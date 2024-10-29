@@ -21,7 +21,10 @@ string vname = "";
 string portList[3] = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2"};
 int numPorts = sizeof(portList) / sizeof(portList[0]);
 string currentPort = "";
-
+string curMode = "";
+double lat_b = 1;
+double lon_b = 1;
+bool gpsFound = False;
 bool checkVehicle = false;
 
 // close the other ports
@@ -139,12 +142,19 @@ void M300::commFloatie(){
                         
                         m_nav_spd = speed;
                         m_nav_x = x;
-                        m_nav_y = y;      
-                      }
-                       else{
-                         fakeGPS1();
-                       }
+                        m_nav_y = y;
+                        
+                        gpsFound = true;
                     }
+
+                    else{
+                      // ignore GPS input
+                    }
+                      
+                    if(!gpsFound){
+                        fakeGPS1();
+                    }
+                  }
   
                   case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
                   {
@@ -163,95 +173,92 @@ void M300::commFloatie(){
 
 
 void M300::commBeacon(){
-    readnum++;
+    memset(buffer2, 0, BUFFER_SIZE);
+    num_bytes = read(pik_port, buffer2, BUFFER_SIZE);
 
-      memset(buffer2, 0, BUFFER_SIZE);
-      num_bytes = read(pik_port, buffer2, BUFFER_SIZE);
+    std::string beaconInput(buffer2, num_bytes);
+    trim_spaces(beaconInput);
 
-      std::string beaconInput(buffer2, num_bytes);
-      trim_spaces(beaconInput);
-
-      // Find the position of the first space character
-      spacePos = beaconInput.find(' ');
-
-      if(spacePos != std::string::npos && beaconInput.length() >= spacePos + 2){
-        // Extract the substring representing the first value
-        firstValueStr = beaconInput.substr(0, spacePos);
-        // Extract the substring representing the second value
-        secondValueStr = beaconInput.substr(spacePos + 1);
-
-        lat_b = 1;
-        lon_b = 1;
-        
-        if(containsNumber(firstValueStr) && containsNumber(secondValueStr)){
-          lat_b = stod(firstValueStr);
-          lon_b = stod(secondValueStr);
-        
-          spacePos1 = secondValueStr.find(' '); 
-
-          if(spacePos1 != std::string::npos && secondValueStr.length() >= spacePos1 + 2){
-            emergency = secondValueStr.substr(spacePos1 + 1); // 
-
-            pos = emergency.find("\r");
-
-            if (pos != std::string::npos)
-              emergency.erase(pos);
-
-            if(emergency == "RETURN" && status != "return"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("deploy", "true");
-              Notify("DEPLOY", "true");
-              Notify("return", "true");
-              Notify("RETURN", "true");
-              Notify("STATION_KEEP", "false");
-              Notify("station-keep", "false");
-              Notify("STATION_KEEP_ALL", "false");
-
-              status = "return";
-              Notify("status", status);
-            }
-
-            else if(emergency == "SOS" && status != "sos"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("STATION_KEEP", "true");
-              Notify("station-keep", "true");
-              Notify("STATION_KEEP_ALL", "true");
-              Notify("return", "false");
-              Notify("RETURN", "false");
-              Notify("deploy", "false");
-              Notify("DEPLOY", "false");
-
-              status = "sos";
-              Notify("status", status);
-            }
-          }
-              double x = 0;
-              double y = 0;
-              bool ok = m_geodesy.LatLong2LocalGrid(stod(firstValueStr), stod(secondValueStr), y, x); 
-
-              Notify(m_nav_prefix+"_LAT", lat_b, "GPRMC");
-              Notify(m_nav_prefix+"_LON", lon_b, "GPRMC");
-              Notify(m_nav_prefix+"_LONG", lon_b, "GPRMC");
-              Notify(m_gps_prefix+"_LAT", lat_b, "GPRMC");
-              Notify(m_gps_prefix+"_LON", lon_b, "GPRMC");
-              Notify(m_gps_prefix+"_LONG", lon_b, "GPRMC");      
-              Notify(m_nav_prefix+"_X", x, "GPRMC");
-              Notify(m_nav_prefix+"_Y", y, "GPRMC");
-              Notify(m_gps_prefix+"_X", x, "GPRMC");
-              Notify(m_gps_prefix+"_Y", y, "GPRMC");  
-
-              // cout << "x:" << x << "y" << y << endl;
-
-              m_nav_hdg = 0;
-              m_nav_spd = 0;
-              m_nav_x = x;
-              m_nav_y = y; 
-        }
-      }
-     beaconInput.clear();
+    std::istringstream iss(beaconInput);
     
-}
+    std::string lat, lon, mode = "";
 
+    // Try extracting the three parts from the string
+    if (iss >> lat >> lon >> mode) {
+        if(containsNumber(lat) && containsNumber(lon) ){
+
+            lat_b = stod(lat);
+            lon_b = stod(lon);
+
+            double x = 0;
+            double y = 0;
+            bool ok = m_geodesy.LatLong2LocalGrid(lat_b, lon_b, y, x); 
+
+            Notify(m_nav_prefix+"_LAT", lat_b, "GPRMC");
+            Notify(m_nav_prefix+"_LON", lon_b, "GPRMC");
+            Notify(m_nav_prefix+"_LONG", lon_b, "GPRMC");
+            Notify(m_gps_prefix+"_LAT", lat_b, "GPRMC");
+            Notify(m_gps_prefix+"_LON", lon_b, "GPRMC");
+            Notify(m_gps_prefix+"_LONG", lon_b, "GPRMC");      
+            Notify(m_nav_prefix+"_X", x, "GPRMC");
+            Notify(m_nav_prefix+"_Y", y, "GPRMC");
+            Notify(m_gps_prefix+"_X", x, "GPRMC");
+            Notify(m_gps_prefix+"_Y", y, "GPRMC");  
+
+            if(!containsNumber(mode)){
+                // Activate mode
+                for (std::string::size_type i = 0; i < mode.size(); ++i) {
+                    mode[i] = tolower(mode[i]);
+                }
+
+                if(mode == "sos"){
+                    Notify("MOOS_MANUAL_OVERRIDE", "false");
+                    Notify("STATION_KEEP", "true");
+                    Notify("station-keep", "true");
+                    Notify("STATION_KEEP_ALL", "true");
+                    Notify("return", "false");
+                    Notify("RETURN", "false");
+                    Notify("deploy", "false");
+                    Notify("DEPLOY", "false");
+
+                    Notify("status", status);
+                }
+
+                else if(mode == "return"){
+                    Notify("MOOS_MANUAL_OVERRIDE", "false");
+                    Notify("deploy", "true");
+                    Notify("DEPLOY", "true");
+                    Notify("return", "true");
+                    Notify("RETURN", "true");
+                    Notify("STATION_KEEP", "false");
+                    Notify("station-keep", "false");
+                    Notify("STATION_KEEP_ALL", "false");
+
+                    Notify("status", status);
+                }
+
+                else if(mode == "stop"){
+                    // stop vehicle
+                }
+            }
+
+            else{
+                // No mode specified
+            }
+        }
+        else{
+            cout << "don't contain number" << endl;
+        }
+
+        cout << lat << lon << mode << endl;
+
+    } else {
+        // If the input doesn't have exactly three parts, do nothing
+        std::cout << "Input does not contain exactly three parts." << std::endl;
+    }
+
+    return;
+}
 
 sendServo(){
     // send servo to pixhawk
@@ -284,28 +291,39 @@ void M300::setBaudRate(int baud){
     }
 }
 
-void trim_spaces(char *str) {
-    int n = strlen(str);
-    char result[n + 1]; // Resultant string
-    int j = 0; // Index for result
+bool containsNumber(const std::string& str) {
+    for (std::string::size_type i = 0; i < str.length(); ++i) {
+        char c = str[i];
+        if (std::isdigit(c) || c == '.' || c == '-' || c == '+') {
+            return true;
+        }
+        else{
+          return false;
+        }
+    }
+    return false;
+}
 
-    for (int i = 0; i < n; i++) {
-        // Check if current character is not a space
-        if (str[i] != ' ') {
-            result[j++] = str[i];
-        } else if (j > 0 && result[j - 1] != ' ') {
-            // Only add a single space if the last added character is not a space
-            result[j++] = ' ';
+std::string trim_spaces(const std::string &str) {
+    std::string result;
+    bool in_space = false;
+
+    for (char ch : str) {
+        if (ch != ' ') {
+            result += ch;
+            in_space = false;
+        } else if (!in_space) {
+            result += ' ';
+            in_space = true;
         }
     }
 
-    // Remove trailing space if it exists
-    if (j > 0 && result[j - 1] == ' ') {
-        j--;
+    // Remove any trailing space
+    if (!result.empty() && result.back() == ' ') {
+        result.pop_back();
     }
 
-    result[j] = '\0'; // Null-terminate the result string
-    strcpy(str, result); // Copy result back to original string
+    return result;
 }
 
 //---------------------------------------------------------
