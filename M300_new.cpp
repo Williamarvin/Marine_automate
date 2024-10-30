@@ -20,6 +20,8 @@ using namespace std;
 string vname = "";
 string portList[3] = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2"};
 int numPorts = sizeof(portList) / sizeof(portList[0]);
+std::vector<int> portNumber(numPorts, -1);  // All elements initialized to -1
+
 string currentPort = "";
 string curMode = "";
 double lat_b = 1;
@@ -30,8 +32,8 @@ bool checkVehicle = false;
 // close the other ports
 void closeOthers(){
     for(int i = 0; i < numPorts; i++){
-        if(currentPort != portList[i]){
-            close(portList[i]);
+        if(currentPort != portNumber[i]){
+            close(portNumber[i]);
         }
     }
 }
@@ -40,11 +42,15 @@ void closeOthers(){
 void M300::vehicleConnection(){
     for(int i = 0; i < numPorts; i++){
         pik_port = open(serialPort.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+        if(portList[i] == -1){
+          portList[i] = pik_port;
+        }
+
         setBaudRate(B115200);
 
-        memset(buffer1, 0, BUFFER_SIZE1);
-        num_bytes = read(pik_port, buffer1, BUFFER_SIZE1);
-        string line4(buffer1, num_bytes);
+        memset(buffer, 0, BUFFER_SIZE);
+        num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+        string line4(buffer, num_bytes);
 
         int bIndex = line4.find('b');
 
@@ -66,8 +72,8 @@ void M300::vehicleConnection(){
 
 
 void M300::commFloatie(){
-      memset(buffer, 0, BUFFER_SIZE1);
-      ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE1);
+      memset(buffer, 0, BUFFER_SIZE);
+      ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
 
       for (int i = 0; i < num_bytes; ++i) {
           mavlink_message_t msg;
@@ -152,7 +158,7 @@ void M300::commFloatie(){
                     }
                       
                     if(!gpsFound){
-                        fakeGPS1();
+                        fakeGpsFloatie();
                     }
                   }
   
@@ -324,6 +330,61 @@ std::string trim_spaces(const std::string &str) {
     }
 
     return result;
+}
+
+
+
+void M300::fakeGpsBeacon(){
+  double lat = 100;
+  double lon = 2;
+  double hdg = 189;
+  double speed = 0;
+
+  Notify(m_nav_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_nav_prefix+"_LON", lon, "GPRMC");
+  Notify(m_nav_prefix+"_LONG", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_gps_prefix+"_LON", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LONG", lon, "GPRMC");      
+  Notify(m_nav_prefix+"_X", lat, "GPRMC");
+  Notify(m_nav_prefix+"_Y", lon, "GPRMC");
+  Notify(m_gps_prefix+"_X", lat, "GPRMC");
+  Notify(m_gps_prefix+"_Y", lon, "GPRMC");    
+  Notify(m_nav_prefix+"_SPEED", speed, "GPRMC");      
+  Notify(m_nav_prefix+"_HEADING", hdg, "GPRMC");
+  Notify("GPS_HEADING", hdg, "GPRMC");
+
+  m_nav_hdg = hdg;
+  m_nav_spd = speed;
+  m_nav_x = lat;
+  m_nav_y = lon;
+}
+
+
+void M300::fakeGpsFloatie(){
+  double lat = -45;
+  double lon = -26;
+  double speed = 0;
+  double hdg = 0;
+
+  Notify(m_nav_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_nav_prefix+"_LON", lon, "GPRMC");
+  Notify(m_nav_prefix+"_LONG", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_gps_prefix+"_LON", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LONG", lon, "GPRMC");      
+  Notify(m_nav_prefix+"_X", lat, "GPRMC");
+  Notify(m_nav_prefix+"_Y", lon, "GPRMC");
+  Notify(m_gps_prefix+"_X", lat, "GPRMC");
+  Notify(m_gps_prefix+"_Y", lon, "GPRMC");    
+  Notify(m_nav_prefix+"_SPEED", speed, "GPRMC");     
+  Notify(m_nav_prefix+"_HEADING", hdg, "GPRMC");
+  Notify("GPS_HEADING", hdg, "GPRMC"); 
+
+  m_nav_spd = speed;
+  m_nav_x = lat;
+  m_nav_y = lon;
+  m_nav_hdg = hdg;
 }
 
 //---------------------------------------------------------
