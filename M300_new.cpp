@@ -29,11 +29,14 @@ double lon_b = 1;
 bool gpsFound = False;
 bool checkVehicle = false;
 
+double f_Thrust_L, f_Thrust_R = 0;
+
 // close the other ports
 void closeOthers(){
     for(int i = 0; i < numPorts; i++){
         if(currentPort != portNumber[i]){
             close(portNumber[i]);
+            portNumber[i] = -1;
         }
     }
 }
@@ -120,6 +123,17 @@ void M300::commFloatie(){
                   //   }
                   // }
                   // Handle specific message types
+
+                  case MAVLINK_MSG_ID_RC_CHANNELS{
+                    mavlink_rc_channels_raw_t packets;
+                    mavlink_msg_rc_channels_raw_decode(&msg, &packets);       
+
+                    // static_cast<int16_t>packets.chan1_raw // left
+                    // static_cast<int16_t>packets.chan3_raw // right
+
+                    f_Thrust_L = static_cast<int16_t>packets.chan1_raw;
+                    f_Thrust_R = static_cast<int16_t>packets.chan3_raw;
+                  }
                   
                   case MAVLINK_MSG_ID_GPS_RAW_INT:
                   {
@@ -266,18 +280,81 @@ void M300::commBeacon(){
     return;
 }
 
-sendServo(){
-    // send servo to pixhawk
-    // priorities on board then remote then automate
+void M300::MapToMavlink(float pwmValue){
+  int mappedValue = 0;
+  int inputValue = pwmValue;
+
+  if (inputValue >= 0) {
+    // Map the range [0, 100] to [1500, 2000]
+    inputValue = std::max(0, std::min(inputValue, 100));
+    float coefficient = static_cast<float>(inputValue) / 100;
+    mappedValue = 1500 + (coefficient * 500);
+} else {
+    // Map the range [-100, 0] to [1000, 1500]
+    inputValue = std::max(-100, std::min(inputValue, 0));
+    float coefficient = static_cast<float>(inputValue + 100) / 100;
+    mappedValue = 1000 + (coefficient * 500);
+  }
+
+  return mappedValue
 }
 
-sendBeaconData(){
-    // send sos, return or normal to floatie
+void M300::sendServo(uint8_t servoNumber, float pwmValue){
+    mavlink_message_t msg;
+    
+    mavlink_msg_command_long_pack( 
+        1,
+        0,
+        &msg,
+        0,
+        0,
+        MAV_CMD_DO_SET_SERVO, 
+        0,
+        servoNumber,
+        pwmValue,0,0,0,0,0
+    );
+
+    uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+
+    uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
+   
+    ssize_t bytesWritten = write(pik_port, buffer, len);
 }
 
-receiveBeaconData(){
-    // receive sos, return or normal for floatie
+void M300::ThrustOutputPriority(){
+
+  // onBoard
+
+  // Remote 
+
+  // Automate
+  double a_Thrust_L = MapToMavlink(m_thrust.getThrustLeft());
+  double a_Thrust_R = MapToMavlink(m_thrust.getThrustRight());
+
+  // on board control
+  // if(o_Thrust_L >= 1525 || o_Thrust_R >= 1525 || o_Thrust_L <= 1475 || o_Thrust_R<= 1475){
+    // sendServo(3, o_Thrust_L);
+    // sendServo(1, o_Thrust_R);
+  // }
+
+  if(f_Thrust_L >= 1525 || f_Thrust_R >= 1525 || f_Thrust_L <= 1475 || f_Thrust_R<= 1475){
+    sendServo(3, f_Thrust_L);
+    sendServo(1, f_Thrust_R);
+  }
+
+  else if(a_thrust_L >= 1525 || a_thrust_R >= 1525 || a_Thrust_L <= 1475 || a_Thrust_R <= 1475){
+    sendServo(3, a_Thrust_L);
+    sendServo(1, a_Thrust_R);
+  }
 }
+
+// sendBeaconData(){
+//     // send sos, return or normal to floatie
+// }
+
+// receiveBeaconData(){
+//     // receive sos, return or normal for floatie
+// }
 
 // set baud rate
 void M300::setBaudRate(int baud){
@@ -654,6 +731,8 @@ void M300::registerVariables()
   Register("SIM_RUDDER_FAULT", 0);
 
   
+  Register("NODE_REPORT_FLOATIE", 0);
+  Register("NODE_REPORT_BEACON", 0);
 }
 
 //---------------------------------------------------------
