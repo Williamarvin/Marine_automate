@@ -20,6 +20,8 @@ using namespace std;
 string vname = "";
 string portList[3] = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2"};
 int numPorts = sizeof(portList) / sizeof(portList[0]);
+std::vector<int> portNumber(numPorts, -1);  // All elements initialized to -1
+
 string currentPort = "";
 string curMode = "";
 double lat_b = 1;
@@ -27,11 +29,16 @@ double lon_b = 1;
 bool gpsFound = False;
 bool checkVehicle = false;
 
+double f_Thrust_L, f_Thrust_R = 0;
+
+string beaconInfo = "";
+
 // close the other ports
 void closeOthers(){
     for(int i = 0; i < numPorts; i++){
-        if(currentPort != portList[i]){
-            close(portList[i]);
+        if(currentPort != portNumber[i]){
+            close(portNumber[i]);
+            portNumber[i] = -1;
         }
     }
 }
@@ -40,11 +47,15 @@ void closeOthers(){
 void M300::vehicleConnection(){
     for(int i = 0; i < numPorts; i++){
         pik_port = open(serialPort.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+        if(portList[i] == -1){
+          portList[i] = pik_port;
+        }
+
         setBaudRate(B115200);
 
-        memset(buffer1, 0, BUFFER_SIZE1);
-        num_bytes = read(pik_port, buffer1, BUFFER_SIZE1);
-        string line4(buffer1, num_bytes);
+        memset(buffer, 0, BUFFER_SIZE);
+        num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+        string line4(buffer, num_bytes);
 
         int bIndex = line4.find('b');
 
@@ -54,10 +65,15 @@ void M300::vehicleConnection(){
             closeOthers();
         }
 
-        else if(for floatie requirement){
-            checkVehicle = true;
-            currentPort = portList[i];
-            closeOthers();
+        for (int i = 0; i < num_bytes; ++i) {
+            mavlink_message_t msg;
+            mavlink_status_t status;
+
+            if (mavlink_parse_char(MAVLINK_COMM_0, buffer[i], &msg, &status) && m_vname == "floatie") {
+              checkVehicle = true;
+              currentPort = portList[i];
+              closeOthers();
+            }
         }
 
         // continue until port is found
@@ -66,8 +82,13 @@ void M300::vehicleConnection(){
 
 
 void M300::commFloatie(){
-      memset(buffer, 0, BUFFER_SIZE1);
-      ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE1);
+      memset(buffer, 0, BUFFER_SIZE);
+      ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+
+      // if gps not found, use fake gps
+      if(!gpsFound){
+        fakeGpsFloatie();
+      }
 
       for (int i = 0; i < num_bytes; ++i) {
           mavlink_message_t msg;
@@ -114,6 +135,17 @@ void M300::commFloatie(){
                   //   }
                   // }
                   // Handle specific message types
+
+                  case MAVLINK_MSG_ID_RC_CHANNELS{
+                    mavlink_rc_channels_raw_t packets;
+                    mavlink_msg_rc_channels_raw_decode(&msg, &packets);       
+
+                    // static_cast<int16_t>packets.chan1_raw // left
+                    // static_cast<int16_t>packets.chan3_raw // right
+
+                    f_Thrust_L = static_cast<int16_t>packets.chan1_raw;
+                    f_Thrust_R = static_cast<int16_t>packets.chan3_raw;
+                  }
                   
                   case MAVLINK_MSG_ID_GPS_RAW_INT:
                   {
@@ -151,9 +183,6 @@ void M300::commFloatie(){
                       // ignore GPS input
                     }
                       
-                    if(!gpsFound){
-                        fakeGPS1();
-                    }
                   }
   
                   case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
@@ -239,6 +268,15 @@ void M300::commBeacon(){
 
                 else if(mode == "stop"){
                     // stop vehicle
+
+                    Notify("MOOS_MANUAL_OVERRIDE", "true");
+                    Notify("deploy", "false");
+                    Notify("DEPLOY", "false");
+                    Notify("return", "false");
+                    Notify("RETURN", "false");
+                    Notify("STATION_KEEP", "false");
+                    Notify("station-keep", "false");
+                    Notify("STATION_KEEP_ALL", "false");
                 }
             }
 
@@ -247,31 +285,101 @@ void M300::commBeacon(){
             }
         }
         else{
-            cout << "don't contain number" << endl;
+            fakeGpsBeacon();
         }
 
         cout << lat << lon << mode << endl;
 
     } else {
         // If the input doesn't have exactly three parts, do nothing
-        std::cout << "Input does not contain exactly three parts." << std::endl;
+        // std::cout << "Input does not contain exactly three parts." << std::endl;
+        fakeGpsBeacon();
     }
 
     return;
 }
 
-sendServo(){
-    // send servo to pixhawk
-    // priorities on board then remote then automate
+void parseBeaconMode(){
+  // parse beacon mode
+  // NAME=beacon,X=0,Y=0,MODE=PARK
+  // 
 }
 
-sendBeaconData(){
-    // send sos, return or normal to floatie
+void M300::MapToMavlink(float pwmValue){
+  int mappedValue = 0;
+  int inputValue = pwmValue;
+
+  if (inputValue >= 0) {
+    // Map the range [0, 100] to [1500, 2000]
+    inputValue = std::max(0, std::min(inputValue, 100));
+    float coefficient = static_cast<float>(inputValue) / 100;
+    mappedValue = 1500 + (coefficient * 500);
+} else {
+    // Map the range [-100, 0] to [1000, 1500]
+    inputValue = std::max(-100, std::min(inputValue, 0));
+    float coefficient = static_cast<float>(inputValue + 100) / 100;
+    mappedValue = 1000 + (coefficient * 500);
+  }
+
+  return mappedValue
 }
 
-receiveBeaconData(){
-    // receive sos, return or normal for floatie
+void M300::sendServo(uint8_t servoNumber, float pwmValue){
+    mavlink_message_t msg;
+    
+    mavlink_msg_command_long_pack( 
+        1,
+        0,
+        &msg,
+        0,
+        0,
+        MAV_CMD_DO_SET_SERVO, 
+        0,
+        servoNumber,
+        pwmValue,0,0,0,0,0
+    );
+
+    uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+
+    uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
+   
+    ssize_t bytesWritten = write(pik_port, buffer, len);
 }
+
+void M300::ThrustOutputPriority(){
+
+  // onBoard
+
+  // Remote 
+
+  // Automate
+  double a_Thrust_L = MapToMavlink(m_thrust.getThrustLeft());
+  double a_Thrust_R = MapToMavlink(m_thrust.getThrustRight());
+
+  // on board control
+  // if(o_Thrust_L >= 1525 || o_Thrust_R >= 1525 || o_Thrust_L <= 1475 || o_Thrust_R<= 1475){
+    // sendServo(3, o_Thrust_L);
+    // sendServo(1, o_Thrust_R);
+  // }
+
+  if(f_Thrust_L >= 1525 || f_Thrust_R >= 1525 || f_Thrust_L <= 1475 || f_Thrust_R<= 1475){
+    sendServo(3, f_Thrust_L);
+    sendServo(1, f_Thrust_R);
+  }
+
+  else if(a_thrust_L >= 1525 || a_thrust_R >= 1525 || a_Thrust_L <= 1475 || a_Thrust_R <= 1475){
+    sendServo(3, a_Thrust_L);
+    sendServo(1, a_Thrust_R);
+  }
+}
+
+// sendBeaconData(){
+//     // send sos, return or normal to floatie
+// }
+
+// receiveBeaconData(){
+//     // receive sos, return or normal for floatie
+// }
 
 // set baud rate
 void M300::setBaudRate(int baud){
@@ -285,10 +393,6 @@ void M300::setBaudRate(int baud){
     tty.c_cflag |= CS8;               // 8-bit data
     tty.c_cflag &= ~PARENB;           // No parity
     tty.c_cflag &= ~CSTOPB;           // 1 stop bit
-
-    if (tcsetattr(pik_port, TCSANOW, &tty) != 0) {
-      close(pik_port);
-    }
 }
 
 bool containsNumber(const std::string& str) {
@@ -324,6 +428,61 @@ std::string trim_spaces(const std::string &str) {
     }
 
     return result;
+}
+
+
+
+void M300::fakeGpsBeacon(){
+  double lat = 100;
+  double lon = 2;
+  double hdg = 189;
+  double speed = 0;
+
+  Notify(m_nav_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_nav_prefix+"_LON", lon, "GPRMC");
+  Notify(m_nav_prefix+"_LONG", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_gps_prefix+"_LON", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LONG", lon, "GPRMC");      
+  Notify(m_nav_prefix+"_X", lat, "GPRMC");
+  Notify(m_nav_prefix+"_Y", lon, "GPRMC");
+  Notify(m_gps_prefix+"_X", lat, "GPRMC");
+  Notify(m_gps_prefix+"_Y", lon, "GPRMC");    
+  Notify(m_nav_prefix+"_SPEED", speed, "GPRMC");      
+  Notify(m_nav_prefix+"_HEADING", hdg, "GPRMC");
+  Notify("GPS_HEADING", hdg, "GPRMC");
+
+  m_nav_hdg = hdg;
+  m_nav_spd = speed;
+  m_nav_x = lat;
+  m_nav_y = lon;
+}
+
+
+void M300::fakeGpsFloatie(){
+  double lat = -45;
+  double lon = -26;
+  double speed = 0;
+  double hdg = 0;
+
+  Notify(m_nav_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_nav_prefix+"_LON", lon, "GPRMC");
+  Notify(m_nav_prefix+"_LONG", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LAT", lat, "GPRMC");
+  Notify(m_gps_prefix+"_LON", lon, "GPRMC");
+  Notify(m_gps_prefix+"_LONG", lon, "GPRMC");      
+  Notify(m_nav_prefix+"_X", lat, "GPRMC");
+  Notify(m_nav_prefix+"_Y", lon, "GPRMC");
+  Notify(m_gps_prefix+"_X", lat, "GPRMC");
+  Notify(m_gps_prefix+"_Y", lon, "GPRMC");    
+  Notify(m_nav_prefix+"_SPEED", speed, "GPRMC");     
+  Notify(m_nav_prefix+"_HEADING", hdg, "GPRMC");
+  Notify("GPS_HEADING", hdg, "GPRMC"); 
+
+  m_nav_spd = speed;
+  m_nav_x = lat;
+  m_nav_y = lon;
+  m_nav_hdg = hdg;
 }
 
 //---------------------------------------------------------
@@ -593,7 +752,10 @@ void M300::registerVariables()
   Register("SIM_RUDDER_FAULT", 0);
 
   
+  Register("NODE_REPORT_FLOATIE", 0);
+  Register("NODE_REPORT_BEACON", 0);
 }
+
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
@@ -618,6 +780,10 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
    
     if(key == "IVPHELM_ALLSTOP")
       m_ivp_allstop = (toupper(sval) != "CLEAR");
+    else if(key == "NODE_REPORT_FLOATIE"){
+      beaconInfo = sval;
+    }
+      
     else if (key == "DESIRED_RUDDER" ){
       if ( m_thrust.getDriveMode() != "direct" ) {
 	m_tstamp_des_rudder = mtime;
