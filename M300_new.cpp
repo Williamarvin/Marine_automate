@@ -31,7 +31,7 @@ bool checkVehicle = false;
 
 double f_Thrust_L, f_Thrust_R = 0;
 
-string beaconInfo = "";
+string beaconMode = "";
 
 // close the other ports
 void closeOthers(){
@@ -200,6 +200,33 @@ void M300::commFloatie(){
       }
 }
 
+void M300::setFloatieMode(){
+  // Deploy 
+  // MODE@ACTIVE:TRAVERSING
+  // Return
+  // MODE@ACTIVE:RETURNING
+  // Beacon call
+  // MODE@INACTIVE
+  // Park
+  // PARK
+
+  if(beaconMode == "MODE@ACTIVE:TRAVERSING"){
+    // traversing
+  }
+
+  else if(beaconMode == "MODE@ACTIVE:RETURNING"){
+    // return
+  }
+
+  else if(beaconMode == "MODE@INACTIVE"){
+    // beacon call
+  }
+
+  else if (beaconMode == "PARK"){
+    // park
+  }
+}
+
 
 void M300::commBeacon(){
     memset(buffer2, 0, BUFFER_SIZE);
@@ -299,10 +326,22 @@ void M300::commBeacon(){
     return;
 }
 
-void parseBeaconMode(){
+void parseBeaconMode(string data){
   // parse beacon mode
   // NAME=beacon,X=0,Y=0,MODE=PARK
-  // 
+
+    std::string modePrefix = "MODE=";
+    size_t startPos = data.find(modePrefix);
+    if (startPos != std::string::npos) {
+        startPos += modePrefix.length();
+        size_t endPos = data.find(',', startPos);
+        std::string modeValue = data.substr(startPos, endPos - startPos);
+        std::cout << "MODE value: " << modeValue << std::endl;
+    } else {
+        std::cout << "MODE not found" << std::endl;
+    }
+
+    return 0;
 }
 
 void M300::MapToMavlink(float pwmValue){
@@ -781,7 +820,7 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
     if(key == "IVPHELM_ALLSTOP")
       m_ivp_allstop = (toupper(sval) != "CLEAR");
     else if(key == "NODE_REPORT_FLOATIE"){
-      beaconInfo = sval;
+      beaconMode = parseBeaconMode(sval);
     }
       
     else if (key == "DESIRED_RUDDER" ){
