@@ -31,6 +31,8 @@ bool checkVehicle = false;
 
 double f_Thrust_L, f_Thrust_R = 0;
 
+string beaconInfo = "";
+
 // close the other ports
 void closeOthers(){
     for(int i = 0; i < numPorts; i++){
@@ -77,6 +79,11 @@ void M300::vehicleConnection(){
 void M300::commFloatie(){
       memset(buffer, 0, BUFFER_SIZE);
       ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+
+      // if gps not found, use fake gps
+      if(!gpsFound){
+        fakeGpsFloatie();
+      }
 
       for (int i = 0; i < num_bytes; ++i) {
           mavlink_message_t msg;
@@ -171,9 +178,6 @@ void M300::commFloatie(){
                       // ignore GPS input
                     }
                       
-                    if(!gpsFound){
-                        fakeGpsFloatie();
-                    }
                   }
   
                   case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
@@ -267,17 +271,24 @@ void M300::commBeacon(){
             }
         }
         else{
-            cout << "don't contain number" << endl;
+            fakeGpsBeacon();
         }
 
         cout << lat << lon << mode << endl;
 
     } else {
         // If the input doesn't have exactly three parts, do nothing
-        std::cout << "Input does not contain exactly three parts." << std::endl;
+        // std::cout << "Input does not contain exactly three parts." << std::endl;
+        fakeGpsBeacon();
     }
 
     return;
+}
+
+void parseBeaconMode(){
+  // parse beacon mode
+  // NAME=beacon,X=0,Y=0,MODE=PARK
+  // 
 }
 
 void M300::MapToMavlink(float pwmValue){
@@ -368,10 +379,6 @@ void M300::setBaudRate(int baud){
     tty.c_cflag |= CS8;               // 8-bit data
     tty.c_cflag &= ~PARENB;           // No parity
     tty.c_cflag &= ~CSTOPB;           // 1 stop bit
-
-    if (tcsetattr(pik_port, TCSANOW, &tty) != 0) {
-      close(pik_port);
-    }
 }
 
 bool containsNumber(const std::string& str) {
@@ -735,6 +742,7 @@ void M300::registerVariables()
   Register("NODE_REPORT_BEACON", 0);
 }
 
+
 //---------------------------------------------------------
 // Procedure: OnNewMail
 
@@ -758,6 +766,10 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
    
     if(key == "IVPHELM_ALLSTOP")
       m_ivp_allstop = (toupper(sval) != "CLEAR");
+    else if(key == "NODE_REPORT_FLOATIE"){
+      beaconInfo = sval;
+    }
+      
     else if (key == "DESIRED_RUDDER" ){
       if ( m_thrust.getDriveMode() != "direct" ) {
 	m_tstamp_des_rudder = mtime;
