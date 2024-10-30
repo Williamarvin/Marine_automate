@@ -96,8 +96,7 @@ void M300::fakeGPS1(){
   m_nav_hdg = hdg;
 }
 
-void M300::sendServo(uint8_t servoNumber, float pwmValue)
-{
+void M300::sendServo(uint8_t servoNumber, float pwmValue){
     mavlink_message_t msg;
     int mappedValue = 0;
     int inputValue = pwmValue;
@@ -113,7 +112,7 @@ void M300::sendServo(uint8_t servoNumber, float pwmValue)
         mappedValue = 1000 + (coefficient * 500);
     }
     pwmValue = mappedValue;
-    //servo 3. left
+    
     mavlink_msg_command_long_pack( 
         1,
         0,
@@ -125,9 +124,9 @@ void M300::sendServo(uint8_t servoNumber, float pwmValue)
         servoNumber,
         pwmValue,0,0,0,0,0
     );
- //   sleep(10);
+
     uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-    // cout << pwmValue << endl;
+
     uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
    
     ssize_t bytesWritten = write(pik_port, buffer, len);

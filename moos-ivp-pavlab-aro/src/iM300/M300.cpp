@@ -281,15 +281,20 @@ void M300::registerVariables()
   Register("SIM_THR_R_BIAS",0);
   Register("SIM_RUDDER_FAULT", 0);
 
-  
+  Register("NODE_REPORT_HENRY", 0);
+  Register("NODE_REPORT_ABE", 0);
+
 }
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
 
+string abeInfo = "";
+
 bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
 {
   AppCastingMOOSApp::OnNewMail(NewMail);
+  m_msgs << "testings1" << endl;
   
   MOOSMSG_LIST::iterator p;
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -307,6 +312,10 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
    
     if(key == "IVPHELM_ALLSTOP")
       m_ivp_allstop = (toupper(sval) != "CLEAR");
+
+    else if(key == "NODE_REPORT_ABE"){
+      abeInfo = sval;
+    }
     else if (key == "DESIRED_RUDDER" ){
       if ( m_thrust.getDriveMode() != "direct" ) {
 	m_tstamp_des_rudder = mtime;
@@ -1499,6 +1508,7 @@ bool M300::buildReport()
   m_msgs << "------------------------------------------------------" << endl;
   m_msgs << "System:    voltage: " << pd_volt << "   satellites: " << str_sats << endl;
   m_msgs << "------------------------------------------------------" << endl;
+  m_msgs << "abeinfo: " << abeInfo << endl;
   
   if ( m_rot_ctrl.getRotateInPlace() ) {
     m_msgs << "Rotation target heading: " << str_rot_hdg_tgt << endl;
