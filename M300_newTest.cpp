@@ -190,7 +190,19 @@ void M300::setFloatieMode(){
   }
 
   else if(beaconMode == "MODE@INACTIVE"){
-    // beacon call
+    // SOS
+
+    Notify("MOOS_MANUAL_OVERRIDE", "false");
+    Notify("STATION_KEEP", "true");
+    Notify("station-keep", "true");
+    Notify("STATION_KEEP_ALL", "true");
+    Notify("return", "false");
+    Notify("RETURN", "false");
+    Notify("deploy", "false");
+    Notify("DEPLOY", "false");
+
+    status = "sos";
+    Notify("status", status);
   }
 
   else if (beaconMode == "PARK"){
@@ -416,99 +428,102 @@ ssize_t num_bytes;
 // const int BUFFER_SIZE = 512;
 char buffer2[BUFFER_SIZE];
 
-void M300::receiveCommBeacon(){
-    readnum++;
 
-    if(readnum >= 10000)readnum = 0;
-    if(readnum % 5 == 1 || readnum % 5 == 2){
-      memset(buffer2, 0, BUFFER_SIZE);
-      num_bytes = read(pik_port, buffer2, BUFFER_SIZE);
+void M300::commBeacon(){
+    memset(buffer, 0, BUFFER_SIZE);
+    num_bytes = read(pik_port, buffer, BUFFER_SIZE);
 
-      std::string line1(buffer2, num_bytes);
-      line2 = line1;
+    std::string beaconInput(buffer2, num_bytes);
+    trim_spaces(beaconInput);
 
-      // Find the position of the first space character
-      spacePos = line1.find(' ');
-
-
-      if(spacePos != std::string::npos && line1.length() >= spacePos + 2){
-
-        // Extract the substring representing the first value
-        firstValueStr = line1.substr(0, spacePos);
-        // Extract the substring representing the second value
-        secondValueStr = line1.substr(spacePos + 4);
-
-        lat_b = 1;
-        lon_b = 1;
-        
-        if(containsNumber(firstValueStr) && containsNumber(secondValueStr)){
-          lat_b = stod(firstValueStr);
-          lon_b = stod(secondValueStr);
-        
-          spacePos1 = secondValueStr.find(' '); 
-
-          if(spacePos1 != std::string::npos && secondValueStr.length() >= spacePos1 + 4){
-            emergency = secondValueStr.substr(spacePos1 + 4); // 
-
-            pos = emergency.find("\r");
-
-            if (pos != std::string::npos)
-              emergency.erase(pos);
-
-            if(emergency == "RETURN" && status != "return"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("deploy", "true");
-              Notify("DEPLOY", "true");
-              Notify("return", "true");
-              Notify("RETURN", "true");
-              Notify("STATION_KEEP", "false");
-              Notify("station-keep", "false");
-              Notify("STATION_KEEP_ALL", "false");
-
-              status = "return";
-              Notify("status", status);
-            }
-
-            else if(emergency == "SOS" && status != "sos"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("STATION_KEEP", "true");
-              Notify("station-keep", "true");
-              Notify("STATION_KEEP_ALL", "true");
-              Notify("return", "false");
-              Notify("RETURN", "false");
-              Notify("deploy", "false");
-              Notify("DEPLOY", "false");
-
-              status = "sos";
-              Notify("status", status);
-            }
-          }
-              double x = 0;
-              double y = 0;
-              bool ok = m_geodesy.LatLong2LocalGrid(stod(firstValueStr), stod(secondValueStr), y, x); 
-
-              Notify(m_nav_prefix+"_LAT", lat_b, "GPRMC");
-              Notify(m_nav_prefix+"_LON", lon_b, "GPRMC");
-              Notify(m_nav_prefix+"_LONG", lon_b, "GPRMC");
-              Notify(m_gps_prefix+"_LAT", lat_b, "GPRMC");
-              Notify(m_gps_prefix+"_LON", lon_b, "GPRMC");
-              Notify(m_gps_prefix+"_LONG", lon_b, "GPRMC");      
-              Notify(m_nav_prefix+"_X", x, "GPRMC");
-              Notify(m_nav_prefix+"_Y", y, "GPRMC");
-              Notify(m_gps_prefix+"_X", x, "GPRMC");
-              Notify(m_gps_prefix+"_Y", y, "GPRMC");  
-
-              // cout << "x:" << x << "y" << y << endl;
-
-              m_nav_hdg = 0;
-              m_nav_spd = 0;
-              m_nav_x = x;
-              m_nav_y = y; 
-        }
-      }
-      line1.clear();
-    }
+    std::istringstream iss(beaconInput);
     
+    std::string lat, lon, mode = "";
+
+    // Try extracting the three parts from the string
+    if (iss >> lat >> lon >> mode) {
+        if(containsNumber(lat) && containsNumber(lon) ){
+
+            lat_b = stod(lat);
+            lon_b = stod(lon);
+
+            double x = 0;
+            double y = 0;
+            bool ok = m_geodesy.LatLong2LocalGrid(lat_b, lon_b, y, x); 
+
+            Notify(m_nav_prefix+"_LAT", lat_b, "GPRMC");
+            Notify(m_nav_prefix+"_LON", lon_b, "GPRMC");
+            Notify(m_nav_prefix+"_LONG", lon_b, "GPRMC");
+            Notify(m_gps_prefix+"_LAT", lat_b, "GPRMC");
+            Notify(m_gps_prefix+"_LON", lon_b, "GPRMC");
+            Notify(m_gps_prefix+"_LONG", lon_b, "GPRMC");      
+            Notify(m_nav_prefix+"_X", x, "GPRMC");
+            Notify(m_nav_prefix+"_Y", y, "GPRMC");
+            Notify(m_gps_prefix+"_X", x, "GPRMC");
+            Notify(m_gps_prefix+"_Y", y, "GPRMC");  
+
+            if(!containsNumber(mode)){
+                // Activate mode
+                for (std::string::size_type i = 0; i < mode.size(); ++i) {
+                    mode[i] = tolower(mode[i]);
+                }
+
+                if(mode == "sos"){
+                    Notify("MOOS_MANUAL_OVERRIDE", "false");
+                    Notify("STATION_KEEP", "true");
+                    Notify("station-keep", "true");
+                    Notify("STATION_KEEP_ALL", "true");
+                    Notify("return", "false");
+                    Notify("RETURN", "false");
+                    Notify("deploy", "false");
+                    Notify("DEPLOY", "false");
+
+                    Notify("status", status);
+                }
+
+                else if(mode == "return"){
+                    Notify("MOOS_MANUAL_OVERRIDE", "false");
+                    Notify("deploy", "true");
+                    Notify("DEPLOY", "true");
+                    Notify("return", "true");
+                    Notify("RETURN", "true");
+                    Notify("STATION_KEEP", "false");
+                    Notify("station-keep", "false");
+                    Notify("STATION_KEEP_ALL", "false");
+
+                    Notify("status", status);
+                }
+
+                else if(mode == "stop"){
+                    // stop vehicle
+                    // idk if work
+
+                    Notify("MOOS_MANUAL_OVERRIDE", "true");
+                    Notify("deploy", "false");
+                    Notify("DEPLOY", "false");
+                    Notify("return", "false");
+                    Notify("RETURN", "false");
+                    Notify("STATION_KEEP", "false");
+                    Notify("station-keep", "false");
+                    Notify("STATION_KEEP_ALL", "false");
+                }
+            }
+
+            else{
+                // No mode specified
+            }
+        }
+        else{
+            fakeGpsBeacon();
+        }
+
+    } else {
+        // If the input doesn't have exactly three parts, do nothing
+        // std::cout << "Input does not contain exactly three parts." << std::endl;
+        fakeGpsBeacon();
+    }
+
+    return;
 }
 
 void M300::setBaudRate(int baud){
