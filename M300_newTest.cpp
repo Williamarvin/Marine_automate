@@ -26,7 +26,6 @@ int pik_port = -1;
 string mode = "floatie";
 string status = "";
 
-string remote = "disabled";
 int portOpen = 0;
 
 std::string  m_nav_prefix;
@@ -77,7 +76,6 @@ void M300::vehicleConnection(){
           checkVehicle = true;
           currentPort = portList[i];
       }
-      
 
       // floatie requirement
       for (int i = 0; i < num_bytes; ++i) {
@@ -223,7 +221,6 @@ bool containsNumber(const std::string& str) {
     return false;
 }
 
-string serialPort1 = "";
 int pik_port1 = -1;
 ssize_t num_bytes1;
 
@@ -596,7 +593,6 @@ M300::M300()
   m_rudder_bias_L = 0.0;
   m_rudder_bias_R = 0.0;  
   
-  serialPort = "/dev/cu.usbserial-0001";
 }
 
 //---------------------------------------------------------
@@ -641,10 +637,7 @@ bool M300::OnStartUp()
       handled = true;
       mode = value;
     }
-    else if(param == "comms_type") {
-      serialPort = value;
-      handled = true;
-    }
+
     else if(param == "ivp_allstop")
       handled = setBooleanOnString(m_ivp_allstop, value);
     else if(param == "stale_check_enabled")
@@ -809,10 +802,6 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "NODE_REPORT_FLOATIE"){
       beaconMode = parseBeaconMode(sval);
     }
-    
-    else if(key == "comms_type") {
-      serialPort = sval;
-    }
 
     else if(key == "status"){
       status = sval;
@@ -877,7 +866,6 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
     else if(key == "SIM_THR_R_BIAS") {
       if(m_add_thruster_fault){
   m_fault_bias_thr_R = dval;
-  //sendPulse();
       }
     }
 
@@ -939,44 +927,34 @@ bool M300::Iterate()
   checkForStalenessOrAllStop();
     
   // Part 2: Connect if needed, and write/read from socket
-  // std::cout << serialPort << std::endl;
-  // pik_port = open(serialPort.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
   m_ninja.setCommsType("client");
 
+  // gps initialisation
   if(m_vname == "floatie")
   fakeGpsFloatie();
   else if(m_vname == "beacon")
   fakeGpsBeacon();
 
+  // serial connection automation
   if(checkVehicle == false){
     vehicleConnection();
   }
 
+  // if vehicle is floatie and vehicle is connected
   if(checkVehicle == true && m_vname == "floatie") {
       sendMessagesToSocket();
-      // receiveCommFloatie();
       ThrustOutputPriority();
       commFloatie();
-      // beaconFeature();
   }
 
+  // if vehicle is beacon and beacon is connected
   else if(checkVehicle == true && m_vname == "beacon"){
     receiveCommBeacon();
     // sendMessagesToSocket();
   }
+
   else{
-    
-    // if(mode == "beacon"){
-    //   pik_port = open(serialPort.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-    //   setBaudRate(B115200);
-    //   fakeGPS();
-    // }
-    // else if(mode == "floatie"){
-    //   pik_port = open(serialPort.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-    //   setBaudRate(B115200);
-    //   fakeGPS1();
-    // }
-    // cout << "not open!" << endl;
+    // vehicle not detected
   }
 
   // Part 3: Get Appcast events from ninja and report them
@@ -2032,7 +2010,6 @@ bool M300::buildReport()
   m_msgs << "System:    voltage: " << pd_volt << "   satellites: " << str_sats << endl;
   m_msgs << "------------------------------------------------------" << endl;
   m_msgs << "status: " << status << endl;
-  m_msgs << "remote: " << remote << endl;
   m_msgs << "------------------------------------------------------" << endl;
   m_msgs << "serial output: " << line2 << endl;
   m_msgs << "port open: " << portOpen << endl;
