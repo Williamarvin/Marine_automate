@@ -514,16 +514,17 @@ void M300::commBeacon(){
             }
         }
         else{
+            // lat and lon wrong format
+            // ignore
             fakeGpsBeacon();
         }
 
     } else {
         // If the input doesn't have exactly three parts, do nothing
         // std::cout << "Input does not contain exactly three parts." << std::endl;
+        // wrong format
         fakeGpsBeacon();
     }
-
-    return;
 }
 
 void M300::setBaudRate(int baud){
