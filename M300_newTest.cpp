@@ -38,7 +38,6 @@ string line2 = "";
 
 string portList[3] = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2"};
 int numPorts = sizeof(portList) / sizeof(portList[0]);
-std::vector<int> portNumber(numPorts, -1);  // All elements initialized to -1
 
 string currentPort = "/dev/ttyUSB1";
 const int BUFFER_SIZE = 512;
@@ -50,17 +49,8 @@ bool gpsFound = false;
 
 int f_Thrust_L, f_Thrust_R = 0;
 
-
-// close the other ports
-void closeOthers(){
-    for(int i = 0; i < numPorts; i++){
-        if(pik_port != portNumber[i]){
-            close(portNumber[i]);
-            portNumber[i] = -1;
-        }
-    }
-}
 string output = "";
+string beaconInfo = "";
 
 // connect to correct port and vehicle (match)
 void M300::vehicleConnection(){
@@ -75,10 +65,6 @@ void M300::vehicleConnection(){
 
       setBaudRate(B57600);
 
-      if(portNumber[i] == -1){
-        portNumber[i] = pik_port;
-      }
-
       memset(buffer, 0, BUFFER_SIZE);
       ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
 
@@ -86,13 +72,14 @@ void M300::vehicleConnection(){
 
       int bIndex = line4.find('b');
 
+      // Beacon requirment
       if(bIndex != std::string::npos && bIndex + 6 <= line4.length() && m_vname == "beacon" && line4.substr(bIndex, 6) == "beacon"){
           checkVehicle = true;
           currentPort = portList[i];
-          closeOthers();
       }
       
 
+      // floatie requirement
       for (int i = 0; i < num_bytes; ++i) {
           mavlink_message_t msg;
           mavlink_status_t status;
@@ -101,23 +88,15 @@ void M300::vehicleConnection(){
 
             checkVehicle = true;
             // currentPort = portList[j];
-            closeOthers();
             return;
         }
       } 
 
-        close(pik_port);
-        // continue until port is found
+      // On board requirement
+
+      close(pik_port);
+      // continue until port is found
     }
-}
-
-
-
-string formatDecimal(double value, int decimalPlaces) {
-    ostringstream oss;
-    oss.precision(decimalPlaces);
-    oss << fixed << value;
-    return oss.str();
 }
 
 void M300::fakeGpsBeacon(){
@@ -173,42 +152,51 @@ void M300::fakeGpsFloatie(){
   // m_nav_hdg = hdg;
 }
 
-// void M300::sendServo(uint8_t servoNumber, float pwmValue)
-// {
-//     mavlink_message_t msg;
-//     int mappedValue = 0;
-//     int inputValue = pwmValue;
-//     if (inputValue >= 0) {
-//         // Map the range [0, 100] to [1500, 2000]
-//         inputValue = std::max(0, std::min(inputValue, 100));
-//         float coefficient = static_cast<float>(inputValue) / 100;
-//         mappedValue = 1500 + (coefficient * 500);
-//     } else {
-//         // Map the range [-100, 0] to [1000, 1500]
-//         inputValue = std::max(-100, std::min(inputValue, 0));
-//         float coefficient = static_cast<float>(inputValue + 100) / 100;
-//         mappedValue = 1000 + (coefficient * 500);
-//     }
-//     pwmValue = mappedValue;
-//     //servo 3. left
-//     mavlink_msg_command_long_pack( 
-//         1,
-//         0,
-//         &msg,
-//         0,
-//         0,
-//         MAV_CMD_DO_SET_SERVO, 
-//         0,
-//         servoNumber,
-//         pwmValue,0,0,0,0,0
-//     );
-//  //   sleep(10);
-//     uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-//     // cout << pwmValue << endl;
-//     uint16_t len = mavlink_msg_to_send_buffer(buffer, &msg);
-   
-//     ssize_t bytesWritten = write(pik_port, buffer, len);
-// }
+
+void parseBeaconMode(string data){
+  // parse beacon mode
+  // NAME=beacon,X=0,Y=0,MODE=PARK
+
+    std::string modePrefix = "MODE=";
+    size_t startPos = data.find(modePrefix);
+    if (startPos != std::string::npos) {
+        startPos += modePrefix.length();
+        size_t endPos = data.find(',', startPos);
+        std::string modeValue = data.substr(startPos, endPos - startPos);
+        std::cout << "MODE value: " << modeValue << std::endl;
+    } else {
+        std::cout << "MODE not found" << std::endl;
+    }
+
+    return 0;
+}
+
+void M300::setFloatieMode(){
+  // Deploy 
+  // MODE@ACTIVE:TRAVERSING
+  // Return
+  // MODE@ACTIVE:RETURNING
+  // Beacon call
+  // MODE@INACTIVE
+  // Park
+  // PARK
+
+  if(beaconMode == "MODE@ACTIVE:TRAVERSING"){
+    // traversing
+  }
+
+  else if(beaconMode == "MODE@ACTIVE:RETURNING"){
+    // return
+  }
+
+  else if(beaconMode == "MODE@INACTIVE"){
+    // beacon call
+  }
+
+  else if (beaconMode == "PARK"){
+    // park
+  }
+}
 
 bool containsNumber(const std::string& str) {
     for (std::string::size_type i = 0; i < str.length(); ++i) {
@@ -238,96 +226,7 @@ std::string emergency;
 std::string firstValueStr;
 std::string secondValueStr;
 
-
 int readnum = 0;
-
-void M300::beaconFeature(){
-    if(serialPort == "/dev/ttyUSB0"){
-      serialPort1 = "/dev/ttyUSB1";
-    }
-
-    else if(serialPort == "/dev/ttyUSB1"){
-        serialPort1 = "/dev/ttyUSB0";
-    }
-
-    else{
-      return;
-    }
-
-    if(pik_port1 < 0){
-      pik_port1 = open(serialPort1.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-      portOpen++;
-      return;
-    }
-    readnum++;
-
-    if(readnum > 10000){
-      readnum = 0;
-    }
-
-    if(readnum%5 == 0){
-      memset(buffer1, 0, BUFFER_SIZE1);
-      num_bytes1 = read(pik_port1, buffer1, BUFFER_SIZE1);
-      std::string line4(buffer1, num_bytes1);
-
-      line2 = line4;
-
-      spacePos = line4.find(' ');
-
-      if(spacePos != std::string::npos && line4.length() >= spacePos + 2){
-        // Extract the substring representing the first value
-        firstValueStr = line4.substr(0, spacePos);
-        // Extract the substring representing the second value
-        secondValueStr = line4.substr(spacePos + 2);
-
-        lat_b = 1;
-        lon_b = 1;
-        
-        if(containsNumber(firstValueStr) && containsNumber(secondValueStr)){
-          lat_b = stod(firstValueStr);
-          lon_b = stod(secondValueStr);
-        
-          spacePos1 = secondValueStr.find(' '); 
-
-          if(spacePos1 != std::string::npos && secondValueStr.length() >= spacePos1 + 2){
-            emergency = secondValueStr.substr(spacePos1 + 2); // 
-
-            pos = emergency.find("\r");
-
-            if (pos != std::string::npos)
-              emergency.erase(pos);
-
-            if(emergency == "RETURN" && status != "return"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("deploy", "true");
-              Notify("DEPLOY", "true");
-              Notify("return", "true");
-              Notify("RETURN", "true");
-              Notify("STATION_KEEP", "false");
-              Notify("station-keep", "false");
-              Notify("STATION_KEEP_ALL", "false");
-
-              status = "return";
-            }
-
-            else if(emergency == "SOS" && status != "sos"){
-              Notify("MOOS_MANUAL_OVERRIDE", "false");
-              Notify("STATION_KEEP", "true");
-              Notify("station-keep", "true");
-              Notify("STATION_KEEP_ALL", "true");
-              Notify("return", "false");
-              Notify("RETURN", "false");
-              Notify("deploy", "false");
-              Notify("DEPLOY", "false");
-
-              status = "sos";
-            }
-          }
-        }
-      }
-      line4.clear();
-    }
-}
 
 void M300::commFloatie(){
       memset(buffer, 0, BUFFER_SIZE);
@@ -363,26 +262,6 @@ void M300::commFloatie(){
                       m_nav_hdg = hdg;
                       // cout << "heading: " << packets.hdg << "relativealt" << packets.relative_alt << endl;
                   }
-
-                  // case MAVLINK_MSG_ID_RC_CHANNELS:
-                  // {
-                  //   mavlink_rc_channels_raw_t packets;
-                  //   mavlink_msg_rc_channels_raw_decode(&msg, &packets);                
-                    
-                  //   if(static_cast<int16_t>(packets.chan6_raw) <= 999){
-                  //       mode_all = false; // remote
-                  //       remote = "remote";
-                  //   }
-                  //   else if(static_cast<int16_t>(packets.chan6_raw) >= 1500){
-                  //       mode_all = true; // software
-                  //       remote = "software";
-                  //   }
-                  //   else{
-                  //     mode_all = true;
-                  //     remote = "disabled";
-                  //   }
-                  // }
-                  // Handle specific message types
 
                   case MAVLINK_MSG_ID_RC_CHANNELS:
                   {
@@ -429,17 +308,18 @@ void M300::commFloatie(){
                     }
 
                     else{
+                      // if Gps out of range
                       // ignore GPS input
                     }
-                      
                   }
-  
-                  case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
-                  {
-                      mavlink_servo_output_raw_t packet;
-                      mavlink_msg_servo_output_raw_decode(&msg, &packet);
-                      // cout << "thruster: " << packet.servo1_raw << " " << packet.servo3_raw << endl; 
-                  }
+
+                  // Get actual thruster outputs
+                  // case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
+                  // {
+                  //     mavlink_servo_output_raw_t packet;
+                  //     mavlink_msg_servo_output_raw_decode(&msg, &packet);
+                  //     cout << "thruster: " << packet.servo1_raw << " " << packet.servo3_raw << endl; 
+                  // }
 
                   // Add cases for other message types as needed
                   default:
@@ -495,7 +375,6 @@ void M300::ThrustOutputPriority(){
 
   // onBoard
 
-  // Remote 
 
   // Automate
   double a_Thrust_L = MapToMavlink(m_thrust.getThrustLeft());
@@ -507,121 +386,27 @@ void M300::ThrustOutputPriority(){
     // sendServo(1, o_Thrust_R);
   // }
 
+  // Remote 
   if(f_Thrust_L >= 1525 || f_Thrust_R >= 1525 || f_Thrust_L <= 1475 || f_Thrust_R<= 1475){
     sendServo(3, f_Thrust_L);
     sendServo(1, f_Thrust_R);
+
+    // add 5 second delay after remote stop. 
   }
 
+  // Automation
   else if(a_Thrust_L >= 1525 || a_Thrust_R >= 1525 || a_Thrust_L <= 1475 || a_Thrust_R <= 1475){
     sendServo(3, a_Thrust_L);
     sendServo(1, a_Thrust_R);
   }
 
+  // if no input, stop
   else{
     sendServo(3, 1500);
     sendServo(1, 1500);
   }
+
 }
-
-// void M300::receiveCommFloatie(){
-//       memset(buffer, 0, BUFFER_SIZE1);
-//       ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE1);
-
-//       for (int i = 0; i < num_bytes; ++i) {
-//           mavlink_message_t msg;
-//           mavlink_status_t status;
-
-//           if (mavlink_parse_char(MAVLINK_COMM_0, buffer[i], &msg, &status)) {
-//               // Message parsed successfully
-//               switch (msg.msgid) {
-
-//                 case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-//                   {
-//                       mavlink_global_position_int_t packets;
-//                       mavlink_msg_global_position_int_decode(&msg, &packets);
-
-//                       double hdg = double((float(packets.hdg)/100));
-                      
-//                       Notify(m_nav_prefix+"_HEADING", hdg, "GPRMC");
-//                       Notify("GPS_HEADING", hdg, "GPRMC");
-
-//                       if (hdg > 360){
-//                         hdg = hdg - 360;
-//                       }
-
-//                       m_nav_hdg = hdg;
-//                       // cout << "heading: " << packets.hdg << "relativealt" << packets.relative_alt << endl;
-//                   }
-
-//                   case MAVLINK_MSG_ID_RC_CHANNELS:
-//                   {
-//                     mavlink_rc_channels_raw_t packets;
-//                     mavlink_msg_rc_channels_raw_decode(&msg, &packets);                
-                    
-//                     if(static_cast<int16_t>(packets.chan6_raw) <= 999){
-//                         mode_all = true; // remote
-//                         remote = "remote";
-//                     }
-//                     else if(static_cast<int16_t>(packets.chan6_raw) >= 1500){
-//                         mode_all = true; // software
-//                         remote = "software";
-//                     }
-//                     else{
-//                       mode_all = true;
-//                       remote = "disabled";
-//                     }
-//                   }
-//                   // Handle specific message types
-                  
-//                   case MAVLINK_MSG_ID_GPS_RAW_INT:
-//                   {
-//                     mavlink_gps_raw_int_t packet;
-//                     mavlink_msg_gps_raw_int_decode(&msg, &packet);
-// //                    cout << "hello" << endl;
-                    
-//                     double x, y;
-//                     double dbl_lat = (float(packet.lat)/10000000);
-//                     double dbl_lon = (float(packet.lon)/10000000);
-//                     double speed = 0.5;
-
-//                     bool ok = m_geodesy.LatLong2LocalGrid(dbl_lat, dbl_lon, y, x); 
-
-//                     if(dbl_lat < 24 && dbl_lat > 22){
-//                         Notify(m_nav_prefix+"_LAT", dbl_lat, "GPRMC");
-//                         Notify(m_nav_prefix+"_LON", dbl_lon, "GPRMC");
-//                         Notify(m_nav_prefix+"_LONG", dbl_lon, "GPRMC");
-//                         Notify(m_gps_prefix+"_LAT", dbl_lat, "GPRMC");
-//                         Notify(m_gps_prefix+"_LON", dbl_lon, "GPRMC");
-//                         Notify(m_gps_prefix+"_LONG", dbl_lon, "GPRMC");      
-//                         Notify(m_nav_prefix+"_X", x, "GPRMC");
-//                         Notify(m_nav_prefix+"_Y", y, "GPRMC");
-//                         Notify(m_gps_prefix+"_X", x, "GPRMC");
-//                         Notify(m_gps_prefix+"_Y", y, "GPRMC");    
-//                         Notify(m_nav_prefix+"_SPEED", speed, "GPRMC");         
-                        
-//                         m_nav_spd = speed;
-//                         m_nav_x = x;
-//                         m_nav_y = y;      
-//                       }
-//                       //  else{
-//                       //    fakeGPS1();
-//                       //  }
-//                     }
-
-//                   case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
-//                   {
-//                       mavlink_servo_output_raw_t packet;
-//                       mavlink_msg_servo_output_raw_decode(&msg, &packet);
-//                       // cout << "thruster: " << packet.servo1_raw << " " << packet.servo3_raw << endl; 
-//                   }
-
-//                   // Add cases for other message types as needed
-//                   default:
-//                     break;
-//               }
-//           }
-//       }
-// }
 
 bool call_sos = false;
 bool call_return = false;
@@ -737,10 +522,6 @@ void M300::setBaudRate(int baud){
     tty.c_cflag |= CS8;               // 8-bit data
     tty.c_cflag &= ~PARENB;           // No parity
     tty.c_cflag &= ~CSTOPB;           // 1 stop bit
-
-    // if (tcsetattr(pik_port, TCSANOW, &tty) != 0) {
-    //   close(pik_port);
-    // }
 }
 
 
@@ -808,7 +589,6 @@ M300::M300()
 M300::~M300()
 {
   close(pik_port);
-  close(pik_port1);
 }
 
 //---------------------------------------------------------
@@ -980,7 +760,11 @@ void M300::registerVariables()
   Register("deploy", 0);
   Register("status", 0);
 
+
+  Register("NODE_REPORT_FLOATIE", 0);
+  Register("NODE_REPORT_BEACON", 0);
 }
+
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
@@ -1002,12 +786,15 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
     string comm  = msg.GetCommunity(); 
     string msrc  = msg.GetSource();  
 #endif
-
    
     if(key == "IVPHELM_ALLSTOP")
       m_ivp_allstop = (toupper(sval) != "CLEAR");
+
+    else if(key == "NODE_REPORT_FLOATIE"){
+      beaconMode = parseBeaconMode(sval);
+    }
     
-    if(key == "comms_type") {
+    else if(key == "comms_type") {
       serialPort = sval;
     }
 
