@@ -54,7 +54,7 @@ void M300::vehicleConnection(){
         setBaudRate(B115200);
 
         memset(buffer, 0, BUFFER_SIZE);
-        num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+        ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
         string line4(buffer, num_bytes);
 
         int bIndex = line4.find('b');
