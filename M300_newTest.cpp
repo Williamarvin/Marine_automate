@@ -46,7 +46,7 @@ char buffer[BUFFER_SIZE];
 bool checkVehicle = false;
 bool gpsFound = false;
 
-int f_Thrust_L, f_Thrust_R, o_Thrust_L, o_Thrust_R = 0;
+float f_Thrust_L, f_Thrust_R, o_Thrust_L, o_Thrust_R = 0;
 
 string output = "";
 string beaconInfo = "";
@@ -368,13 +368,17 @@ void M300::commOnBoard(){
     std::istringstream iss(boardInput);
     
     std::string mode, thrust = "";
+    float s_thrust = 0;
 
     iss >> mode >> thrust;
 
-    thrust = thrust/2 + 1500; 
+    if(containsNumber(thrust))
+    s_thrust = stod(thrust)
 
-    o_Thrust_L = thrust;
-    o_Thrust_R = thrust;
+    s_thrust = s_thrust/2 + 1500; 
+
+    o_Thrust_L = s_thrust;
+    o_Thrust_R = s_thrust;
 }
 
 
@@ -2054,6 +2058,9 @@ bool M300::buildReport()
   m_msgs << "------------------------------------------------------" << endl;
   m_msgs << "serial output: " << line2 << endl;
   m_msgs << "port open: " << portOpen << endl;
+  m_msgs << "On Board: " << "thrust " << o_Thrust_L<< " " << o_Thrust_R << endl;
+  m_msgs << "Remote: " << "thrust " << f_Thrust_L << " " << f_Thrust_R << endl;
+
 
   m_msgs << m_vname << pik_port << "------- vehicle info" << output << endl;
 
