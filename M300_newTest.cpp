@@ -40,7 +40,6 @@ int numPorts = sizeof(portList) / sizeof(portList[0]);
 
 string currentPort = "/dev/ttyUSB1";
 const int BUFFER_SIZE = 512;
-char buffer1[BUFFER_SIZE];
 char buffer[BUFFER_SIZE];
 
 bool checkVehicle = false;
@@ -240,11 +239,7 @@ bool containsNumber(const std::string& str) {
     return false;
 }
 
-int pik_port1 = -1;
-ssize_t num_bytes1;
 
-const int BUFFER_SIZE1 = 512;
-// char buffer1[BUFFER_SIZE1];
 size_t spacePos;
 double lat_b = 1;
 double lon_b = 1;
