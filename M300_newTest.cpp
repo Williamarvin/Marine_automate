@@ -46,7 +46,7 @@ char buffer[BUFFER_SIZE];
 bool checkVehicle = false;
 bool gpsFound = false;
 
-int f_Thrust_L, f_Thrust_R = 0;
+int f_Thrust_L, f_Thrust_R, o_Thrust_L, o_Thrust_R = 0;
 
 string output = "";
 string beaconInfo = "";
@@ -67,17 +67,36 @@ void M300::vehicleConnection(){
       memset(buffer, 0, BUFFER_SIZE);
       ssize_t num_bytes = read(pik_port, buffer, BUFFER_SIZE);
 
-      string line4(buffer, num_bytes);
+      string input(buffer, num_bytes);
 
-      int bIndex = line4.find('b');
+      // int bIndex = line4.find('b');
 
-      // Beacon requirment
-      if(bIndex != std::string::npos && bIndex + 6 <= line4.length() && m_vname == "beacon" && line4.substr(bIndex, 6) == "beacon"){
+      // // Beacon requirment
+      // if(bIndex != std::string::npos && bIndex + 6 <= line4.length() && m_vname == "beacon" && line4.substr(bIndex, 6) == "beacon"){
+      //     checkVehicle = true;
+      //     currentPort = portList[i];
+      // }
+
+      trim_spaces(input);
+
+      std::istringstream iss(input);
+
+      std::string mode = "";
+
+      iss >> mode;
+
+      if(mode == "ON" && m_vname == "floatie"){
+          // on board control
           checkVehicle = true;
-          currentPort = portList[i];
+      }
+
+      else if(mode == "BE" && m_vname == "beacon"){
+          // beacon
+          checkVehicle = true;
       }
 
       // floatie requirement
+      // check if floatie
       for (int i = 0; i < num_bytes; ++i) {
           mavlink_message_t msg;
           mavlink_status_t status;
@@ -90,8 +109,8 @@ void M300::vehicleConnection(){
         }
       } 
 
-      // On board requirement
 
+      // No port found
       close(pik_port);
       // continue until port is found
     }
@@ -338,6 +357,26 @@ void M300::commFloatie(){
       }
 }
 
+// read on board input
+void M300::commOnBoard(){
+    memset(buffer, 0, BUFFER_SIZE);
+    num_bytes = read(pik_port, buffer, BUFFER_SIZE);
+
+    std::string boardInput(buffer2, num_bytes);
+    trim_spaces(boardInput);
+
+    std::istringstream iss(boardInput);
+    
+    std::string mode, thrust = "";
+
+    iss >> mode >> thrust;
+
+    thrust = thrust/2 + 1500; 
+
+    o_Thrust_L = thrust;
+    o_Thrust_R = thrust;
+}
+
 
 int M300::MapToMavlink(float pwmValue){
   int mappedValue = 0;
@@ -357,6 +396,8 @@ int M300::MapToMavlink(float pwmValue){
 
   return mappedValue;
 }
+
+
 
 void M300::sendServo(uint8_t servoNumber, float pwmValue){
     mavlink_message_t msg;
@@ -390,13 +431,13 @@ void M300::ThrustOutputPriority(){
   double a_Thrust_R = MapToMavlink(m_thrust.getThrustRight());
 
   // on board control
-  // if(o_Thrust_L >= 1525 || o_Thrust_R >= 1525 || o_Thrust_L <= 1475 || o_Thrust_R<= 1475){
-    // sendServo(3, o_Thrust_L);
-    // sendServo(1, o_Thrust_R);
-  // }
+  if(o_Thrust_L >= 1525 || o_Thrust_R >= 1525 || o_Thrust_L <= 1475 || o_Thrust_R<= 1475){
+    sendServo(3, o_Thrust_L);
+    sendServo(1, o_Thrust_R);
+  }
 
   // Remote 
-  if(f_Thrust_L >= 1525 || f_Thrust_R >= 1525 || f_Thrust_L <= 1475 || f_Thrust_R<= 1475){
+  else if(f_Thrust_L >= 1525 || f_Thrust_R >= 1525 || f_Thrust_L <= 1475 || f_Thrust_R<= 1475){
     sendServo(3, f_Thrust_L);
     sendServo(1, f_Thrust_R);
 
