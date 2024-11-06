@@ -112,7 +112,8 @@ void M300::onBoardConnection(){
 
         if(mode == "ON" && m_vname == "floatie"){
             // on board control
-            onBoard = true;          
+            onBoard = true;   
+            return;       
         }
 
         // No port found
@@ -464,27 +465,50 @@ void M300::commFloatie(){
 
 // read on board input
 void M300::commOnBoard(){
-    memset(buffer, 0, BUFFER_SIZE);
-    num_bytes = read(board_port, buffer, BUFFER_SIZE);
+    memset(buffer1, 0, BUFFER_SIZE);
+    num_bytes = read(board_port, buffer1, BUFFER_SIZE);
 
-    std::string boardInput(buffer, num_bytes);
+
+    if(num_bytes <= 0)
+      return;
+
+    std::string boardInput(buffer1, num_bytes);
     trim_spaces(boardInput);
+    line5 = buffer1;
 
     std::istringstream iss(boardInput);
     
-    std::string mode, thrust = "";
-    float s_thrust = 0;
+    string mode, thrustL, thrustR = "";
+    float l_thrust, r_thrust = 0;
 
-    iss >> mode >> thrust;
+    iss >> mode >> thrustL >> thrustR;
 
-    if(containsNumber(thrust)){
-        s_thrust = stod(thrust);
+    // on board with differential
+    if(containsNumber(thrustL) && containsNumber(thrustR)){
+        l_thrust = stod(thrustL);
+        r_thrust = stod(thrustR);
 
-        s_thrust = s_thrust/2 + 1500; 
+        l_thrust = l_thrust/2 + 1500;
+        r_thrust = r_thrust/2 + 1500;
 
-        o_Thrust_L = s_thrust;
-        o_Thrust_R = s_thrust;
+        o_Thrust_L = l_thrust;
+        o_Thrust_R = r_thrust;
     }
+
+    // on board without differential
+    // std::string mode, thrust = "";
+    // float s_thrust = 0;
+
+    // iss >> mode >> thrust;
+
+    // if(containsNumber(thrust) ){
+    //     s_thrust = stod(thrust);
+
+    //     // s_thrust = s_thrust/2 + 1500; 
+
+    //     o_Thrust_L = l_thrust;
+    //     o_Thrust_R = r_thrust;
+    // }
 }
 
 
@@ -2168,6 +2192,7 @@ bool M300::buildReport()
   m_msgs << "serial output: " << line2 << endl;
   m_msgs << "port open: " << portOpen << endl;
   m_msgs << "On Board: " << "thrust " << o_Thrust_L<< " " << o_Thrust_R << " available: " << onBoard << endl;
+
   m_msgs << "Remote: " << "thrust " << f_Thrust_L << " " << f_Thrust_R << endl;
 
 
