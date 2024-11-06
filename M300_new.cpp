@@ -1101,14 +1101,15 @@ bool M300::Iterate()
   m_ninja.setCommsType("client");
 
   // gps initialisation
-  if(m_vname == "floatie")
+  if(m_vname == "floatie" && checkVehicle == false)
   fakeGpsFloatie();
-  else if(m_vname == "beacon")
+  else if(m_vname == "beacon" && checkVehicle == false)
   fakeGpsBeacon();
 
   // serial connection automation
-  if(checkVehicle == false){
-    vehicleConnection();
+  if(checkVehicle == false || pik_port == -1){
+      vehicleConnection();
+      checkVehicle = false;
   }
 
   // if vehicle is floatie and vehicle is connected
@@ -1117,18 +1118,19 @@ bool M300::Iterate()
       ThrustOutputPriority();
       commFloatie();
 
-      if(onBoard == false)
-      onBoardConnection();
+      if(onBoard == false || board_port == -1){
+        onBoard = false;
+        onBoardConnection();
+      }
       else if(onBoard == true)
       commOnBoard();
-      
+
+      // on board control not found
   }
 
   // if vehicle is beacon and beacon is connected
   else if(checkVehicle == true && m_vname == "beacon"){
-    // receiveCommBeacon();
-    // sendMessagesToSocket();
-    commBeacon();
+      commBeacon();
   }
 
   else{
