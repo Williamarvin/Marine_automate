@@ -269,31 +269,70 @@ void M300::setFloatieMode(){
   // PARK
 
   if(beaconMode == "MODE@ACTIVE:TRAVERSING"){
-    // traversing
+      // traversing
+      // testing
+
+      Notify("MOOS_MANUAL_OVERRIDE", "false");
+      Notify("deploy", "true");
+      Notify("DEPLOY", "true");
+      Notify("return", "false");
+      Notify("RETURN", "false");
+      Notify("STATION_KEEP", "false");
+      Notify("station-keep", "false");
+      Notify("STATION_KEEP_ALL", "false");
+
+      status = "transverse";
+
+      Notify("status", status);
   }
 
   else if(beaconMode == "MODE@ACTIVE:RETURNING"){
-    // return
+      // return
+
+      Notify("MOOS_MANUAL_OVERRIDE", "false");
+      Notify("deploy", "true");
+      Notify("DEPLOY", "true");
+      Notify("return", "true");
+      Notify("RETURN", "true");
+      Notify("STATION_KEEP", "false");
+      Notify("station-keep", "false");
+      Notify("STATION_KEEP_ALL", "false");
+
+      status = "return";
+      Notify("status", status);
   }
 
   else if(beaconMode == "MODE@INACTIVE"){
-    // SOS
+      // SOS
 
-    Notify("MOOS_MANUAL_OVERRIDE", "false");
-    Notify("STATION_KEEP", "true");
-    Notify("station-keep", "true");
-    Notify("STATION_KEEP_ALL", "true");
-    Notify("return", "false");
-    Notify("RETURN", "false");
-    Notify("deploy", "false");
-    Notify("DEPLOY", "false");
+      Notify("MOOS_MANUAL_OVERRIDE", "false");
+      Notify("STATION_KEEP", "true");
+      Notify("station-keep", "true");
+      Notify("STATION_KEEP_ALL", "true");
+      Notify("return", "false");
+      Notify("RETURN", "false");
+      Notify("deploy", "false");
+      Notify("DEPLOY", "false");
 
-    status = "sos";
-    Notify("status", status);
+      status = "sos";
+      Notify("status", status);
   }
 
   else if (beaconMode == "PARK"){
-    // park
+      // park
+      // test mode
+
+      Notify("MOOS_MANUAL_OVERRIDE", "true");
+      Notify("deploy", "false");
+      Notify("DEPLOY", "false");
+      Notify("return", "false");
+      Notify("RETURN", "faslse");
+      Notify("STATION_KEEP", "false");
+      Notify("station-keep", "false");
+      Notify("STATION_KEEP_ALL", "false");
+
+      status = "park";
+      Notify("status", status);
   }
 }
 
@@ -543,7 +582,7 @@ void M300::commBeacon(){
 
     // Try extracting the four parts from the string
     if (iss >> device >> lat >> lon >> mode) {
-        if(containsNumber(lat) && containsNumber(lon) ){
+        if(containsNumber(lat) && containsNumber(lon)){
 
             lat_b = stod(lat);
             lon_b = stod(lon);
