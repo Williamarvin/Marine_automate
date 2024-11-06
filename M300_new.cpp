@@ -58,7 +58,7 @@ string beaconInfo = "";
 
 ssize_t num_bytes;
 bool onBoard = false;
-
+string beaconMode = "";
 
 std::string trim_spaces(const std::string &str) {
     std::string result;
@@ -83,41 +83,42 @@ std::string trim_spaces(const std::string &str) {
 }
 
 void M300::onBoardConnection(){
+
     for(int i = 0; i < portList.size(); i++){
 
-      board_port = open(portList[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
-      setBaudRate(B57600);
-      
-      if(board_port == -1){
-        continue;
+        board_port = open(portList[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
+        setBaudRate(B57600);
+        
+        if(board_port == -1){
+          continue;
+        }
+
+        memset(buffer1, 0, BUFFER_SIZE);
+        ssize_t num_bytes = read(board_port, buffer1, BUFFER_SIZE);
+
+        if(num_bytes <= 0)
+          continue;
+
+        string line4(buffer1, num_bytes);
+
+        trim_spaces(line4);
+
+        std::istringstream iss(line4);
+
+        std::string mode = "";
+        line5=line4;
+
+        iss >> mode;
+
+        if(mode == "ON" && m_vname == "floatie"){
+            // on board control
+            onBoard = true;          
+        }
+
+        // No port found
+        close(board_port);
+        // continue until port is found
       }
-
-      memset(buffer1, 0, BUFFER_SIZE);
-      ssize_t num_bytes = read(board_port, buffer1, BUFFER_SIZE);
-
-      if(num_bytes <= 0)
-        continue;
-
-      string line4(buffer1, num_bytes);
-
-      trim_spaces(line4);
-
-      std::istringstream iss(line4);
-
-      std::string mode = "";
-      line5=line4;
-
-      iss >> mode;
-
-      if(mode == "ON" && m_vname == "floatie"){
-          // on board control
-          onBoard = true;          
-      }
-
-      // No port found
-      close(board_port);
-      // continue until port is found
-    }
 }
 
 
@@ -137,35 +138,43 @@ void M300::vehicleConnection(){
 
       // floatie requirement
       // check if floatie
-      for (int i = 0; i < num_bytes; ++i) {
-          mavlink_message_t msg;
-          mavlink_status_t status;
 
-        if (mavlink_parse_char(MAVLINK_COMM_0, buffer[i], &msg, &status)) {
+      if(m_vname == "floatie"){
+          for (int i = 0; i < num_bytes; ++i) {
 
-            checkVehicle = true;
-            portList.erase(portList.begin() + i);
-            // currentPort = portList[j];
-            return;
+              mavlink_message_t msg;
+              mavlink_status_t status;
+
+              if (mavlink_parse_char(MAVLINK_COMM_0, buffer[i], &msg, &status)) {
+
+                  checkVehicle = true;
+                  portList.erase(portList.begin() + i);
+                  // currentPort = portList[j];
+                  return;
+              }
+            } 
         }
-      } 
+      
+      else if(m_vname == "beacon"){
 
-      if(num_bytes <= 0)
-        continue;
+          if(num_bytes <= 0)
+            continue;
 
-      string line4(buffer, num_bytes);
+          string line4(buffer, num_bytes);
 
-      trim_spaces(line4);
+          trim_spaces(line4);
 
-      std::istringstream iss(line4);
+          std::istringstream iss(line4);
 
-      std::string mode = "";
+          std::string mode = "";
 
-      iss >> mode;
+          iss >> mode;
 
-      if(mode == "BE" && m_vname == "beacon"){
-          // beacon
-          checkVehicle = true;
+          if(mode == "BE"){
+              // beacon
+              checkVehicle = true;
+              portList.erase(portList.begin() + i);
+          }
       }
 
       // No port found
@@ -228,23 +237,26 @@ void M300::fakeGpsFloatie(){
 }
 
 
-void parseBeaconMode(string data){
+string parseBeaconMode(string data){
   // parse beacon mode
   // NAME=beacon,X=0,Y=0,MODE=PARK
+
+    string modeValue = "";
 
     std::string modePrefix = "MODE=";
     size_t startPos = data.find(modePrefix);
     if (startPos != std::string::npos) {
         startPos += modePrefix.length();
         size_t endPos = data.find(',', startPos);
-        std::string modeValue = data.substr(startPos, endPos - startPos);
+        modeValue = data.substr(startPos, endPos - startPos);
         std::cout << "MODE value: " << modeValue << std::endl;
     } else {
         std::cout << "MODE not found" << std::endl;
     }
+
+    return modeValue;
 }
 
-string beaconMode = "";
 
 void M300::setFloatieMode(){
   // Deploy 
@@ -434,7 +446,6 @@ void M300::commOnBoard(){
         o_Thrust_L = s_thrust;
         o_Thrust_R = s_thrust;
     }
-
 }
 
 
@@ -528,10 +539,10 @@ void M300::commBeacon(){
 
     std::istringstream iss(beaconInput);
     
-    std::string lat, lon, mode = "";
+    std::string device, lat, lon, mode = "";
 
-    // Try extracting the three parts from the string
-    if (iss >> lat >> lon >> mode) {
+    // Try extracting the four parts from the string
+    if (iss >> device >> lat >> lon >> mode) {
         if(containsNumber(lat) && containsNumber(lon) ){
 
             lat_b = stod(lat);
@@ -897,7 +908,7 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
       m_ivp_allstop = (toupper(sval) != "CLEAR");
 
     else if(key == "NODE_REPORT_FLOATIE"){
-      // beaconMode = parseBeaconMode(sval);
+      beaconMode = parseBeaconMode(sval);
     }
 
     else if(key == "status"){
