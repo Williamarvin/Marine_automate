@@ -39,11 +39,11 @@ std::string  m_compass_prefix;
 bool mode_all = true;
 string line2 = "";
 
-std::vector<std::string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0"};
+std::vector<std::string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4"};
 int numPorts = portList.size();
 
 string currentPort = "/dev/ttyUSB1";
-const int BUFFER_SIZE = 512;
+const int BUFFER_SIZE = 1000;
 char buffer[BUFFER_SIZE];
 
 char buffer1[BUFFER_SIZE];
@@ -506,8 +506,8 @@ void M300::commOnBoard(){
 
     //     // s_thrust = s_thrust/2 + 1500; 
 
-    //     o_Thrust_L = l_thrust;
-    //     o_Thrust_R = r_thrust;
+    //     o_Thrust_L = s_thrust;
+    //     o_Thrust_R = s_thrust;
     // }
 }
 
@@ -531,7 +531,41 @@ int M300::MapToMavlink(float pwmValue){
   return mappedValue;
 }
 
+#include <poll.h>
+#include <stdio.h>
+#include <errno.h>
 
+// void checkPortConnection(int port_fd, string vehicle) {
+//     struct pollfd fds;
+//     fds.fd = port_fd;
+//     fds.events = POLLIN | POLLERR | POLLHUP;
+
+//     int ret = poll(&fds, 1, 1000);
+
+//     if(ret == -1){
+//       return;
+//     }
+
+//     if (ret == 0) {
+//         // Timeout, port is still valid
+//         return;
+//     }
+
+//     // Check for errors like disconnection (POLLERR or POLLHUP)
+//     if (fds.revents & POLLERR || fds.revents & POLLHUP) {
+//         // Port disconnected
+//         if(vehicle == "vehicle"){
+//           close(port_fd);
+//           pik_port = -1;
+//         }
+
+//         else if(vehicle == "board"){
+//           close(port_fd);
+//           board_port = -1;
+//         }
+//         return;
+//     }
+// }
 
 void M300::sendServo(uint8_t servoNumber, float pwmValue){
     mavlink_message_t msg;
@@ -1106,17 +1140,21 @@ bool M300::Iterate()
   else if(m_vname == "beacon" && checkVehicle == false)
   fakeGpsBeacon();
 
+
   // serial connection automation
   if(checkVehicle == false || pik_port == -1){
-      vehicleConnection();
       checkVehicle = false;
+      vehicleConnection();
   }
+
+  // checkPortConnection(pik_port, "vehicle");
 
   // if vehicle is floatie and vehicle is connected
   if(checkVehicle == true && m_vname == "floatie") {
       sendMessagesToSocket();
       ThrustOutputPriority();
       commFloatie();
+      // checkPortConnection(board_port, "board");
 
       if(onBoard == false || board_port == -1){
         onBoard = false;
