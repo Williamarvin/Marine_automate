@@ -1005,7 +1005,7 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
       m_ivp_allstop = (toupper(sval) != "CLEAR");
 
     else if(key == "NODE_REPORT_FLOATIE"){
-      beaconMode = parseBeaconMode(sval);
+      // beaconMode = parseBeaconMode(sval);
     }
 
     else if(key == "status"){
