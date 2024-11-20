@@ -20,6 +20,9 @@
 #include <sstream>
 #include <cstring>
 #include <list>
+#include <poll.h>
+#include <stdio.h>
+#include <errno.h>
 
 using namespace std;
 
@@ -32,14 +35,14 @@ string line5 = "";
 
 int portOpen = 0;
 
-std::string  m_nav_prefix;
-std::string  m_gps_prefix;
-std::string  m_compass_prefix;
+string  m_nav_prefix;
+string  m_gps_prefix;
+string  m_compass_prefix;
 
 bool mode_all = true;
 string line2 = "";
 
-std::vector<std::string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4"};
+vector<string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4"};
 int numPorts = portList.size();
 
 string currentPort = "/dev/ttyUSB1";
@@ -60,8 +63,23 @@ ssize_t num_bytes;
 bool onBoard = false;
 string beaconMode = "";
 
-std::string trim_spaces(const std::string &str) {
-    std::string result;
+size_t spacePos;
+double lat_b = 1;
+double lon_b = 1;
+size_t spacePos1;
+size_t pos;
+string emergency;
+string firstValueStr;
+string secondValueStr;
+
+int readnum = 0;
+
+bool call_sos = false;
+bool call_return = false;
+int i = 0;
+
+string trim_spaces(const string &str) {
+    string result;
     bool in_space = false;
 
     for (char ch : str) {
@@ -103,10 +121,10 @@ void M300::onBoardConnection(){
 
         trim_spaces(line4);
 
-        std::istringstream iss(line4);
+        istringstream iss(line4);
 
-        std::string mode = "";
-        line5=line4;
+        string mode = "";
+        // line5 = line4;
 
         iss >> mode;
 
@@ -165,16 +183,18 @@ void M300::vehicleConnection(){
 
           trim_spaces(line4);
 
-          std::istringstream iss(line4);
+          istringstream iss(line4);
 
-          std::string mode = "";
+          string mode = "";
 
           iss >> mode;
+          line5 = mode;
 
           if(mode == "BE"){
               // beacon
               checkVehicle = true;
               portList.erase(portList.begin() + i);
+              return;
           }
       }
 
@@ -244,15 +264,15 @@ string parseBeaconMode(string data){
 
     string modeValue = "";
 
-    std::string modePrefix = "MODE=";
+    string modePrefix = "MODE=";
     size_t startPos = data.find(modePrefix);
-    if (startPos != std::string::npos) {
+    if (startPos != string::npos) {
         startPos += modePrefix.length();
         size_t endPos = data.find(',', startPos);
         modeValue = data.substr(startPos, endPos - startPos);
-        std::cout << "MODE value: " << modeValue << std::endl;
+        cout << "MODE value: " << modeValue << endl;
     } else {
-        std::cout << "MODE not found" << std::endl;
+        cout << "MODE not found" << endl;
     }
 
     return modeValue;
@@ -337,10 +357,10 @@ void M300::setFloatieMode(){
   }
 }
 
-bool containsNumber(const std::string& str) {
-    for (std::string::size_type i = 0; i < str.length(); ++i) {
+bool containsNumber(const string& str) {
+    for (string::size_type i = 0; i < str.length(); ++i) {
         char c = str[i];
-        if (std::isdigit(c) || c == '.' || c == '-' || c == '+') {
+        if (isdigit(c) || c == '.' || c == '-' || c == '+') {
             return true;
         }
         else{
@@ -351,16 +371,7 @@ bool containsNumber(const std::string& str) {
 }
 
 
-size_t spacePos;
-double lat_b = 1;
-double lon_b = 1;
-size_t spacePos1;
-size_t pos;
-std::string emergency;
-std::string firstValueStr;
-std::string secondValueStr;
 
-int readnum = 0;
 
 void M300::commFloatie(){
       memset(buffer, 0, BUFFER_SIZE);
@@ -472,11 +483,11 @@ void M300::commOnBoard(){
     if(num_bytes <= 0)
       return;
 
-    std::string boardInput(buffer1, num_bytes);
+    string boardInput(buffer1, num_bytes);
     trim_spaces(boardInput);
     line5 = buffer1;
 
-    std::istringstream iss(boardInput);
+    istringstream iss(boardInput);
     
     string mode, thrustL, thrustR = "";
     float l_thrust, r_thrust = 0;
@@ -496,7 +507,7 @@ void M300::commOnBoard(){
     }
 
     // on board without differential
-    // std::string mode, thrust = "";
+    // string mode, thrust = "";
     // float s_thrust = 0;
 
     // iss >> mode >> thrust;
@@ -518,12 +529,12 @@ int M300::MapToMavlink(float pwmValue){
 
   if (inputValue >= 0) {
     // Map the range [0, 100] to [1500, 2000]
-    inputValue = std::max(0, std::min(inputValue, 100));
+    inputValue = max(0, min(inputValue, 100));
     float coefficient = static_cast<float>(inputValue) / 100;
     mappedValue = 1500 + (coefficient * 500);
 } else {
     // Map the range [-100, 0] to [1000, 1500]
-    inputValue = std::max(-100, std::min(inputValue, 0));
+    inputValue = max(-100, min(inputValue, 0));
     float coefficient = static_cast<float>(inputValue + 100) / 100;
     mappedValue = 1000 + (coefficient * 500);
   }
@@ -531,9 +542,7 @@ int M300::MapToMavlink(float pwmValue){
   return mappedValue;
 }
 
-#include <poll.h>
-#include <stdio.h>
-#include <errno.h>
+
 
 // void checkPortConnection(int port_fd, string vehicle) {
 //     struct pollfd fds;
@@ -623,23 +632,24 @@ void M300::ThrustOutputPriority(){
 
 }
 
-bool call_sos = false;
-bool call_return = false;
-int i = 0;
+string modeFromBeacon = "";
 
 void M300::commBeacon(){
     memset(buffer, 0, BUFFER_SIZE);
     num_bytes = read(pik_port, buffer, BUFFER_SIZE);
 
-    std::string beaconInput(buffer, num_bytes);
+    if(num_bytes <= 0)
+      return;
+
+    string beaconInput(buffer, num_bytes);
     trim_spaces(beaconInput);
 
-    std::istringstream iss(beaconInput);
+    istringstream iss(beaconInput);
     
-    std::string device, lat, lon, mode = "";
+    string device, lat, lon, mode = "";
 
     // Try extracting the four parts from the string
-    if (iss >> device >> lat >> lon >> mode) {
+    if (iss >> device >> lat >> lon) {
         if(containsNumber(lat) && containsNumber(lon)){
 
             lat_b = stod(lat);
@@ -660,9 +670,10 @@ void M300::commBeacon(){
             Notify(m_gps_prefix+"_X", x, "GPRMC");
             Notify(m_gps_prefix+"_Y", y, "GPRMC");  
 
-            if(!containsNumber(mode)){
+            if(iss >> device >> lat >> lon >> mode && !containsNumber(mode)){
                 // Activate mode
-                for (std::string::size_type i = 0; i < mode.size(); ++i) {
+                modeFromBeacon = mode;
+                for (string::size_type i = 0; i < mode.size(); ++i) {
                     mode[i] = tolower(mode[i]);
                 }
 
@@ -719,7 +730,7 @@ void M300::commBeacon(){
 
     } else {
         // If the input doesn't have exactly three parts, do nothing
-        // std::cout << "Input does not contain exactly three parts." << std::endl;
+        // cout << "Input does not contain exactly three parts." << endl;
         // wrong format
         fakeGpsBeacon();
     }
@@ -749,7 +760,7 @@ void M300::setBaudRate(int baud){
 //
 M300::M300()
 {
-  std::fstream serial;
+  fstream serial;
   // Configuration variables  (overwritten by .moos params)
   m_max_rudder   = 30.0;        // default MAX_RUDDER (+/-)
   m_max_thrust   = 100.0;       // default MAX_THRUST (+/-)
@@ -1140,7 +1151,6 @@ bool M300::Iterate()
   else if(m_vname == "beacon" && checkVehicle == false)
   fakeGpsBeacon();
 
-
   // serial connection automation
   if(checkVehicle == false || pik_port == -1){
       checkVehicle = false;
@@ -1317,7 +1327,7 @@ void M300::readMessagesFromSocket()
 {
 
   string line = "";
-  std::getline(serial, line);
+  getline(serial, line);
 
     //cout << line << endl;
 
@@ -2046,14 +2056,14 @@ bool M300::handleMsgCPNVR(string msg)
   Notify("NAV_VEL_TWIST_LINEAR_Y", vel_sway);
   Notify("NAV_VEL_TWIST_ANGULAR_Z",dbl_rate_yaw_rad);
 
-  std::string unav_string = std::to_string(vel_surge);
-  std::string unav_header = "u(";
-  std::string vnav_string = std::to_string(vel_sway);
-  std::string vnav_header = ")v(";
-  std::string rnav_string = std::to_string(dbl_rate_yaw_rad);
-  std::string rnav_header = ")r(";
-  std::string end_char = ")";
-  std::string nav_full_state = unav_header + unav_string + vnav_header + vnav_string + rnav_header + rnav_string + end_char;
+  string unav_string = to_string(vel_surge);
+  string unav_header = "u(";
+  string vnav_string = to_string(vel_sway);
+  string vnav_header = ")v(";
+  string rnav_string = to_string(dbl_rate_yaw_rad);
+  string rnav_header = ")r(";
+  string end_char = ")";
+  string nav_full_state = unav_header + unav_string + vnav_header + vnav_string + rnav_header + rnav_string + end_char;
 
   Notify("NAV_FULL_STATE", nav_full_state);
   
@@ -2234,6 +2244,7 @@ bool M300::buildReport()
   m_msgs << "On Board: " << "thrust " << o_Thrust_L<< " " << o_Thrust_R << " available: " << onBoard << endl;
 
   m_msgs << "Remote: " << "thrust " << f_Thrust_L << " " << f_Thrust_R << endl;
+  m_msgs << "vehicle output" << line5 << "beaconMode: " << modeFromBeacon << endl;
 
 
   m_msgs << m_vname << pik_port << "------- vehicle info" << output << endl;
