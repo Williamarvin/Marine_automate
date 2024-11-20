@@ -22,21 +22,15 @@ ProcessConfig = ANTLER
   Run = uFldMessageHandler @ NewConsole = false
   Run = uProcessWatch      @ NewConsole = false
 
-#ifdef XMODE SIM
   Run = uSimMarineV22      @ NewConsole = false
-#elseifdef XMODE M300
   Run = iM300              @ NewConsole = false
   Run = iM300Health        @ NewConsole = false
-#endif
 }
 
 
-#ifdef XMODE SIM
 #include plug_uSimMarineV22.moos
-#elseifdef XMODE M300
 #include plug_iM300.moos
 #include plug_iM300Health.moos
-#endif
 
 #include plug_pShare.moos
 
@@ -68,6 +62,39 @@ ProcessConfig = pNodeReporter
 
   vessel_type = kayak
 }
+
+ProcessConfig = uFldNodeComms                                   
+{                                                               
+  AppTick   = 4                                                 
+  CommsTick = 4                                                 
+                                                                
+  comms_range    = 100      // default (in meters)              
+  critical_range = 30       // default (in meters)              
+  stale_time     = 5        // default (in seconds)             
+                                                                
+  max_msg_length   = 1000   // default (# of characters)        
+  min_msg_interval = 30     // default (in seconds)             
+  min_rpt_interval = -1     // default (in seconds)             
+                                                                
+  verbose    = true         // default                          
+  groups     = false        // default                          
+  msg_groups = false        // default                          
+                                                                
+  stealth  = vname=alpha, stealth=0.8                           
+  earange  = vname=alpha, earange=4.5                           
+                                                                
+  shared_node_reports = false  // default                       
+                                                                
+  pulse_duration = 10          // default (in seconds)          
+  view_node_rpt_pulses = true  // default                       
+                                                                
+  drop_percentage = 10         // Drop 10% msgs. Default is 0.  
+                                                                
+  msg_color        = white         // default                   
+  msg_repeat_color = light_green   // default                   
+                                                                
+  app_logging = true  // {true or file} By default disabled     
+}                                             
 
 //---------------------------------------
 // pDeadManPost Config Block
