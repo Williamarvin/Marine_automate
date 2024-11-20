@@ -670,7 +670,7 @@ void M300::commBeacon(){
             Notify(m_gps_prefix+"_X", x, "GPRMC");
             Notify(m_gps_prefix+"_Y", y, "GPRMC");  
 
-            if(iss >> device >> lat >> lon >> mode && !containsNumber(mode)){
+            if(iss >> mode && !containsNumber(mode)){
                 // Activate mode
                 modeFromBeacon = mode;
                 for (string::size_type i = 0; i < mode.size(); ++i) {
@@ -703,7 +703,7 @@ void M300::commBeacon(){
                     Notify("status", status);
                 }
 
-                else if(mode == "stop"){
+                else if(mode == "normal"){
                     // stop vehicle
                     // idk if work
 
@@ -1016,7 +1016,8 @@ bool M300::OnNewMail(MOOSMSG_LIST &NewMail)
       m_ivp_allstop = (toupper(sval) != "CLEAR");
 
     else if(key == "NODE_REPORT_FLOATIE"){
-      // beaconMode = parseBeaconMode(sval);
+      beaconMode = parseBeaconMode(sval);
+      // beaconMode = sval;
     }
 
     else if(key == "status"){
@@ -1164,6 +1165,7 @@ bool M300::Iterate()
       sendMessagesToSocket();
       ThrustOutputPriority();
       commFloatie();
+      setFloatieMode();
       // checkPortConnection(board_port, "board");
 
       if(onBoard == false || board_port == -1){
@@ -2244,7 +2246,7 @@ bool M300::buildReport()
   m_msgs << "On Board: " << "thrust " << o_Thrust_L<< " " << o_Thrust_R << " available: " << onBoard << endl;
 
   m_msgs << "Remote: " << "thrust " << f_Thrust_L << " " << f_Thrust_R << endl;
-  m_msgs << "vehicle output" << line5 << "beaconMode: " << modeFromBeacon << endl;
+  m_msgs << "vehicle output" << line5 << "beaconMode: " << modeFromBeacon << "  " << beaconMode << endl;
 
 
   m_msgs << m_vname << pik_port << "------- vehicle info" << output << endl;
