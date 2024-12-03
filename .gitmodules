@@ -1,0 +1,3 @@
+[submodule "moos-ivp-pavlab-aro/src/iM300/moos-ivp-pavlab-aro/src/iM300/c_library_v2"]
+	path = moos-ivp-pavlab-aro/src/iM300/moos-ivp-pavlab-aro/src/iM300/c_library_v2
+	url = https://github.com/mavlink/c_library_v2.git
