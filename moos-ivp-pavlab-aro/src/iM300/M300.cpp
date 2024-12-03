@@ -55,7 +55,6 @@ void M300::onBoardConnection(){
         board_port = open(portList[i].c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
         setBaudRate(B57600);
         
-        // Case when board port is not available
         if(board_port == -1){
           continue;
         }
@@ -66,11 +65,11 @@ void M300::onBoardConnection(){
         if(num_bytes <= 0)
           continue;
 
-        string onBoardOutput(onBoard_buffer, num_bytes);
+        string output(onBoard_buffer, num_bytes);
 
-        trim_spaces(onBoardOutput);
+        trim_spaces(output);
 
-        istringstream iss(onBoardOutput);
+        istringstream iss(output);
 
         string mode = "";
 
@@ -522,8 +521,8 @@ void M300::thrusterSafety(){
 void M300::ThrustOutputPriority(){
 
   // Automate
-  double a_Thrust_L = MapToMavlink(m_thrust.getThrustLeft());
-  double a_Thrust_R = MapToMavlink(m_thrust.getThrustRight());
+  a_Thrust_L = MapToMavlink(m_thrust.getThrustLeft());
+  a_Thrust_R = MapToMavlink(m_thrust.getThrustRight());
 
   // on board control
   if((o_Thrust_L >= 1525 && o_Thrust_L <= 2000) || (o_Thrust_R >= 1525 && o_Thrust_R <= 2000) || (o_Thrust_L <= 1475 && o_Thrust_R >= 1000) || (o_Thrust_R <= 1475 && o_Thrust_R >= 1000)){
@@ -535,8 +534,6 @@ void M300::ThrustOutputPriority(){
   else if((f_Thrust_L >= 1525 && f_Thrust_L <= 2000) || (f_Thrust_R >= 1525 && f_Thrust_R <= 2000) || (f_Thrust_L <= 1475 && f_Thrust_R >= 1000) || (f_Thrust_R <= 1475 && f_Thrust_R >= 1000)){
     sendServo(3, f_Thrust_L);
     sendServo(1, f_Thrust_R);
-
-    // add 5 second delay after remote stop. 
   }
 
   // Automation
@@ -1084,7 +1081,6 @@ bool M300::Iterate()
       ThrustOutputPriority();
       commFloatie();
       setFloatieMode();
-      // checkPortConnection(board_port, "board");
 
       if(onBoard == false || board_port == -1){
         onBoard = false;
@@ -2155,11 +2151,12 @@ bool M300::buildReport()
   if(m_vname == "floatie"){
     m_msgs << "On Board: " << "thrust " << o_Thrust_L<< " " << o_Thrust_R << " available: " << onBoard << endl;
     m_msgs << "Remote: " << "thrust: " << f_Thrust_L << " " << f_Thrust_R << endl;
-    m_msgs << "gps found: " << gpsFound << "heading found: " << hdg_found << endl;
+    m_msgs << "Automation: " << a_Thrust_L << " " << a_Thrust_R << endl;
+    m_msgs << "gps found: " << gpsFound << " heading found: " << hdg_found << endl;
   }
 
   m_msgs << "beaconMode: " << beaconMode << endl;
-  m_msgs << "vehicle name: " << m_vname << "Vehicle port: " << pik_port << endl;
+  m_msgs << "vehicle name: " << m_vname << " Vehicle port: " << checkVehicle << endl;
   
   if ( m_rot_ctrl.getRotateInPlace() ) {
     m_msgs << "Rotation target heading: " << str_rot_hdg_tgt << endl;
