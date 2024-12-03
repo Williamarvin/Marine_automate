@@ -20,6 +20,9 @@
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "XYRangePulse.h"  // for send pulse
 #include "NodeMessage.h"   // for UREP coordination
+#include "c_library_v2/common/mavlink.h"
+
+using namespace std;
 
 class M300 : public AppCastingMOOSApp
 {
@@ -59,10 +62,28 @@ protected: // App Specific functions
   void sendPulse();
   void calculateFaultyThrust(double thrustL, double thrustR, double &thrustL_faulty, double &thrustR_faulty);
   
+  // Auv functions
+  void sendServo(uint8_t servoNumber, float pwmValue);
+  void setBaudRate(int);
+  void setFloatieMode();
+  void commOnBoard();
+  void commBeacon();
+  void onBoardConnection();
+  void thrusterSafety();
+  void vehicleConnection();
+  void commFloatie();
+  void fakeGpsFloatie();
+  void fakeGpsBeacon();
+  void ThrustOutputPriority();
+  int MapToMavlink(float pwmValue);
 
-  
+  string trim_spaces(const string &str);
 
 private: // Config variables
+  
+  std::fstream serial;
+  string serialPort;
+  
   double       m_max_rudder;       // MAX_RUDDER
   double       m_max_thrust;       // MAX_THRUST
   std::string  m_drive_mode;       // DRIVE_MODE
@@ -88,7 +109,6 @@ private: // State variables
   VehRotController m_rot_ctrl;
 
   bool         m_ivp_allstop;
-  bool         m_ignore_ivphelm_allstop;
   bool         m_moos_manual_override;
 
   // Stale Message Detection
@@ -99,7 +119,6 @@ private: // State variables
   double       m_tstamp_des_rudder;
   double       m_tstamp_des_thrust;
   double       m_tstamp_compass_msg;
-  double       m_compass_speed_thresh; 
 
   unsigned int m_num_satellites;
   double       m_batt_voltage;
@@ -128,6 +147,36 @@ private: // State variables
   double       m_fault_factor_rudder;
   double       m_rudder_bias_L;
   double       m_rudder_bias_R; 
+
+  // port related
+  int pik_port = -1;
+  int board_port = -1;
+  vector<string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4", "/dev/ttyFIQ0", "/dev/ttyS9"};
+
+  // Message related
+  const int BUFFER_SIZE = 1000;
+  char vehicle_buffer[1000];
+  char onBoard_buffer[1000];
+
+  // Check bool variables
+  bool checkVehicle = false;
+  bool gpsFound = false;
+  bool onBoard = false;
+  bool hdg_found = false;
+
+  // Beacon related
+  string beaconMode = "";
+
+  // Flotie related
+  string mode = "floatie";
+  string status = "";
+  float f_Thrust_L, f_Thrust_R, o_Thrust_L, o_Thrust_R = 0;
+
+  // Others
+  string serial_output = "";
+  ssize_t num_bytes;
+
+  // Modified
 };
 
 #endif 
