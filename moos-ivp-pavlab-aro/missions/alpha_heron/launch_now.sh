@@ -23,8 +23,9 @@ PSHARE_PORT="9201"
 SHORE_IP="localhost"
 SHORE_PSHARE="9200"
 VNAME="abe"
-INDEX="1"
+INDEX="2"
 XMODE="M300"
+comms_type="/dev/ttyUSB0"
 
 REGION="pavlab"
 START_POS="0,0,180"
@@ -138,19 +139,23 @@ done
 MOOS_PORT=`expr $INDEX + 9000`
 PSHARE_PORT=`expr $INDEX + 9200`
 
+target=false
+# if dont do anything, then you have to plug pikhawk first
+
 if [ "${XMODE}" = "M300" ]; then
     IP_ADDR='172.20.10.4'
+    FSEAT_IP='beacon'
 
     if [[ "${ARGI}" == --ip=* ]]; then
-        echo "yes"
-        comms_type="${ARGI#--ip=*}"
-    else
         comms_type="/dev/ttyUSB0"
+        target=true
+    else
+        target=false
+        comms_type="/dev/ttyUSB1"
     fi
 
     IP_ADDR=$comms_type
-    FSEAT_IP='floatie'
-    VNAME="floatie"
+    VNAME="beacon"
 
     if [ $? != 0 ]; then
 	echo "$ME: Problem getting Heron Name. Exit Code 2"
@@ -222,8 +227,13 @@ echo "Launching $VNAME MOOS Community. WARP="$TIME_WARP
 pAntler targ_${VNAME}.moos >& /dev/null &
 echo "Done Launching $VNAME MOOS Community"
 
-# echo "launching beacon.."
-# ./launch_vehicle1.sh --shore=$SHORE_IP
+echo "launching floatie.."
+
+if [ $target = true ]; then
+    ./launch_vehicle.sh --shore=$SHORE_IP --ip="/dev/ttyUSB1"
+else
+    ./launch_vehicle.sh --shore=$SHORE_IP --ip="/dev/ttyUSB0"
+fi
 
 #---------------------------------------------------------------
 #  Part 7: If launched from script, we're done, exit now

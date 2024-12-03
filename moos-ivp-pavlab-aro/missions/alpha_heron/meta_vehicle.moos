@@ -21,14 +21,12 @@ ProcessConfig = ANTLER
   Run = pRealm             @ NewConsole = false
   Run = uFldMessageHandler @ NewConsole = false
   Run = uProcessWatch      @ NewConsole = false
+  Run = uFldNodeComms      @ NewConsole = false
 
-  Run = uSimMarineV22      @ NewConsole = false
   Run = iM300              @ NewConsole = false
   Run = iM300Health        @ NewConsole = false
 }
 
-
-#include plug_uSimMarineV22.moos
 #include plug_iM300.moos
 #include plug_iM300Health.moos
 
@@ -52,6 +50,13 @@ ProcessConfig = pHelmIvP
   domain       = speed:0:2.0:21
 }
 
+ProcessConfig = iRemoteLite
+{
+ CustomJournal = Name = DESIRED_RUDDER,Key =6, History = 10,Period = 0
+ CustomSummary = DESIRED_THRUST
+ CustomKey = 2 : JANITOR_SWITCH @ "ACTUATION:OFF"
+}
+
 //---------------------------------------
 // pNodeReporter Config Block
 	
@@ -63,12 +68,27 @@ ProcessConfig = pNodeReporter
   vessel_type = kayak
 }
 
+//---------------------------------------
+// pDeadManPost Config Block
+
+ProcessConfig = pDeadManPost
+{
+  AppTick   = 4
+  CommsTick = 4
+
+  heartbeat_var   = HEARTBEAT
+  max_noheart     = 15
+  post_policy     = reset
+  active_at_start = false
+  deadflag        = DEPLOY = false
+}
+
 ProcessConfig = uFldNodeComms                                   
 {                                                               
   AppTick   = 4                                                 
   CommsTick = 4                                                 
                                                                 
-  comms_range    = 100      // default (in meters)              
+  comms_range    = 1000000      // default (in meters)              
   critical_range = 30       // default (in meters)              
   stale_time     = 5        // default (in seconds)             
                                                                 
@@ -94,22 +114,7 @@ ProcessConfig = uFldNodeComms
   msg_repeat_color = light_green   // default                   
                                                                 
   app_logging = true  // {true or file} By default disabled     
-}                                             
-
-//---------------------------------------
-// pDeadManPost Config Block
-
-ProcessConfig = pDeadManPost
-{
-  AppTick   = 4
-  CommsTick = 4
-
-  heartbeat_var   = HEARTBEAT
-  max_noheart     = 15
-  post_policy     = reset
-  active_at_start = false
-  deadflag        = DEPLOY = false
-}
+}                        
 
 	
 //----------------------------------------
@@ -141,6 +146,7 @@ ProcessConfig = uFldNodeBroker
   bridge = src=NODE_REPORT_LOCAL,  alias=NODE_REPORT
   bridge = src=NODE_MESSAGE_LOCAL, alias=NODE_MESSAGE
 }
+
 
 //---------------------------------------
 // pMarinePIDV22 Config Block
