@@ -139,17 +139,7 @@ MOOS_PORT=`expr $INDEX + 9000`
 PSHARE_PORT=`expr $INDEX + 9200`
 
 if [ "${XMODE}" = "M300" ]; then
-    IP_ADDR='172.20.10.4'
 
-    if [[ "${ARGI}" == --ip=* ]]; then
-        echo "yes"
-        comms_type="${ARGI#--ip=*}"
-    else
-        comms_type="/dev/ttyUSB0"
-    fi
-
-    IP_ADDR=$comms_type
-    FSEAT_IP='floatie'
     VNAME="floatie"
 
     if [ $? != 0 ]; then
@@ -221,9 +211,6 @@ fi
 echo "Launching $VNAME MOOS Community. WARP="$TIME_WARP
 pAntler targ_${VNAME}.moos >& /dev/null &
 echo "Done Launching $VNAME MOOS Community"
-
-# echo "launching beacon.."
-# ./launch_vehicle1.sh --shore=$SHORE_IP
 
 #---------------------------------------------------------------
 #  Part 7: If launched from script, we're done, exit now

@@ -75,9 +75,6 @@ protected: // App Specific functions
   void fakeGpsFloatie();
   void fakeGpsBeacon();
   void ThrustOutputPriority();
-  int MapToMavlink(float pwmValue);
-
-  string trim_spaces(const string &str);
 
 private: // Config variables
   
@@ -170,7 +167,12 @@ private: // State variables
   // Flotie related
   string mode = "floatie";
   string status = "";
-  float f_Thrust_L, f_Thrust_R, o_Thrust_L, o_Thrust_R = 0;
+  float f_Thrust_L= 0;
+  float f_Thrust_R = 0;
+  float o_Thrust_L = 0;
+  float o_Thrust_R = 0;
+  float a_Thrust_L = 0;
+  float a_Thrust_R = 0;
 
   // Others
   string serial_output = "";
