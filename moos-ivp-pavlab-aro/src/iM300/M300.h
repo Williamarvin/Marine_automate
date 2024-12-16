@@ -146,37 +146,37 @@ private: // State variables
   double       m_rudder_bias_R; 
 
   // port related
-  int pik_port = -1;
-  int board_port = -1;
+  int          pik_port = -1;
+  int          board_port = -1;
   vector<string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4", "/dev/ttyFIQ0", "/dev/ttyS9"};
 
   // Message related
-  const int BUFFER_SIZE = 1000;
-  char vehicle_buffer[1000];
-  char onBoard_buffer[1000];
+  const        int BUFFER_SIZE = 1000;
+  char         vehicle_buffer[1000];
+  char         onBoard_buffer[1000];
 
   // Check bool variables
-  bool checkVehicle = false;
-  bool gpsFound = false;
-  bool onBoard = false;
-  bool hdg_found = false;
+  bool         checkVehicle = false;
+  bool         gpsFound = false;
+  bool         onBoard = false;
+  bool         hdg_found = false;
 
   // Beacon related
-  string beaconMode = "";
+  string       beaconMode = "";
 
   // Flotie related
-  string mode = "floatie";
-  string status = "";
-  float f_Thrust_L= 0;
-  float f_Thrust_R = 0;
-  float o_Thrust_L = 0;
-  float o_Thrust_R = 0;
-  float a_Thrust_L = 0;
-  float a_Thrust_R = 0;
+  string       mode = "floatie";
+  string       status = "";
+  float        f_Thrust_L= 0;
+  float        f_Thrust_R = 0;
+  float        o_Thrust_L = 0;
+  float        o_Thrust_R = 0;
+  float        a_Thrust_L = 0;
+  float        a_Thrust_R = 0;
 
   // Others
-  string serial_output = "";
-  ssize_t num_bytes;
+  string       serial_output = "";
+  ssize_t      num_bytes;
 
   // Modified
 };
