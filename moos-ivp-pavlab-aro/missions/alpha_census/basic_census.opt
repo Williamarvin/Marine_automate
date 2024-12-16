@@ -1,0 +1,93 @@
+
+// Configuration file for pOpinionManager
+// The vehicle's opinion for every option is configured below
+//
+// General assumptions for reasonable group behavior:
+// gamma - delta > 0 : Cooperative
+// gamma - delta < 0 : Competitive
+// alpha >= 0
+// beta  < 0
+
+
+// -------------------------------------------
+// Loiter1
+social_option
+{
+               name = loiter1
+   active_condition = DEPLOY=true    // default options is 'always'
+              input = ODOMETRY_DIST
+      option_output = OPTION=LOITER1
+
+         social_mode = custom
+   resistance_weight = 0.1
+   
+    intra_agent_same_option_coupling = 0.03   // Self reinforcement  (alpha)
+   intra_agent_inter_option_coupling = loiter2 = -0.1            //  (beta)
+   intra_agent_inter_option_coupling = loiter3 = -0.1            //  (beta)	
+    inter_agent_same_option_coupling = -1.0  // influence of others (gamma)
+   inter_agent_inter_option_coupling = loiter2 = 0.0            //  (delta)
+   inter_agent_inter_option_coupling = loiter3 = 0.00           //  (delta)
+   
+   input_function_type =  none
+            input_max  =  100
+            input_min  = -100
+            input_gain =  0.01
+}
+
+// -------------------------------------------
+// Loiter2
+social_option
+{
+               name = loiter2
+   active_condition = DEPLOY=true    // default options is 'always'
+              input = LOITER2_BIAS
+      option_output = OPTION=LOITER2
+
+         social_mode = custom
+   resistance_weight = 0.1
+   
+    intra_agent_same_option_coupling = 0.3   // Self reinforcement  (alpha)
+   intra_agent_inter_option_coupling = loiter1 = -0.1            //  (beta)
+   intra_agent_inter_option_coupling = loiter3 = -0.1            //  (beta)	
+    inter_agent_same_option_coupling = -1.0  // influence of others (gamma)
+   inter_agent_inter_option_coupling = loiter1 = 0.0 //2.0           //  (delta)
+   inter_agent_inter_option_coupling = loiter3 = 0.0 //2.0           //  (delta)
+   
+   input_function_type =  none
+            input_max  =  100
+            input_min  = -100
+            input_gain =  1.0
+}
+
+// -------------------------------------------
+// Loiter3
+social_option
+{
+               name = loiter3
+   active_condition = DEPLOY=true    // default options is 'always'
+              input = LOITER3_BIAS
+      option_output = OPTION=LOITER3
+
+         social_mode = custom
+   resistance_weight = 0.1
+   
+    intra_agent_same_option_coupling = 0.3   // Self reinforcement  (alpha)
+   intra_agent_inter_option_coupling = loiter1 = -0.1            //  (beta)
+   intra_agent_inter_option_coupling = loiter2 = -0.1            //  (beta)	
+    inter_agent_same_option_coupling = -1.0  // influence of others (gamma)
+   inter_agent_inter_option_coupling = loiter1 = 0.0 //2.0           //  (delta)
+   inter_agent_inter_option_coupling = loiter2 = 0.0 //2.0           //  (delta)
+   
+   input_function_type =  none
+            input_max  =  100
+            input_min  = -100
+            input_gain =  1.0
+}
+
+
+
+
+
+
+
+
