@@ -23,8 +23,9 @@ PSHARE_PORT="9201"
 SHORE_IP="localhost"
 SHORE_PSHARE="9200"
 VNAME="abe"
-INDEX="1"
+INDEX="2"
 XMODE="M300"
+comms_type="/dev/ttyUSB0"
 
 REGION="pavlab"
 START_POS="0,0,180"
@@ -138,9 +139,11 @@ done
 MOOS_PORT=`expr $INDEX + 9000`
 PSHARE_PORT=`expr $INDEX + 9200`
 
-if [ "${XMODE}" = "M300" ]; then
+target=false
+# if dont do anything, then you have to plug pikhawk first
 
-    VNAME="floatie"
+if [ "${XMODE}" = "M300" ]; then
+    VNAME="beacon"
 
     if [ $? != 0 ]; then
 	echo "$ME: Problem getting Heron Name. Exit Code 2"
@@ -208,9 +211,22 @@ fi
 #  Part 6: Launch the processes
 #--------------------------------------------------------------
 
+#  launching beacon
+echo "launching beacon.."
 echo "Launching $VNAME MOOS Community. WARP="$TIME_WARP
 pAntler targ_${VNAME}.moos >& /dev/null &
 echo "Done Launching $VNAME MOOS Community"
+
+echo "launching floatie.."
+
+pAntler targ_shoreside.moos >& /dev/null &
+echo "Done Launching Shoreside Community"
+
+# Launcing floatie
+./launch_vehicle.sh --shore=$SHORE_IP
+
+# Launching shoreside
+# ./launch_shoreside.sh --ip=$SHORE_IP
 
 #---------------------------------------------------------------
 #  Part 7: If launched from script, we're done, exit now

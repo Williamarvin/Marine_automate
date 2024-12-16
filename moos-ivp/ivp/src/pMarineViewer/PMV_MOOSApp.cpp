@@ -21,6 +21,8 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/stitching.hpp>
 #include <unistd.h>
 #include <iostream>
 #include "PMV_MOOSApp.h"
@@ -33,6 +35,91 @@
 #include "XYFormatUtilsPoly.h"
 
 using namespace std;
+
+// Edited
+#include <iostream>
+#include <curl/curl.h>
+#include <vector>
+#include <fstream>
+#include <filesystem> // Include for filesystem operations (C++17)
+
+string lat_lon_input = "";
+
+// Callback function to write data into a vector
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, vector<char>* userp) {
+    size_t totalSize = size * nmemb;
+    userp->insert(userp->end(), (char*)contents, (char*)contents + totalSize);
+    return totalSize;
+}
+
+void processImageData(const vector<char>& imageData) {
+    // Convert vector<char> to cv::Mat
+    cv::Mat img = cv::imdecode(cv::Mat(imageData), cv::IMREAD_COLOR); // Decode image data
+
+    if (img.empty()) {
+        cerr << "Failed to decode image data." << endl;
+        return;
+    }
+
+    // Resize the image to 2000x2000
+    cv::Mat resizedImg;
+    cv::resize(img, resizedImg, cv::Size(2000, 2000));
+
+    // Define the path to save files: two directories up and inside a 'data' folder
+    const string dataDirectory = "../../../moos-ivp/ivp/data"; // Path to save files
+
+    // Ensure that the data directory exists
+    if (!filesystem::exists(dataDirectory)) {
+        filesystem::create_directories(dataDirectory); // Create directories if they do not exist
+        cout << "Created directory: " << dataDirectory << endl;
+    }
+
+    // Save the resized image as a TIFF file in the specified directory
+    string outputPath = dataDirectory + "/map.tif";
+    cv::imwrite(outputPath, resizedImg); // Save as TIFF or any format you prefer
+
+    cout << "Resized image saved as " << outputPath << endl;
+
+    // Additional processing logic can go here
+}
+
+void getMap() {
+    CURL* curl;
+    CURLcode res;
+    vector<char> imageData; // Vector to hold image data
+
+    // Your Google Maps API key
+    string apiKey = "AIzaSyBvIZChwJJ0uZNUieXOP9092kOafpqXoeI"; // Replace with your actual API key
+    string url = "https://maps.googleapis.com/maps/api/staticmap?center=" + lat_lon_input + "&zoom=14&size=800x800&key=" + apiKey; // Set size to 800x800
+
+    curl = curl_easy_init();
+    if(curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &imageData);
+        
+        // Perform the request
+        res = curl_easy_perform(curl);
+        
+        // Check for errors
+        if(res != CURLE_OK) {
+            cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res) << endl;
+            imageData.clear(); // Clear data on error
+        } else {
+            cout << "Map fetched successfully." << endl;
+        }
+
+        // Cleanup
+        curl_easy_cleanup(curl);
+    }
+
+    if (!imageData.empty()) {
+        // Process the fetched TIFF image data directly in memory
+        processImageData(imageData);
+    } else {
+        cerr << "Failed to retrieve map data." << endl;
+    }
+}
 
 //----------------------------------------------------------------
 // Constructor()
@@ -769,6 +856,7 @@ void PMV_MOOSApp::handleRealmCastRequesting()
 //----------------------------------------------------------------------
 // Procedure: handleStartUp  (OnStartUp)
 
+
 void PMV_MOOSApp::handleStartUp(const MOOS_event & e) {
   // Keep track of whether the back images were user configured.
   // If not, we'll use the default image afterwards.
@@ -916,8 +1004,12 @@ void PMV_MOOSApp::handleStartUp(const MOOS_event & e) {
     }
     else if(param == "null_tiff")
       handled = m_gui->mviewer->handleNoTiff();
-    else if(param == "tiff_file")
-      handled = m_gui->mviewer->setParam(param, value);
+    else if(param == "tiff_file"){
+      // handled = m_gui->mviewer->setParam(param, value);
+      handled = false;
+      lat_lon_input = value;
+    }
+      
     else if(param == "tiff_file_b")
       handled = m_gui->mviewer->setParam(param, value);
     else if(param == "node_report_variable") {
@@ -966,8 +1058,10 @@ void PMV_MOOSApp::handleStartUp(const MOOS_event & e) {
   }
 
   // If no images were specified, use the default images.
-  if(m_gui->mviewer->getTiffFileCount() == 0)
-    m_gui->mviewer->setParam("tiff_file", "Default.tif");
+  if(m_gui->mviewer->getTiffFileCount() == 0){
+    getMap();
+    m_gui->mviewer->setParam("tiff_file", "map.tif");
+  }
 
   bool changed = m_realm_repo->checkStartCluster();
   if(changed) {
@@ -1428,6 +1522,7 @@ bool PMV_MOOSApp::buildReport()
   m_msgs << "------------------ " << endl;
   m_msgs << "RC Count:          " << m_realm_repo->getRealmCastCount() << endl;
   m_msgs << "WC Count:          " << m_realm_repo->getWatchCastCount() << endl;
+  m_msgs << "Lat and Lon of Maps" << lat_lon_input << endl;
 
   
   unsigned int drawcount = m_gui->mviewer->getDrawCount();
