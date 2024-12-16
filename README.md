@@ -53,3 +53,7 @@ source ~/.bashrc
 cd moos-ivp-pavlab-aro/missions/alpha_heron/
 ./launch_now.sh
 ```
+
+# If all else fails
+1. visit tutorial in: https://oceanai.mit.edu/2.680/pmwiki/pmwiki.php?n=Lab.Lab
+2. Set up in mac or other inquires of windows: https://oceanai.mit.edu/2.680/pmwiki/pmwiki.php?n=Lab.ClassSetup
