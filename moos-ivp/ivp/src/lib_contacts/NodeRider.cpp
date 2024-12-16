@@ -29,159 +29,145 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-NodeRider::NodeRider()
-{
+NodeRider::NodeRider() {
   m_frequency = 0;
-  m_last_utc  = 0;
-  m_fresh     = false;
+  m_last_utc = 0;
+  m_fresh = false;
 
   m_total_updates = 0;
 }
 
-
 //------------------------------------------------------------
 // Procedure: setVar()
 
-bool NodeRider::setVar(std::string var)
-{
-  if((var == "NAME")   || (var == "X")    || (var == "Y")    ||
-     (var == "SPD")    || (var == "HDG")  || (var == "DEP")  ||
-     (var == "LAT")    || (var == "LON")  || (var == "TYPE") ||
-     (var == "COLOR")  || (var == "MODE") || (var == "ALLSTOP") ||
-     (var == "INDEX")  || (var == "YAW")  || (var == "TIME")   ||
-     (var == "LENGTH"))
-    return(false);
-  
+bool NodeRider::setVar(std::string var) {
+  if ((var == "NAME") || (var == "X") || (var == "Y") || (var == "SPD") ||
+      (var == "HDG") || (var == "DEP") || (var == "LAT") || (var == "LON") ||
+      (var == "TYPE") || (var == "COLOR") || (var == "MODE") ||
+      (var == "ALLSTOP") || (var == "INDEX") || (var == "YAW") ||
+      (var == "TIME") || (var == "LENGTH"))
+    return (false);
+
   m_moosvar = var;
-  return(true);
+  return (true);
 }
 
 //------------------------------------------------------------
 // Procedure: setRiderField()
 
-bool NodeRider::setRiderFld(string fld)
-{
-  if(!isAlphaNum(fld))
-    return(false);
+bool NodeRider::setRiderFld(string fld) {
+  if (!isAlphaNum(fld))
+    return (false);
 
   m_rider_fld = fld;
-  return(true);
+  return (true);
 }
 
 //------------------------------------------------------------
 // Procedure: setPolicyConfig()
 
-bool NodeRider::setPolicyConfig(std::string config_str)
-{
-  if(config_str == "always") {
+bool NodeRider::setPolicyConfig(std::string config_str) {
+  if (config_str == "always") {
     m_policy = "always";
-    return(true);
+    return (true);
   }
 
-  if(config_str == "updated") {
+  if (config_str == "updated") {
     m_policy = "updated";
     m_frequency = -1;
-    return(true);
+    return (true);
   }
 
-  if(strBegins(config_str, "updated+")) {
+  if (strBegins(config_str, "updated+")) {
     biteStringX(config_str, '+');
-    if(isNumber(config_str)) {
+    if (isNumber(config_str)) {
       double freq = atof(config_str.c_str());
-      if(freq >= 0) {
-	m_policy = "updated";
-	m_frequency = freq;
-	return(true);
+      if (freq >= 0) {
+        m_policy = "updated";
+        m_frequency = freq;
+        return (true);
       }
     }
   }
 
-  if(isNumber(config_str)) {
+  if (isNumber(config_str)) {
     double freq = atof(config_str.c_str());
-    if(freq >= 0) {
+    if (freq >= 0) {
       m_policy = "freq";
       m_frequency = freq;
-      return(true);
+      return (true);
     }
   }
 
-  return(false);
+  return (false);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: updateValue()
 
-bool NodeRider::updateValue(string curr_value, double utc)
-{
+bool NodeRider::updateValue(string curr_value, double utc) {
   m_curr_value = curr_value;
-  m_last_utc   = utc;
-  m_fresh      = true;
+  m_last_utc = utc;
+  m_fresh = true;
 
   m_total_updates++;
-  
-  return(true);
+
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: setPolicy()
 
-bool NodeRider::setPolicy(string str)
-{
-  if((str == "always") || (str == "updated") || (str == "freq"))
+bool NodeRider::setPolicy(string str) {
+  if ((str == "always") || (str == "updated") || (str == "freq"))
     m_policy = str;
   else
-    return(false);
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: setFrequency()
 
-bool NodeRider::setFrequency(double dval)
-{
-  if(dval >= 0)
+bool NodeRider::setFrequency(double dval) {
+  if (dval >= 0)
     m_frequency = dval;
   else
-    return(false);
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: valid()
 
-bool NodeRider::valid() const
-{
-  if((m_moosvar == "") || (m_policy == ""))
-    return(false);
+bool NodeRider::valid() const {
+  if ((m_moosvar == "") || (m_policy == ""))
+    return (false);
 
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: getSpec()
 //      Note: always, udpated, updated+10, 10
 
-string NodeRider::getSpec() const
-{
-  if(!valid())
-    return("");
+string NodeRider::getSpec() const {
+  if (!valid())
+    return ("");
 
   string str = "var=" + m_moosvar;
 
-  if(m_policy == "freq")
-    str += ", policy=" + doubleToStringX(m_frequency,2);
-  else if((m_policy == "updated") && (m_frequency > 0))
-    str += ", policy=updated+" + doubleToStringX(m_frequency,2);
+  if (m_policy == "freq")
+    str += ", policy=" + doubleToStringX(m_frequency, 2);
+  else if ((m_policy == "updated") && (m_frequency > 0))
+    str += ", policy=updated+" + doubleToStringX(m_frequency, 2);
   else
     str += ", policy=" + m_policy;
 
-  if(m_rider_fld != "")
+  if (m_rider_fld != "")
     str += ", rfld=" + m_rider_fld;
-  
-  return(str);
-}
 
+  return (str);
+}

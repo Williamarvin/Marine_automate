@@ -23,52 +23,51 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <vector>
-#include <cstdlib>
 #include "PathUtils.h"
 #include "GeomUtils.h"
+#include <cstdlib>
+#include <vector>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: greedyPath()
 
-XYSegList greedyPath(XYSegList segl, double sx, double sy)
-{
-  //return(segl);
+XYSegList greedyPath(XYSegList segl, double sx, double sy) {
+  // return(segl);
   vector<unsigned int> vertex_visited;
-  vector<double>       vertex_x;
-  vector<double>       vertex_y;
-  vector<string>       vertex_vprop;
-  
+  vector<double> vertex_x;
+  vector<double> vertex_y;
+  vector<string> vertex_vprop;
+
   unsigned int i, j, vsize = segl.size();
-  
-  for(i=0; i<vsize; i++) {
+
+  for (i = 0; i < vsize; i++) {
     vertex_x.push_back(segl.get_vx(i));
     vertex_y.push_back(segl.get_vy(i));
     vertex_vprop.push_back(segl.get_vprop(i));
     vertex_visited.push_back(false);
   }
-  
+
   XYSegList new_segl;
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     // Begin finding the next vertex
     double smallest_dist = -1;
     unsigned int best_ix = 0;
-    for(j=0; j<vsize; j++) {
-      if(!vertex_visited[j]) {
-	double jx = vertex_x[j];
-	double jy = vertex_y[j];
-	double jdist = distPointToPoint(sx, sy, jx, jy);
-	if((smallest_dist < 0) || (jdist < smallest_dist)) {
-	  smallest_dist = jdist;
-	  best_ix = j;
-	}
+    for (j = 0; j < vsize; j++) {
+      if (!vertex_visited[j]) {
+        double jx = vertex_x[j];
+        double jy = vertex_y[j];
+        double jdist = distPointToPoint(sx, sy, jx, jy);
+        if ((smallest_dist < 0) || (jdist < smallest_dist)) {
+          smallest_dist = jdist;
+          best_ix = j;
+        }
       }
     }
     // Done finding the next vertex
     // Begin updating using the new next vertex info
-    if(smallest_dist >= 0) {
+    if (smallest_dist >= 0) {
       double nextx = vertex_x[best_ix];
       double nexty = vertex_y[best_ix];
       string next_vprop = vertex_vprop[best_ix];
@@ -78,14 +77,5 @@ XYSegList greedyPath(XYSegList segl, double sx, double sy)
       sy = nexty;
     }
   }
-  return(new_segl);
+  return (new_segl);
 }
-
-
-
-
-
-
-
-
-

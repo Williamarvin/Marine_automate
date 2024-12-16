@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef DUBINS_TURN_HEADER
 #define DUBINS_TURN_HEADER
 
@@ -30,29 +30,28 @@
 
 class DubinsTurn {
 public:
-  DubinsTurn(double osx=0, double osy=0, double osh=0, double rad=0);
-  ~DubinsTurn() {};
+  DubinsTurn(double osx = 0, double osy = 0, double osh = 0, double rad = 0);
+  ~DubinsTurn(){};
 
   void setTurn(double new_desired_hdg);
 
-  double getArcCX() const {return(m_ax);}
-  double getArcCY() const {return(m_ay);}
-  double getArcRad() const {return(m_rad);}
-  double getArcLangle() const {return(m_langle);}
-  double getArcRangle() const {return(m_rangle);}
+  double getArcCX() const { return (m_ax); }
+  double getArcCY() const { return (m_ay); }
+  double getArcRad() const { return (m_rad); }
+  double getArcLangle() const { return (m_langle); }
+  double getArcRangle() const { return (m_rangle); }
 
-  double getOSRayX() const {return(m_rx);}
-  double getOSRayY() const {return(m_ry);}
+  double getOSRayX() const { return (m_rx); }
+  double getOSRayY() const { return (m_ry); }
 
-  double getArcLen() const {return(m_arc_length);}
-  double getTurnHdg() const {return(m_new_hdg);}
-  
-  bool   starTurn() const {return(m_turn_type == 1);}
-  bool   portTurn() const {return(m_turn_type == -1);}
-  bool   noTurn()   const {return(m_turn_type == 0);}
-  
+  double getArcLen() const { return (m_arc_length); }
+  double getTurnHdg() const { return (m_new_hdg); }
+
+  bool starTurn() const { return (m_turn_type == 1); }
+  bool portTurn() const { return (m_turn_type == -1); }
+  bool noTurn() const { return (m_turn_type == 0); }
+
 public:
-  
 private:
   // configuration variables
   double m_osx;
@@ -74,8 +73,7 @@ private:
 
   double m_arc_length;
 
-  int    m_turn_type;
+  int m_turn_type;
 };
 
 #endif
-

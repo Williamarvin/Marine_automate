@@ -26,87 +26,76 @@
 #ifndef XY_FIELD_GENERATOR_HEADER
 #define XY_FIELD_GENERATOR_HEADER
 
-#include <vector>
-#include <string>
-#include "XYPolygon.h"
 #include "XYFormatUtilsPoly.h"
+#include "XYPolygon.h"
+#include <string>
+#include <vector>
 
-class XYFieldGenerator
-{
- public:
+class XYFieldGenerator {
+public:
   XYFieldGenerator();
   virtual ~XYFieldGenerator() {}
 
   bool addPolygon(std::string);
   bool addPolygon(XYPolygon);
   bool setSnap(double);
-  void setBufferDist(double v)     {m_buffer_dist=v;}
-  void setMaxTries(unsigned int v) {m_max_tries=v;}
-  void setTargAmt(unsigned int v)  {m_targ_amt=v;}
-  void setFlexBuffer(bool v=true)  {m_flex_buffer=v;}
-  void setVerbose(bool v=true)     {m_verbose=v;}
+  void setBufferDist(double v) { m_buffer_dist = v; }
+  void setMaxTries(unsigned int v) { m_max_tries = v; }
+  void setTargAmt(unsigned int v) { m_targ_amt = v; }
+  void setFlexBuffer(bool v = true) { m_flex_buffer = v; }
+  void setVerbose(bool v = true) { m_verbose = v; }
 
   void clear();
-  
+
   XYPoint generatePoint();
-  bool    generatePoints(unsigned int amt=0);
+  bool generatePoints(unsigned int amt = 0);
 
-  bool    addRandomPoint();
-  bool    addAllRandomPoints(unsigned int amt);
+  bool addRandomPoint();
+  bool addAllRandomPoints(unsigned int amt);
 
-  bool    addPoint(const XYPoint&);
-  bool    addPoint(double vx, double vy);
+  bool addPoint(const XYPoint &);
+  bool addPoint(double vx, double vy);
 
-  
   XYPoint getNewestPoint() const;
-  
-  std::vector<XYPoint> getPoints() {return(m_vpoints);}
-  std::vector<double>  getNearestVals(bool force=false);
-  double               getGlobalNearest(bool force=false);
-    
-  unsigned int polygonCount() {return(m_polygons.size());}
-  unsigned int size()         {return(m_polygons.size());}
-  XYPolygon    getPolygon(unsigned int);
 
- protected: // Config variables
-  bool isPointTooClose(const XYPoint&);
+  std::vector<XYPoint> getPoints() { return (m_vpoints); }
+  std::vector<double> getNearestVals(bool force = false);
+  double getGlobalNearest(bool force = false);
+
+  unsigned int polygonCount() { return (m_polygons.size()); }
+  unsigned int size() { return (m_polygons.size()); }
+  XYPolygon getPolygon(unsigned int);
+
+protected: // Config variables
+  bool isPointTooClose(const XYPoint &);
   bool isPointTooClose(double vx, double vy);
-  bool isPointInRegion(const XYPoint&);
+  bool isPointInRegion(const XYPoint &);
   bool isPointInRegion(double vx, double vy);
 
-  void updateGlobalNearestVals(bool force=false);
-  
- protected: // Config variables
+  void updateGlobalNearestVals(bool force = false);
+
+protected: // Config variables
   std::vector<XYPolygon> m_polygons;
 
   unsigned int m_max_tries;
   unsigned int m_targ_amt;
-  
-  double   m_buffer_dist;
-  double   m_snap;
 
-  double   m_flex_buffer;
+  double m_buffer_dist;
+  double m_snap;
 
-  bool     m_verbose;
-  
- protected: // State variables
-  double   m_poly_min_x;
-  double   m_poly_min_y;
-  double   m_poly_max_x;
-  double   m_poly_max_y;
+  double m_flex_buffer;
+
+  bool m_verbose;
+
+protected: // State variables
+  double m_poly_min_x;
+  double m_poly_min_y;
+  double m_poly_max_x;
+  double m_poly_max_y;
 
   std::vector<XYPoint> m_vpoints;
-  std::vector<double>  m_nearest;
-  double               m_global_nearest;
+  std::vector<double> m_nearest;
+  double m_global_nearest;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

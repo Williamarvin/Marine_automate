@@ -24,43 +24,32 @@
 #ifndef ALOG_SORT_HANDLER_HEADER
 #define ALOG_SORT_HANDLER_HEADER
 
-#include <vector>
-#include <string>
 #include <set>
+#include <string>
+#include <vector>
 
-class SortHandler
-{
- public:
+class SortHandler {
+public:
   SortHandler();
   ~SortHandler() {}
 
-  bool handleSort(const std::string&, const std::string& str="");
-  bool handleCheck(const std::string&);
+  bool handleSort(const std::string &, const std::string &str = "");
+  bool handleCheck(const std::string &);
   void printReport();
-  void setCacheSize(unsigned int v) {m_cache_size=v;}
-  void setFileOverWrite(bool v)     {m_file_overwrite=v;}
+  void setCacheSize(unsigned int v) { m_cache_size = v; }
+  void setFileOverWrite(bool v) { m_file_overwrite = v; }
 
-  unsigned int getCacheSize() const {return(m_cache_size);}
-  
- protected:
+  unsigned int getCacheSize() const { return (m_cache_size); }
+
+protected:
   unsigned int m_cache_size;
   unsigned int m_total_lines;
   unsigned int m_re_sorts;
 
-  bool  m_file_overwrite;
+  bool m_file_overwrite;
 
   FILE *m_file_in;
   FILE *m_file_out;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

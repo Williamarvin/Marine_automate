@@ -24,34 +24,20 @@
 #ifndef POPULATOR_HELMPLOTS_HEADER
 #define POPULATOR_HELMPLOTS_HEADER
 
+#include "ALogEntry.h"
+#include "HelmPlot.h"
 #include <string>
 #include <vector>
-#include "HelmPlot.h"
-#include "ALogEntry.h"
 
-class Populator_HelmPlots 
-{
+class Populator_HelmPlots {
 public:
-  Populator_HelmPlots() {};
-  ~Populator_HelmPlots() {};
+  Populator_HelmPlots(){};
+  ~Populator_HelmPlots(){};
 
-  bool     populateFromEntries(const std::vector<ALogEntry>&);
-  HelmPlot getHelmPlot() {return(m_helm_plot);};
+  bool populateFromEntries(const std::vector<ALogEntry> &);
+  HelmPlot getHelmPlot() { return (m_helm_plot); };
 
 protected:
   HelmPlot m_helm_plot;
 };
-#endif 
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

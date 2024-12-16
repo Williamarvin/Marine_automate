@@ -37,22 +37,19 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Platform_POSIX_INCLUDED
 #define MOOS_POCO_Foundation_Platform_POSIX_INCLUDED
-
 
 //
 // PA-RISC based HP-UX platforms have some issues...
 //
 #if defined(hpux) || defined(_hpux)
-	#if defined(__hppa) || defined(__hppa__)
-    #define MOOS_POCO_NO_SYS_SELECT_H 1
-		#if defined(__HP_aCC)
-      #define MOOS_POCO_NO_TEMPLATE_ICOMPARE 1
-		#endif
-	#endif
+#if defined(__hppa) || defined(__hppa__)
+#define MOOS_POCO_NO_SYS_SELECT_H 1
+#if defined(__HP_aCC)
+#define MOOS_POCO_NO_TEMPLATE_ICOMPARE 1
 #endif
-
+#endif
+#endif
 
 #endif // MOOS_POCO_Foundation_Platform_POSIX_INCLUDED

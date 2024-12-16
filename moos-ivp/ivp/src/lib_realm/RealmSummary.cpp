@@ -23,101 +23,89 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "RealmSummary.h"
+#include "MBUtils.h"
 #include <iostream>
 #include <iterator>
-#include "MBUtils.h"
-#include "RealmSummary.h"
 
 using namespace std;
 
 //---------------------------------------------------------
 // Procedure: addProc()
 
-void RealmSummary::addProc(string proc_str)
-{
-  if(!vectorContains(m_procs, proc_str))
+void RealmSummary::addProc(string proc_str) {
+  if (!vectorContains(m_procs, proc_str))
     m_procs.push_back(proc_str);
 }
 
 //---------------------------------------------------------
 // Procedure: addHistVar()
 
-void RealmSummary::addHistVar(string var_str)
-{
-  if(!vectorContains(m_hist_vars, var_str))
+void RealmSummary::addHistVar(string var_str) {
+  if (!vectorContains(m_hist_vars, var_str))
     m_hist_vars.push_back(var_str);
 }
 
 //---------------------------------------------------------
 // Procedure: valid()
 
-bool RealmSummary::valid() const
-{
-  if((m_node == "") || (m_procs.size() == 0))
-    return(false);
+bool RealmSummary::valid() const {
+  if ((m_node == "") || (m_procs.size() == 0))
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: get_spec()
 
-string RealmSummary::get_spec() const
-{
-  if((m_node == "") || (m_procs.size() == 0))
-    return("realm_summary_err");
-  
+string RealmSummary::get_spec() const {
+  if ((m_node == "") || (m_procs.size() == 0))
+    return ("realm_summary_err");
+
   string msg = "node=" + m_node + "#channels=";
 
   string channels;
-  for(unsigned int i=0; i<m_procs.size(); i++) {
-    if(channels != "")
+  for (unsigned int i = 0; i < m_procs.size(); i++) {
+    if (channels != "")
       channels += ",";
     channels += m_procs[i];
   }
   msg += channels;
 
-
   string hist_vars;
-  for(unsigned int i=0; i<m_hist_vars.size(); i++) {
-    if(hist_vars != "")
+  for (unsigned int i = 0; i < m_hist_vars.size(); i++) {
+    if (hist_vars != "")
       hist_vars += ",";
     hist_vars += m_hist_vars[i];
   }
   msg += "," + hist_vars;
 
-  return(msg);
+  return (msg);
 }
-
 
 //---------------------------------------------------------
 // Procedure: string2RealmSummary()
 //   Example: node=alpha # channels=pHelmIvP,pNodeReporter,...
 
-RealmSummary string2RealmSummary(string str)
-{
+RealmSummary string2RealmSummary(string str) {
   RealmSummary null_summary;
   RealmSummary good_summary;
 
   vector<string> parts = parseString(str, '#');
-  for(unsigned int i=0; i<parts.size(); i++) {
+  for (unsigned int i = 0; i < parts.size(); i++) {
     string param = biteStringX(parts[i], '=');
     string value = parts[i];
 
-    if(param == "node") 
+    if (param == "node")
       good_summary.setNode(value);
-    else if(param == "channels") {
+    else if (param == "channels") {
       vector<string> procs = parseString(value, ',');
-      for(unsigned int j=0; j<procs.size(); j++) 
-	good_summary.addProc(procs[j]);
-    }
-    else
-      return(null_summary);
+      for (unsigned int j = 0; j < procs.size(); j++)
+        good_summary.addProc(procs[j]);
+    } else
+      return (null_summary);
   }
 
-  return(good_summary);
+  return (good_summary);
 }
-
-
-
-

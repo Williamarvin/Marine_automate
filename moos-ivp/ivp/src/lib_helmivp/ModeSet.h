@@ -24,56 +24,45 @@
 #ifndef MODE_SET_HEADER
 #define MODE_SET_HEADER
 
-#include <vector>
-#include <string>
-#include "ModeEntry.h"
 #include "InfoBuffer.h"
+#include "ModeEntry.h"
 #include "VarDataPair.h"
+#include <string>
+#include <vector>
 
 class ModeSet {
 public:
-  ModeSet() {m_info_buffer=0;}
+  ModeSet() { m_info_buffer = 0; }
   ~ModeSet() {}
 
-  void addEntry(ModeEntry entry) {m_entries.push_back(entry);}
+  void addEntry(ModeEntry entry) { m_entries.push_back(entry); }
 
-  void setInfoBuffer(InfoBuffer *b) {m_info_buffer = b;}
-  
-  unsigned int size() {return(m_entries.size());}
-  
+  void setInfoBuffer(InfoBuffer *b) { m_info_buffer = b; }
+
+  unsigned int size() { return (m_entries.size()); }
+
   void evaluate();
   void print();
 
-  std::vector<VarDataPair> getVarDataPairs() 
-    {return(m_mode_var_data_pairs);}
+  std::vector<VarDataPair> getVarDataPairs() { return (m_mode_var_data_pairs); }
   std::string getModeSummary();
 
   std::vector<std::string> getConditionVars();
 
   std::string getStringDescription();
-  
-  std::map<std::string, std::vector<LogicCondition> > getNonModeLogicConditions();
 
- protected:
+  std::map<std::string, std::vector<LogicCondition>>
+  getNonModeLogicConditions();
+
+protected:
   void consultFromInfoBuffer();
   void updateInfoBuffer();
 
 protected:
-  std::vector<ModeEntry>    m_entries;
-  std::vector<VarDataPair>  m_mode_var_data_pairs;
+  std::vector<ModeEntry> m_entries;
+  std::vector<VarDataPair> m_mode_var_data_pairs;
 
   InfoBuffer *m_info_buffer;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

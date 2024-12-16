@@ -13,13 +13,13 @@
 #define ESRI_BATHY_GRID_UTILS_HEADER
 
 #include "EsriBathyGrid.h"
-#include <string>
-#include <math.h>  // atan2
 #include "XYFormatUtilsSegl.h"
+#include <math.h> // atan2
+#include <string>
 
 std::string getGridLabel(std::string grid_spec);
-std::string getLawnmowerString(EsriBathyGrid grid, int vnum, int v_N, double degrees);
+std::string getLawnmowerString(EsriBathyGrid grid, int vnum, int v_N,
+                               double degrees);
 std::string getLawnmowerString2(EsriBathyGrid grid, int vnum, int v_N);
-
 
 #endif

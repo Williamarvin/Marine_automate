@@ -5,19 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "OpinionManager_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pOpinionManager application is used for               ");
@@ -30,8 +29,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pOpinionManager file.moos [OPTIONS]                   ");
@@ -40,7 +38,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pOpinionManager with the given process name         ");
   blk("      rather than pOpinionManager.                           ");
   mag("  --example, -e                                                 ");
@@ -62,8 +60,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pOpinionManager Example MOOS Configuration                   ");
@@ -79,12 +76,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pOpinionManager INTERFACE                                    ");
@@ -107,9 +102,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pOpinionManager", "gpl");
   exit(0);
 }
-

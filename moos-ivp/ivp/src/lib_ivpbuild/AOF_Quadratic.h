@@ -22,38 +22,29 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_QUADRATIC_HEADER
 #define AOF_QUADRATIC_HEADER
 
 #include "AOF.h"
 
-class AOF_Quadratic: public AOF {
+class AOF_Quadratic : public AOF {
 public:
   AOF_Quadratic(IvPDomain g_domain);
   ~AOF_Quadratic() {}
 
-public:    
-  double evalBox(const IvPBox*) const;
-  bool   setParam(const std::string& param, double val); 
-  bool   initialize();
-  
+public:
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &param, double val);
+  bool initialize();
+
 private:
   double m_coeff;
   double n_coeff;
   double x_center;
   double y_center;
-  int    x_index;
-  int    y_index;
+  int x_index;
+  int y_index;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

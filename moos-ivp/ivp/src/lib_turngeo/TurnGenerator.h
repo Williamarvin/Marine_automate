@@ -24,45 +24,43 @@
 #ifndef TURN_GENERATOR_HEADER
 #define TURN_GENERATOR_HEADER
 
-#include <vector>
-#include <string>
 #include "XYPoint.h"
+#include <string>
+#include <vector>
 
-class TurnGenerator 
-{
+class TurnGenerator {
 public:
   TurnGenerator();
-  ~TurnGenerator() {};
-  
-  virtual void generate() {};
+  ~TurnGenerator(){};
+
+  virtual void generate(){};
   virtual bool setTurnRadius(double radius);
   virtual void setEndPos(double endx, double endy);
   virtual void setEndHeading(double endh);
-  
-  void setStartPos(double osx, double osy, double osh);
-  
-  bool setPointGap(double gap);
-  void setPortTurn(bool v)      {m_port_turn = v;}
-  void clear()                  {m_points.clear();}
-  
-  std::vector<XYPoint> getPts() const {return(m_points);}
-  std::vector<double>  getPtsX() const;
-  std::vector<double>  getPtsY() const;
 
-  double getTurnRadius() const {return(m_turn_radius);}
-  double getPointGap() const {return(m_ptgap);}
+  void setStartPos(double osx, double osy, double osh);
+
+  bool setPointGap(double gap);
+  void setPortTurn(bool v) { m_port_turn = v; }
+  void clear() { m_points.clear(); }
+
+  std::vector<XYPoint> getPts() const { return (m_points); }
+  std::vector<double> getPtsX() const;
+  std::vector<double> getPtsY() const;
+
+  double getTurnRadius() const { return (m_turn_radius); }
+  double getPointGap() const { return (m_ptgap); }
   double getTurnLen() const;
-  
-  unsigned int size() const {return(m_points.size());}
+
+  unsigned int size() const { return (m_points.size()); }
 
   unsigned int mergePoints(double thresh);
 
   std::string getTurnDir() const;
-  
-  bool valid() const;
-  
-protected:
 
+  bool valid() const;
+
+protected:
   double m_start_osx;
   double m_start_osy;
   double m_start_osh;
@@ -73,8 +71,8 @@ protected:
   double m_ptgap;
   double m_turn_radius;
 
-  bool   m_port_turn;
-  
+  bool m_port_turn;
+
   bool m_start_osx_set;
   bool m_start_osy_set;
   bool m_start_osh_set;
@@ -88,5 +86,4 @@ protected:
   std::vector<XYPoint> m_points;
 };
 
-#endif 
-
+#endif

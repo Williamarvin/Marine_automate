@@ -12,26 +12,25 @@
 #ifndef ZAIC_SPD_MODEL_HEADER
 #define ZAIC_SPD_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "ZAIC_Model.h"
 #include "ZAIC_SPD.h"
+#include <string>
 
-class ZAIC_SPD_Model : public ZAIC_Model
-{
- public:
+class ZAIC_SPD_Model : public ZAIC_Model {
+public:
   ZAIC_SPD_Model();
-  ~ZAIC_SPD_Model() {};
+  ~ZAIC_SPD_Model(){};
 
- public: // Virtual function overloaded
+public: // Virtual function overloaded
   IvPFunction *getIvPFunction();
-  
- public: // Editing functions
-  void  moveX(double amt);
-  void  setDomain(unsigned int);
+
+public: // Editing functions
+  void moveX(double amt);
+  void setDomain(unsigned int);
 
   // Change the Edit Mode
-  void  currMode(int);
+  void currMode(int);
 
   // Getters
   double getMedVal();
@@ -40,8 +39,8 @@ class ZAIC_SPD_Model : public ZAIC_Model
   double getLowValUtil();
   double getHghValUtil();
 
- protected:
-  ZAIC_SPD*  m_zaic_spd;
-  int        m_curr_mode;
+protected:
+  ZAIC_SPD *m_zaic_spd;
+  int m_curr_mode;
 };
-#endif 
+#endif

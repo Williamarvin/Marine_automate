@@ -24,41 +24,34 @@
 #ifndef LOG_UTILS_HEADER
 #define LOG_UTILS_HEADER
 
-#include <vector>
-#include <string>
 #include "ALogEntry.h"
+#include <string>
+#include <vector>
 
-std::string getTimeStamp(const std::string& line);
-std::string getVarName(const std::string& line);
-std::string getSourceName(const std::string& line);
-std::string getSourceNameNoAux(const std::string& line);
-std::string getDataEntry(const std::string& line);
+std::string getTimeStamp(const std::string &line);
+std::string getVarName(const std::string &line);
+std::string getSourceName(const std::string &line);
+std::string getSourceNameNoAux(const std::string &line);
+std::string getDataEntry(const std::string &line);
 
-std::string getNextRawLine(FILE*);
-ALogEntry   getNextRawALogEntry(FILE*, bool allstrings=false);
+std::string getNextRawLine(FILE *);
+ALogEntry getNextRawALogEntry(FILE *, bool allstrings = false);
 
+void stripInsigDigits(std::string &line);
+void shiftTimeStamp(std::string &line, double logstart);
+double getLogStart(const std::string &line);
+double getLogStartFromFile(const std::string &filename);
+double getDataStartTimeFromFile(const std::string &filename);
+double getDataEndTimeFromFile(const std::string &filename);
+void addVectorKey(std::vector<std::string> &, std::vector<bool> &, std::string);
 
-void   stripInsigDigits(std::string& line);
-void   shiftTimeStamp(std::string& line, double logstart);
-double getLogStart(const std::string& line);
-double getLogStartFromFile(const std::string& filename);
-double getDataStartTimeFromFile(const std::string& filename);
-double getDataEndTimeFromFile(const std::string& filename);
-void   addVectorKey(std::vector<std::string>&, 
-		    std::vector<bool>&, std::string);
-
-double getEpochSecsFromTimeOfDay(std::string, int format=0);
+double getEpochSecsFromTimeOfDay(std::string, int format = 0);
 double getEpochSecsFromTimeOfDay(double hour, double min, double sec);
-double getEpochSecsFromDayOfYear(std::string, int format=0);
+double getEpochSecsFromDayOfYear(std::string, int format = 0);
 double getEpochSecsFromDayOfYear(double day, double month, double year);
 
-unsigned int getIndexByTime(const std::vector<double>&, double);
+unsigned int getIndexByTime(const std::vector<double> &, double);
 
-unsigned int getFileLineCount(const std::string& filename);
+unsigned int getFileLineCount(const std::string &filename);
 
-#endif 
-
-
-
-
-
+#endif

@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_HEADING_BIAS_HEADER
 #define BHV_HEADING_BIAS_HEADER
 
@@ -30,35 +30,15 @@ class BHV_HeadingBias : public IvPBehavior {
 public:
   BHV_HeadingBias(IvPDomain);
   ~BHV_HeadingBias() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
 
- protected:
-  bool         updateInfoIn();
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
 
 protected:
-  bool    m_bias_right;
-  double  m_os_heading;
+  bool updateInfoIn();
+
+protected:
+  bool m_bias_right;
+  double m_os_heading;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

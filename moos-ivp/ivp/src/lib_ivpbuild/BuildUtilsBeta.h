@@ -26,22 +26,19 @@
 #ifndef BUILD_UTIL_HEADER
 #define BUILD_UTIL_HEADER
 
-#include <string>
-#include "PDMap.h"
 #include "BoxSet.h"
+#include "PDMap.h"
+#include <string>
 
 //--------------------------------------------------------------------
 // Generic Box Utils
 
-IvPBox  build1DBox(IvPDomain, std::string domstr, double vmin, double vmax);
-IvPBox  build1DBox(IvPDomain, std::string domstr, double val);
+IvPBox build1DBox(IvPDomain, std::string domstr, double vmin, double vmax);
+IvPBox build1DBox(IvPDomain, std::string domstr, double val);
 
-IvPBox  build2DBox(IvPDomain, std::string domstr1, std::string domstr2,
-		   double vmin1, double vmax1, double vmin2, double vmax2);
-IvPBox  build2DPointBox(IvPDomain, std::string domstr1, std::string domstr2,
-			double val1, double val2);
-
+IvPBox build2DBox(IvPDomain, std::string domstr1, std::string domstr2,
+                  double vmin1, double vmax1, double vmin2, double vmax2);
+IvPBox build2DPointBox(IvPDomain, std::string domstr1, std::string domstr2,
+                       double val1, double val2);
 
 #endif
-
-

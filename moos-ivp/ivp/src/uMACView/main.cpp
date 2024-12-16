@@ -21,16 +21,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "MBUtils.h"
-#include "OpenURL.h"
 #include "ColorParse.h"
-#include "Threadsafe_pipe.h"
-#include "MOOS_event.h"
+#include "MBUtils.h"
 #include "MOOSAppRunnerThread.h"
-#include "UMV_MOOSApp.h"
+#include "MOOS_event.h"
+#include "OpenURL.h"
+#include "Threadsafe_pipe.h"
 #include "UMV_GUI.h"
 #include "UMV_Info.h"
+#include "UMV_MOOSApp.h"
+#include <iostream>
 
 using namespace std;
 
@@ -42,32 +42,31 @@ Threadsafe_pipe<MOOS_event> g_pending_moos_events;
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/uMACView");
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
-  
-  if(mission_file == "")
+
+  if (mission_file == "")
     showHelpAndExit();
 
   cout << termColor("green");
@@ -75,29 +74,29 @@ int main(int argc, char *argv[])
   cout << termColor() << endl;
 
   AppCastRepo appcast_repo;
-  RealmRepo   realm_repo;
+  RealmRepo realm_repo;
 
-  UMV_GUI* gui = new UMV_GUI(500,800, run_command.c_str());
-  if(!gui) {
+  UMV_GUI *gui = new UMV_GUI(500, 800, run_command.c_str());
+  if (!gui) {
     cout << "Unable to instantiate the GUI - exiting." << endl;
-    return(-1);
+    return (-1);
   }
 
   UMV_MOOSApp theUMV;
 
   theUMV.setGUI(gui);
-  theUMV.setPendingEventsPipe(& g_pending_moos_events);
+  theUMV.setPendingEventsPipe(&g_pending_moos_events);
   theUMV.setAppCastRepo(&appcast_repo);
   theUMV.setRealmRepo(&realm_repo);
   gui->setAppCastRepo(&appcast_repo);
   gui->setRealmRepo(&realm_repo);
-  
+
   // start the MOOSPort in its own thread
-  MOOSAppRunnerThread appRunner(&theUMV, (char*)(run_command.c_str()),
-				mission_file.c_str(), argc, argv);
-  
+  MOOSAppRunnerThread appRunner(&theUMV, (char *)(run_command.c_str()),
+                                mission_file.c_str(), argc, argv);
+
   Fl::lock();
-  
+
   while (Fl::wait() > 0) {
     // We use the posting of a thread message (Fl::awake()) entirely
     // to cause Fl::wait() to return.  That should minimize the
@@ -111,12 +110,12 @@ int main(int argc, char *argv[])
       MOOS_event e;
       bool success = g_pending_moos_events.dequeue(e);
       assert(success);
-      
-      if(e.type == "OnNewMail")
+
+      if (e.type == "OnNewMail")
         theUMV.handleNewMail(e);
-      else if(e.type == "Iterate")
+      else if (e.type == "Iterate")
         theUMV.handleIterate(e);
-      else if(e.type == "OnStartUp")
+      else if (e.type == "OnStartUp")
         theUMV.handleStartUp(e);
     }
   }
@@ -124,15 +123,5 @@ int main(int argc, char *argv[])
   cout << "Quitting....." << endl;
   appRunner.quit();
   delete gui;
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-

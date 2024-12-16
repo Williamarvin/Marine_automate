@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_HSLINE_HEADER
 #define BHV_HSLINE_HEADER
 
@@ -31,32 +31,19 @@ class BHV_HSLine : public IvPBehavior {
 public:
   BHV_HSLine(IvPDomain);
   ~BHV_HSLine() {}
-  
-  bool         setParam(std::string, std::string);
-  IvPFunction* onRunState();
-  void         onIdleState()      {postErasableSegList();}
-  void         onCompleteState()  {postErasableSegList();}
 
- protected: 
-  void      postErasableSegList();
+  bool setParam(std::string, std::string);
+  IvPFunction *onRunState();
+  void onIdleState() { postErasableSegList(); }
+  void onCompleteState() { postErasableSegList(); }
 
- protected:  // configuration parameters
-  double    m_time_on_leg;               // seconds
-  double    m_max_des_speed_observed;    // meters/second
+protected:
+  void postErasableSegList();
+
+protected:                         // configuration parameters
+  double m_time_on_leg;            // seconds
+  double m_max_des_speed_observed; // meters/second
 
   XYSegList m_seglist;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

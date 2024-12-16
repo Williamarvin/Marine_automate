@@ -22,12 +22,12 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_COMMS_PULSE_HEADER
 #define XY_FORMAT_UTILS_COMMS_PULSE_HEADER
 
-#include <string>
 #include "XYCommsPulse.h"
+#include <string>
 
 //---------------------------------------------------------------
 // Create an XYCommsPulse from a string specification. This function
@@ -36,29 +36,19 @@
 // are subject to change without regard to backward compatibility.
 XYCommsPulse string2CommsPulse(std::string);
 
-// *** IMPORTANT NOTE **** 
-// The below functions are not intended to be invoked directly by 
+// *** IMPORTANT NOTE ****
+// The below functions are not intended to be invoked directly by
 // the user. They are subortinate functions called by the above
-// function. While the above function will be maintained in the 
+// function. While the above function will be maintained in the
 // future for backward compatibility, the below functions are not.
 
 //---------------------------------------------------------------
-// Create an XYCommsPulse from a string specification. 
+// Create an XYCommsPulse from a string specification.
 // This function is standard because it processes the string format
 // used when a string is created from an existing XYCommsPulse instance.
-// Example: sx=val, sy=val, tx=val, ty=val, beam_width=10, 
+// Example: sx=val, sy=val, tx=val, ty=val, beam_width=10,
 //          duration=3, fill=0.5, label=bobby
 
 XYCommsPulse stringStandard2CommsPulse(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

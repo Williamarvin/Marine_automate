@@ -12,16 +12,15 @@
 
 #pragma once
 
+#include "ACTable.h"
+#include "EvalEngineKernelCore.h"
+#include "EvalEngineMessage.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include <cstdarg> //va_list, va_start, va_end
-#include <set>
 #include <map>
-#include "ACTable.h"
-#include "EvalEngineMessage.h"
-#include "EvalEngineKernelCore.h"
+#include <set>
 
-class EvalEngine
-{
+class EvalEngine {
 public:
   EvalEngine();
   ~EvalEngine();
@@ -31,7 +30,8 @@ public:
 
   bool Initialize();
   bool UpdateVariables(std::map<std::string, EEMessage> msg_buffer);
-  std::vector<std::pair<std::string, std::string> > ComputeEvaluations(std::vector<std::string> &kernel_level_warnings);
+  std::vector<std::pair<std::string, std::string>>
+  ComputeEvaluations(std::vector<std::string> &kernel_level_warnings);
 
   std::string genEngineReleaseInfo();
   std::string genEngineExampleConfig();
@@ -56,8 +56,8 @@ protected: // Protected variables
 private: // Configuration variables
   std::set<std::string> m_subscriptions_all;
   std::set<std::string> m_publications_all;
-  std::map<std::string, std::set<std::string> > m_subscriptions_to_kernels;
-  std::map<std::string, std::set<std::string> > m_publications_to_kernels;
+  std::map<std::string, std::set<std::string>> m_subscriptions_to_kernels;
+  std::map<std::string, std::set<std::string>> m_publications_to_kernels;
   std::vector<std::string> m_kernel_identities;
   std::map<std::string, EEMessage> m_info_buffer;
   std::map<std::string, std::string> m_parameters_all;

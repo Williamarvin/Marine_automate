@@ -21,16 +21,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
-#include <string>
-#include <iostream>
 #include "ColorParse.h"
 #include "Expander.h"
 #include "Expander_Info.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -39,95 +39,80 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   Expander expander;
 
-  bool input_file_provided  = false;
+  bool input_file_provided = false;
   bool output_file_provided = false;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string arg = argv[i];
 
-    if((arg=="-v") || (arg=="--version") || (arg=="-version"))
+    if ((arg == "-v") || (arg == "--version") || (arg == "-version"))
       showReleaseInfoAndExit();
-    else if((arg == "-h") || (arg == "--help") || (arg=="-help"))
+    else if ((arg == "-h") || (arg == "--help") || (arg == "-help"))
       showHelpAndExit();
-    else if((arg == "-m") || (arg == "--manual"))
+    else if ((arg == "-m") || (arg == "--manual"))
       showManualAndExit();
-    else if((arg == "-f") || (arg == "--force"))
+    else if ((arg == "-f") || (arg == "--force"))
       expander.setForce(true);
-    else if(strBegins(arg, "--path=")) 
+    else if (strBegins(arg, "--path="))
       expander.addPath(arg.substr(7));
-    else if(strBegins(arg, "--tag=")) 
+    else if (strBegins(arg, "--tag="))
       expander.setIncTag(arg.substr(6));
-    else if(((arg=="-p") || (arg=="--path")) && (i<(argc-1))) 
-      expander.addPath(argv[i+1]);
-    else if(((arg=="-s") || (arg=="--strict")))
+    else if (((arg == "-p") || (arg == "--path")) && (i < (argc - 1)))
+      expander.addPath(argv[i + 1]);
+    else if (((arg == "-s") || (arg == "--strict")))
       expander.setStrict(true);
-    else if(((arg=="-l") || (arg=="--lenient")))
+    else if (((arg == "-l") || (arg == "--lenient")))
       expander.setPartialsOK(true);
-    else if(((arg=="-i") || (arg=="--interactive")))
+    else if (((arg == "-i") || (arg == "--interactive")))
       expander.setInteractive(true);
-    else if(((arg=="-I") || (arg=="--impatient"))) {
+    else if (((arg == "-I") || (arg == "--impatient"))) {
       expander.setInteractive(true);
       expander.setImpatient(true);
     }
 
-    else if(strBegins(arg, "--macros="))
+    else if (strBegins(arg, "--macros="))
       expander.addMacroFile(arg.substr(9));
- 
-    else if(((arg=="-t") || (arg=="--terminal")))
+
+    else if (((arg == "-t") || (arg == "--terminal")))
       expander.setTerminal(true);
 
     // If none of the above switch options explicitly match...
-    else if(i == 1) {
+    else if (i == 1) {
       expander.setInFile(argv[1]);
       input_file_provided = true;
-    }
-    else if(i == 2) {
+    } else if (i == 2) {
       expander.setOutFile(argv[2]);
       output_file_provided = true;
-    }
-    else if(strContains(arg, '=')) {
-      string left  = biteStringX(arg, '=');
+    } else if (strContains(arg, '=')) {
+      string left = biteStringX(arg, '=');
       string right = arg;
       expander.addMacro(left, right);
-    }
-    else
+    } else
       expander.addMacro(arg, "<defined>");
   }
 
-  if(!input_file_provided) {
+  if (!input_file_provided) {
     cout << "Aborted: An input file must be provided." << endl;
     exit(EXIT_FAILURE);
   }
 
-  if(!output_file_provided) {
+  if (!output_file_provided) {
     cout << "Aborted: An output file must be provided" << endl;
     exit(EXIT_FAILURE);
   }
 
-  if(expander.verifyInfile()) {
-    if(expander.expand())
+  if (expander.verifyInfile()) {
+    if (expander.expand())
       expander.writeOutput();
     else
       exit(EXIT_FAILURE);
-  }
-  else {
+  } else {
     cout << "Aborted: " << argv[1] << " cannot be opened. " << endl;
     exit(EXIT_FAILURE);
   }
-  
-  return(0);
+
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-

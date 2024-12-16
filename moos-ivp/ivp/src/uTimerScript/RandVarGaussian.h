@@ -24,35 +24,24 @@
 #ifndef RAND_VAR_GAUSSIAN_HEADER
 #define RAND_VAR_GAUSSIAN_HEADER
 
-#include <string>
 #include "RandomVariable.h"
+#include <string>
 
-class RandVarGaussian : public RandomVariable
-{
- public:
+class RandVarGaussian : public RandomVariable {
+public:
   RandVarGaussian();
   virtual ~RandVarGaussian() {}
 
- public: // Overloaded virtual functions
-  bool   setParam(std::string, double);
-  void   reset();
+public: // Overloaded virtual functions
+  bool setParam(std::string, double);
+  void reset();
 
   std::string getStringSummary() const;
   std::string getParams() const;
 
- protected: // Configuration Parameters
-  double      m_sigma;
-  double      m_mu;
+protected: // Configuration Parameters
+  double m_sigma;
+  double m_mu;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

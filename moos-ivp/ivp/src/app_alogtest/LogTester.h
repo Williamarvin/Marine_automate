@@ -22,18 +22,18 @@
 /*****************************************************************/
 
 #ifndef LOG_CHECKER_HEADER
-#define	LOG_CHECKER_HEADER
+#define LOG_CHECKER_HEADER
 
-#include <vector>
-#include <string>
 #include "ALogEntry.h"
-#include "LogUtils.h"
 #include "LogTest.h"
+#include "LogUtils.h"
+#include <string>
+#include <vector>
 
 const std::string m_timestamp = "ALOG_TIMESTAMP";
 
 class LogTester {
- public:
+public:
   LogTester();
   ~LogTester();
 
@@ -41,32 +41,29 @@ class LogTester {
   bool setALogFile(std::string alog_file);
   bool setMarkFile(std::string mark_file);
 
-  void setVerbose(bool v=true)   {m_verbose=v;}
-  void setOverWrite(bool v=true) {m_overwrite=v;}
+  void setVerbose(bool v = true) { m_verbose = v; }
+  void setOverWrite(bool v = true) { m_overwrite = v; }
 
   bool test();
   void print() const;
-  
-protected:
 
+protected:
   bool parseTestFiles();
-  bool parseTestFile(std::string);  
+  bool parseTestFile(std::string);
   bool finish();
-  
- protected:
-  
+
+protected:
   bool m_verbose;
   bool m_overwrite;
 
   std::string m_alog_file;
   std::string m_mark_file;
-  
-  FILE* m_fptr;
-  
+
+  FILE *m_fptr;
+
   std::vector<LogTest> m_tests;
 
   std::vector<std::string> m_test_files;
 };
 
-#endif	
-
+#endif

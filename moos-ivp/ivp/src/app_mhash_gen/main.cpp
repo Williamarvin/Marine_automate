@@ -21,45 +21,46 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <unistd.h>
 #include "HashUtils.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
-  for(int i=1; i<argc; i++) {
+int main(int argc, char *argv[]) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    
-    if((argi=="-h") || (argi == "--help") || (argi=="-help")) {
+
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help")) {
       cout << "Usage: " << endl;
       cout << "$ mhash_gen " << endl;
       cout << "              " << endl;
       cout << "Synopsis:     " << endl;
-      cout << "  This tool is simple wrapper around the utility for making " << endl;
-      cout << "  the default format MOOS-IvP mission hash. It was created  " << endl;
-      cout << "  solely to give the user a feel for example mission hashes." << endl;
-      cout << "  Dictionary of words: ivp/src/lib_mbutil/HashUtils.cpp     " << endl;
-      return(0);
-    }
-    else {
+      cout << "  This tool is simple wrapper around the utility for making "
+           << endl;
+      cout << "  the default format MOOS-IvP mission hash. It was created  "
+           << endl;
+      cout << "  solely to give the user a feel for example mission hashes."
+           << endl;
+      cout << "  Dictionary of words: ivp/src/lib_mbutil/HashUtils.cpp     "
+           << endl;
+      return (0);
+    } else {
       cout << "Unhandled arg: " << argi << endl;
-      return(1);
+      return (1);
     }
   }
 
-  unsigned long tseed = time(NULL)+1;
-  unsigned long pid = (long)getpid()+1;
-  unsigned long seed = (tseed%999999);
-  seed = ((rand())*seed)%999999;
-  seed = (seed*pid)%999999;
+  unsigned long tseed = time(NULL) + 1;
+  unsigned long pid = (long)getpid() + 1;
+  unsigned long seed = (tseed % 999999);
+  seed = ((rand()) * seed) % 999999;
+  seed = (seed * pid) % 999999;
   srand(seed);
 
   cout << missionHash() << endl;
 
-  return(0);
+  return (0);
 }
-

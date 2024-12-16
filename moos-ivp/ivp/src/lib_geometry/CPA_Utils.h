@@ -22,35 +22,26 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_CPA_UTILS_HEADER
 #define XY_CPA_UTILS_HEADER
 
-double evalCPA(double cnx, double cny, double cnspd, double cnhdg,
-	       double osx, double osy, double osspd, double oshdg,
-	       double ostol);
+double evalCPA(double cnx, double cny, double cnspd, double cnhdg, double osx,
+               double osy, double osspd, double oshdg, double ostol);
 
-bool   crossesBow(double cnx, double cny, double cnspd, double cnhdg,
-		  double osx, double osy, double osspd, double oshdg,
-		  double ostol=0);
-
-double closingSpeed(double osx, double osy, double osspd, 
-		    double oshdg, double px, double py);
-		    
+bool crossesBow(double cnx, double cny, double cnspd, double cnhdg, double osx,
+                double osy, double osspd, double oshdg, double ostol = 0);
 
 double closingSpeed(double osx, double osy, double osspd, double oshdg,
-		    double cnx, double cny, double cnspd, double cnhdg);
+                    double px, double py);
 
+double closingSpeed(double osx, double osy, double osspd, double oshdg,
+                    double cnx, double cny, double cnspd, double cnhdg);
 
-void   velocityVectorSum(double hdg1, double spd1, double hdg2, 
-			 double spd2, double& hdg, double& spd);
+void velocityVectorSum(double hdg1, double spd1, double hdg2, double spd2,
+                       double &hdg, double &spd);
 
-double  relAngRate(double xa, double ya, double xb, double yb, 
-		   double xc, double yc, double xd, double yd, double time);
+double relAngRate(double xa, double ya, double xb, double yb, double xc,
+                  double yc, double xd, double yd, double time);
 
 #endif
-
-
-
-
-

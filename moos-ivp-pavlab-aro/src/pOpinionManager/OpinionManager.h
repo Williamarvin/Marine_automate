@@ -8,41 +8,37 @@
 #ifndef OpinionManager_HEADER
 #define OpinionManager_HEADER
 
-#include "OpinionManagerEngine.h"
 #include "NodeMessage.h"
+#include "OpinionManagerEngine.h"
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class OpinionManager : public AppCastingMOOSApp
-{
- public:
-   OpinionManager();
-   ~OpinionManager();
+class OpinionManager : public AppCastingMOOSApp {
+public:
+  OpinionManager();
+  ~OpinionManager();
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- protected:
-   void registerVariables();
+protected:
+  void registerVariables();
 
- private: // Configuration variables
+private: // Configuration variables
+private: // State variables
+  OpManagerEngine m_op_eng;
+  NodeMessage m_optn_node_message;
+  std::string m_vname;
 
- private: // State variables
-   
-   OpManagerEngine m_op_eng;
-   NodeMessage m_optn_node_message;
-   std::string m_vname;
-
-   // Record of last postings to not bloat the MOOSDB
-   // key = var name, val is the string that was last posted
-   std::map<std::string, std::string> m_last_population_state_posting;
-   
+  // Record of last postings to not bloat the MOOSDB
+  // key = var name, val is the string that was last posted
+  std::map<std::string, std::string> m_last_population_state_posting;
 };
 
-#endif 
+#endif

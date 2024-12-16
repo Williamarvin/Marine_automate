@@ -24,27 +24,25 @@
 #ifndef IPF_UTILS_HEADER
 #define IPF_UTILS_HEADER
 
-#include <vector>
-#include <string>
+#include "AOF.h"
+#include "IvPFunction.h"
 #include "QuadSet.h"
 #include "QuadSet1D.h"
-#include "IvPFunction.h"
-#include "AOF.h"
+#include <string>
+#include <vector>
 
-QuadSet  buildQuadSetFromIPF(IvPFunction*, bool dense=false);
+QuadSet buildQuadSetFromIPF(IvPFunction *, bool dense = false);
 
-QuadSet  buildQuadSetDense2DFromIPF(IvPFunction*);
+QuadSet buildQuadSetDense2DFromIPF(IvPFunction *);
 
-QuadSet  buildQuadSetDense2DFromAOF(AOF*, unsigned int patch=1);
+QuadSet buildQuadSetDense2DFromAOF(AOF *, unsigned int patch = 1);
 
-QuadSet  buildQuadSet2DFromIPF(IvPFunction*);
+QuadSet buildQuadSet2DFromIPF(IvPFunction *);
 
-QuadSet1D  buildQuadSet1DFromIPF(IvPFunction*, std::string);
+QuadSet1D buildQuadSet1DFromIPF(IvPFunction *, std::string);
 
-
-std::vector<Quad3D> buildQuadsFromCache(const std::vector<std::vector<double> >&,
-					unsigned int patch_size=1);
-
+std::vector<Quad3D>
+buildQuadsFromCache(const std::vector<std::vector<double>> &,
+                    unsigned int patch_size = 1);
 
 #endif
-

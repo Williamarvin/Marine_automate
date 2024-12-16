@@ -24,31 +24,24 @@
 #ifndef RAND_PAIR_POLY_HEADER
 #define RAND_PAIR_POLY_HEADER
 
-#include <string>
 #include "RandomPair.h"
 #include "XYPolygon.h"
+#include <string>
 
-class RandPairPoly : public RandomPair
-{
- public:
+class RandPairPoly : public RandomPair {
+public:
   RandPairPoly();
   virtual ~RandPairPoly() {}
 
- public: // Overloaded virtual functions
-  //bool   setParam(std::string, double) {return(true);}
-  bool   setParam(std::string, std::string);
-  void   reset();
-  
+public: // Overloaded virtual functions
+  // bool   setParam(std::string, double) {return(true);}
+  bool setParam(std::string, std::string);
+  void reset();
+
   std::string getStringSummary() const;
 
- private:
-
+private:
   XYPolygon m_poly;
 };
 
-#endif 
-
-
-
-
-
+#endif

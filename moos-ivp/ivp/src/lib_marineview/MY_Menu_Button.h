@@ -24,41 +24,22 @@
 #ifndef MY_FLTK_MENU_BUTTON_HEADER
 #define MY_FLTK_MENU_BUTTON_HEADER
 
-#include <iostream>
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_Button.H>
-
+#include <iostream>
 
 class MY_Menu_Button : public Fl_Menu_Button {
 public:
-  MY_Menu_Button(int x, int y, int w, int h, const char *l=0) :
-  Fl_Menu_Button(x, y, w, h, l) {}
-  
-  int  handle(int event) {
-    if((Fl::event_key()==FL_Up)   || (Fl::event_key()==FL_Down)  || 
-       (Fl::event_key()==FL_Left) || (Fl::event_key()==FL_Right)) {
-      return(0);
+  MY_Menu_Button(int x, int y, int w, int h, const char *l = 0)
+      : Fl_Menu_Button(x, y, w, h, l) {}
+
+  int handle(int event) {
+    if ((Fl::event_key() == FL_Up) || (Fl::event_key() == FL_Down) ||
+        (Fl::event_key() == FL_Left) || (Fl::event_key() == FL_Right)) {
+      return (0);
     }
-    return(Fl_Menu_Button::handle(event));
+    return (Fl_Menu_Button::handle(event));
   }
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

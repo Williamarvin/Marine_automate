@@ -22,40 +22,39 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef WALL_ENGINE_HEADER
 #define WALL_ENGINE_HEADER
 
-#include <vector>
-#include "XYSegList.h"
 #include "DubinsCache.h"
 #include "ProxPoint.h"
+#include "XYSegList.h"
+#include <vector>
 
 class WallEngine {
 public:
   WallEngine();
-  ~WallEngine() {};
+  ~WallEngine(){};
 
   bool setEngine(double osy, double osx, double osh, double radius,
-		 const std::vector<XYSegList>& walls,
-		 unsigned int hdg_choices=360);
-  
-  double getXCPA(double osh, double osv,
-		 double ttc_base, double ttc_rate) const;
+                 const std::vector<XYSegList> &walls,
+                 unsigned int hdg_choices = 360);
 
-  double getMinRangeToWall() const {return(m_min_range_to_wall);}
+  double getXCPA(double osh, double osv, double ttc_base,
+                 double ttc_rate) const;
 
-  
+  double getMinRangeToWall() const { return (m_min_range_to_wall); }
+
 private:
-  void   buildWallSegCache();
-  void   buildBaseProxCache();
+  void buildWallSegCache();
+  void buildBaseProxCache();
 
-  void   buildProxCache();
-  void   buildHitCacheDubins();
+  void buildProxCache();
+  void buildHitCacheDubins();
 
   std::vector<ProxPoint> getArcProxPoints(unsigned int ix);
 
-private:  // Config vars
+private: // Config vars
   double m_osx;
   double m_osy;
   double m_osh;
@@ -63,37 +62,33 @@ private:  // Config vars
   std::vector<XYSegList> m_walls;
 
   double m_prox_thresh;
-  
+
   unsigned int m_hdg_choices;
 
   void print(unsigned int, unsigned int) const;
-  
-private:  // State vars
+
+private: // State vars
   DubinsCache m_dcache;
 
   std::vector<double> m_port_wsegs_x1;
-  std::vector<double> m_port_wsegs_y1;  
+  std::vector<double> m_port_wsegs_y1;
   std::vector<double> m_port_wsegs_x2;
-  std::vector<double> m_port_wsegs_y2;  
+  std::vector<double> m_port_wsegs_y2;
 
   std::vector<double> m_star_wsegs_x1;
   std::vector<double> m_star_wsegs_y1;
   std::vector<double> m_star_wsegs_x2;
   std::vector<double> m_star_wsegs_y2;
-  
+
   std::vector<ProxPoint> m_port_prox_cache;
   std::vector<ProxPoint> m_star_prox_cache;
 
-  std::vector<std::vector<ProxPoint> > m_prox_cache;
+  std::vector<std::vector<ProxPoint>> m_prox_cache;
 
-  
-  
   double m_min_range_to_wall;
-  
-  std::vector<std::vector<double> > m_cache_cpa; 
-  std::vector<std::vector<double> > m_cache_dcpa; 
-  
+
+  std::vector<std::vector<double>> m_cache_cpa;
+  std::vector<std::vector<double>> m_cache_dcpa;
 };
 
 #endif
-

@@ -15,35 +15,26 @@ namespace MOOS {
 
 class ClientCommsStatus {
 public:
-    ClientCommsStatus();
-    virtual ~ClientCommsStatus();
+  ClientCommsStatus();
+  virtual ~ClientCommsStatus();
 
-    enum Quality
-    {
-        Excellent,
-        Good,
-        Fair,
-        Poor
-    };
+  enum Quality { Excellent, Good, Fair, Poor };
 
-    double recent_latency_;
-    double max_latency_;
-    double min_latency_;
-    double avg_latency_;
-    std::string name_;
-    std::list<std::string> subscribes_;
-    std::list<std::string> publishes_;
+  double recent_latency_;
+  double max_latency_;
+  double min_latency_;
+  double avg_latency_;
+  std::string name_;
+  std::list<std::string> subscribes_;
+  std::list<std::string> publishes_;
 
-    bool operator==(const ClientCommsStatus & M) const;
+  bool operator==(const ClientCommsStatus &M) const;
 
-    void Write(std::ostream & out);
+  void Write(std::ostream &out);
 
-    Quality Appraise();
-
-
-
+  Quality Appraise();
 };
 
-}
+} // namespace MOOS
 
 #endif /* CLIENTCOMMSSTATUS_H_ */

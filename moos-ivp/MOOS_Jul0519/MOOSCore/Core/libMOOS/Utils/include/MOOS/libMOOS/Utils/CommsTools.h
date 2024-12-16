@@ -7,9 +7,8 @@
 
 #ifndef COMMSTOOLS_H_
 #define COMMSTOOLS_H_
-namespace MOOS
-{
-    bool WaitForSocket(int fd, int nTimeoutSeconds);
+namespace MOOS {
+bool WaitForSocket(int fd, int nTimeoutSeconds);
 };
 
 #endif /* COMMSTOOLS_H_ */

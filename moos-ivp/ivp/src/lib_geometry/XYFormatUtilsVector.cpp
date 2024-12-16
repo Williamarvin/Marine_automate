@@ -23,10 +23,10 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <vector>
-#include <cstdlib>
 #include "XYFormatUtilsVector.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <vector>
 
 using namespace std;
 
@@ -34,69 +34,56 @@ using namespace std;
 // Procedure: string2Vector
 //
 
-XYVector string2Vector(string str)
-{
+XYVector string2Vector(string str) {
   XYVector null_vector;
   XYVector new_vector;
 
   str = tolower(stripBlankEnds(str));
   vector<string> mvector = parseStringQ(str, ',');
   unsigned int i, vsize = mvector.size();
-  
-  // Below are the mandatory parameters - check they are set.
-  double xpos     = 0;
-  double ypos     = 0;
-  double mag      = 0;
-  double ang      = 0;
-  double xdot     = 0;
-  double ydot     = 0;
-  bool   xpos_set = false;
-  bool   ypos_set = false;
 
-  for(i=0; i<vsize; i++) {
+  // Below are the mandatory parameters - check they are set.
+  double xpos = 0;
+  double ypos = 0;
+  double mag = 0;
+  double ang = 0;
+  double xdot = 0;
+  double ydot = 0;
+  bool xpos_set = false;
+  bool ypos_set = false;
+
+  for (i = 0; i < vsize; i++) {
     string param = stripBlankEnds(biteString(mvector[i], '='));
     string value = stripBlankEnds(mvector[i]);
-    double dval  = atof(value.c_str());
-    if(((param == "xpos") || (param == "x")) && isNumber(value)) {
+    double dval = atof(value.c_str());
+    if (((param == "xpos") || (param == "x")) && isNumber(value)) {
       xpos_set = true;
       xpos = dval;
-    }
-    else if(((param == "ypos") || (param=="y")) && isNumber(value)) {
+    } else if (((param == "ypos") || (param == "y")) && isNumber(value)) {
       ypos_set = true;
       ypos = dval;
-    }
-    else if((param == "ang") && isNumber(value))
+    } else if ((param == "ang") && isNumber(value))
       ang = dval;
-    else if((param == "mag") && isNumber(value))
+    else if ((param == "mag") && isNumber(value))
       mag = dval;
-    else if((param == "xdot") && isNumber(value))
+    else if ((param == "xdot") && isNumber(value))
       xdot = dval;
-    else if((param == "ydot") && isNumber(value))
+    else if ((param == "ydot") && isNumber(value))
       ydot = dval;
-    else if((param == "vertex_size") && isNumber(value))
+    else if ((param == "vertex_size") && isNumber(value))
       new_vector.set_vertex_size(dval);
-    else if(param == "head_size") 
+    else if (param == "head_size")
       new_vector.setHeadSize(dval);
     else
       new_vector.set_param(param, value);
   }
 
-  if(!xpos_set || !ypos_set)
-    return(null_vector);
-  
+  if (!xpos_set || !ypos_set)
+    return (null_vector);
+
   new_vector.setPosition(xpos, ypos);
   new_vector.setVectorMA(mag, ang);
   new_vector.mergeVectorXY(xdot, ydot);
-  
-  return(new_vector);
+
+  return (new_vector);
 }
-
-
-
-
-
-
-
-
-
-

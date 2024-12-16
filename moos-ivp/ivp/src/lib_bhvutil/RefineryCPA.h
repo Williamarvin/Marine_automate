@@ -22,53 +22,51 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef REFINERY_CPA_HEADER
 #define REFINERY_CPA_HEADER
 
-#include <vector>
+#include "CPAEngine.h"
 #include "IvPBox.h"
 #include "IvPDomain.h"
-#include "CPAEngine.h"
+#include <vector>
 
 class RefineryCPA {
- public:
+public:
   RefineryCPA();
   ~RefineryCPA() {}
 
-  bool init(double osx, double osy, double cnx, double cny,
-	    double cnh, double cnv, double ostol,
-	    double min_ucd, double max_ucd, IvPDomain domain,
-	    CPAEngine *cpa_engine);
+  bool init(double osx, double osy, double cnx, double cny, double cnh,
+            double cnv, double ostol, double min_ucd, double max_ucd,
+            IvPDomain domain, CPAEngine *cpa_engine);
 
   std::vector<IvPBox> getRefineRegions();
 
-  unsigned int getTotalQueriesCPA() const {return(m_cpa_queries);}
-  void setVerbose(bool v=true) {m_verbose=v;}
+  unsigned int getTotalQueriesCPA() const { return (m_cpa_queries); }
+  void setVerbose(bool v = true) { m_verbose = v; }
 
-  std::string getLogicCase() {return(m_logic_case);}
+  std::string getLogicCase() { return (m_logic_case); }
 
-  void setQuit1() {m_quit1=true;}
-  void setQuit2() {m_quit2=true;}
-  void setQuit3() {m_quit3=true;}
-  
- protected:
+  void setQuit1() { m_quit1 = true; }
+  void setQuit2() { m_quit2 = true; }
+  void setQuit3() { m_quit3 = true; }
 
+protected:
   std::vector<IvPBox> getRefineRegionsAft();
 
- protected: // Fore utilities
-  std::vector<IvPBox> getRefineRegionsFore();         
-  std::vector<IvPBox> getRefineRegionsForeInRGam();   // Q2 Q3
-  std::vector<IvPBox> getRefineRegionsForeInRGamX();   
-  std::vector<IvPBox> getRefineRegionsForeOutRGam();  // Q1
+protected: // Fore utilities
+  std::vector<IvPBox> getRefineRegionsFore();
+  std::vector<IvPBox> getRefineRegionsForeInRGam(); // Q2 Q3
+  std::vector<IvPBox> getRefineRegionsForeInRGamX();
+  std::vector<IvPBox> getRefineRegionsForeOutRGam(); // Q1
   double getFleeSpeed() const;
 
-  double getMinSpdAtHdg(double hdg);  // unused
+  double getMinSpdAtHdg(double hdg); // unused
   double getMaxSpdAtHdg(double hdg);
 
   double getMinFirstSatHdgAtSpd(double spd, double hmin);
   double getMaxFirstSatHdgAtSpd(double spd, double hmax);
-  
+
   double getMinLastSatHdgAtSpd(double spd, double hmax);
   double getMaxLastSatHdgAtSpd(double spd, double hmin);
 
@@ -81,14 +79,14 @@ class RefineryCPA {
   double getFleeSpdClockwise(double hdg, double spd, double endspd);
   double getFleeSpdCounterClock(double hdg, double spd, double endspd);
 
-  bool   validHdg(double hval) const;
-  bool   validSpd(double sval) const;
+  bool validHdg(double hval) const;
+  bool validSpd(double sval) const;
 
   unsigned int getHdgDiscPts(double hmin, double hmax, int snap) const;
 
-  double evalCPA(double hdg, double spd, double ostol){
+  double evalCPA(double hdg, double spd, double ostol) {
     m_cpa_queries++;
-    return(m_cpa_engine->evalCPA(hdg, spd, ostol));
+    return (m_cpa_engine->evalCPA(hdg, spd, ostol));
   }
 
 protected: // general utilities
@@ -96,34 +94,32 @@ protected: // general utilities
   double getSpdSnappedLow(double) const;
   double getHdgSnappedHgh(double) const;
   double getHdgSnappedLow(double) const;
-  
-  
- protected:
 
+protected:
   unsigned int m_crs_ix;
   unsigned int m_spd_ix;
   unsigned int m_crs_pts;
   unsigned int m_spd_pts;
-  
-  bool      m_initialized;
+
+  bool m_initialized;
 
   CPAEngine *m_cpa_engine;
 
-  double    m_contact_range;
-  double    m_range_gamma;
-  double    m_range_epsilon;
-  double    m_os_cn_abs_bng;
-  bool      m_os_port_of_cn;
-  bool      m_os_star_of_cn;
-  
-  double    m_theta_delta;
+  double m_contact_range;
+  double m_range_gamma;
+  double m_range_epsilon;
+  double m_os_cn_abs_bng;
+  bool m_os_port_of_cn;
+  bool m_os_star_of_cn;
+
+  double m_theta_delta;
 
   unsigned int m_cpa_queries;
-  
- protected:  // Configuration variables
+
+protected: // Configuration variables
   IvPDomain m_domain;
-  bool   m_verbose;
-  
+  bool m_verbose;
+
   double m_min_util_cpa_dist;
   double m_max_util_cpa_dist;
 
@@ -144,21 +140,3 @@ protected: // general utilities
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

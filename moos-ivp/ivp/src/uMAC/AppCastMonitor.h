@@ -24,43 +24,41 @@
 #ifndef APPCAST_MONITOR_HEADER
 #define APPCAST_MONITOR_HEADER
 
-#include <string>
-#include <map>
-#include "MOOS/libMOOS/MOOSLib.h"
 #include "AppCastRepo.h"
+#include "MOOS/libMOOS/MOOSLib.h"
+#include <map>
+#include <string>
 
-class AppCastMonitor : public CMOOSApp
-{
- public:
+class AppCastMonitor : public CMOOSApp {
+public:
   AppCastMonitor();
   ~AppCastMonitor() {}
-  
-  void handleCommand(char);
-  void setTerseMode(bool v) {m_terse_mode=v;}
 
-  void setInitialProc(std::string s) {m_initial_proc=s;}
-  void setInitialNode(std::string s) {m_initial_node=s;}
-  void setRefreshPaused() {m_refresh_mode = "paused";}
-  
- protected:
+  void handleCommand(char);
+  void setTerseMode(bool v) { m_terse_mode = v; }
+
+  void setInitialProc(std::string s) { m_initial_proc = s; }
+  void setInitialNode(std::string s) { m_initial_node = s; }
+  void setRefreshPaused() { m_refresh_mode = "paused"; }
+
+protected:
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
   void RegisterVariables();
 
- protected:
-  bool handleMailAppCast(const std::string&);
-  bool handleMailMissionHash(const std::string&);
+protected:
+  bool handleMailAppCast(const std::string &);
+  bool handleMailMissionHash(const std::string &);
   void handleSelectNode(std::string);
   void handleSelectChannel(std::string);
-  void postAppCastRequest(std::string node, std::string app,
-			  std::string key,  std::string thresh,
-			  double duration);
+  void postAppCastRequest(std::string node, std::string app, std::string key,
+                          std::string thresh, double duration);
 
-  bool setCurrentNode(std::string s)   {return(m_repo.setCurrentNode(s));}
-  bool setCurrentProc(std::string s)   {return(m_repo.setCurrentProc(s));}
-  bool switchContentMode(const std::string& s="revert");
+  bool setCurrentNode(std::string s) { return (m_repo.setCurrentNode(s)); }
+  bool setCurrentProc(std::string s) { return (m_repo.setCurrentProc(s)); }
+  bool switchContentMode(const std::string &s = "revert");
 
   void printHelp();
   void printReportNodes();
@@ -72,31 +70,29 @@ class AppCastMonitor : public CMOOSApp
   std::string currentProc() const;
 
   void trySetInitialNodeProc();
-  
- private: // Configuration variables
 
-  std::string  m_refresh_mode;      // paused,events,streaming
-  std::string  m_content_mode;      // help,nodes,procs,appcast 
-  std::string  m_content_mode_prev;
+private:                      // Configuration variables
+  std::string m_refresh_mode; // paused,events,streaming
+  std::string m_content_mode; // help,nodes,procs,appcast
+  std::string m_content_mode_prev;
 
-  bool         m_terse_mode;
+  bool m_terse_mode;
 
-  std::string  m_initial_node;
-  std::string  m_initial_proc;
-  
- private: // State variables
+  std::string m_initial_node;
+  std::string m_initial_proc;
+
+private: // State variables
   unsigned int m_term_reports;
   unsigned int m_iteration;
-  double       m_timewarp;  
-  double       m_curr_time;
-  double       m_last_report_time;
-  double       m_term_report_interval;
-  bool         m_update_pending;
-  
-  AppCastRepo  m_repo;
+  double m_timewarp;
+  double m_curr_time;
+  double m_last_report_time;
+  double m_term_report_interval;
+  bool m_update_pending;
 
-  std::string  m_mission_hash;
+  AppCastRepo m_repo;
+
+  std::string m_mission_hash;
 };
 
-#endif 
-
+#endif

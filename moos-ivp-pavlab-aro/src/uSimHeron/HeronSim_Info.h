@@ -18,5 +18,3 @@ void showExampleConfigAndExit();
 void showInterfaceAndExit();
 
 #endif
-
-

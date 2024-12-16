@@ -22,19 +22,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "InfoCastSettings.h"
-#include "MBUtils.h"
 #include "ColorParse.h"
+#include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor
 
-InfoCastSettings::InfoCastSettings()
-{
+InfoCastSettings::InfoCastSettings() {
   m_content_mode = "appcast";
   m_refresh_mode = "events";
   m_infocast_viewable = true;
@@ -45,7 +44,7 @@ InfoCastSettings::InfoCastSettings()
   m_nodes_font_size = "large";
 
   m_infocast_height = 70;
-  m_infocast_width  = 30;  
+  m_infocast_width = 30;
 
   m_appcast_color_scheme = "indigo";
   m_realmcast_color_scheme = "hillside";
@@ -64,289 +63,262 @@ InfoCastSettings::InfoCastSettings()
 //-------------------------------------------------------------
 // Procedure: setAppCastColorScheme()
 
-bool InfoCastSettings::setAppCastColorScheme(string str)
-{
+bool InfoCastSettings::setAppCastColorScheme(string str) {
   str = tolower(stripBlankEnds(str));
 
-  if(str == "default") {
+  if (str == "default") {
     m_appcast_color_scheme = "indigo";
-    return(true);
+    return (true);
   }
-  
-  if((str != "white") && (str != "indigo") &&
-     (str != "beige") && (str != "toggle"))
-    return(false);
 
-  if(str == "toggle") {
-    if(m_appcast_color_scheme == "white")
+  if ((str != "white") && (str != "indigo") && (str != "beige") &&
+      (str != "toggle"))
+    return (false);
+
+  if (str == "toggle") {
+    if (m_appcast_color_scheme == "white")
       m_appcast_color_scheme = "indigo";
-    else if(m_appcast_color_scheme == "indigo")
+    else if (m_appcast_color_scheme == "indigo")
       m_appcast_color_scheme = "beige";
-    else if(m_appcast_color_scheme == "beige")
+    else if (m_appcast_color_scheme == "beige")
       m_appcast_color_scheme = "white";
-  }
-  else
+  } else
     m_appcast_color_scheme = str;
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setRealmCastColorScheme()
 
-bool InfoCastSettings::setRealmCastColorScheme(string str)
-{
+bool InfoCastSettings::setRealmCastColorScheme(string str) {
   str = tolower(stripBlankEnds(str));
-  
-  if(str == "default") {
-    m_appcast_color_scheme = "hillside";
-    return(true);
-  }
-  
-  if((str != "white") && (str != "indigo") && (str != "hillside") &&
-     (str != "beige") && (str != "toggle"))
-    return(false);
 
-  if(str == "toggle") {
-    if(m_realmcast_color_scheme == "white")
+  if (str == "default") {
+    m_appcast_color_scheme = "hillside";
+    return (true);
+  }
+
+  if ((str != "white") && (str != "indigo") && (str != "hillside") &&
+      (str != "beige") && (str != "toggle"))
+    return (false);
+
+  if (str == "toggle") {
+    if (m_realmcast_color_scheme == "white")
       m_realmcast_color_scheme = "hillside";
 
-    else if(m_realmcast_color_scheme == "hillside")
+    else if (m_realmcast_color_scheme == "hillside")
       m_realmcast_color_scheme = "beige";
 
-    else if(m_realmcast_color_scheme == "beige")
+    else if (m_realmcast_color_scheme == "beige")
       m_realmcast_color_scheme = "indigo";
 
-    else if(m_realmcast_color_scheme == "indigo")
+    else if (m_realmcast_color_scheme == "indigo")
       m_realmcast_color_scheme = "white";
-  }
-  else
+  } else
     m_realmcast_color_scheme = str;
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setInfoCastHeight()
 
-bool InfoCastSettings::setInfoCastHeight(string str)
-{
-  if(!isNumber(str) && !strBegins(str, "delta:"))
-    return(false);
-  
-  if(strBegins(str, "delta:")) {
+bool InfoCastSettings::setInfoCastHeight(string str) {
+  if (!isNumber(str) && !strBegins(str, "delta:"))
+    return (false);
+
+  if (strBegins(str, "delta:")) {
     biteStringX(str, ':');
-    if(!isNumber(str))
-      return(false);
+    if (!isNumber(str))
+      return (false);
     double delta = atof(str.c_str());
     m_infocast_height += delta;
-  }
-  else {
+  } else {
     double dval = atof(str.c_str());
     m_infocast_height = snapToStep(dval, 5.0);
   }
 
   m_infocast_height = vclip(m_infocast_height, 30, 90);
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setInfoCastWidth()
 
-bool InfoCastSettings::setInfoCastWidth(string str)
-{
-  if(!isNumber(str) && !strBegins(str, "delta:"))
-    return(false);
-  
-  if(strBegins(str, "delta:")) {
+bool InfoCastSettings::setInfoCastWidth(string str) {
+  if (!isNumber(str) && !strBegins(str, "delta:"))
+    return (false);
+
+  if (strBegins(str, "delta:")) {
     biteStringX(str, ':');
-    if(!isNumber(str))
-      return(false);
+    if (!isNumber(str))
+      return (false);
     double delta = atof(str.c_str());
     m_infocast_width += delta;
-  }
-  else {
+  } else {
     double dval = atof(str.c_str());
     m_infocast_width = snapToStep(dval, 5.0);
   }
 
   m_infocast_width = vclip(m_infocast_width, 20, 70);
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setContentMode()
 
-bool InfoCastSettings::setContentMode(string str)
-{
+bool InfoCastSettings::setContentMode(string str) {
   str = tolower(str);
 
-  if((str != "realmcast") && (str != "appcast") && (str != "toggle"))
-    return(false);
-  
-  if(str == "toggle") {
-    if(m_content_mode == "appcast")
+  if ((str != "realmcast") && (str != "appcast") && (str != "toggle"))
+    return (false);
+
+  if (str == "toggle") {
+    if (m_content_mode == "appcast")
       m_content_mode = "realmcast";
-    else if(m_content_mode == "realmcast")
+    else if (m_content_mode == "realmcast")
       m_content_mode = "appcast";
-  }
-  else 
+  } else
     m_content_mode = str;
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setRefreshMode()
 
-bool InfoCastSettings::setRefreshMode(string str)
-{
+bool InfoCastSettings::setRefreshMode(string str) {
   str = tolower(str);
-  
-  if((str != "streaming") && (str != "events") && (str != "paused"))
-    return(false);
-  
+
+  if ((str != "streaming") && (str != "events") && (str != "paused"))
+    return (false);
+
   m_refresh_mode = str;
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setShowRealmCastSource()
 
-bool InfoCastSettings::setShowRealmCastSource(string str)
-{
-  return(setBooleanOnString(m_show_rc_source, str));
+bool InfoCastSettings::setShowRealmCastSource(string str) {
+  return (setBooleanOnString(m_show_rc_source, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setShowRealmCastCommunity()
 
-bool InfoCastSettings::setShowRealmCastCommunity(string str)
-{
-  return(setBooleanOnString(m_show_rc_community, str));
+bool InfoCastSettings::setShowRealmCastCommunity(string str) {
+  return (setBooleanOnString(m_show_rc_community, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setShowRealmCastSubs()
 
-bool InfoCastSettings::setShowRealmCastSubs(string str)
-{
-  return(setBooleanOnString(m_show_rc_subscriptions, str));
+bool InfoCastSettings::setShowRealmCastSubs(string str) {
+  return (setBooleanOnString(m_show_rc_subscriptions, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setShowRealmCastMasked()
 
-bool InfoCastSettings::setShowRealmCastMasked(string str)
-{
-  return(setBooleanOnString(m_show_rc_masked, str));
+bool InfoCastSettings::setShowRealmCastMasked(string str) {
+  return (setBooleanOnString(m_show_rc_masked, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setWrapRealmCastContent()
 
-bool InfoCastSettings::setWrapRealmCastContent(string str)
-{
-  return(setBooleanOnString(m_wrap_rc_content, str));
+bool InfoCastSettings::setWrapRealmCastContent(string str) {
+  return (setBooleanOnString(m_wrap_rc_content, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setTruncRealmCastContent()
 
-bool InfoCastSettings::setTruncRealmCastContent(string str)
-{
-  return(setBooleanOnString(m_trunc_rc_content, str));
+bool InfoCastSettings::setTruncRealmCastContent(string str) {
+  return (setBooleanOnString(m_trunc_rc_content, str));
 }
 
 //-------------------------------------------------------------
 // Procedure: setRealmCastTimeFormatUTC()
 
-bool InfoCastSettings::setRealmCastTimeFormatUTC(string str)
-{
-  return(setBooleanOnString(m_time_format_utc, str));
+bool InfoCastSettings::setRealmCastTimeFormatUTC(string str) {
+  return (setBooleanOnString(m_time_format_utc, str));
 }
-
 
 //-------------------------------------------------------------
 // Procedure: fontChange()
 
-string InfoCastSettings::fontChange(string old, string str)
-{
+string InfoCastSettings::fontChange(string old, string str) {
   str = tolower(str);
-  if((str != "xsmall") && (str != "small")  && (str != "medium") &&
-     (str != "large")  && (str != "xlarge") && (str != "toggle") &&
-     (str != "bigger") && (str != "smaller"))
-    return("error");
+  if ((str != "xsmall") && (str != "small") && (str != "medium") &&
+      (str != "large") && (str != "xlarge") && (str != "toggle") &&
+      (str != "bigger") && (str != "smaller"))
+    return ("error");
 
-  if((str == "toggle") || (str == "bigger")) {
-    if(old == "xsmall")
-      return("small");
-    else if(old == "small")
-      return("medium");
-    else if(old == "medium")
-      return("large");
-    else if(old == "large")
-      return("xlarge");
-    else if((old == "xlarge") && (str == "toggle"))
-      return("xsmall");
+  if ((str == "toggle") || (str == "bigger")) {
+    if (old == "xsmall")
+      return ("small");
+    else if (old == "small")
+      return ("medium");
+    else if (old == "medium")
+      return ("large");
+    else if (old == "large")
+      return ("xlarge");
+    else if ((old == "xlarge") && (str == "toggle"))
+      return ("xsmall");
   }
-  
-  else if(str == "smaller") {
-    if(old == "xlarge")
-      return("large");
-    else if(old == "large")
-      return("medium");
-    else if(old == "medium")
-      return("small");
-    else if(old == "small")
-      return("xsmall");
+
+  else if (str == "smaller") {
+    if (old == "xlarge")
+      return ("large");
+    else if (old == "large")
+      return ("medium");
+    else if (old == "medium")
+      return ("small");
+    else if (old == "small")
+      return ("xsmall");
   }
 
   else
-    return(str);
-  
-  return(old);
-}
+    return (str);
 
+  return (old);
+}
 
 //-------------------------------------------------------------
 // Procedure: setInfoCastFontSize()
 
-bool InfoCastSettings::setInfoCastFontSize(string str)
-{
+bool InfoCastSettings::setInfoCastFontSize(string str) {
   string new_val = fontChange(m_infocast_font_size, str);
-  if(new_val == "error")
-    return(false);
+  if (new_val == "error")
+    return (false);
 
   m_infocast_font_size = new_val;
-  return(true);
+  return (true);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: setNodesFontSize()
 
-bool InfoCastSettings::setNodesFontSize(string str)
-{
+bool InfoCastSettings::setNodesFontSize(string str) {
   string new_val = fontChange(m_nodes_font_size, str);
-  if(new_val == "error")
-    return(false);
-  
+  if (new_val == "error")
+    return (false);
+
   m_nodes_font_size = new_val;
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setProcsFontSize()
 
-bool InfoCastSettings::setProcsFontSize(string str)
-{
+bool InfoCastSettings::setProcsFontSize(string str) {
   string new_val = fontChange(m_procs_font_size, str);
-  if(new_val == "error")
-    return(false);
-  
+  if (new_val == "error")
+    return (false);
+
   m_procs_font_size = new_val;
-  return(true);
+  return (true);
 }
-
-

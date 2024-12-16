@@ -40,16 +40,15 @@
 // This is a helper macro, to automatically provide filename and
 // line number details to the MOOSAssert function.
 // It also ensures that asserts are only compiled in when required.
-#if ((defined(_DEBUG) || defined(ALLOW_RELEASE_ASSERTS)) && (MOOS_ASSERT_LEVEL > 0))
+#if ((defined(_DEBUG) || defined(ALLOW_RELEASE_ASSERTS)) &&                    \
+     (MOOS_ASSERT_LEVEL > 0))
 #define _MOOSASSERT(bCond, msg) MOOSAssert(bCond, msg, __FILE__, __LINE__)
 #else
 #define _MOOSASSERT(bCond, msg)
 #endif
 
-
-
-inline void MOOSAssert(bool cond, const char *msg=NULL, const char *filename=NULL, int line=0)
-{
+inline void MOOSAssert(bool cond, const char *msg = NULL,
+                       const char *filename = NULL, int line = 0) {
   // Suppress unused parameter warnings, since some MOOS_ASSERT_LEVEL code paths
   // don't use these parameters.
   UNUSED_PARAMETER(cond);
@@ -60,39 +59,27 @@ inline void MOOSAssert(bool cond, const char *msg=NULL, const char *filename=NUL
 #if (defined(_DEBUG) || defined(ALLOW_RELEASE_ASSERTS))
 #if (MOOS_ASSERT_LEVEL > 0)
 
-    if (!cond)
-    {
-        if (filename && line>0)
-        {
-            if (msg)
-            {
-                MOOSTrace("Assert failed at %s:%d. %s\n", filename, line, msg);
-            }
-            else
-            {
-                MOOSTrace("Assert failed at %s:%d.\n", filename, line);
-            }
-        }
-        else
-        {
-            if (msg)
-            {
-                MOOSTrace("Assert failed. %s\n", msg);
-            }
-            else
-            {
-                MOOSTrace("Assert failed.\n");
-            }
-        }
-                
+  if (!cond) {
+    if (filename && line > 0) {
+      if (msg) {
+        MOOSTrace("Assert failed at %s:%d. %s\n", filename, line, msg);
+      } else {
+        MOOSTrace("Assert failed at %s:%d.\n", filename, line);
+      }
+    } else {
+      if (msg) {
+        MOOSTrace("Assert failed. %s\n", msg);
+      } else {
+        MOOSTrace("Assert failed.\n");
+      }
+    }
 
 #if (MOOS_ASSERT_LEVEL == 2)
-        exit();
+    exit();
 #endif
-    }
+  }
 #endif
 #endif
 }
 
 #endif // __MOOSAssert_h
-

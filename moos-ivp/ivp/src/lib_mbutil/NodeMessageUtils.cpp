@@ -23,10 +23,10 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "NodeMessageUtils.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -38,57 +38,55 @@ using namespace std;
 //            or
 //            src_node=ike,dest_group=red,var_name=FOO,double_val=3.4
 
-NodeMessage string2NodeMessage(const string& message_string)
-{
+NodeMessage string2NodeMessage(const string &message_string) {
   NodeMessage empty_message;
   NodeMessage new_message;
 
   string string_val;
-  bool   string_val_quoted = false;
+  bool string_val_quoted = false;
 
   vector<string> svector = parseStringQ(message_string, ',');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string param = tolower(biteStringX(svector[i], '='));
     string value = svector[i];
-    
-    if(param == "src_node")
+
+    if (param == "src_node")
       new_message.setSourceNode(value);
-    else if(param == "src_app")
+    else if (param == "src_app")
       new_message.setSourceApp(value);
-    else if(param == "src_bhv")
+    else if (param == "src_bhv")
       new_message.setSourceBehavior(value);
-    else if(param == "dest_node")
+    else if (param == "dest_node")
       new_message.setDestNode(value);
-    else if(param == "dest_group")
+    else if (param == "dest_group")
       new_message.setDestGroup(value);
-    else if(param == "var_name")
+    else if (param == "var_name")
       new_message.setVarName(value);
-    else if(param == "string_val")
+    else if (param == "string_val")
       string_val = value;
-    else if(param == "color")
+    else if (param == "color")
       new_message.setColor(value);
-    else if(param == "ack_id")
+    else if (param == "ack_id")
       new_message.setMessageID(value);
-    else if((param == "string_val_quoted") && (tolower(value) == "true"))
+    else if ((param == "string_val_quoted") && (tolower(value) == "true"))
       string_val_quoted = true;
-    else if((param == "ack") && (tolower(value) == "true"))
+    else if ((param == "ack") && (tolower(value) == "true"))
       new_message.setAckRequested(true);
-    else if(param == "double_val")
+    else if (param == "double_val")
       new_message.setDoubleVal(atof(value.c_str()));
   }
 
   // If extra quotes were automatically added to the string val to hide
   // separators in the string, remove them now.
-  
-  if(isQuoted(string_val) && string_val_quoted)
+
+  if (isQuoted(string_val) && string_val_quoted)
     string_val = stripQuotes(string_val);
-  
+
   new_message.setStringVal(string_val);
 
-  if(!new_message.valid())
-    return(empty_message);
+  if (!new_message.valid())
+    return (empty_message);
 
-  return(new_message);
+  return (new_message);
 }
-

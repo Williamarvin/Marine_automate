@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_BUILD_UTILS_HEADER
 #define XY_BUILD_UTILS_HEADER
 
@@ -30,18 +30,8 @@
 #include "XYFormatUtilsPoly.h"
 #include "XYFormatUtilsSegl.h"
 
-XYPolygon stringToPoly(std::string s)    {return(string2Poly(s));}
-XYPoint   stringToPoint(std::string s)   {return(string2Point(s));}
-XYSegList stringToSegList(std::string s) {return(string2SegList(s));}
+XYPolygon stringToPoly(std::string s) { return (string2Poly(s)); }
+XYPoint stringToPoint(std::string s) { return (string2Point(s)); }
+XYSegList stringToSegList(std::string s) { return (string2SegList(s)); }
 
 #endif
-
-
-
-
-
-
-
-
-
-

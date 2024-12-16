@@ -24,52 +24,20 @@
 #ifndef SHAPE_HERON_HEADER
 #define SHAPE_HERON_HEADER
 
-double g_heronBody[]=
-  {
-   1.5, 0,
-   1.8, 14,
-   1.7, 18,
-   1.5, 20,
-   1.0, 22,
-   0.7, 23,
-   0.2, 24,
-   -0.2, 24,
-   -0.7, 23,
-   -1.0, 22,
-   -1.5, 20,
-   -1.7, 18,
-   -1.8, 14,
-   -1.5, 0
-  };
+double g_heronBody[] = {1.5,  0,  1.8,  14, 1.7,  18, 1.5,  20, 1.0,  22,
+                        0.7,  23, 0.2,  24, -0.2, 24, -0.7, 23, -1.0, 22,
+                        -1.5, 20, -1.7, 18, -1.8, 14, -1.5, 0};
 unsigned int g_heronBodySize = 14;
-double       g_heronLength   = 24;
+double g_heronLength = 24;
 
-double g_heronBack[]=
-  {
-   3.7, 4.5,
-   3.7, 12.5,
-   -3.7, 12.5,
-   -3.7, 4.5
-  };
-unsigned int g_heronBackSize =  4;
+double g_heronBack[] = {3.7, 4.5, 3.7, 12.5, -3.7, 12.5, -3.7, 4.5};
+unsigned int g_heronBackSize = 4;
 
-double g_heronFront[]=
-  {
-   3.7,  12.5,
-   3.7,  18.5,
-   -3.7, 18.5,
-   -3.7, 12.5
-  };
-unsigned int g_heronFrontSize =  4;
+double g_heronFront[] = {3.7, 12.5, 3.7, 18.5, -3.7, 18.5, -3.7, 12.5};
+unsigned int g_heronFrontSize = 4;
 
-
-double  g_heronCtrX = 0.0;
-double  g_heronCtrY = 12.0;
-double  g_heronBase = 12.0;
+double g_heronCtrX = 0.0;
+double g_heronCtrY = 12.0;
+double g_heronBase = 12.0;
 
 #endif
-
-
-
-
-

@@ -24,33 +24,33 @@
 #ifndef LOG_BIN_HANDLER_HEADER
 #define LOG_BIN_HANDLER_HEADER
 
-#include <string>
 #include <map>
+#include <string>
 
-class LogBinHandler
-{
- public:
+class LogBinHandler {
+public:
   LogBinHandler();
   ~LogBinHandler() {}
 
   bool handle();
-  
+
   bool setLogFile(std::string);
   bool setDelta(std::string);
   bool setMinVal(std::string);
-  bool setVerbose() {m_verbose=true; return(true);}
-  
- protected: // Config vars
+  bool setVerbose() {
+    m_verbose = true;
+    return (true);
+  }
 
+protected: // Config vars
   double m_minval;
   double m_delta;
-  bool   m_verbose;
+  bool m_verbose;
 
   FILE *m_file_in;
 
- protected: // State vars
+protected: // State vars
   std::map<double, unsigned int> m_bins;
 };
 
 #endif
-

@@ -21,76 +21,75 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "MBUtils.h"
 #include "PickJoust.h"
 #include "PickJoust_Info.h"
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   PickJoust pickj;
 
   string arg_summary = argv[0];
 
-  int  file_index = 1;
-  
-  if(argc == 1)
+  int file_index = 1;
+
+  if (argc == 1)
     showHelpAndExit();
 
   // Pass One over the command line args
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
     arg_summary += " " + argi;
 
     bool handled = true;
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-f") || (argi == "--force") || (argi=="-force"))
+    else if ((argi == "-f") || (argi == "--force") || (argi == "-force"))
       pickj.setFileOverWrite(true);
-    else if(argi=="--verbose")
+    else if (argi == "--verbose")
       pickj.setVerbose(true);
-    
-    else if(strBegins(argi, "--file="))
+
+    else if (strBegins(argi, "--file="))
       handled = pickj.setOutputFile(argi.substr(7));
-    else if(strBegins(argi, "--amt="))
+    else if (strBegins(argi, "--amt="))
       handled = pickj.setPickAmt(argi.substr(6));
-    else if(strBegins(argi, "--circle="))
+    else if (strBegins(argi, "--circle="))
       handled = pickj.setCircle(argi.substr(9));
-    else if(strBegins(argi, "--ang_min_diff="))
+    else if (strBegins(argi, "--ang_min_diff="))
       handled = pickj.setAngMinDiff(argi.substr(15));
-    else if(strBegins(argi, "--ang_max_diff="))
+    else if (strBegins(argi, "--ang_max_diff="))
       handled = pickj.setAngMaxDiff(argi.substr(15));
-    else if(strBegins(argi, "--maxtries="))
+    else if (strBegins(argi, "--maxtries="))
       handled = pickj.setMaxTries(argi.substr(11));
-    else if(strBegins(argi, "--spd="))
+    else if (strBegins(argi, "--spd="))
       handled = pickj.setSpdConfig(argi.substr(6));
-    else if(strBegins(argi, "--ssnap="))
+    else if (strBegins(argi, "--ssnap="))
       handled = pickj.setSpdSnap(argi.substr(8));
-    else if(strBegins(argi, "--psnap="))
+    else if (strBegins(argi, "--psnap="))
       handled = pickj.setPtSnap(argi.substr(8));
-    else if(argi=="--reuse")
+    else if (argi == "--reuse")
       pickj.setReuse();
-    else if(argi=="--hdrs")
+    else if (argi == "--hdrs")
       pickj.enableHeaders();
     else
       handled = false;
-      
-    if(!handled) {
+
+    if (!handled) {
       cout << "pickjoust: Unhandled arg: " << argi << endl;
-      return(0);
+      return (0);
     }
   }
 
   pickj.setArgSummary(arg_summary);
   bool success = pickj.pick();
-  if(!success)
-    return(1);
+  if (!success)
+    return (1);
 
   pickj.printChoices();
-  
-  return(0);
+
+  return (0);
 }

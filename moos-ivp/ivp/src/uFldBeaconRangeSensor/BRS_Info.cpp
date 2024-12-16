@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "BRS_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run in a shoreside community. Configured with one or");
@@ -47,8 +46,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelp
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                          ");
   blu("==========================================================");
   blu("Usage: uFldBeaconRangeSensor file.moos [OPTIONS]          ");
@@ -57,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                          ");
   blk("Options:                                                  ");
-  mag("  --alias","=<ProcessName>                                ");
+  mag("  --alias", "=<ProcessName>                                ");
   blk("      Launch uFldBeaconRangeSensor with the given process ");
   blk("      name rather than uFldBeaconRangeSensor.             ");
   mag("  --example, -e                                           ");
@@ -68,10 +66,11 @@ void showHelpAndExit()
   blk("      Display MOOS publications and subscriptions.        ");
   mag("  --version,-v                                            ");
   blk("      Display release version of uFldBeaconRangeSensor.   ");
-  mag("  --verbose","=<setting>                                  ");
+  mag("  --verbose", "=<setting>                                  ");
   blk("      Set verbosity. true or false (default)              ");
   mag("  --web,-w                                                ");
-  blk("      Open browser to: https://oceanai.mit.edu/apps/uFldBeaconRangeSensor ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/apps/uFldBeaconRangeSensor ");
   blk("                                                          ");
   blk("Note: If argv[2] does not otherwise match a known option, ");
   blk("      then it will be interpreted as a run alias. This is ");
@@ -80,12 +79,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldBeaconRangeSensor Example MOOS Configuration                ");
   blu("=============================================================== ");
@@ -94,23 +91,24 @@ void showExampleConfigAndExit()
   blk("  CommsTick = 4                                                 ");
   blk("                                                                ");
   blk("  // Configuring aspects of vehicles in the sim                 ");
-  blk("  reach_distance = default = 200  "," // or {nolimit}           ");
-  blk("  reach_distance = henry = 40     "," // meters                 ");
-  blk("  ping_wait      = default = 30   "," // seconds                ");
+  blk("  reach_distance = default = 200  ", " // or {nolimit}           ");
+  blk("  reach_distance = henry = 40     ", " // meters                 ");
+  blk("  ping_wait      = default = 30   ", " // seconds                ");
   blk("  ping_wait      = henry   = 120                                ");
-  blk("  ping_payments  = upon_response  "," // or {upon_receipt, upon_request}");
+  blk("  ping_payments  = upon_response  ",
+      " // or {upon_receipt, upon_request}");
   blk("                                                                ");
   blk("  // Configuring manner of reporting                            ");
-  blk("  report_vars    = short  ","// or {long, both}                 ");
-  blk("  ground_truth   = true   ","// or {false}                      ");
-  blk("  verbose        = true   ","// or {false}                      ");
+  blk("  report_vars    = short  ", "// or {long, both}                 ");
+  blk("  ground_truth   = true   ", "// or {false}                      ");
+  blk("  verbose        = true   ", "// or {false}                      ");
   blk("                                                                ");
   blk("  // Configuring default beacon properties                      ");
-  blk("  default_beacon_shape = circle    ","// or {square, diamond, etc.}  ");
-  blk("  default beacon_color = orange    ","// or {red, green, etc.}       ");
+  blk("  default_beacon_shape = circle    ", "// or {square, diamond, etc.}  ");
+  blk("  default beacon_color = orange    ", "// or {red, green, etc.}       ");
   blk("  default_beacon_width = 4                                      ");
   blk("  default_beacon_report_range = 100                             ");
-  blk("  default_beacon_freq  = never     ","// or [0,inf]             ");
+  blk("  default_beacon_freq  = never     ", "// or [0,inf]             ");
   blk("  default_beacon_push_dist = 100                                ");
   blk("  default_beacon_pull_dist = 100                                ");
   blk("                                                                ");
@@ -120,7 +118,7 @@ void showExampleConfigAndExit()
   blk("  beacon = x=350, y=705, label=03, width=8, color=blue          ");
   blk("                                                                ");
   blk("  // Configuring Artificial Noise                               ");
-  blk("  rn_algorithm  =  uniform,pct=0  "," // pct may be in [0,1]    ");
+  blk("  rn_algorithm  =  uniform,pct=0  ", " // pct may be in [0,1]    ");
   blk("                                                                ");
   blk("  app_logging = true  // {true or file} By default disabled     ");
   blk("}                                                               ");
@@ -128,12 +126,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldBeaconRangeSensor INTERFACE                                 ");
@@ -169,18 +165,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldBeaconRangeSensor", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

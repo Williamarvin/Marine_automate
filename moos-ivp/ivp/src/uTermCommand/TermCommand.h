@@ -24,22 +24,20 @@
 #ifndef TERM_COMMAND_HEADER
 #define TERM_COMMAND_HEADER
 
-#include <vector>
-#include <string>
 #include "MOOS/libMOOS/MOOSLib.h"
+#include <string>
+#include <vector>
 
-
-class TermCommand : public CMOOSApp
-{
+class TermCommand : public CMOOSApp {
 public:
   TermCommand();
   virtual ~TermCommand() {}
-  
+
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
+
   void handleCharInput(char);
 
 protected:
@@ -48,25 +46,23 @@ protected:
   void postCommand(unsigned int);
 
   std::vector<int> getPartialKeyMatches();
-  int              getFullKeyMatch();
+  int getFullKeyMatch();
 
   void tabExpand();
   void handleArrow(char c);
 
-
 public:
-  CMOOSLock  m_tc_mutex;
+  CMOOSLock m_tc_mutex;
 
 protected:
+  std::vector<std::string> m_var_key;
+  std::vector<std::string> m_var_name;
+  std::vector<std::string> m_var_type;
+  std::vector<std::string> m_var_val;
 
-  std::vector<std::string>  m_var_key;
-  std::vector<std::string>  m_var_name;
-  std::vector<std::string>  m_var_type;
-  std::vector<std::string>  m_var_val;
+  unsigned int m_iteration;
 
-  unsigned int  m_iteration;
-
-  int  m_memory_ix;
+  int m_memory_ix;
 
   std::string m_cmd_buffer;
   std::vector<std::string> m_cmds_prev;
@@ -74,13 +70,3 @@ protected:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

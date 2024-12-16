@@ -24,31 +24,29 @@
 #ifndef POPULATOR_VZAIC_HEADER
 #define POPULATOR_VZAIC_HEADER
 
+#include "IvPDomain.h"
+#include "ZAIC_Vector.h"
 #include <string>
 #include <vector>
-#include "ZAIC_Vector.h"
-#include "IvPDomain.h"
 
-class PopulatorVZAIC
-{
- public:
+class PopulatorVZAIC {
+public:
   PopulatorVZAIC();
   ~PopulatorVZAIC() {}
-  
+
   bool readFile(std::string filename);
-  
+
   ZAIC_Vector *buildZAIC();
 
- protected:
-  IvPDomain  m_domain;
-  double     m_minutil;
-  double     m_maxutil;
+protected:
+  IvPDomain m_domain;
+  double m_minutil;
+  double m_maxutil;
 
   std::vector<double> m_domain_vals;
   std::vector<double> m_range_vals;
-
 };
-#endif 
+#endif
 
 //--------------------------------------------
 //  ivpdomain = foobar,0,100,101
@@ -56,13 +54,3 @@ class PopulatorVZAIC
 //  range  = 2,4,6,8,10
 //  minutil = 0
 //  maxutil = 100
-
-
-
-
-
-
-
-
-
-

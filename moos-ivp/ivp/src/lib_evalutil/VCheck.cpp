@@ -21,21 +21,20 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <vector>
-#include "MBUtils.h"
 #include "VCheck.h"
+#include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-VCheck::VCheck()
-{
+VCheck::VCheck() {
   m_val_dbl = 0;
-  m_tstamp  = 0;
+  m_tstamp = 0;
 
   m_max_tdelta = 0;
   m_max_vdelta = 0;
@@ -48,10 +47,9 @@ VCheck::VCheck()
   m_satisfied = false;
 
   m_actual_delta = -1;
-  m_actual_time  = -1;
+  m_actual_time = -1;
   m_actual_val_dbl = 0;
 }
-
 
 //---------------------------------------------------------
 // Procecure: setVarCheck()
@@ -59,51 +57,48 @@ VCheck::VCheck()
 //            spec = "var=WPT_IX, sval=4, time=34, max_tdelta=5
 //            spec = "var=MISSION, sval=done, time=334, max_tdelta=5
 
-bool VCheck::setVarCheck(string spec)
-{
+bool VCheck::setVarCheck(string spec) {
   vector<string> svector = parseString(spec, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = tolower(biteStringX(svector[i], '='));
     string value = svector[i];
 
-    if(param == "var")
+    if (param == "var")
       setVarName(value);
-    else if(param == "sval")
+    else if (param == "sval")
       setValString(value);
-    else if((param == "dval") && isNumber(value))
+    else if ((param == "dval") && isNumber(value))
       setValDouble(atof(value.c_str()));
 
-    else if(param == "val") {
-      if(isNumber(value))
-	setValDouble(atof(value.c_str()));
+    else if (param == "val") {
+      if (isNumber(value))
+        setValDouble(atof(value.c_str()));
       setValString(value);
     }
 
-    else if((param == "time") && isNumber(value))
+    else if ((param == "time") && isNumber(value))
       setTimeStamp(atof(value.c_str()));
-    else if((param == "max_tdelta") && isNumber(value))
+    else if ((param == "max_tdelta") && isNumber(value))
       setMaxTimeDelta(atof(value.c_str()));
-    else if((param == "max_vdelta") && isNumber(value))
+    else if ((param == "max_vdelta") && isNumber(value))
       setMaxValDelta(atof(value.c_str()));
     else
-      return(false);
+      return (false);
   }
 
-  if(m_varname == "")
-    return(false);
-  
-  if(!m_val_set || !m_tstamp_set || !m_delta_set)
-    return(false);
+  if (m_varname == "")
+    return (false);
 
-  return(true);
+  if (!m_val_set || !m_tstamp_set || !m_delta_set)
+    return (false);
+
+  return (true);
 }
-  
 
 //---------------------------------------------------------
 // Procecure: print()
 
-void VCheck::print() const
-{
+void VCheck::print() const {
   cout << "-------------------------------------------------" << endl;
   cout << "Varname: " << m_varname << endl;
   cout << "  val_str: [" << m_val_str << "]" << endl;
@@ -121,25 +116,15 @@ void VCheck::print() const
   cout << "    actual_val_dbl: " << doubleToStringX(m_actual_val_dbl) << endl;
   cout << "    actual_val_str: " << m_actual_val_str << endl;
 }
-  
 
 //---------------------------------------------------------
 // Overload the < operator
-bool operator< (const VCheck& vcheck1, const VCheck& vcheck2)
-{
-  return(vcheck1.getTimeStamp() > vcheck2.getTimeStamp());
+bool operator<(const VCheck &vcheck1, const VCheck &vcheck2) {
+  return (vcheck1.getTimeStamp() > vcheck2.getTimeStamp());
 }
 
 //---------------------------------------------------------
 // Overload the > operator
-bool operator> (const VCheck& vcheck1, const VCheck& vcheck2)
-{
-  return(vcheck1.getTimeStamp() < vcheck2.getTimeStamp());
+bool operator>(const VCheck &vcheck1, const VCheck &vcheck2) {
+  return (vcheck1.getTimeStamp() < vcheck2.getTimeStamp());
 }
-
-
-
-
-
-
-

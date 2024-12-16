@@ -26,37 +26,23 @@
 #ifndef STRING_NODE_HEADER
 #define STRING_NODE_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
-class StringNode
-{
+class StringNode {
 public:
-  StringNode(const std::string& s) {m_value = s;}
+  StringNode(const std::string &s) { m_value = s; }
   ~StringNode() {}
 
-  bool addParChild(const std::string& parent, 
-		   const std::string& child);
+  bool addParChild(const std::string &parent, const std::string &child);
 
-  void print(unsigned int indent=0);
-  std::vector<std::string> getPrintableSet(unsigned int index=0);
+  void print(unsigned int indent = 0);
+  std::vector<std::string> getPrintableSet(unsigned int index = 0);
 
- void writeGraphviz(std::ostream& os);
+  void writeGraphviz(std::ostream &os);
 
 protected:
-  std::string             m_value;
+  std::string m_value;
   std::vector<StringNode> m_children;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

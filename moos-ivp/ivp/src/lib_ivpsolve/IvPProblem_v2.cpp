@@ -22,49 +22,47 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <iostream>
+
 #include "IvPProblem_v2.h"
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: solve
 
-bool IvPProblem_v2::solve(const IvPBox *b)
-{
+bool IvPProblem_v2::solve(const IvPBox *b) {
   solvePrior(0);
 
   PDMap *pdmap = m_ofs[0]->getPDMap();
   int boxCount = pdmap->size();
 
-  for(int i=0; i<boxCount; i++) {
+  for (int i = 0; i < boxCount; i++) {
     nodeBox[1]->copy(pdmap->bx(i));
     solveRecurse(1);
-  }    
+  }
 
   solvePost();
-  if(!m_silent) {
-    if(m_full_tree) 
+  if (!m_silent) {
+    if (m_full_tree)
       cout << "******* DONE IvPProblem::solveV1()" << endl;
     else
       cout << "******* DONE IvPProblem::solveV2()" << endl;
   }
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: solveRecurse
 
-void IvPProblem_v2::solveRecurse(int level)
-{
+void IvPProblem_v2::solveRecurse(int level) {
   int result;
 
-  if(level == m_ofnum) {                       // boundary condition
+  if (level == m_ofnum) { // boundary condition
     m_leafs_visited++;
     bool ok = false;
     float currWT = compactor->maxVal(nodeBox[level], &ok);
-    if((m_maxbox==NULL) || (currWT > m_maxwt))
+    if ((m_maxbox == NULL) || (currWT > m_maxwt))
       newSolution(currWT, nodeBox[level]);
     return;
   }
@@ -72,15 +70,9 @@ void IvPProblem_v2::solveRecurse(int level)
   PDMap *pdmap = m_ofs[level]->getPDMap();
 
   int amt_level_plus1 = pdmap->size();
-  for(int i=0; i<amt_level_plus1; i++) {
-    result = nodeBox[level]->intersect(pdmap->bx(i), nodeBox[level+1]);
-    if(m_full_tree || result)
-      solveRecurse(level+1);
+  for (int i = 0; i < amt_level_plus1; i++) {
+    result = nodeBox[level]->intersect(pdmap->bx(i), nodeBox[level + 1]);
+    if (m_full_tree || result)
+      solveRecurse(level + 1);
   }
 }
-
-
-
-
-
-

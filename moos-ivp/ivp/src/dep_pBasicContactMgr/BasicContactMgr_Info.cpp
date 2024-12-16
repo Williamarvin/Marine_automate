@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
+#include "BasicContactMgr_Info.h"
+#include "ColorParse.h"
+#include "ReleaseInfo.h"
 #include <cstdlib>
 #include <iostream>
-#include "ReleaseInfo.h"
-#include "ColorParse.h"
-#include "BasicContactMgr_Info.h"
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The contact manager deals with other known vehicles in its    ");
@@ -44,12 +43,10 @@ void showSynopsis()
   blk("  one or more of the contacts.                                  ");
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blk("Usage: pBasicContactMgr file.moos [OPTIONS]                     ");
@@ -58,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pBasicContactMgr with the given process            ");
   blk("      name rather than pBasicContactMgr.                        ");
   mag("  --example, -e                                                 ");
@@ -80,8 +77,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pBasicContactMgr Example MOOS Configuration                     ");
@@ -129,12 +125,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("pBasicContactMgr INTERFACE                                      ");
   blu("=============================================================== ");
@@ -195,17 +189,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pBasicContactMgr", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

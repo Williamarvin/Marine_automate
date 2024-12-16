@@ -8,15 +8,14 @@
 #ifndef ALOG_SPLIT_HANDLER_BUNDLE_HEADER
 #define ALOG_SPLIT_HANDLER_BUNDLE_HEADER
 
-#include <vector>
-#include <string>
 #include "SplitHandler.h"
+#include <string>
+#include <vector>
 
-class SplitHandlerBundle
-{
- public:
-  SplitHandlerBundle() {};
-  ~SplitHandlerBundle() {};
+class SplitHandlerBundle {
+public:
+  SplitHandlerBundle(){};
+  ~SplitHandlerBundle(){};
 
   void addALogFile(std::string);
   bool checkALogFiles();
@@ -24,11 +23,10 @@ class SplitHandlerBundle
   bool handle();
   void clear();
 
- protected:
-  
+protected:
   bool handle(unsigned int);
 
-  std::vector<std::string>  m_alog_files;
+  std::vector<std::string> m_alog_files;
   std::vector<SplitHandler> m_handlers;
 };
 

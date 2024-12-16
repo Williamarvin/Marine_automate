@@ -26,60 +26,60 @@
 #ifndef BUILD_UTIL_HEADER
 #define BUILD_UTIL_HEADER
 
-#include <string>
-#include "PDMap.h"
 #include "BoxSet.h"
+#include "PDMap.h"
+#include <string>
 
-IvPBox  genUnifBox(const IvPDomain&, int);
-IvPBox  makeRand(const IvPBox&); 
-IvPBox  makeRand(const IvPDomain&);
-bool    containedWithinBox(const IvPBox&, const IvPBox&);
-bool    intersectDomain(const IvPDomain&, const IvPDomain&);
+IvPBox genUnifBox(const IvPDomain &, int);
+IvPBox makeRand(const IvPBox &);
+IvPBox makeRand(const IvPDomain &);
+bool containedWithinBox(const IvPBox &, const IvPBox &);
+bool intersectDomain(const IvPDomain &, const IvPDomain &);
 
-IvPDomain   unionDomain(const IvPDomain&, const IvPDomain&B);
-IvPDomain   subDomain(const IvPDomain&, std::string);
-IvPDomain   boxToDomain(const IvPBox&);
-IvPDomain   stringToDomain(const std::string&);
-IvPBox      domainToBox(const IvPDomain&);
-IvPBox      stringToBox(const std::string&);
-std::string domainToString(const IvPDomain&, bool=true);
+IvPDomain unionDomain(const IvPDomain &, const IvPDomain &B);
+IvPDomain subDomain(const IvPDomain &, std::string);
+IvPDomain boxToDomain(const IvPBox &);
+IvPDomain stringToDomain(const std::string &);
+IvPBox domainToBox(const IvPDomain &);
+IvPBox stringToBox(const std::string &);
+std::string domainToString(const IvPDomain &, bool = true);
 
-std::string domainAndBoxToString(const IvPBox&, const IvPDomain&);
+std::string domainAndBoxToString(const IvPBox &, const IvPDomain &);
 
-BoxSet*  makeUniformDistro(const IvPBox&, const IvPBox&, int=1);
-BoxSet*  subtractBox(const IvPBox&, const IvPBox&);
-IvPBox*  cutBox(IvPBox*, int);
-IvPBox*  quarterBox(IvPBox*, int, bool);
-
-//--------------------------------------------------------------------
-IvPBox  stringToPointBox(const std::string&, const IvPDomain&, 
-			 const char gsep=',', const char lsep=':'); 
-
-IvPBox  stringDiscreteToPointBox(const std::string&, const IvPDomain&, 
-				 const char gsep=',', const char lsep=':'); 
-
-IvPBox  stringNativeToPointBox(const std::string&, const IvPDomain&, 
-			       const char gsep=',', const char lsep=':'); 
+BoxSet *makeUniformDistro(const IvPBox &, const IvPBox &, int = 1);
+BoxSet *subtractBox(const IvPBox &, const IvPBox &);
+IvPBox *cutBox(IvPBox *, int);
+IvPBox *quarterBox(IvPBox *, int, bool);
 
 //--------------------------------------------------------------------
-IvPBox  stringToRegionBox(const std::string&, const IvPDomain&, 
-			  const char gsep=',', const char lsep=':'); 
+IvPBox stringToPointBox(const std::string &, const IvPDomain &,
+                        const char gsep = ',', const char lsep = ':');
 
-IvPBox  stringNativeToRegionBox(const std::string&, const IvPDomain&, 
-				const char gsep=',', const char lsep=':'); 
+IvPBox stringDiscreteToPointBox(const std::string &, const IvPDomain &,
+                                const char gsep = ',', const char lsep = ':');
 
-IvPBox  stringDiscreteToRegionBox(const std::string&, const IvPDomain&, 
-				  const char gsep=',', const char lsep=':');
+IvPBox stringNativeToPointBox(const std::string &, const IvPDomain &,
+                              const char gsep = ',', const char lsep = ':');
+
+//--------------------------------------------------------------------
+IvPBox stringToRegionBox(const std::string &, const IvPDomain &,
+                         const char gsep = ',', const char lsep = ':');
+
+IvPBox stringNativeToRegionBox(const std::string &, const IvPDomain &,
+                               const char gsep = ',', const char lsep = ':');
+
+IvPBox stringDiscreteToRegionBox(const std::string &, const IvPDomain &,
+                                 const char gsep = ',', const char lsep = ':');
 
 //--------------------------------------------------------------------
 // Heading/Speed Box Utilities
 
-IvPBox  buildBoxHdgAll(IvPDomain, double smin, double smax);
+IvPBox buildBoxHdgAll(IvPDomain, double smin, double smax);
 
-std::vector<IvPBox>  buildBoxesSpdAll(IvPDomain, double hmin, double hmax);
+std::vector<IvPBox> buildBoxesSpdAll(IvPDomain, double hmin, double hmax);
 
-std::vector<IvPBox>  buildBoxesHdgSpd(IvPDomain, double hmin, double hmax,
-				      double smin, double smax);
+std::vector<IvPBox> buildBoxesHdgSpd(IvPDomain, double hmin, double hmax,
+                                     double smin, double smax);
 
 //--------------------------------------------------------------------
 // Utility added by mikerb April 2018 for testing Refineries
@@ -89,11 +89,7 @@ std::vector<IvPBox> getPointBoxes(IvPBox);
 //--------------------------------------------------------------------
 // Utility added by mikerb Sep 2019 for streamlining Refineries
 
-bool                testRegionsApart(const std::vector<IvPBox>&);
+bool testRegionsApart(const std::vector<IvPBox> &);
 std::vector<IvPBox> makeRegionsApart(std::vector<IvPBox>);
 
-
-
 #endif
-
-

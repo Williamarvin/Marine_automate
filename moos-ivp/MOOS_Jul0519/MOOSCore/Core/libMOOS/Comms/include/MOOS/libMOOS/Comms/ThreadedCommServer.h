@@ -31,220 +31,214 @@
 #ifndef THREADEDCOMMSERVER_H_
 #define THREADEDCOMMSERVER_H_
 
-
 #include "MOOS/libMOOS/Comms/MOOSCommServer.h"
-#include "MOOS/libMOOS/Utils/SafeList.h"
 #include "MOOS/libMOOS/Thirdparty/PocoBits/SharedPtr.h"
+#include "MOOS/libMOOS/Utils/SafeList.h"
 
-namespace MOOS
-{
+namespace MOOS {
 
-//this is a small container structure used to hold data which is shared
-//between classes the in concert support the threadedcommserver
-struct ClientThreadSharedData
-{
+// this is a small container structure used to hold data which is shared
+// between classes the in concert support the threadedcommserver
+struct ClientThreadSharedData {
 
-	std::string _sClientName;
+  std::string _sClientName;
 
-	//payload
-	Poco::SharedPtr<CMOOSCommPkt> _pPkt;
+  // payload
+  Poco::SharedPtr<CMOOSCommPkt> _pPkt;
 
-	//little bit of status
-	enum Status
-	{
-	  NOT_INITIALISED,
-	  PKT_READ,
-	  CONNECTION_CLOSED,
-	  PKT_WRITE,
-	  STOP_THREAD,
-	} _Status;
+  // little bit of status
+  enum Status {
+    NOT_INITIALISED,
+    PKT_READ,
+    CONNECTION_CLOSED,
+    PKT_WRITE,
+    STOP_THREAD,
+  } _Status;
 
+  ClientThreadSharedData(const std::string &sN,
+                         Status eStatus = NOT_INITIALISED)
+      : _sClientName(sN), _Status(eStatus) {
+    _pPkt = new CMOOSCommPkt;
+  };
 
-	ClientThreadSharedData(const std::string & sN,Status eStatus =NOT_INITIALISED):
-	_sClientName(sN),_Status(eStatus)
-	{
-		_pPkt = new CMOOSCommPkt;
-	};
-
-	ClientThreadSharedData(){_Status =NOT_INITIALISED; };
-
+  ClientThreadSharedData() { _Status = NOT_INITIALISED; };
 };
-
 
 class ServerAudit;
 
-class ThreadedCommServer : public CMOOSCommServer
-{
+class ThreadedCommServer : public CMOOSCommServer {
 public:
-    ThreadedCommServer();
-    virtual ~ThreadedCommServer();
+  ThreadedCommServer();
+  virtual ~ThreadedCommServer();
 
 private:
-    typedef CMOOSCommServer BASE;
-
+  typedef CMOOSCommServer BASE;
 
 protected:
-    typedef SafeList<ClientThreadSharedData> SHARED_PKT_LIST;
+  typedef SafeList<ClientThreadSharedData> SHARED_PKT_LIST;
 
+  /**
+   * This is a class which handles the Reading and Writing of fully formed
+   * MOOSCommPkts It ceaselessly looks to read from a socket - when a Pkt is
+   * formed it stuff it on a shared thread safe list. It then waits for a reply
+   * pkt to be placed in _SharedDataOutgoing via a call to
+   * ::SendToClient()
+   */
+  class ClientThread : public CMOOSCommObject {
+  public:
+    virtual ~ClientThread();
+    /**
+     *
+     * @param sName name of client this object is encapsulating
+     * @param ClientSocket reference to a socket at the other end of which is
+     * the client
+     * @param SharedData a safe list of ClientThreadSharedData objects
+     * @param bAsync is this an asynchronous client
+     * @param dfConsolidationPeriodMS how long should this client be told to
+     * pause between talking to DB
+     * @param dfClientTimeout how long will we tolerate silence before dumping
+     * this sorry soul
+     * @param are we wishing to boost the priority of this IO bound thread
+     * @return
+     */
+    ClientThread(const std::string &sName, XPCTcpSocket &ClientSocket,
+                 SHARED_PKT_LIST &SharedDataIncoming, bool bAsync,
+                 double dfConsolidationPeriodMS, double dfClientTimeout,
+                 bool bBoostThread);
 
     /**
-     * This is a class which handles the Reading and Writing of fully formed MOOSCommPkts
-     * It ceaselessly looks to read from a socket - when a Pkt is formed it stuff it on a shared thread safe
-     * list. It then waits for a reply pkt to be placed in _SharedDataOutgoing via a call to
-     * ::SendToClient()
+     * standard trick to get around c++ issue an threads
+     * @param pParam (a cunningly disguised instance pointer
+     * @return
      */
-    class ClientThread : public CMOOSCommObject
-    {
-    public:
-        virtual ~ClientThread();
-        /**
-         *
-         * @param sName name of client this object is encapsulating
-         * @param ClientSocket reference to a socket at the other end of which is the client
-         * @param SharedData a safe list of ClientThreadSharedData objects
-         * @param bAsync is this an asynchronous client
-         * @param dfConsolidationPeriodMS how long should this client be told to pause between talking to DB
-         * @param dfClientTimeout how long will we tolerate silence before dumping this sorry soul
-         * @param are we wishing to boost the priority of this IO bound thread
-         * @return
-         */
-        ClientThread(const std::string & sName,
-        		XPCTcpSocket & ClientSocket,
-        		SHARED_PKT_LIST & SharedDataIncoming,
-        		bool bAsync,
-        		double dfConsolidationPeriodMS,
-        		double dfClientTimeout,
-        		bool bBoostThread);
+    static bool ReadEntry(void *pParam) {
+      return ((ClientThread *)pParam)->AsynchronousReadLoop();
+    }
+    static bool WriteEntry(void *pParam) {
+      return ((ClientThread *)pParam)->AsynchronousWriteLoop();
+    }
 
+    /**
+     * here is the main business of the day - this does the reading and writing
+     * in turn
+     * @return should not return unless socket closes..
+     */
+    bool AsynchronousReadLoop();
 
-        /**
-         * standard trick to get around c++ issue an threads
-         * @param pParam (a cunningly disguised instance pointer
-         * @return
-         */
-        static bool ReadEntry(void * pParam) {  return  ( (ClientThread*)pParam) -> AsynchronousReadLoop();}
-        static bool WriteEntry(void * pParam) {  return  ( (ClientThread*)pParam) -> AsynchronousWriteLoop();}
+    bool AsynchronousWriteLoop();
 
-        /**
-         * here is the main business of the day - this does the reading and writing in turn
-         * @return should not return unless socket closes..
-         */
-        bool AsynchronousReadLoop();
+    /**
+     * used to push data to client to send...
+     * @param OutGoing an object which was orginally collected from
+     * _SharedDataIncoming
+     * @return tru on success
+     */
+    bool SendToClient(ClientThreadSharedData &OutGoing);
 
-        bool AsynchronousWriteLoop();
+    bool SelectWrite(ClientThreadSharedData &SDOutGoing);
 
-        /**
-         * used to push data to client to send...
-         * @param OutGoing an object which was orginally collected from _SharedDataIncoming
-         * @return tru on success
-         */
-        bool SendToClient(ClientThreadSharedData & OutGoing);
+    bool HandleClientWrite();
 
-        bool SelectWrite(ClientThreadSharedData & SDOutGoing);
+    bool OnClientDisconnect();
 
+    XPCTcpSocket &GetSocket() { return m_ClientSocket; };
 
-        bool HandleClientWrite();
+    bool IsSynchronous() { return !m_bAsynchronous; };
+    bool IsAsynchronous() { return m_bAsynchronous; };
 
-        bool OnClientDisconnect();
+    double GetConsolidationTime();
 
-        XPCTcpSocket & GetSocket(){return m_ClientSocket;};
+    const std::string &GetClientName() { return m_sClientName; };
 
-        bool IsSynchronous(){return !m_bAsynchronous;};
-        bool IsAsynchronous(){return m_bAsynchronous;};
+    bool Start();
 
-        double GetConsolidationTime();
+  protected:
+    // a thread object which will start the Run() method
+    CMOOSThread m_Reader;
+    CMOOSThread m_Writer;
 
-        const std::string & GetClientName(){ return m_sClientName;};
+    // terminates this client and constituent threads
+    bool Kill();
 
-        bool Start();
+    // what is the name of the client we are representing?
+    std::string m_sClientName;
 
-    protected:
+    // we are simply given a reference to the socket via which the client is
+    // talking at constr
+    XPCTcpSocket &m_ClientSocket;
 
+    // note that this a reference to a list given to us (we don't own it) at
+    // construction
+    ThreadedCommServer::SHARED_PKT_LIST &m_SharedDataIncoming;
 
-        //a thread object which will start the Run() method
-        CMOOSThread m_Reader;
-        CMOOSThread m_Writer;
+    // note that this one we own - its private to us
+    ThreadedCommServer::SHARED_PKT_LIST m_SharedDataOutgoing;
 
-        //terminates this client and constituent threads
-        bool Kill();
+    // is the client asynchronous?
+    bool m_bAsynchronous;
 
-        //what is the name of the client we are representing?
-        std::string m_sClientName;
+    // what consolidation period are we asking clients to invoke?
+    double m_dfConsolidationPeriod;
 
-        //we are simply given a reference to the socket via which the client is talking at constr
-        XPCTcpSocket & m_ClientSocket;
+    // how long can we tolerate silence
+    double m_dfClientTimeout;
 
-        //note that this a reference to a list given to us (we don't own it) at construction
-        ThreadedCommServer::SHARED_PKT_LIST &  m_SharedDataIncoming;
+    // are we asked to boost prioirty
+    bool m_bBoostThread;
 
-        //note that this one we own - its private to us
-        ThreadedCommServer::SHARED_PKT_LIST m_SharedDataOutgoing;
+    std::vector<unsigned char> m_IncomingStorage;
+    std::vector<unsigned char> m_OutgoingStorage;
+  };
 
-        //is the client asynchronous?
-        bool m_bAsynchronous;
+  typedef Poco::SharedPtr<ClientThread> SharedClientThread;
 
-        //what consolidation period are we asking clients to invoke?
-        double m_dfConsolidationPeriod;
+  /** Called when a new client connects. Performs handshaking and adds new
+  socket to m_ClientSocketList
+  @param pNewClient pointer to the new socket created in ListenLoop;
+  @see ListenLoop*/
+  virtual bool OnNewClient(XPCTcpSocket *pNewClient, char *sName);
 
-        //how long can we tolerate silence
-        double m_dfClientTimeout;
+  virtual bool OnClientDisconnect(ClientThreadSharedData &SD);
+  virtual bool OnClientDisconnect();
 
-        //are we asked to boost prioirty
-        bool m_bBoostThread;
+  /** return true if Aynschronous Clients are supported */
+  virtual bool SupportsAsynchronousClients();
 
-        std::vector<unsigned char  > m_IncomingStorage;
-        std::vector<unsigned char  > m_OutgoingStorage;
-    };
+  virtual bool ServerLoop();
 
-    typedef Poco::SharedPtr<ClientThread> SharedClientThread;
+  virtual bool TimerLoop();
 
+  virtual bool AddAndStartClientThread(XPCTcpSocket &NewClientSocket,
+                                       const std::string &sName);
 
+  virtual bool ProcessClient(ClientThreadSharedData &SD,
+                             MOOS::ServerAudit &Auditor);
 
-    /** Called when a new client connects. Performs handshaking and adds new socket to m_ClientSocketList
-    @param pNewClient pointer to the new socket created in ListenLoop;
-    @see ListenLoop*/
-    virtual bool OnNewClient(XPCTcpSocket * pNewClient,char * sName);
+  virtual bool ProcessClient();
 
-    virtual bool OnClientDisconnect(ClientThreadSharedData &SD);
-    virtual bool OnClientDisconnect();
+  bool StopAndCleanUpClientThread(std::string sName);
 
-    /** return true if Aynschronous Clients are supported */
-    virtual bool SupportsAsynchronousClients();
+  virtual bool Stop();
 
-    virtual bool ServerLoop();
+protected:
+  // all connected clients will push the received Pkts into this list....
+  SafeList<ClientThreadSharedData> m_SharedDataListFromClient;
+  typedef std::map<std::string, SharedClientThread> ClientThreadsMap;
+  ClientThreadsMap m_ClientThreads;
 
-    virtual bool TimerLoop();
+  typedef SafeList<SharedClientThread> SafeClientThreadsList;
+  SafeClientThreadsList m_OldClientThreadsToDestroy;
 
-    virtual bool AddAndStartClientThread(XPCTcpSocket & NewClientSocket,const std::string & sName);
-
-    virtual bool ProcessClient(ClientThreadSharedData &SD, MOOS::ServerAudit & Auditor);
-
-    virtual bool ProcessClient();
-
-    bool StopAndCleanUpClientThread(std::string sName);
-
-    virtual bool Stop();
-
-    protected:
-
-		//all connected clients will push the received Pkts into this list....
-		SafeList<ClientThreadSharedData> m_SharedDataListFromClient;
-        typedef std::map<std::string,SharedClientThread> ClientThreadsMap;
-        ClientThreadsMap m_ClientThreads;
-
-        typedef SafeList<SharedClientThread> SafeClientThreadsList;
-        SafeClientThreadsList m_OldClientThreadsToDestroy;
-
-        //do not decelare m_WasteDisposal before m_OldClientThreadsToDestroy
-        //as we have to have the thread being destroyed before the resource it
-        //is working on.
-        CMOOSThread m_WasteDisposal;
-        static bool WasteDisposalEntry(void * pParam) {
-            return   static_cast<ThreadedCommServer*>(pParam) -> WasteDisposalLoop();}
-        virtual bool WasteDisposalLoop();
-
+  // do not decelare m_WasteDisposal before m_OldClientThreadsToDestroy
+  // as we have to have the thread being destroyed before the resource it
+  // is working on.
+  CMOOSThread m_WasteDisposal;
+  static bool WasteDisposalEntry(void *pParam) {
+    return static_cast<ThreadedCommServer *>(pParam)->WasteDisposalLoop();
+  }
+  virtual bool WasteDisposalLoop();
 };
 
-}
+} // namespace MOOS
 
 #endif /* THREADEDCOMMSERVER_H_ */

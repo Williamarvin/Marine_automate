@@ -32,22 +32,17 @@
 class Regressor;
 
 class RT_Directed {
- public:
-  RT_Directed() {m_verbose=false;}
+public:
+  RT_Directed() { m_verbose = false; }
   virtual ~RT_Directed() {}
 
- public: 
-  PDMap* create(PDMap*, const IvPBox&, const IvPBox&);
+public:
+  PDMap *create(PDMap *, const IvPBox &, const IvPBox &);
 
-  void   setVerbose(bool v=true) {m_verbose=v;}
-  
- private:
+  void setVerbose(bool v = true) { m_verbose = v; }
+
+private:
   bool m_verbose;
 };
 
 #endif
-
-
-
-
-

@@ -24,34 +24,22 @@
 #ifndef BHV_GUIDE_HEADER
 #define BHV_GUIDE_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
-class BHV_Guide
-{
+class BHV_Guide {
 public:
-  BHV_Guide() {m_action="web";};
+  BHV_Guide() { m_action = "web"; };
   virtual ~BHV_Guide() {}
 
   bool setBehaviorName(std::string);
   bool setAction(std::string);
-  
-  void guide();
-  
-protected:
 
+  void guide();
+
+protected:
   std::string m_bhv_name;
   std::string m_action;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

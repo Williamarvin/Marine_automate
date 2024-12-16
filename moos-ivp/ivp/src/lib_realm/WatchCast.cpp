@@ -23,17 +23,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include "MBUtils.h"
 #include "WatchCast.h"
+#include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-WatchCast::WatchCast()
-{
+WatchCast::WatchCast() {
   m_loc_time = 0;
   m_utc_time = 0;
   m_dval = 0;
@@ -44,88 +43,83 @@ WatchCast::WatchCast()
 //---------------------------------------------------------
 // Procedure: get_spec()
 
-string WatchCast::get_spec() const
-{
+string WatchCast::get_spec() const {
   string sep = "!X!"; // field separator
-  
+
   string msg = "node=" + m_node;
-  msg += sep +"var=" + m_varname;
-  
-  if(m_source != "")
+  msg += sep + "var=" + m_varname;
+
+  if (m_source != "")
     msg += sep + "src=" + m_source;
-  if(m_community != "")
+  if (m_community != "")
     msg += sep + "comm=" + m_community;
 
-  msg += sep + "loc_time=" + doubleToStringX(m_loc_time,2);
-  msg += sep + "utc_time=" + doubleToStringX(m_utc_time,2);
+  msg += sep + "loc_time=" + doubleToStringX(m_loc_time, 2);
+  msg += sep + "utc_time=" + doubleToStringX(m_utc_time, 2);
 
-  if(m_dval_set)
-    msg += sep + "dval=" + doubleToStringX(m_dval,3);
+  if (m_dval_set)
+    msg += sep + "dval=" + doubleToStringX(m_dval, 3);
   else
     msg += sep + "sval=" + m_sval;
 
-  return(msg);
+  return (msg);
 }
 
 //---------------------------------------------------------
 // Procedure: valid()
 
-bool WatchCast::valid() const
-{
-  if(m_sval_set == m_dval_set)
-    return(false);
-  if(m_node == "")
-    return(false);
-  if(m_source == "")
-    return(false);
-  if(m_community == "")
-    return(false);
+bool WatchCast::valid() const {
+  if (m_sval_set == m_dval_set)
+    return (false);
+  if (m_node == "")
+    return (false);
+  if (m_source == "")
+    return (false);
+  if (m_community == "")
+    return (false);
 
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------
 // Procedure: string2WatchCast()
 
-WatchCast string2WatchCast(std::string str)
-{
+WatchCast string2WatchCast(std::string str) {
   string sep = "!X!"; // field separator
   char c_sep = 30;    // ASCII 30 is "Record Separator"
-  string str_sep(1,c_sep);
-  
+  string str_sep(1, c_sep);
+
   str = findReplace(str, sep, str_sep);
-  
+
   WatchCast null_rcvar;
   WatchCast good_rcvar;
 
   vector<string> svector = parseString(str, c_sep);
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
-    if(param == "node") 
+    if (param == "node")
       good_rcvar.setNode(value);
-    else if(param == "var") 
+    else if (param == "var")
       good_rcvar.setVarName(value);
-    else if(param == "src") 
+    else if (param == "src")
       good_rcvar.setSource(value);
-    else if(param == "comm") 
+    else if (param == "comm")
       good_rcvar.setCommunity(value);
-    else if(param == "sval") 
+    else if (param == "sval")
       good_rcvar.setSVal(value);
-    else if(param == "dval") 
+    else if (param == "dval")
       good_rcvar.setDVal(atof(value.c_str()));
-    else if(param == "loc_time") 
+    else if (param == "loc_time")
       good_rcvar.setLocTime(atof(value.c_str()));
-    else if(param == "utc_time") 
+    else if (param == "utc_time")
       good_rcvar.setUtcTime(atof(value.c_str()));
     else
-      return(null_rcvar);
+      return (null_rcvar);
   }
-			 
-  if(!good_rcvar.valid())
-    return(null_rcvar);
-    
-  return(good_rcvar);
-}
 
+  if (!good_rcvar.valid())
+    return (null_rcvar);
+
+  return (good_rcvar);
+}

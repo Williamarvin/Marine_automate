@@ -22,13 +22,13 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_SEGMENT_HEADER
 #define XY_SEGMENT_HEADER
 
-#include <string>
 #include "XYObject.h"
 #include "XYPoint.h"
+#include <string>
 
 class XYSegment : public XYObject {
 public:
@@ -37,28 +37,28 @@ public:
   virtual ~XYSegment() {}
 
   // XYSegList create and edit functions
-  void   set(double x1, double y1, double x2, double y2);
-  void   set(const XYPoint&, const XYPoint);
-  void   clear();
+  void set(double x1, double y1, double x2, double y2);
+  void set(const XYPoint &, const XYPoint);
+  void clear();
 
 public:
-  void   shift_horz(double val);
-  void   shift_vert(double val);
-  void   apply_snap(double snapval);
-  void   reverse();
+  void shift_horz(double val);
+  void shift_vert(double val);
+  void apply_snap(double snapval);
+  void reverse();
 
-  bool   intersects(XYSegment);
-  
+  bool intersects(XYSegment);
+
 public:
-  double length() const {return(m_length);}
-  double get_x1() const {return(m_x1);}
-  double get_y1() const {return(m_y1);}
-  double get_x2() const {return(m_x2);}
-  double get_y2() const {return(m_y2);}
-  double getRAng12() const {return(m_rang12);}
-  double getRAng21() const {return(m_rang21);}
+  double length() const { return (m_length); }
+  double get_x1() const { return (m_x1); }
+  double get_y1() const { return (m_y1); }
+  double get_x2() const { return (m_x2); }
+  double get_y2() const { return (m_y2); }
+  double getRAng12() const { return (m_rang12); }
+  double getRAng21() const { return (m_rang21); }
 
-  std::string get_spec(int vertex_precision=1) const;
+  std::string get_spec(int vertex_precision = 1) const;
 
 protected:
   double m_x1;
@@ -72,14 +72,3 @@ protected:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "HelmIvP_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "HelmIvP_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  pHelmIvP is a behavior-based autonomous decision-making MOOS  ");
@@ -46,8 +45,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pHelmIvP file.moos [BEHAVIOR FILES]  [OPTIONS]           ");
@@ -56,7 +54,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pHelmIvP with the given process name rather        ");
   blk("      than pHelmIvP.                                            ");
   mag("  --example, -e                                                 ");
@@ -87,8 +85,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pHelmIvP Example MOOS Configuration                             ");
@@ -115,17 +112,17 @@ void showExampleConfigAndExit()
   blk("  other_override_var   = AUTONOMY_OVERRIDE                      ");
   blk("                                                                ");
   blk("  // Handle possible time skews from external communities       ");
-  blk("  node_skew            = charlie,45  ","// vehicle_name, secs   ");
-  blk("  ok_skew              = 60          ","// or {any}             ");
+  blk("  node_skew            = charlie,45  ", "// vehicle_name, secs   ");
+  blk("  ok_skew              = 60          ", "// or {any}             ");
   blk("                                                                ");
   blk("  // Configure the verbosity of terminal output.                ");
-  blk("  verbose              = terse  "," // or {true,false,quiet}    ");
+  blk("  verbose              = terse  ", " // or {true,false,quiet}    ");
   blk("                                                                ");
   blk("  // Insist that at least one non-constraint behavior be active ");
-  blk("  goals_mandatory      = true  "," // or {true,FALSE}           ");
+  blk("  goals_mandatory      = true  ", " // or {true,FALSE}           ");
   blk("                                                                ");
   blk("  // Allow unfound bhv directories to not be a problem.         ");
-  blk("  bhv_dir_not_found_ok = true "," // or {true,FALSE}            ");
+  blk("  bhv_dir_not_found_ok = true ", " // or {true,FALSE}            ");
   blk("                                                                ");
   blk("  // Name apps to wait on before posting onHelmStart messages.  ");
   blk("  hold_on_apps = pBasicContactMgr, pTaskManager                 ");
@@ -136,12 +133,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pHelmIvP INTERFACE                                              ");
@@ -204,17 +199,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pHelmIvP", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

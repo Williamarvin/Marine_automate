@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef P_ECHO_VAR_EXAMPLE_CONFIG_HEADER
 #define P_ECHO_VAR_EXAMPLE_CONFIG_HEADER
 
@@ -31,12 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-
-

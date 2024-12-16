@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "ZAIC_PEAK_Model.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Constructor
 
-ZAIC_PEAK_Model::ZAIC_PEAK_Model() : ZAIC_Model()
-{
+ZAIC_PEAK_Model::ZAIC_PEAK_Model() : ZAIC_Model() {
   // Modes: 0:medval 1:lowval 2:hghval 3:lowval_util 4:hghval_util
-  m_curr_mode = 0;  
+  m_curr_mode = 0;
   m_draw_mode = 1;
 
   m_zaic_peak1 = 0;
@@ -48,12 +47,11 @@ ZAIC_PEAK_Model::ZAIC_PEAK_Model() : ZAIC_Model()
 // Procedure: getIvPFunction()
 //      Note: Virtual function overloaded
 
-IvPFunction *ZAIC_PEAK_Model::getIvPFunction()
-{
-  if(m_draw_mode == 1)
-    return(m_zaic_peak1->extractOF());
-  if(m_draw_mode == 2)
-    return(m_zaic_peak2->extractOF());
+IvPFunction *ZAIC_PEAK_Model::getIvPFunction() {
+  if (m_draw_mode == 1)
+    return (m_zaic_peak1->extractOF());
+  if (m_draw_mode == 2)
+    return (m_zaic_peak2->extractOF());
 
   IvPDomain domain = m_zaic_peak1->getIvPDomain();
   string varname = domain.getVarName(0);
@@ -69,52 +67,51 @@ IvPFunction *ZAIC_PEAK_Model::getIvPFunction()
   joined_zaic.setBaseWidth(m_zaic_peak2->getParam("basewidth"), 1);
   joined_zaic.setPeakWidth(m_zaic_peak2->getParam("peakwidth"), 1);
   joined_zaic.setValueWrap(m_value_wrap);
-    
-  if(m_draw_mode == 3)
-    return(joined_zaic.extractOF(false));
 
-  return(joined_zaic.extractOF(true));
+  if (m_draw_mode == 3)
+    return (joined_zaic.extractOF(false));
+
+  return (joined_zaic.extractOF(true));
 }
 
 //-------------------------------------------------------------
 // Procedure: setDomain
 
-void ZAIC_PEAK_Model::setDomain(unsigned int domain_pts)
-{
-  if(domain_pts < 101)
+void ZAIC_PEAK_Model::setDomain(unsigned int domain_pts) {
+  if (domain_pts < 101)
     domain_pts = 100;
-  if(domain_pts > 1001)
+  if (domain_pts > 1001)
     domain_pts = 1001;
 
   // Initialize the IvP Domain with the new number of points
   IvPDomain ivp_domain;
-  ivp_domain.addDomain("x", 0, domain_pts-1, domain_pts);
-  
+  ivp_domain.addDomain("x", 0, domain_pts - 1, domain_pts);
+
   // Rebuild the zaics with default initial values
-  double summit1 = (double)(domain_pts) * 0.25;
+  double summit1 = (double)(domain_pts)*0.25;
   double pwidth1 = 10;
   double bwidth1 = 25;
   double sdelta1 = 80;
 
-  double summit2 = (double)(domain_pts) * 0.65;
+  double summit2 = (double)(domain_pts)*0.65;
   double pwidth2 = 5;
   double bwidth2 = 30;
   double sdelta2 = 45;
 
-  double min_util = 0; 
-  double max_util = 100; 
-  
+  double min_util = 0;
+  double max_util = 100;
+
   ZAIC_PEAK *new_zaic1 = new ZAIC_PEAK(ivp_domain, "x");
-  bool ok1 = new_zaic1->setParams(summit1, pwidth1, bwidth1,  
-				  sdelta1, min_util, max_util);
-  if(ok1)
+  bool ok1 = new_zaic1->setParams(summit1, pwidth1, bwidth1, sdelta1, min_util,
+                                  max_util);
+  if (ok1)
     m_zaic_peak1 = new_zaic1;
 
   ZAIC_PEAK *new_zaic2 = new ZAIC_PEAK(ivp_domain, "x");
-  bool ok2 = new_zaic2->setParams(summit2, pwidth2, bwidth2,  
-				  sdelta2, min_util, max_util);
-  
-  if(ok2)
+  bool ok2 = new_zaic2->setParams(summit2, pwidth2, bwidth2, sdelta2, min_util,
+                                  max_util);
+
+  if (ok2)
     m_zaic_peak2 = new_zaic2;
 
   m_zaic_peak1->setValueWrap(m_value_wrap);
@@ -132,10 +129,9 @@ void ZAIC_PEAK_Model::setDomain(unsigned int domain_pts)
 //            6 Alter BWidth on ZAIC 2
 //            7 Alter SDelta on ZAIC 2
 
-void ZAIC_PEAK_Model::currMode(int new_mode)
-{
-  if((new_mode >= 0) && (new_mode <= 9))
-    m_curr_mode = new_mode; 
+void ZAIC_PEAK_Model::currMode(int new_mode) {
+  if ((new_mode >= 0) && (new_mode <= 9))
+    m_curr_mode = new_mode;
 }
 
 //-------------------------------------------------------------
@@ -147,25 +143,22 @@ void ZAIC_PEAK_Model::currMode(int new_mode)
 //            4 Draw Sum from both ZAICS
 //            5 Toggle between modes
 
-void ZAIC_PEAK_Model::drawMode(int new_mode)
-{
-  if((new_mode < 0) || (new_mode > 4))
+void ZAIC_PEAK_Model::drawMode(int new_mode) {
+  if ((new_mode < 0) || (new_mode > 4))
     return;
 
-  if(new_mode == 0) {
+  if (new_mode == 0) {
     m_draw_mode++;
-    if(m_draw_mode > 4)
+    if (m_draw_mode > 4)
       m_draw_mode = 1;
-  }
-  else
+  } else
     m_draw_mode = new_mode;
 }
 
 //-------------------------------------------------------------
 // Procedure: setValueWrap()
 
-void ZAIC_PEAK_Model::setValueWrap(bool val)
-{
+void ZAIC_PEAK_Model::setValueWrap(bool val) {
   m_value_wrap = val;
   m_zaic_peak1->setValueWrap(m_value_wrap);
   m_zaic_peak2->setValueWrap(m_value_wrap);
@@ -174,38 +167,34 @@ void ZAIC_PEAK_Model::setValueWrap(bool val)
 //-------------------------------------------------------------
 // Procedure: moveX()
 
-void ZAIC_PEAK_Model::moveX(double delta)
-{
-  if(!m_zaic_peak1 || !m_zaic_peak2)
+void ZAIC_PEAK_Model::moveX(double delta) {
+  if (!m_zaic_peak1 || !m_zaic_peak2)
     return;
 
   double highval = m_zaic_peak1->getIvPDomain().getVarPoints(0);
-  
+
   //===========================================================
   // Handle for PEAK 1
   //===========================================================
-  if(m_curr_mode==0) {   // Altering summit
+  if (m_curr_mode == 0) { // Altering summit
     double summit = m_zaic_peak1->getParam("summit");
     summit += delta;
-    if(summit < 0)
+    if (summit < 0)
       summit = 0;
-    if(summit >= highval)
+    if (summit >= highval)
       summit = highval;
     m_zaic_peak1->setSummit(summit);
-  }
-  else if(m_curr_mode == 1) { // Altering PeakWidth
+  } else if (m_curr_mode == 1) { // Altering PeakWidth
     double pwidth = delta + m_zaic_peak1->getParam("peakwidth");
-    if(pwidth < 0)
+    if (pwidth < 0)
       pwidth = 0;
     m_zaic_peak1->setPeakWidth(pwidth);
-  }
-  else if(m_curr_mode == 2) { // Altering BaseWidth
+  } else if (m_curr_mode == 2) { // Altering BaseWidth
     double bwidth = delta + m_zaic_peak1->getParam("basewidth");
-    if(bwidth < 0) 
+    if (bwidth < 0)
       bwidth = 0;
     m_zaic_peak1->setBaseWidth(bwidth);
-  }
-  else if(m_curr_mode == 3) { // Altering SummitDelta
+  } else if (m_curr_mode == 3) { // Altering SummitDelta
     double minutil = m_zaic_peak1->getParam("minutil");
     double maxutil = m_zaic_peak1->getParam("maxutil");
     double sdelta = delta + m_zaic_peak1->getParam("summitdelta");
@@ -217,28 +206,25 @@ void ZAIC_PEAK_Model::moveX(double delta)
   //===========================================================
   // Handle for PEAK 2
   //===========================================================
-  else if(m_curr_mode==4) {   // Altering summit
+  else if (m_curr_mode == 4) { // Altering summit
     double summit = m_zaic_peak2->getParam("summit");
     summit += delta;
-    if(summit < 0)
+    if (summit < 0)
       summit = 0;
-    if(summit >= highval)
+    if (summit >= highval)
       summit = highval;
     m_zaic_peak2->setSummit(summit);
-  }
-  else if(m_curr_mode == 5) { // Altering PeakWidth
+  } else if (m_curr_mode == 5) { // Altering PeakWidth
     double pwidth = delta + m_zaic_peak2->getParam("peakwidth");
-    if(pwidth < 0)
+    if (pwidth < 0)
       pwidth = 0;
     m_zaic_peak2->setPeakWidth(pwidth);
-  }
-  else if(m_curr_mode == 6) { // Altering BaseWidth
+  } else if (m_curr_mode == 6) { // Altering BaseWidth
     double bwidth = delta + m_zaic_peak2->getParam("basewidth");
-    if(bwidth < 0)
+    if (bwidth < 0)
       bwidth = 0;
     m_zaic_peak2->setBaseWidth(bwidth);
-  }
-  else if(m_curr_mode == 7) { // Altering SummitDelta
+  } else if (m_curr_mode == 7) { // Altering SummitDelta
     double minutil = m_zaic_peak2->getParam("minutil");
     double maxutil = m_zaic_peak2->getParam("maxutil");
     double sdelta = delta + m_zaic_peak2->getParam("summitdelta");
@@ -250,27 +236,27 @@ void ZAIC_PEAK_Model::moveX(double delta)
   //===========================================================
   // Handle for PEAK 2
   //===========================================================
-  else if(m_curr_mode==8) {   // Altering Max Util
+  else if (m_curr_mode == 8) { // Altering Max Util
     double minutil = m_zaic_peak1->getParam("minutil");
     double maxutil = delta + m_zaic_peak1->getParam("maxutil");
-    if(maxutil < 1)
+    if (maxutil < 1)
       maxutil = 1;
-    if(maxutil <= minutil)
-      maxutil = minutil+1;
-    if(maxutil > 100)
+    if (maxutil <= minutil)
+      maxutil = minutil + 1;
+    if (maxutil > 100)
       maxutil = 100;
     m_zaic_peak1->setMinMaxUtil(minutil, maxutil);
     m_zaic_peak2->setMinMaxUtil(minutil, maxutil);
   }
 
-  else if(m_curr_mode==9) {   // Altering Min Util
+  else if (m_curr_mode == 9) { // Altering Min Util
     double minutil = delta + m_zaic_peak1->getParam("minutil");
     double maxutil = m_zaic_peak1->getParam("maxutil");
-    if(minutil > 99)
+    if (minutil > 99)
       minutil = 99;
-    if(minutil >= maxutil)
-      minutil = maxutil-1;
-    if(minutil < 0)
+    if (minutil >= maxutil)
+      minutil = maxutil - 1;
+    if (minutil < 0)
       minutil = 0;
     m_zaic_peak1->setMinMaxUtil(minutil, maxutil);
     m_zaic_peak2->setMinMaxUtil(minutil, maxutil);
@@ -283,92 +269,77 @@ void ZAIC_PEAK_Model::moveX(double delta)
 //----------------------------------------------------------------
 // Procedure: getSummit()
 
-double ZAIC_PEAK_Model::getSummit1()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("summit"));
+double ZAIC_PEAK_Model::getSummit1() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("summit"));
 }
 
-double ZAIC_PEAK_Model::getSummit2()
-{
-  if(!m_zaic_peak2)
-    return(0);
-  return(m_zaic_peak2->getParam("summit"));
+double ZAIC_PEAK_Model::getSummit2() {
+  if (!m_zaic_peak2)
+    return (0);
+  return (m_zaic_peak2->getParam("summit"));
 }
 
 //----------------------------------------------------------------
 // Procedure: getPeakWidth()
 
-double ZAIC_PEAK_Model::getPeakWidth1()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("peakwidth"));
+double ZAIC_PEAK_Model::getPeakWidth1() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("peakwidth"));
 }
 
-double ZAIC_PEAK_Model::getPeakWidth2()
-{
-  if(!m_zaic_peak2)
-    return(0);
-  return(m_zaic_peak2->getParam("peakwidth"));
+double ZAIC_PEAK_Model::getPeakWidth2() {
+  if (!m_zaic_peak2)
+    return (0);
+  return (m_zaic_peak2->getParam("peakwidth"));
 }
 
 //----------------------------------------------------------------
 // Procedure: getBaseWidth()
 
-double ZAIC_PEAK_Model::getBaseWidth1()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("basewidth"));
+double ZAIC_PEAK_Model::getBaseWidth1() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("basewidth"));
 }
 
-double ZAIC_PEAK_Model::getBaseWidth2()
-{
-  if(!m_zaic_peak2)
-    return(0);
-  return(m_zaic_peak2->getParam("basewidth"));
+double ZAIC_PEAK_Model::getBaseWidth2() {
+  if (!m_zaic_peak2)
+    return (0);
+  return (m_zaic_peak2->getParam("basewidth"));
 }
 
 //----------------------------------------------------------------
 // Procedure: getSummitDelta()
 
-double ZAIC_PEAK_Model::getSummitDelta1()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("summitdelta"));
+double ZAIC_PEAK_Model::getSummitDelta1() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("summitdelta"));
 }
 
-double ZAIC_PEAK_Model::getSummitDelta2()
-{
-  if(!m_zaic_peak2)
-    return(0);
-  return(m_zaic_peak2->getParam("summitdelta"));
+double ZAIC_PEAK_Model::getSummitDelta2() {
+  if (!m_zaic_peak2)
+    return (0);
+  return (m_zaic_peak2->getParam("summitdelta"));
 }
 
 //----------------------------------------------------------------
 // Procedure: getMinUtil()
 
-double ZAIC_PEAK_Model::getMinUtil()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("minutil"));
+double ZAIC_PEAK_Model::getMinUtil() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("minutil"));
 }
 
 //----------------------------------------------------------------
 // Procedure: getMaxUtil()
 
-double ZAIC_PEAK_Model::getMaxUtil()
-{
-  if(!m_zaic_peak1)
-    return(0);
-  return(m_zaic_peak1->getParam("maxutil"));
+double ZAIC_PEAK_Model::getMaxUtil() {
+  if (!m_zaic_peak1)
+    return (0);
+  return (m_zaic_peak1->getParam("maxutil"));
 }
-
-
-
-
-

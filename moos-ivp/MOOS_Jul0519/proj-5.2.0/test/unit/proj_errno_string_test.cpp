@@ -34,35 +34,37 @@
 
 namespace {
 
-TEST(ProjErrnoStringTest, NoError) {
-    EXPECT_EQ(0, proj_errno_string(0));
-}
+TEST(ProjErrnoStringTest, NoError) { EXPECT_EQ(0, proj_errno_string(0)); }
 
 TEST(ProjErrnoStringTest, ProjErrnos) {
-    EXPECT_STREQ("no arguments in initialization list", proj_errno_string(-1));
-    EXPECT_STREQ("invalid projection system error (-1000)", proj_errno_string(-1000));
-    EXPECT_STREQ("invalid projection system error (-9999)", proj_errno_string(-9999));
-    // for errnos < -9999, -9999 is always returned
-    const int min = std::numeric_limits<int>::min();
-    EXPECT_STREQ("invalid projection system error (-9999)",proj_errno_string(min));
-    EXPECT_STREQ("invalid projection system error (-9999)", proj_errno_string(-10000));
+  EXPECT_STREQ("no arguments in initialization list", proj_errno_string(-1));
+  EXPECT_STREQ("invalid projection system error (-1000)",
+               proj_errno_string(-1000));
+  EXPECT_STREQ("invalid projection system error (-9999)",
+               proj_errno_string(-9999));
+  // for errnos < -9999, -9999 is always returned
+  const int min = std::numeric_limits<int>::min();
+  EXPECT_STREQ("invalid projection system error (-9999)",
+               proj_errno_string(min));
+  EXPECT_STREQ("invalid projection system error (-9999)",
+               proj_errno_string(-10000));
 }
 
 TEST(ProjErrnoStringTest, SystemErrnos) {
-    const int max = std::numeric_limits<int>::max();
+  const int max = std::numeric_limits<int>::max();
 
 #ifdef HAVE_STRERROR
-    EXPECT_STREQ(strerror(5), proj_errno_string(5));
-    EXPECT_STREQ(strerror(9999), proj_errno_string(9999));
-    EXPECT_STREQ(strerror(10000), proj_errno_string(10000));
-    EXPECT_STREQ(strerror(max), proj_errno_string(max));
+  EXPECT_STREQ(strerror(5), proj_errno_string(5));
+  EXPECT_STREQ(strerror(9999), proj_errno_string(9999));
+  EXPECT_STREQ(strerror(10000), proj_errno_string(10000));
+  EXPECT_STREQ(strerror(max), proj_errno_string(max));
 #else
-    EXPECT_STREQ("no system list, errno: 5\n", proj_errno_string(5));
-    EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(9999));
-    // for errnos > 9999, 9999 is always returned
-    EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(10000));
-    EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(max));
+  EXPECT_STREQ("no system list, errno: 5\n", proj_errno_string(5));
+  EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(9999));
+  // for errnos > 9999, 9999 is always returned
+  EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(10000));
+  EXPECT_STREQ("no system list, errno: 9999\n", proj_errno_string(max));
 #endif
 }
 
-}  // namespace
+} // namespace

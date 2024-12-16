@@ -26,62 +26,62 @@
 #ifndef XY_GRID_HEADER
 #define XY_GRID_HEADER
 
+#include "XYPolygon.h"
+#include "XYSquare.h"
 #include <string>
 #include <vector>
-#include "XYSquare.h"
-#include "XYPolygon.h"
 
 class XYGrid {
 public:
   XYGrid();
   virtual ~XYGrid() {}
 
-  bool      initialize(std::string);
+  bool initialize(std::string);
 
-  XYSquare  getElement(unsigned int index) const;
-  void      setVal(unsigned int index, double val);
-  double    getVal(unsigned int index) const;
+  XYSquare getElement(unsigned int index) const;
+  void setVal(unsigned int index, double val);
+  double getVal(unsigned int index) const;
 
-  XYSquare  getSBound() const  {return(bounding_square);}
-  XYPolygon getPBound() const  {return(bounding_poly);}
-  double    getMinVal() const  {return(min_val);}
-  double    getMaxVal() const  {return(max_val);}
-  int       size() const       {return(elements.size());}
+  XYSquare getSBound() const { return (bounding_square); }
+  XYPolygon getPBound() const { return (bounding_poly); }
+  double getMinVal() const { return (min_val); }
+  double getMaxVal() const { return (max_val); }
+  int size() const { return (elements.size()); }
 
-  void      setUtil(unsigned int ix, double val);
-  void      setUtilRange(double, double);
-  double    getUtil(unsigned int ix)  const;
+  void setUtil(unsigned int ix, double val);
+  void setUtilRange(double, double);
+  double getUtil(unsigned int ix) const;
 
-  double    getMinUtil()     const {return(min_util);}
-  double    getMaxUtil()     const {return(max_util);}
-  double    getMinUtilPoss() const {return(min_util_possible);}
-  double    getMaxUtilPoss() const {return(max_util_possible);}
-  
-  void      handleSegment(double, double, double, double);
-  void      resetFromMin();
+  double getMinUtil() const { return (min_util); }
+  double getMaxUtil() const { return (max_util); }
+  double getMinUtilPoss() const { return (min_util_possible); }
+  double getMaxUtilPoss() const { return (max_util_possible); }
 
-  bool      ptIntersect(double, double) const;
-  bool      ptIntersectBound(double, double) const;
-  bool      segIntersectBound(double, double, double, double) const;
-  bool      processDelta(const std::string&);
+  void handleSegment(double, double, double, double);
+  void resetFromMin();
 
-  std::string getConfigString() const {return(config_string);}
-  std::string getLabel() const {return(label);}
+  bool ptIntersect(double, double) const;
+  bool ptIntersectBound(double, double) const;
+  bool segIntersectBound(double, double, double, double) const;
+  bool processDelta(const std::string &);
+
+  std::string getConfigString() const { return (config_string); }
+  std::string getLabel() const { return (label); }
 
 protected:
-  bool     initialize(XYPolygon, const XYSquare&, double);
-  bool     initialize(const XYSquare&, const XYSquare&, double);
-  void     clear();
-    
+  bool initialize(XYPolygon, const XYSquare &, double);
+  bool initialize(const XYSquare &, const XYSquare &, double);
+  void clear();
+
 protected:
   std::vector<XYSquare> elements;
-  std::vector<double>   values;
-  std::vector<double>   utilities;
-  std::string           config_string;
-  std::string           label;
-  XYSquare              bounding_square;
-  XYPolygon             bounding_poly;
-  
+  std::vector<double> values;
+  std::vector<double> utilities;
+  std::string config_string;
+  std::string label;
+  XYSquare bounding_square;
+  XYPolygon bounding_poly;
+
   double min_val;
   double max_val;
 
@@ -91,22 +91,3 @@ protected:
   double max_util_possible;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

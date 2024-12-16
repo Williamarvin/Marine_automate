@@ -26,8 +26,8 @@
 #ifndef SQUARE_XY_HEADER
 #define SQUARE_XY_HEADER
 
-#include <string>
 #include "XYObject.h"
+#include <string>
 
 class XYSquare : public XYObject {
 public:
@@ -35,59 +35,45 @@ public:
   XYSquare(double xylen);
   XYSquare(double xlen, double ylen);
   XYSquare(double xl, double hx, double yl, double yh);
-  bool operator==(const XYSquare&) const;
-  bool operator!=(const XYSquare&) const;
+  bool operator==(const XYSquare &) const;
+  bool operator!=(const XYSquare &) const;
   virtual ~XYSquare() {}
 
-  void   set(double, double, double, double);
-  bool   containsPoint(double, double) const;
+  void set(double, double, double, double);
+  bool containsPoint(double, double) const;
   double segIntersectLength(double, double, double, double) const;
   double segDistToSquare(double, double, double, double) const;
   double ptDistToSquareCtr(double, double) const;
 
-  double get_min_x() const {return(m_xlow);}
-  double get_max_x() const {return(m_xhigh);}
-  double get_min_y() const {return(m_ylow);}
-  double get_max_y() const {return(m_yhigh);}
-
+  double get_min_x() const { return (m_xlow); }
+  double get_max_x() const { return (m_xhigh); }
+  double get_min_y() const { return (m_ylow); }
+  double get_max_y() const { return (m_yhigh); }
 
   double getVal(int, int) const;
-  void   shiftX(double v)     {m_xlow+=v; m_xhigh+=v;}
-  void   shiftY(double v)     {m_ylow+=v; m_yhigh+=v;}
-  double getLengthX() const   {return(m_xhigh - m_xlow);}
-  double getLengthY() const   {return(m_yhigh - m_ylow);}
-  bool   valid() const        {return(m_valid);}
-  
-  double getCenterX() const   {return((m_xhigh-m_xlow)/2 + m_xlow);}
-  double getCenterY() const   {return((m_yhigh-m_ylow)/2 + m_ylow);}
+  void shiftX(double v) {
+    m_xlow += v;
+    m_xhigh += v;
+  }
+  void shiftY(double v) {
+    m_ylow += v;
+    m_yhigh += v;
+  }
+  double getLengthX() const { return (m_xhigh - m_xlow); }
+  double getLengthY() const { return (m_yhigh - m_ylow); }
+  bool valid() const { return (m_valid); }
 
-  std::string get_spec(std::string s="") const;
-  std::string get_spec_as_poly(std::string s="") const;
+  double getCenterX() const { return ((m_xhigh - m_xlow) / 2 + m_xlow); }
+  double getCenterY() const { return ((m_yhigh - m_ylow) / 2 + m_ylow); }
+
+  std::string get_spec(std::string s = "") const;
+  std::string get_spec_as_poly(std::string s = "") const;
 
 protected:
   double m_xlow;
   double m_xhigh;
   double m_ylow;
   double m_yhigh;
-  bool   m_valid;
+  bool m_valid;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

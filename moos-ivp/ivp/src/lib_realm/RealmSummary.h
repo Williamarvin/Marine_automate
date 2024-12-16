@@ -26,30 +26,29 @@
 #ifndef REALM_SUMMARY_HEADER
 #define REALM_SUMMARY_HEADER
 
-#include <string>
 #include <map>
+#include <string>
 
-class RealmSummary
-{
- public:
-  RealmSummary() {};
+class RealmSummary {
+public:
+  RealmSummary(){};
   ~RealmSummary() {}
 
-  void setNode(std::string s) {m_node=s;}
+  void setNode(std::string s) { m_node = s; }
   void addProc(std::string s);
   void addHistVar(std::string s);
 
   std::string get_spec() const;
 
-  std::string getNode() const            {return(m_node);}
-  std::vector<std::string> getProcs()    {return(m_procs);}
-  std::vector<std::string> getHistVars() {return(m_hist_vars);}
+  std::string getNode() const { return (m_node); }
+  std::vector<std::string> getProcs() { return (m_procs); }
+  std::vector<std::string> getHistVars() { return (m_hist_vars); }
 
-  unsigned int size() const {return(m_procs.size());}
+  unsigned int size() const { return (m_procs.size()); }
 
   bool valid() const;
-  
- private: 
+
+private:
   std::string m_node;
 
   std::vector<std::string> m_procs;
@@ -59,5 +58,4 @@ class RealmSummary
 
 RealmSummary string2RealmSummary(std::string);
 
-#endif 
-
+#endif

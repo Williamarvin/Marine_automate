@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "UPV_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "UPV_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  uPlotViewer is a GUI tool for rendering a frequency bar graph ");
@@ -43,8 +42,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uPlotViewer file.moos [OPTIONS]                        ");
@@ -53,7 +51,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uPlotViewer with the given process name rather     ");
   blk("      than uPlotViewer.                                         ");
   mag("  --example, -e                                                 ");
@@ -75,8 +73,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uPlotViewer Example MOOS Configuration                          ");
@@ -96,12 +93,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uPlotViewer INTERFACE                                           ");
@@ -121,17 +116,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uPlotViewer", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

@@ -18,8 +18,7 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-BlueBoat::BlueBoat()
-{
+BlueBoat::BlueBoat() {
   // Configuration variables  (overwritten by .moos params)
   m_max_rudder = 30.0;     // default MAX_RUDDER (+/-)
   m_max_thrust = 100.0;    // default MAX_THRUST (+/-)
@@ -79,16 +78,12 @@ BlueBoat::BlueBoat()
 //---------------------------------------------------------
 // Destructor()
 
-BlueBoat::~BlueBoat()
-{
-  m_bridge.closeSockFDs();
-}
+BlueBoat::~BlueBoat() { m_bridge.closeSockFDs(); }
 
 //---------------------------------------------------------
 // Procedure: OnStartUp()
 
-bool BlueBoat::OnStartUp()
-{
+bool BlueBoat::OnStartUp() {
 
   AppCastingMOOSApp::OnStartUp();
 
@@ -102,20 +97,17 @@ bool BlueBoat::OnStartUp()
   m_app_name = GetAppName();
 
   STRING_LIST::iterator p;
-  for (p = sParams.begin(); p != sParams.end(); p++)
-  {
+  for (p = sParams.begin(); p != sParams.end(); p++) {
     string orig = *p;
     string line = *p;
     string param = tolower(biteStringX(line, '='));
     string value = line;
 
     bool handled = false;
-    if ((param == "port") && isNumber(value))
-    {
+    if ((param == "port") && isNumber(value)) {
       int port = atoi(value.c_str());
       handled = m_bridge.setPortNumber(port);
-    }
-    else if (param == "ip_addr")
+    } else if (param == "ip_addr")
       handled = m_bridge.setIPAddr(value);
     else if (param == "ivp_allstop")
       handled = setBooleanOnString(m_ivp_allstop, value);
@@ -129,55 +121,37 @@ bool BlueBoat::OnStartUp()
       handled = m_thrust.setMaxRudder(value);
     else if (param == "max_thrust")
       handled = m_thrust.setMaxThrust(value);
-    else if (param == "drive_mode")
-    {
+    else if (param == "drive_mode") {
       handled = m_thrust.setDriveMode(value);
       m_drive_mode = value;
-    }
-    else if (param == "ignore_msg")
+    } else if (param == "ignore_msg")
       handled = handleConfigIgnoreMsg(value);
-    else if (param == "ignore_checksum_errors")
-    {
+    else if (param == "ignore_checksum_errors") {
       bool bool_val = false;
       bool ok1 = setBooleanOnString(bool_val, value);
       bool ok2 = m_bridge.setIgnoreCheckSum(bool_val);
       handled = ok1 && ok2;
-    }
-    else if ((param == "warn_bad_nmea_len") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_len") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEALen();
       handled = true;
-    }
-    else if ((param == "warn_bad_nmea_nend") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_nend") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEANend();
       handled = true;
-    }
-    else if ((param == "warn_bad_nmea_rend") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_rend") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEARend();
       handled = true;
-    }
-    else if ((param == "warn_bad_nmea_form") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_form") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEAForm();
       handled = true;
-    }
-    else if ((param == "warn_bad_nmea_chks") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_chks") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEAChks();
       handled = true;
-    }
-    else if ((param == "warn_bad_nmea_key") && (tolower(value) == "false"))
-    {
+    } else if ((param == "warn_bad_nmea_key") && (tolower(value) == "false")) {
       m_bridge.disableWarningBadNMEAKey();
       handled = true;
-    }
-    else if (param == "debug")
-    {
+    } else if (param == "debug") {
       m_debug = (value == tolower("true")) ? true : false;
-      if (m_debug)
-      {
+      if (m_debug) {
         time_t rawtime;
         struct tm *timeinfo;
         memset(m_fname, m_fname_buff_size, '\0');
@@ -192,12 +166,10 @@ bool BlueBoat::OnStartUp()
       handled = true;
     }
 
-    if (!handled)
-    {
+    if (!handled) {
       reportUnhandledConfigWarning(orig);
       list<string> warnings = m_thrust.getWarnings();
-      while (!warnings.empty())
-      {
+      while (!warnings.empty()) {
         reportConfigWarning(warnings.front());
         warnings.pop_front();
       }
@@ -212,8 +184,7 @@ bool BlueBoat::OnStartUp()
   GeodesySetup();
 
   bool vnameOk = m_MissionReader.GetValue("Community", m_vname);
-  if (!vnameOk)
-  {
+  if (!vnameOk) {
     reportUnhandledConfigWarning("Not able to get vehicle name");
   }
 
@@ -224,8 +195,7 @@ bool BlueBoat::OnStartUp()
 //---------------------------------------------------------
 // Procedure: OnConnectToServer
 
-bool BlueBoat::OnConnectToServer()
-{
+bool BlueBoat::OnConnectToServer() {
   registerVariables();
   return (true);
 }
@@ -233,8 +203,7 @@ bool BlueBoat::OnConnectToServer()
 //---------------------------------------------------------
 // Procedure: registerVariables
 
-void BlueBoat::registerVariables()
-{
+void BlueBoat::registerVariables() {
   AppCastingMOOSApp::RegisterVariables();
   Register("IVPHELM_ALLSTOP", 0);
   Register("DESIRED_THRUST", 0);
@@ -245,13 +214,11 @@ void BlueBoat::registerVariables()
 //---------------------------------------------------------
 // Procedure: OnNewMail
 
-bool BlueBoat::OnNewMail(MOOSMSG_LIST &NewMail)
-{
+bool BlueBoat::OnNewMail(MOOSMSG_LIST &NewMail) {
   AppCastingMOOSApp::OnNewMail(NewMail);
 
   MOOSMSG_LIST::iterator p;
-  for (p = NewMail.begin(); p != NewMail.end(); p++)
-  {
+  for (p = NewMail.begin(); p != NewMail.end(); p++) {
     CMOOSMsg &msg = *p;
     double mtime = msg.GetTime();
     string key = msg.GetKey();
@@ -263,49 +230,35 @@ bool BlueBoat::OnNewMail(MOOSMSG_LIST &NewMail)
     string msrc  = msg.GetSource();
 #endif
 
-    if (key == "IVPHELM_ALLSTOP")
-    {
-      if (msg.IsString())
-      {
+    if (key == "IVPHELM_ALLSTOP") {
+      if (msg.IsString()) {
         m_ivp_allstop = (toupper(sval) != "CLEAR");
-      }
-      else
-      {
+      } else {
         reportRunWarning("Received Invalid Message:" + key);
       }
-    }
-    else if (key == "MOOS_MANUAL_OVERRIDE")
-    {
+    } else if (key == "MOOS_MANUAL_OVERRIDE") {
       bool ok = setBooleanOnString(m_moos_manual_override, sval);
       if (!ok)
         reportRunWarning("Received Invalid Message:" + key);
-    }
-    else if (key == "DESIRED_RUDDER")
-    {
-      if ((msg.IsDouble()) && (m_thrust.getDriveMode() != "direct"))
-      {
+    } else if (key == "DESIRED_RUDDER") {
+      if ((msg.IsDouble()) && (m_thrust.getDriveMode() != "direct")) {
         m_tstamp_des_rudder = mtime;
         m_thrust.setRudder(dval);
+      } else {
+        reportRunWarning("Drive mode set to direct but got rudder command, or "
+                         "value is not double: " +
+                         key);
       }
-      else
-      {
-        reportRunWarning("Drive mode set to direct but got rudder command, or value is not double: " + key);
-      }
-    }
-    else if ((msg.IsDouble()) && (key == "DESIRED_THRUST"))
-    {
-      if (m_thrust.getDriveMode() != "direct")
-      {
+    } else if ((msg.IsDouble()) && (key == "DESIRED_THRUST")) {
+      if (m_thrust.getDriveMode() != "direct") {
         m_tstamp_des_thrust = mtime;
         m_thrust.setThrust(dval);
+      } else {
+        reportRunWarning("Drive mode set to direct but got thruster command, "
+                         "or value is not double: " +
+                         key);
       }
-      else
-      {
-        reportRunWarning("Drive mode set to direct but got thruster command, or value is not double: " + key);
-      }
-    }
-    else if (key != "APPCAST_REQ")
-    { // handled by AppCastingMOOSApp
+    } else if (key != "APPCAST_REQ") { // handled by AppCastingMOOSApp
       reportRunWarning("Unhandled Mail: " + key);
     }
   }
@@ -315,8 +268,7 @@ bool BlueBoat::OnNewMail(MOOSMSG_LIST &NewMail)
 //---------------------------------------------------------
 // Procedure: Iterate()
 
-bool BlueBoat::Iterate()
-{
+bool BlueBoat::Iterate() {
   AppCastingMOOSApp::Iterate();
 
   // Part 1: Check for allstop or staleness
@@ -326,8 +278,7 @@ bool BlueBoat::Iterate()
   if (m_bridge.getState() != "connected")
     m_bridge.setupConnection();
 
-  if (m_bridge.getState() == "connected")
-  {
+  if (m_bridge.getState() == "connected") {
     sendMessagesToSocket();
     readMessagesFromSocket();
   }
@@ -343,31 +294,27 @@ bool BlueBoat::Iterate()
 //   Purpose: Initialize geodesy object with lat/lon origin.
 //            Used for LatLon2LocalUTM conversion.
 
-bool BlueBoat::GeodesySetup()
-{
+bool BlueBoat::GeodesySetup() {
   double LatOrigin = 0.0;
   double LonOrigin = 0.0;
 
   // Get Latitude Origin from .MOOS Mission File
   bool latOK = m_MissionReader.GetValue("LatOrigin", LatOrigin);
-  if (!latOK)
-  {
+  if (!latOK) {
     reportConfigWarning("Latitude origin missing in MOOS file.");
     return (false);
   }
 
   // Get Longitude Origin from .MOOS Mission File
   bool lonOK = m_MissionReader.GetValue("LongOrigin", LonOrigin);
-  if (!lonOK)
-  {
+  if (!lonOK) {
     reportConfigWarning("Longitude origin missing in MOOS file.");
     return (false);
   }
 
   // Initialise CMOOSGeodesy object
   bool geoOK = m_geodesy.Initialise(LatOrigin, LonOrigin);
-  if (!geoOK)
-  {
+  if (!geoOK) {
     reportConfigWarning("CMOOSGeodesy::Initialise() failed. Invalid origin.");
     return (false);
   }
@@ -378,8 +325,7 @@ bool BlueBoat::GeodesySetup()
 //---------------------------------------------------------
 // Procedure: sendMessagesToSocket()
 
-void BlueBoat::sendMessagesToSocket()
-{
+void BlueBoat::sendMessagesToSocket() {
   // This code is still a work in progress the thruster values still need to be
   //  mapped to a pwm value and the auxpwm pin needs to be handled by moos
   //------------------------------------------------
@@ -417,12 +363,10 @@ void BlueBoat::sendMessagesToSocket()
 //      Note: Messages returned from the SockNinja have been
 //            confirmed to be valid NMEA format and checksum
 
-void BlueBoat::readMessagesFromSocket()
-{
+void BlueBoat::readMessagesFromSocket() {
   list<string> incoming_msgs = m_bridge.getSockMessages();
   list<string>::iterator p;
-  for (p = incoming_msgs.begin(); p != incoming_msgs.end(); p++)
-  {
+  for (p = incoming_msgs.begin(); p != incoming_msgs.end(); p++) {
     string msg = *p;
     msg = biteString(msg, '\r'); // Remove CRLF
     Notify("IBlueBoat_RAW_NMEA", msg);
@@ -456,13 +400,11 @@ void BlueBoat::readMessagesFromSocket()
 //  Examples: ignore_msg = $GPGLL
 //            ignore_msg = $GPGLL, GPGSV, $GPVTG
 
-bool BlueBoat::handleConfigIgnoreMsg(string str)
-{
+bool BlueBoat::handleConfigIgnoreMsg(string str) {
   bool all_ok = true;
 
   vector<string> msgs = parseString(str, ',');
-  for (unsigned int i = 0; i < msgs.size(); i++)
-  {
+  for (unsigned int i = 0; i < msgs.size(); i++) {
     string msg = stripBlankEnds(msgs[i]);
     // Check if proper NMEA Header
     if ((msg.length() == 6) && (msg.at(0) = '$'))
@@ -476,21 +418,16 @@ bool BlueBoat::handleConfigIgnoreMsg(string str)
 
 //---------------------------------------------------------
 // Procedure: dbg_print()
-bool BlueBoat::dbg_print(const char *format, ...)
-{
-  if (m_debug == true)
-  {
+bool BlueBoat::dbg_print(const char *format, ...) {
+  if (m_debug == true) {
     va_list args;
     va_start(args, format);
     m_debug_stream = fopen(m_fname, "a");
-    if (m_debug_stream != nullptr)
-    {
+    if (m_debug_stream != nullptr) {
       vfprintf(m_debug_stream, format, args);
       fclose(m_debug_stream);
       return true;
-    }
-    else
-    {
+    } else {
       reportRunWarning("Debug mode is enabled and file could not be opened\n");
       return false;
     }
@@ -505,14 +442,11 @@ bool BlueBoat::dbg_print(const char *format, ...)
 //            If an all-stop has been posted, also set the
 //            local desired_rudder/thrust vals to zero.
 
-void BlueBoat::checkForStalenessOrAllStop()
-{
-  if (m_ivp_allstop)
-  {
+void BlueBoat::checkForStalenessOrAllStop() {
+  if (m_ivp_allstop) {
     m_thrust.setRudder(0);
     m_thrust.setThrust(0);
-    if (m_thrust.getDriveMode() == "direct")
-    {
+    if (m_thrust.getDriveMode() == "direct") {
       m_thrust.setThrusterSpeed(0.0, "right");
       m_thrust.setThrusterSpeed(0.0, "left");
     }
@@ -520,8 +454,7 @@ void BlueBoat::checkForStalenessOrAllStop()
   }
 
   // If not checking staleness, ensure stale mode false, return.
-  if (!m_stale_check_enabled)
-  {
+  if (!m_stale_check_enabled) {
     m_stale_mode = false;
     return;
   }
@@ -538,8 +471,7 @@ void BlueBoat::checkForStalenessOrAllStop()
     m_count_stale++;
 
   bool stale_mode = false;
-  if (stale_rudder || stale_thrust)
-  {
+  if (stale_rudder || stale_thrust) {
     m_thrust.setRudder(0);
     m_thrust.setThrust(0);
     stale_mode = true;
@@ -559,17 +491,15 @@ void BlueBoat::checkForStalenessOrAllStop()
 // Example message included for reference
 //---------------------------------------------------------
 // Procedure: handleMsgBATRY()
-//      Note: Not implemented at the moment as SYSST provides voltage and current
+//      Note: Not implemented at the moment as SYSST provides voltage and
+//      current
 //   Example:
 //   $BATRY,battery_function:type:MAV_BATTERY_FUNCTION_UNKNOWN,battery_remaining:-1,charge_state:type:MAV_BATTERY_CHARGE_STATE_OK,
 //    current_battery:-88,current_consumed:-35,energy_consumed:-20,id:0,mavtype:type:MAV_BATTERY_TYPE_UNKNOWN,temperature:32767,time_remaining:0,
 //    voltages:[16531,65535,65535,65535,65535,65535,65535,65535,65535,65535],counter:457,first_update:2024-08-01T14:39:43.857506859Z,
 //    frequency:3.0264899730682373,last_update:2024-08-01T14:42:15.365952983Z*1E
 
-bool BlueBoat::handleMsgBATRY(string msg)
-{
-  return (true);
-}
+bool BlueBoat::handleMsgBATRY(string msg) { return (true); }
 
 // Example message included for reference
 //---------------------------------------------------------
@@ -580,8 +510,7 @@ bool BlueBoat::handleMsgBATRY(string msg)
 //    errors_count2:0,errors_count3:0,errors_count4:0,load:45,onboard_control_sensors_enabled:bits:304120111,
 //    onboard_control_sensors_health:bits:51413295,onboard_control_sensors_present:bits:321969455,voltage_battery:16570,
 //    counter:399,first_update:2024-08-01T14:39:44.242840167Z,frequency:2.0151515007019043,last_update:2024-08-01T14:43:02.741769602Z*1A
-bool BlueBoat::handleMsgSYSST(string msg)
-{
+bool BlueBoat::handleMsgSYSST(string msg) {
   if (!strBegins(msg, "$SYSST,"))
     return (false);
 
@@ -592,23 +521,19 @@ bool BlueBoat::handleMsgSYSST(string msg)
   bool got_int = false;
 
   vector<string> flds = parseString(msg, ',');
-  for (unsigned int i = 0; i < flds.size(); i++)
-  {
+  for (unsigned int i = 0; i < flds.size(); i++) {
     std::string fld = flds[i];
     string param = tolower(biteStringX(fld, ':'));
     string value = fld;
 
     got_int = setIntOnString(value_int, value);
 
-    if (param == "voltage_battery")
-    {
+    if (param == "voltage_battery") {
       if (!got_int)
         return (false);
       m_sysst_voltage = value_int / 1000.0;
       Notify("STAT_BAT_VOLTAGE", m_sysst_voltage);
-    }
-    else if (param == "current_battery")
-    {
+    } else if (param == "current_battery") {
       if (!got_int)
         return (false);
       m_sysst_current = value_int / 100.0;
@@ -627,8 +552,7 @@ bool BlueBoat::handleMsgSYSST(string msg)
 //    counter:600,first_update:2024-08-01T14:39:43.842028118Z,frequency:3.015075445175171,
 //    last_update:2024-08-01T14:43:02.981550392Z*0D
 
-bool BlueBoat::handleMsgGBPOS(string msg)
-{
+bool BlueBoat::handleMsgGBPOS(string msg) {
   if (!strBegins(msg, "$GBPOS,"))
     return (false);
 
@@ -639,64 +563,50 @@ bool BlueBoat::handleMsgGBPOS(string msg)
   bool got_int = false;
 
   vector<string> flds = parseString(msg, ',');
-  for (unsigned int i = 0; i < flds.size(); i++)
-  {
+  for (unsigned int i = 0; i < flds.size(); i++) {
     std::string fld = flds[i];
     string param = tolower(biteStringX(fld, ':'));
     string value = fld;
 
     got_int = setIntOnString(value_int, value);
 
-    if (param == "alt")
-    {
+    if (param == "alt") {
       if (!got_int)
         return (false);
       m_nav_alt = value_int;
       m_nav_alt = m_nav_alt / 1000.0; // millimeters to meters
       Notify("NAV_ALT", m_nav_alt);
-    }
-    else if (param == "hdg")
-    {
+    } else if (param == "hdg") {
       if (!isNumber(value))
         return (false);
       m_nav_hdg = value_int;
       m_nav_hdg = m_nav_hdg / 100.0; // centidegrees to degrees
       Notify("NAV_HEADING", m_nav_hdg);
-    }
-    else if (param == "lat")
-    {
+    } else if (param == "lat") {
       if (!isNumber(value))
         return (false);
       m_nav_lat = value_int;
       m_nav_lat = m_nav_lat / 10000000.0; // into standard degree format
       Notify("NAV_LAT", m_nav_lat);
-    }
-    else if (param == "lon")
-    {
+    } else if (param == "lon") {
       if (!isNumber(value))
         return (false);
       m_nav_long = value_int;
       m_nav_long = m_nav_long / 10000000.0; // into standard degree format
       Notify("NAV_LON", m_nav_long);
-    }
-    else if (param == "vx")
-    {
+    } else if (param == "vx") {
       if (!isNumber(value))
         return (false);
       m_nav_vx = value_int;
       m_nav_vx = m_nav_vx / 100.0; // cm/s to m/s
       Notify("NAV_VX", m_nav_vx);
-    }
-    else if (param == "vy")
-    {
+    } else if (param == "vy") {
       if (!isNumber(value))
         return (false);
       m_nav_vy = value_int;
       m_nav_vy = m_nav_vy / 100.0; // cm/s to m/s
       Notify("NAV_VY", m_nav_vy);
-    }
-    else if (param == "vz")
-    {
+    } else if (param == "vz") {
       if (!isNumber(value))
         return (false);
       m_nav_vz = value_int;
@@ -707,8 +617,7 @@ bool BlueBoat::handleMsgGBPOS(string msg)
     // convert lat an long to local frame:
     double x, y;
     bool ok = m_geodesy.LatLong2LocalGrid(m_nav_lat, m_nav_long, y, x);
-    if (ok)
-    {
+    if (ok) {
       m_nav_x = x;
       m_nav_y = y;
       Notify("NAV_X", m_nav_x);
@@ -717,8 +626,10 @@ bool BlueBoat::handleMsgGBPOS(string msg)
       // publish speed in m/s decomposed into surge and sway
       m_nav_hdg_rad = M_PI * m_nav_hdg / 180.0;
 
-      m_nav_surge = m_nav_vx * cos(m_nav_hdg_rad) + m_nav_vy * sin(m_nav_hdg_rad);
-      m_nav_sway = -m_nav_vx * sin(m_nav_hdg_rad) + m_nav_vy * cos(m_nav_hdg_rad);
+      m_nav_surge =
+          m_nav_vx * cos(m_nav_hdg_rad) + m_nav_vy * sin(m_nav_hdg_rad);
+      m_nav_sway =
+          -m_nav_vx * sin(m_nav_hdg_rad) + m_nav_vy * cos(m_nav_hdg_rad);
       m_nav_heave = m_nav_vz;
 
       Notify("NAV_SURGE", m_nav_surge);
@@ -729,7 +640,9 @@ bool BlueBoat::handleMsgGBPOS(string msg)
     }
   }
 
-  dbg_print("LAT: %.7f, LON: %.7f, NAV_X: %.2f, NAV_Y %.2f, NAV_SPEED: %.2f, HEADING: %.2f \n", m_nav_lat, m_nav_long, m_nav_x, m_nav_y, m_nav_surge, m_nav_hdg);
+  dbg_print("LAT: %.7f, LON: %.7f, NAV_X: %.2f, NAV_Y %.2f, NAV_SPEED: %.2f, "
+            "HEADING: %.2f \n",
+            m_nav_lat, m_nav_long, m_nav_x, m_nav_y, m_nav_surge, m_nav_hdg);
   return (true);
 }
 // Example message included for reference
@@ -740,8 +653,7 @@ bool BlueBoat::handleMsgGBPOS(string msg)
 //   $HRTBT,autopilot:type:MAV_AUTOPILOT_ARDUPILOTMEGA,base_mode:bits:65,custom_mode:0,mavlink_version:3,
 //    mavtype:type:MAV_TYPE_SURFACE_BOAT,system_status:type:MAV_STATE_ACTIVE,counter:205,first_update:2024-08-01T14:39:42.222191531Z,
 //    frequency:1.024999976158142,last_update:2024-08-01T14:43:02.241917468Z*23
-bool BlueBoat::handleMsgHRTBT(string msg)
-{
+bool BlueBoat::handleMsgHRTBT(string msg) {
   if (!strBegins(msg, "$HRTBT,"))
     return (false);
 
@@ -752,16 +664,14 @@ bool BlueBoat::handleMsgHRTBT(string msg)
   bool got_int = false;
 
   vector<string> flds = parseString(msg, ',');
-  for (unsigned int i = 0; i < flds.size(); i++)
-  {
+  for (unsigned int i = 0; i < flds.size(); i++) {
     std::string fld = flds[i];
     string param = tolower(biteStringX(fld, ':'));
     string value = fld;
 
     got_int = setIntOnString(value_int, value);
 
-    if (param == "counter")
-    {
+    if (param == "counter") {
       if (!got_int)
         return (false);
 
@@ -781,8 +691,7 @@ bool BlueBoat::handleMsgHRTBT(string msg)
 //   chan6_raw:1000,chan7_raw:1000,chan8_raw:1000,chan9_raw:1000,chancount:16,rssi:255,time_boot_ms:201615,
 //   counter:399,first_update:2024-08-01T14:39:44.246898147Z,frequency:2.0151515007019043,last_update:2024-08-01T14:43:02.742506413Z*6C
 
-bool BlueBoat::handleMsgRCHNL(string msg)
-{
+bool BlueBoat::handleMsgRCHNL(string msg) {
   if (!strBegins(msg, "$RCHNL,"))
     return (false);
 
@@ -793,36 +702,28 @@ bool BlueBoat::handleMsgRCHNL(string msg)
   bool got_int = false;
 
   vector<string> flds = parseString(msg, ',');
-  for (unsigned int i = 0; i < flds.size(); i++)
-  {
+  for (unsigned int i = 0; i < flds.size(); i++) {
     std::string fld = flds[i];
     string param = tolower(biteStringX(fld, ':'));
     string value = fld;
 
     got_int = setIntOnString(value_int, value);
-    if (param == "chan14_raw")
-    {
+    if (param == "chan14_raw") {
       if (!got_int)
         return (false);
       m_left_rc = value_int; // microseconds
       Notify("RC_LEFT", m_left_rc);
-    }
-    else if (param == "chan15_raw")
-    {
+    } else if (param == "chan15_raw") {
       if (!got_int)
         return (false);
       m_aux_rc = value_int; // microseconds
       Notify("RC_AUX", m_aux_rc);
-    }
-    else if (param == "chan16_raw")
-    {
+    } else if (param == "chan16_raw") {
       if (!got_int)
         return (false);
       m_right_rc = value_int; // microseconds
       Notify("RC_RIGHT", m_right_rc);
-    }
-    else if (param == "rssi")
-    {
+    } else if (param == "rssi") {
       if (!got_int)
         return (false);
       m_rssi = value_int; // 0-255
@@ -840,8 +741,7 @@ bool BlueBoat::handleMsgRCHNL(string msg)
 //    $ATITD,pitch:0.008361952379345894,pitchspeed:-3.978051245212555e-05,roll:-0.0179135762155056,rollspeed:-0.00018928153440356255,
 //    time_boot_ms:201855,yaw:2.890336751937866,yawspeed:4.8820627853274345e-05,counter:1995,first_update:2024-08-01T14:39:43.352511563Z,
 //    frequency:10.025125503540039,last_update:2024-08-01T14:43:02.991506412Z*7E
-bool BlueBoat::handleMsgATITD(string msg)
-{
+bool BlueBoat::handleMsgATITD(string msg) {
   if (!strBegins(msg, "$ATITD,"))
     return (false);
 
@@ -852,51 +752,39 @@ bool BlueBoat::handleMsgATITD(string msg)
   bool got_double = false;
 
   vector<string> flds = parseString(msg, ',');
-  for (unsigned int i = 0; i < flds.size(); i++)
-  {
+  for (unsigned int i = 0; i < flds.size(); i++) {
     std::string fld = flds[i];
     string param = tolower(biteStringX(fld, ':'));
     string value = fld;
 
     got_double = setDoubleOnString(value_double, value);
 
-    if (param == "pitch")
-    {
+    if (param == "pitch") {
       if (!got_double)
         return (false);
       m_attitude_pitch = value_double; // radians
       Notify("ATTITUDE_PITCH", m_attitude_pitch);
-    }
-    else if (param == "roll")
-    {
+    } else if (param == "roll") {
       if (!got_double)
         return (false);
       m_attitude_roll = value_double; // radians
       Notify("ATTITUDE_ROLL", m_attitude_roll);
-    }
-    else if (param == "yaw")
-    {
+    } else if (param == "yaw") {
       if (!got_double)
         return (false);
       m_attitude_yaw = value_double; // radians
       Notify("ATTITUDE_YAW", m_attitude_yaw);
-    }
-    else if (param == "pitchspeed")
-    {
+    } else if (param == "pitchspeed") {
       if (!got_double)
         return (false);
       m_attitude_pitchrate = value_double; // radians/s
       Notify("ATTITUDE_PITCHSPEED", m_attitude_pitchrate);
-    }
-    else if (param == "rollspeed")
-    {
+    } else if (param == "rollspeed") {
       if (!got_double)
         return (false);
       m_attitude_rollrate = value_double; // radians/s
       Notify("ATTITUDE_ROLLSPEED", m_attitude_rollrate);
-    }
-    else if (param == "yawspeed")
-    {
+    } else if (param == "yawspeed") {
       if (!got_double)
         return (false);
       m_attitude_yawrate = value_double; // radians/s
@@ -910,8 +798,7 @@ bool BlueBoat::handleMsgATITD(string msg)
 //---------------------------------------------------------
 // Procedure: reportBadMessage()
 
-bool BlueBoat::reportBadMessage(string msg, string reason)
-{
+bool BlueBoat::reportBadMessage(string msg, string reason) {
   reportRunWarning("Bad NMEA Msg: " + reason + ": " + msg);
   Notify("IBlueBoat_BAD_NMEA", reason + ": " + msg);
   return (false);
@@ -922,13 +809,11 @@ bool BlueBoat::reportBadMessage(string msg, string reason)
 //      Note: Get the AppCast-consistent events, warnings and
 //            retractions from the sock ninja for posting
 
-void BlueBoat::reportWarningsEvents()
-{
+void BlueBoat::reportWarningsEvents() {
   // Part 1: Handle Event Messages()
   list<string> events = m_bridge.getEvents();
   list<string>::iterator p;
-  for (p = events.begin(); p != events.end(); p++)
-  {
+  for (p = events.begin(); p != events.end(); p++) {
     string event_str = *p;
     reportEvent(event_str);
   }
@@ -937,16 +822,14 @@ void BlueBoat::reportWarningsEvents()
   list<string> warnings = m_bridge.getWarnings();
   list<string> thrust_warnings = m_thrust.getWarnings();
   warnings.splice(warnings.end(), thrust_warnings);
-  for (p = warnings.begin(); p != warnings.end(); p++)
-  {
+  for (p = warnings.begin(); p != warnings.end(); p++) {
     string warning_str = *p;
     reportRunWarning(warning_str);
   }
 
   // Part 3: Handle Retraction Messages()
   list<string> retractions = m_bridge.getRetractions();
-  for (p = retractions.begin(); p != retractions.end(); p++)
-  {
+  for (p = retractions.begin(); p != retractions.end(); p++) {
     string retraction_str = *p;
     retractRunWarning(retraction_str);
   }
@@ -975,8 +858,7 @@ void BlueBoat::reportWarningsEvents()
 // <--R     230  $GPRMC,105707.24,A,0000.00,N,00000.00,W,1.1663,0,291263,0,E*76
 //  S-->    231  $PYDIR,0,0*56
 
-bool BlueBoat::buildReport()
-{
+bool BlueBoat::buildReport() {
   string str_max_rud = doubleToStringX(m_max_rudder, 1);
   string str_max_thr = doubleToStringX(m_max_thrust, 1);
   string str_max_both = str_max_rud + "/" + str_max_thr;
@@ -1000,20 +882,25 @@ bool BlueBoat::buildReport()
   string pd_navx = padString(str_nav_x, 10, false);
   string pd_navy = padString(str_nav_y, 10, false);
 
-  m_msgs << "Config:    max_r/t: " << pd_ruth << "   stale_check:  " << str_sta_ena << endl;
-  m_msgs << "           dr_mode: " << pd_drmo << "   stale_thresh: " << str_sta_thr << endl;
+  m_msgs << "Config:    max_r/t: " << pd_ruth
+         << "   stale_check:  " << str_sta_ena << endl;
+  m_msgs << "           dr_mode: " << pd_drmo
+         << "   stale_thresh: " << str_sta_thr << endl;
   m_msgs << "------------------------------------------------------" << endl;
-  m_msgs << "Drive:     des_rud: " << pd_drud << "   des_thrust_L: " << str_des_thrL << endl;
-  m_msgs << "State:     des_thr: " << pd_dthr << "   des_thrust_R: " << str_des_thrR << endl;
+  m_msgs << "Drive:     des_rud: " << pd_drud
+         << "   des_thrust_L: " << str_des_thrL << endl;
+  m_msgs << "State:     des_thr: " << pd_dthr
+         << "   des_thrust_R: " << str_des_thrR << endl;
   m_msgs << "------------------------------------------------------" << endl;
-  m_msgs << "Nav:       nav_x:   " << pd_navx << "   nav_hdg: " << str_nav_hdg << endl;
-  m_msgs << "           nav_y:   " << pd_navy << "   nav_spd: " << str_nav_spd << endl;
+  m_msgs << "Nav:       nav_x:   " << pd_navx << "   nav_hdg: " << str_nav_hdg
+         << endl;
+  m_msgs << "           nav_y:   " << pd_navy << "   nav_spd: " << str_nav_spd
+         << endl;
   m_msgs << "------------------------------------------------------" << endl;
 
   list<string> summary_lines = m_bridge.getSummary();
   list<string>::iterator p;
-  for (p = summary_lines.begin(); p != summary_lines.end(); p++)
-  {
+  for (p = summary_lines.begin(); p != summary_lines.end(); p++) {
     string line = *p;
     m_msgs << line << endl;
   }

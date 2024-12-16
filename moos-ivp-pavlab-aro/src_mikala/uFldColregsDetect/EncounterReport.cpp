@@ -5,19 +5,18 @@
 /*    DATE: June 26 2023                                   */
 /************************************************************/
 
-#include <vector>
-#include <iterator>
-#include "MBUtils.h"
 #include "EncounterReport.h"
+#include "MBUtils.h"
 #include "XYPoint.h"
+#include <iterator>
+#include <vector>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor()
 
-EncounterReport::EncounterReport(std::string name)
-{
+EncounterReport::EncounterReport(std::string name) {
   m_cn = "none";
   m_os = "none";
   m_range = 0;
@@ -25,83 +24,58 @@ EncounterReport::EncounterReport(std::string name)
   m_targ_ang = 0;
   m_time = 0;
   m_classified = false;
-
-
 }
 
 //---------------------------------------------------------
-//Procedure: stringToNodeReport()
+// Procedure: stringToNodeReport()
 
-EncounterReport stringToEncounterReport(std::string str)
-{
-  EncounterReport empty_encounter_report; 
+EncounterReport stringToEncounterReport(std::string str) {
+  EncounterReport empty_encounter_report;
   EncounterReport encounter_report;
 
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = tolower(biteStringX(svector[i], '='));
     string value = svector[i];
-    string unhandled_contents = ""; 
-    double dval  = atof(value.c_str());
+    string unhandled_contents = "";
+    double dval = atof(value.c_str());
 
-      if(param == "OS" || param == "os")
-        encounter_report.setOS(value);
-      else if(param == "CN" || param == "cn")
-        encounter_report.setCN(value);
-      else if(param == "RNG" || param == "rng")
-        encounter_report.setRange(dval);
-      else if(param == "REL_BRG" || param == "rel_brg")
-        encounter_report.setRelBrg(dval);
-      else if(param == "TARG_ANG" || param == "targ_ang")
-        encounter_report.setTargAng(dval);
-      else if(param == "TIME" || param == "time")
-        encounter_report.setTime(dval);
-      else
-       unhandled_contents += svector[i] + ", ";
-      
+    if (param == "OS" || param == "os")
+      encounter_report.setOS(value);
+    else if (param == "CN" || param == "cn")
+      encounter_report.setCN(value);
+    else if (param == "RNG" || param == "rng")
+      encounter_report.setRange(dval);
+    else if (param == "REL_BRG" || param == "rel_brg")
+      encounter_report.setRelBrg(dval);
+    else if (param == "TARG_ANG" || param == "targ_ang")
+      encounter_report.setTargAng(dval);
+    else if (param == "TIME" || param == "time")
+      encounter_report.setTime(dval);
+    else
+      unhandled_contents += svector[i] + ", ";
   }
-  return(encounter_report);
+  return (encounter_report);
 }
 //---------------------------------------------------------
 
-// Procedure: getOS() 
-std::string EncounterReport::getOS()
-{
-  return(m_os);
-}
+// Procedure: getOS()
+std::string EncounterReport::getOS() { return (m_os); }
 //---------------------------------------------------------
 // Procedure: getCN()
-std::string EncounterReport::getCN()
-{
-  return(m_cn);
-}
+std::string EncounterReport::getCN() { return (m_cn); }
 //---------------------------------------------------------
 // Procedure: getRange()
-double EncounterReport::getRange()
-{
-  return(m_range);
-}
+double EncounterReport::getRange() { return (m_range); }
 //---------------------------------------------------------
 // Procedure: getRelBrg()
-double EncounterReport::getRelBrg()
-{
-  return(m_rel_brg);
-}
+double EncounterReport::getRelBrg() { return (m_rel_brg); }
 //---------------------------------------------------------
 // Procedure: getTargAng()
-double EncounterReport::getTargAng()
-{
-  return(m_targ_ang);
-}
+double EncounterReport::getTargAng() { return (m_targ_ang); }
 //---------------------------------------------------------
 // Procedure: getTime()
-double EncounterReport::getTime()
-{
-  return(m_time);
-}
+double EncounterReport::getTime() { return (m_time); }
 //---------------------------------------------------------
 // Procedure: getClassified()
-bool EncounterReport::getClassified()
-{
-  return(m_classified);
-}
+bool EncounterReport::getClassified() { return (m_classified); }

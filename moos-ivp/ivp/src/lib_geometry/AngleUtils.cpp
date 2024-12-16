@@ -23,11 +23,11 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
 #include "AngleUtils.h"
 #include "GeomUtils.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 #ifndef M_PI
 #define M_PI 3.1415926
@@ -40,7 +40,7 @@
 //            is the angle at the first given point.
 //
 //  a^2 = b^2 + c^2 - 2bc cos(A)   Law of Cosines
-//  
+//
 //           b^2 + c^2 - a^2
 //  cos(A) = ---------------
 //                 2bc
@@ -64,18 +64,16 @@
 //
 //
 
-double angleFromThreePoints(double x1, double y1, 
-			    double x2, double y2,
-			    double x3, double y3)
-{ 
-  double a = hypot((x2-x3), (y2-y3));  // pythag distance 
-  double b = hypot((x1-x3), (y1-y3));  // pythag distance 
-  double c = hypot((x1-x2), (y1-y2));  // pythag distance 
+double angleFromThreePoints(double x1, double y1, double x2, double y2,
+                            double x3, double y3) {
+  double a = hypot((x2 - x3), (y2 - y3)); // pythag distance
+  double b = hypot((x1 - x3), (y1 - y3)); // pythag distance
+  double c = hypot((x1 - x2), (y1 - y2)); // pythag distance
 
-  double numerator   = (b*b)+(c*c)-(a*a);
-  double denominator = (2*b*c);
-  if(denominator == 0)
-    return(0);
+  double numerator = (b * b) + (c * c) - (a * a);
+  double denominator = (2 * b * c);
+  if (denominator == 0)
+    return (0);
 
   double rhs = numerator / denominator;
 
@@ -83,60 +81,56 @@ double angleFromThreePoints(double x1, double y1,
 
   double angle_degrees = ((angle_radians / M_PI) * 180);
 
-  return(angle_degrees);
+  return (angle_degrees);
 }
 
 //-------------------------------------------------------------
 // Procedure: threePointTurnLeft
-//                                                      
-//        x2,y2  o-<<----------o (x1,y1)                                    
-//                            /                                       
-//                          /                                         
-//                        /                                           
-//                      /                                            
-//                    /                                               
-//          (x0,y0) o                                                
-//                                                      
+//
+//        x2,y2  o-<<----------o (x1,y1)
+//                            /
+//                          /
+//                        /
+//                      /
+//                    /
+//          (x0,y0) o
+//
 //      Note: From Cormen, Leiserson, Rivest and Stein:
 
-bool threePointTurnLeft(double x0, double y0, 
-			double x1, double y1,
-			double x2, double y2)
-{ 
-  double cross_product = threePointXProduct(x0,y0, x1,y1, x2,y2);
+bool threePointTurnLeft(double x0, double y0, double x1, double y1, double x2,
+                        double y2) {
+  double cross_product = threePointXProduct(x0, y0, x1, y1, x2, y2);
 
-  if(cross_product < -0.01)
-    return(true);
+  if (cross_product < -0.01)
+    return (true);
 
-  return(false);
+  return (false);
 }
 
 //-------------------------------------------------------------
 // Procedure: threePointXProduct
-//                                                      
-//        x2,y2  o-<<----------o (x1,y1)                                    
-//                            /                                       
-//                          /                                         
-//                        /                                           
-//                      /                                            
-//                    /                                               
-//          (x0,y0) o                                                
-//                                                      
+//
+//        x2,y2  o-<<----------o (x1,y1)
+//                            /
+//                          /
+//                        /
+//                      /
+//                    /
+//          (x0,y0) o
+//
 //      Note: From Cormen, Leiserson, Rivest and Stein:
 
-double threePointXProduct(double x0, double y0, 
-			  double x1, double y1,
-			  double x2, double y2)
-{ 
-  double ax = x2-x0;
-  double ay = y2-y0;
-  double bx = x1-x0; 
-  double by = y1-y0; 
+double threePointXProduct(double x0, double y0, double x1, double y1, double x2,
+                          double y2) {
+  double ax = x2 - x0;
+  double ay = y2 - y0;
+  double bx = x1 - x0;
+  double by = y1 - y0;
 
   // Now compute the cross product of a x b
-  double cross_product = (ax*by) - (bx*ay);
+  double cross_product = (ax * by) - (bx * ay);
 
-  return(cross_product);
+  return (cross_product);
 }
 
 //-------------------------------------------------------------
@@ -147,61 +141,60 @@ double threePointXProduct(double x0, double y0,
 //                   0
 //                   |
 //                   |
-//         270 ----- A ----- 90      
+//         270 ----- A ----- 90
 //                   |
 //                   |
 //                  180
 
-double relAng(double xa, double ya, double xb, double yb)
-{ 
-  if((xa==xb)&&(ya==yb))
-    return(0);
+double relAng(double xa, double ya, double xb, double yb) {
+  if ((xa == xb) && (ya == yb))
+    return (0);
 
-  double w   = 0;
+  double w = 0;
   double sop = 0;
 
-  if(xa < xb) {
-    if(ya==yb)  
-      return(90.0);
+  if (xa < xb) {
+    if (ya == yb)
+      return (90.0);
     else
       w = 90.0;
-  }
-  else if(xa > xb) {
-    if(ya==yb)  
-      return(270.0);
+  } else if (xa > xb) {
+    if (ya == yb)
+      return (270.0);
     else
       w = 270.0;
   }
 
-  if(ya < yb) {
-    if(xa == xb) 
-      return(0.0);
-    if(xb > xa) 
+  if (ya < yb) {
+    if (xa == xb)
+      return (0.0);
+    if (xb > xa)
       sop = -1.0;
-    else 
-      sop =  1.0;
-  }
-  else if(yb < ya) {
-    if(xa == xb) 
-      return(180);
-    if(xb >  xa) 
-      sop =  1.0;
-    else 
+    else
+      sop = 1.0;
+  } else if (yb < ya) {
+    if (xa == xb)
+      return (180);
+    if (xb > xa)
+      sop = 1.0;
+    else
       sop = -1.0;
   }
 
-  double ydiff = yb-ya;
-  double xdiff = xb-xa;
-  if(ydiff<0) ydiff = ydiff * -1.0;
-  if(xdiff<0) xdiff = xdiff * -1.0;
+  double ydiff = yb - ya;
+  double xdiff = xb - xa;
+  if (ydiff < 0)
+    ydiff = ydiff * -1.0;
+  if (xdiff < 0)
+    xdiff = xdiff * -1.0;
 
-  double avalPI = atan(ydiff/xdiff);
+  double avalPI = atan(ydiff / xdiff);
   double avalDG = radToDegrees(avalPI);
   double retVal = (avalDG * sop) + w;
 
   retVal = angle360(retVal);
 
-  return(retVal);
+  return (retVal);
 }
 
 //-------------------------------------------------------------
@@ -212,49 +205,37 @@ double relAng(double xa, double ya, double xb, double yb)
 //                   0
 //                   |
 //                   |
-//         270 ----- A ----- 90      
+//         270 ----- A ----- 90
 //                   |
 //                   |
 //                  180
 
-double relAng(const XYPoint& a, const XYPoint& b)
-{ 
-  return(relAng(a.get_vx(), a.get_vy(), b.get_vx(), b.get_vy()));
+double relAng(const XYPoint &a, const XYPoint &b) {
+  return (relAng(a.get_vx(), a.get_vy(), b.get_vx(), b.get_vy()));
 }
-
 
 //---------------------------------------------------------------
 // Procedure: radAngleWrap
 
-double radAngleWrap(double radval) 
-{
-  if((radval <= M_PI) && (radval >= -M_PI))
-    return(radval);
+double radAngleWrap(double radval) {
+  if ((radval <= M_PI) && (radval >= -M_PI))
+    return (radval);
 
-  if(radval > M_PI) 
-    return(radval - (2*M_PI));
+  if (radval > M_PI)
+    return (radval - (2 * M_PI));
   else
-    return(radval + (2*M_PI));
+    return (radval + (2 * M_PI));
 }
-
 
 //---------------------------------------------------------------
 // Procedure: degToRadians
 
-double degToRadians(double degval) 
-{
-  return((degval/180.0) * M_PI);
-}
-
+double degToRadians(double degval) { return ((degval / 180.0) * M_PI); }
 
 //---------------------------------------------------------------
 // Procedure: radToDegrees
 
-double radToDegrees(double radval)
-{
-  return((radval / M_PI) * 180);
-}
-
+double radToDegrees(double radval) { return ((radval / M_PI) * 180); }
 
 //---------------------------------------------------------------
 // Procedure: headingToRadians
@@ -262,99 +243,90 @@ double radToDegrees(double radval)
 // radians in a counterclockwize x(E) - y(N) coordinate system
 // .
 
-double headingToRadians(double degval) 
-{
-  return(radAngleWrap( (90.0-degval)*M_PI/180.0));
+double headingToRadians(double degval) {
+  return (radAngleWrap((90.0 - degval) * M_PI / 180.0));
 }
-
 
 //---------------------------------------------------------------
 // Procedure: radToHeading
 // Converts radians in a counterclockwize x(E) - y(N) coordinate system
 // to true heading (clockwize from N).
 
-double radToHeading(double radval)
-{
-  return(angle360( 90.0-(radval / M_PI) * 180));
+double radToHeading(double radval) {
+  return (angle360(90.0 - (radval / M_PI) * 180));
 }
-
 
 //---------------------------------------------------------------
 // Procedure: speedInHeading
 //   Purpose: Given a heading and speed of a vehicle, and another heading,
 //            determine the speed of the vehicle in that heading.
 
-double speedInHeading(double osh, double osv, double heading)
-{
+double speedInHeading(double osh, double osv, double heading) {
   // Part 0: handle simple special case
-  if(osv == 0)
-    return(0);
+  if (osv == 0)
+    return (0);
 
   // Part 1: determine the delta heading [0, 180]
   double delta = angle180(osh - heading);
-  if(delta < 0)
+  if (delta < 0)
     delta *= -1;
-  
+
   // Part 2: Handle easy special cases
-  if(delta == 0)
-    return(osv);
-  if(delta == 180)
-    return(-osv);
-  if(delta == 90)
-    return(0);
+  if (delta == 0)
+    return (osv);
+  if (delta == 180)
+    return (-osv);
+  if (delta == 90)
+    return (0);
 
   // Part 3: Handle the general case
   double radians = degToRadians(delta);
-  double answer  = cos(radians) * osv;
-  
-  return(answer);
-}
+  double answer = cos(radians) * osv;
 
+  return (answer);
+}
 
 //---------------------------------------------------------------
 // Procedure: angle180
 //   Purpose: Convert angle to be strictly in the rang (-180, 180].
 
-double angle180(double degval)
-{
-  while(degval > 180)
+double angle180(double degval) {
+  while (degval > 180)
     degval -= 360.0;
-  while(degval <= -180)
+  while (degval <= -180)
     degval += 360.0;
-  return(degval);
+  return (degval);
 }
 
 //---------------------------------------------------------------
 // Procedure: angle360
 //   Purpose: Convert angle to be strictly in the rang [0, 360).
 
-double angle360(double degval)
-{
-  while(degval >= 360.0)
+double angle360(double degval) {
+  while (degval >= 360.0)
     degval -= 360.0;
-  while(degval < 0.0)
+  while (degval < 0.0)
     degval += 360.0;
-  return(degval);
+  return (degval);
 }
 
 //---------------------------------------------------------------
 // Procedure: angleDiff
-//   Purpose: Determine the difference in angle degrees between 
+//   Purpose: Determine the difference in angle degrees between
 //            two given angles, ensuring the range [0, 180).
 
-double angleDiff(double ang1, double ang2)
-{
+double angleDiff(double ang1, double ang2) {
   ang1 = angle360(ang1);
   ang2 = angle360(ang2);
   double diff;
-  if(ang2 > ang1)
+  if (ang2 > ang1)
     diff = ang2 - ang1;
   else
     diff = ang1 - ang2;
 
-  if(diff >= 180)
+  if (diff >= 180)
     diff = 360 - diff;
-  return(diff);
+  return (diff);
 }
 
 //---------------------------------------------------------------
@@ -369,18 +341,17 @@ double angleDiff(double ang1, double ang2)
 //  (10,20) = 10     10-20 = -10   = 350   *larger:choose(10)
 //                   20-10 = 10    = 10
 //
-//  (10,350) = 350   10-350 = -340 = 20    
+//  (10,350) = 350   10-350 = -340 = 20
 //                   350-10 = 340  = 340   *larger:choose(350)
 //
 //  (89,271) = 271   89-271 = -182 = 178
 //                   271-89 = 182  = 182   *larger:choose(271)
 
-double angleMinAcute(double ang1, double ang2)
-{
-  if(angle360(ang1-ang2) >= angle360(ang2-ang1))
-    return(ang1);
+double angleMinAcute(double ang1, double ang2) {
+  if (angle360(ang1 - ang2) >= angle360(ang2 - ang1))
+    return (ang1);
 
-  return(ang2);
+  return (ang2);
 }
 
 //---------------------------------------------------------------
@@ -401,12 +372,11 @@ double angleMinAcute(double ang1, double ang2)
 //  (89,271) = 271   89-271 = -182 = 178   *smaller:choose(89)
 //                   271-89 = 182  = 182
 
-double angleMaxAcute(double ang1, double ang2)
-{
-  if(angle360(ang1-ang2) < angle360(ang2-ang1))
-    return(ang1);
+double angleMaxAcute(double ang1, double ang2) {
+  if (angle360(ang1 - ang2) < angle360(ang2 - ang1))
+    return (ang1);
 
-  return(ang2);
+  return (ang2);
 }
 
 //---------------------------------------------------------------
@@ -427,12 +397,11 @@ double angleMaxAcute(double ang1, double ang2)
 //  (89,271) = 89    89-271 = -182 = 178   *smaller:choose(89)
 //                   271-89 = 182  = 182
 
-double angleMinReflex(double ang1, double ang2)
-{
-  if(angle360(ang1-ang2) < angle360(ang2-ang1))
-    return(ang1);
+double angleMinReflex(double ang1, double ang2) {
+  if (angle360(ang1 - ang2) < angle360(ang2 - ang1))
+    return (ang1);
 
-  return(ang2);
+  return (ang2);
 }
 
 //---------------------------------------------------------------
@@ -453,12 +422,11 @@ double angleMinReflex(double ang1, double ang2)
 //  (89,271) = 271   89-271 = -182 = 178
 //                   271-89 = 182  = 182
 
-double angleMaxReflex(double ang1, double ang2)
-{
-  if(angle360(ang1-ang2) >= angle360(ang2-ang1))
-    return(ang1);
+double angleMaxReflex(double ang1, double ang2) {
+  if (angle360(ang1 - ang2) >= angle360(ang2 - ang1))
+    return (ang1);
 
-  return(ang2);
+  return (ang2);
 }
 
 //---------------------------------------------------------------
@@ -473,24 +441,23 @@ double angleMaxReflex(double ang1, double ang2)
 //            angleMinContains(89,271,0)   = 271
 //            angleMinContains(89,271,180) = 89
 
-double angleMinContains(double ang1, double ang2, double ang3)
-{
+double angleMinContains(double ang1, double ang2, double ang3) {
   // Sanity check
-  if(ang1 == ang2)
-    return(ang1);
+  if (ang1 == ang2)
+    return (ang1);
 
   // Order the two angles
-  double anglow = ang1; 
-  double anghgh = ang2; 
-  if(anglow > anghgh) {
+  double anglow = ang1;
+  double anghgh = ang2;
+  if (anglow > anghgh) {
     anglow = ang2;
     anghgh = ang1;
   }
 
   // Check the range
-  if((ang3 >= anglow) && (ang3 <= anghgh))
-    return(anglow);
-  return(anghgh);
+  if ((ang3 >= anglow) && (ang3 <= anghgh))
+    return (anglow);
+  return (anghgh);
 }
 
 //---------------------------------------------------------------
@@ -505,24 +472,23 @@ double angleMinContains(double ang1, double ang2, double ang3)
 //            angleMaxContains(89,271,0)   = 89
 //            angleMaxContains(89,271,180) = 271
 
-double angleMaxContains(double ang1, double ang2, double ang3)
-{
+double angleMaxContains(double ang1, double ang2, double ang3) {
   // Sanity check
-  if(ang1 == ang2)
-    return(ang1);
+  if (ang1 == ang2)
+    return (ang1);
 
   // Order the two angles
-  double anglow = ang1; 
-  double anghgh = ang2; 
-  if(anglow > anghgh) {
+  double anglow = ang1;
+  double anghgh = ang2;
+  if (anglow > anghgh) {
     anglow = ang2;
     anghgh = ang1;
   }
 
   // Check the range
-  if((ang3 >= anglow) && (ang3 <= anghgh))
-    return(anghgh);
-  return(anglow);
+  if ((ang3 >= anglow) && (ang3 <= anghgh))
+    return (anghgh);
+  return (anglow);
 }
 
 //---------------------------------------------------------------
@@ -537,16 +503,15 @@ double angleMaxContains(double ang1, double ang2, double ang3)
 //            angleMinExcludes(89,271,0)   = 89
 //            angleMinExcludes(89,271,180) = 271
 
-double angleMinExcludes(double ang1, double ang2, double ang3)
-{
+double angleMinExcludes(double ang1, double ang2, double ang3) {
   // Sanity check
-  if(ang1 == ang2)
-    return(ang1);
+  if (ang1 == ang2)
+    return (ang1);
 
   // Order the two angles
-  double anglow = ang1; 
-  double anghgh = ang2; 
-  if(anglow > anghgh) {
+  double anglow = ang1;
+  double anghgh = ang2;
+  if (anglow > anghgh) {
     anglow = ang2;
     anghgh = ang1;
   }
@@ -554,13 +519,13 @@ double angleMinExcludes(double ang1, double ang2, double ang3)
   // If either angle equals the third, then there really is no
   // reasonable answer. This should have been checked by the caller.
   // But since this is a "min" function, we'll just return lowest angle.
-  if((ang1 == ang3) || (ang2 == ang3))
-    return(anglow);
-  
+  if ((ang1 == ang3) || (ang2 == ang3))
+    return (anglow);
+
   // Check the range
-  if((ang3 < anglow) || (ang3 > anghgh))
-    return(anglow);
-  return(anghgh);
+  if ((ang3 < anglow) || (ang3 > anghgh))
+    return (anglow);
+  return (anghgh);
 }
 
 //---------------------------------------------------------------
@@ -575,16 +540,15 @@ double angleMinExcludes(double ang1, double ang2, double ang3)
 //            angleMaxExcludes(89,271,0)   = 271
 //            angleMaxExcludes(89,271,180) = 89
 
-double angleMaxExcludes(double ang1, double ang2, double ang3)
-{
+double angleMaxExcludes(double ang1, double ang2, double ang3) {
   // Sanity check
-  if(ang1 == ang2)
-    return(ang1);
+  if (ang1 == ang2)
+    return (ang1);
 
   // Order the two angles
-  double anglow = ang1; 
-  double anghgh = ang2; 
-  if(anglow > anghgh) {
+  double anglow = ang1;
+  double anghgh = ang2;
+  if (anglow > anghgh) {
     anglow = ang2;
     anghgh = ang1;
   }
@@ -592,13 +556,13 @@ double angleMaxExcludes(double ang1, double ang2, double ang3)
   // If either angle equals the third, then there really is no
   // reasonable answer. This should have been checked by the caller.
   // But since this is a "max" function, we'll just return lowest angle.
-  if((ang1 == ang3) || (ang2 == ang3))
-    return(anghgh);
-  
+  if ((ang1 == ang3) || (ang2 == ang3))
+    return (anghgh);
+
   // Check the range
-  if((ang3 < anglow) || (ang3 > anghgh))
-    return(anghgh);
-  return(anglow);
+  if ((ang3 < anglow) || (ang3 > anghgh))
+    return (anghgh);
+  return (anglow);
 }
 
 //---------------------------------------------------------------
@@ -606,15 +570,14 @@ double angleMaxExcludes(double ang1, double ang2, double ang3)
 //   Purpose: Determine the difference in degrees between the two
 //            given aspect angles, ensuring the range [0, 90].
 
-double aspectDiff(double ang1, double ang2)
-{
+double aspectDiff(double ang1, double ang2) {
   double angle_diff_1 = angleDiff(ang1, ang2);
-  double angle_diff_2 = angleDiff(ang1, ang2+180);
+  double angle_diff_2 = angleDiff(ang1, ang2 + 180);
 
-  if(angle_diff_1 < angle_diff_2)
-    return(angle_diff_1);
+  if (angle_diff_1 < angle_diff_2)
+    return (angle_diff_1);
   else
-    return(angle_diff_2);
+    return (angle_diff_2);
 }
 
 //---------------------------------------------------------------
@@ -631,30 +594,28 @@ double aspectDiff(double ang1, double ang2)
 //            100, 280, 99  --> true (180 range accepts all)
 //            100, 280, 101 --> true (180 range accepts all)
 
-
-bool containsAngle(double aval, double bval, double qval)
-{
+bool containsAngle(double aval, double bval, double qval) {
   // Convert to [0, 360) rather than assume.
   aval = angle360(aval);
   bval = angle360(bval);
-  
-  if(aval == bval)
-    return(qval == bval);
+
+  if (aval == bval)
+    return (qval == bval);
 
   // If the given angle is 180, then all query angles will pass
-  if(fabs(bval-aval) == 180)
-    return(true);
+  if (fabs(bval - aval) == 180)
+    return (true);
 
-  if(aval > bval) {
+  if (aval > bval) {
     double tmp = aval;
     aval = bval;
     bval = tmp;
   }
-    
-  if((bval-aval) > 180)
-    return((qval >= bval) || (qval <= aval));
+
+  if ((bval - aval) > 180)
+    return ((qval >= bval) || (qval <= aval));
   else
-    return((qval >= aval) && (qval <= bval));
+    return ((qval >= aval) && (qval <= bval));
 }
 
 //---------------------------------------------------------------
@@ -663,13 +624,12 @@ bool containsAngle(double aval, double bval, double qval)
 //            ownship positioned as osx,osy at a heading of osh.
 //   Returns: Value in the range [0,360).
 
-double  relBearing(double osx, double osy, double osh, double cnx, double cny)
-{
+double relBearing(double osx, double osy, double osh, double cnx, double cny) {
   double angle_os_to_cn = relAng(osx, osy, cnx, cny);
-  
-  double raw_rel_bearing = angle_os_to_cn - osh;  
 
-  return(angle360(raw_rel_bearing)); // Super important to put in [0,360)
+  double raw_rel_bearing = angle_os_to_cn - osh;
+
+  return (angle360(raw_rel_bearing)); // Super important to put in [0,360)
 }
 
 //---------------------------------------------------------------
@@ -681,66 +641,61 @@ double  relBearing(double osx, double osy, double osh, double cnx, double cny)
 //            180 becomes 180
 //   Returns: Value in the range [0,180].
 
-
-double absRelBearing(double osx, double osy, double osh, double cnx, double cny)
-{
+double absRelBearing(double osx, double osy, double osh, double cnx,
+                     double cny) {
   double rel_bearing = relBearing(osx, osy, osh, cnx, cny);
-  
+
   double abs_relative_bearing = angle180(rel_bearing);
-  if(abs_relative_bearing < 0)
+  if (abs_relative_bearing < 0)
     abs_relative_bearing *= -1;
-  
-  return(abs_relative_bearing);
+
+  return (abs_relative_bearing);
 }
 
 //---------------------------------------------------------------
 // Procedure: totAbsRelBearing
 //   Returns: Value in the range [0,360].
 
-
-double totAbsRelBearing(double osx, double osy, double osh, 
-			double cnx, double cny, double cnh)
-{
+double totAbsRelBearing(double osx, double osy, double osh, double cnx,
+                        double cny, double cnh) {
   double abs_rel_bearing_os_cn = absRelBearing(osx, osy, osh, cnx, cny);
   double abs_rel_bearing_cn_os = absRelBearing(cnx, cny, cnh, osx, osy);
 
-  return(abs_rel_bearing_os_cn + abs_rel_bearing_cn_os);
+  return (abs_rel_bearing_os_cn + abs_rel_bearing_cn_os);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: polyAft
 //   Returns: true if the convex polygon is entirely aft of the vehicle
 //            given its present position and heading
 
-
 bool polyAft(double osx, double osy, double osh, XYPolygon poly, double xbng)
 
 {
   // The xbng parameter generalizes this function. Normally a point is "aft" of
-  // ownship its relative bearing is in the range (90,270). With the xbng 
+  // ownship its relative bearing is in the range (90,270). With the xbng
   // parameter, "aft" can be generalized, e.g., xbng=10 means the polygon must
   // be at least 10 degrees abaft of beam.
-  if(poly.size() == 0)
-    return(false);
-  
-  if(xbng < -90)
+  if (poly.size() == 0)
+    return (false);
+
+  if (xbng < -90)
     xbng = -90;
-  else if(xbng > 90)
+  else if (xbng > 90)
     xbng = 90;
 
   unsigned int i, psize = poly.size();
-  for(i=0; i<psize; i++) {
+  for (i = 0; i < psize; i++) {
     double vx = poly.get_vx(i);
     double vy = poly.get_vy(i);
-    
+
     double relbng = relBearing(osx, osy, osh, vx, vy);
-    if(relbng <= (90+xbng)) 
-      return(false);
-    if(relbng >= (270-xbng)) 
-      return(false);
+    if (relbng <= (90 + xbng))
+      return (false);
+    if (relbng >= (270 - xbng))
+      return (false);
   }
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
@@ -750,13 +705,12 @@ bool polyAft(double osx, double osy, double osh, XYPolygon poly, double xbng)
 //            its present position, with the given radius, turning in the
 //            given direction.
 
-double turnGap(double osx, double osy, double osh, double tradius,
-	       double px1, double py1, double px2, double py2, bool tright)
-{
+double turnGap(double osx, double osy, double osh, double tradius, double px1,
+               double py1, double px2, double py2, bool tright) {
   // Step 1: Find the angle between ownship and the circle center depending
   //         on whether the vehicle is turning hard right or left
   double angle_from_os = 0;
-  if(tright)
+  if (tright)
     angle_from_os = angle360(osh + 90);
   else
     angle_from_os = angle360(osh - 90);
@@ -768,34 +722,33 @@ double turnGap(double osx, double osy, double osh, double tradius,
   // Step 3: Calculate the distance (gap)
   double dist = distCircleToLine(cx, cy, tradius, px1, py1, px2, py2);
 
-  return(dist);
+  return (dist);
 }
 
 //---------------------------------------------------------------
 // Procedure: headingAvg()
 //   Purpose: Determine the average heading given a list of headings
 
-double headingAvg(std::list<double> heading_vals)
-{
+double headingAvg(std::list<double> heading_vals) {
   double ssum = 0.0;
   double csum = 0.0;
 
   std::list<double>::iterator p;
-  for(p = heading_vals.begin(); p!=heading_vals.end(); p++) {
+  for (p = heading_vals.begin(); p != heading_vals.end(); p++) {
     double hdg = *p;
-  
+
     double s = sin(hdg * M_PI / 180.0);
     double c = cos(hdg * M_PI / 180.0);
 
     ssum += s;
-    csum += c;    
+    csum += c;
   }
 
   double avg = atan2(ssum, csum) * 180.0 / M_PI;
-  if(avg < 0.0)
+  if (avg < 0.0)
     avg += 360.0;
 
-  return(avg);
+  return (avg);
 }
 
 //---------------------------------------------------------------
@@ -803,12 +756,11 @@ double headingAvg(std::list<double> heading_vals)
 //   Purpose: Determine the average heading given a two headings
 //      Note: Convenience function
 
-double headingAvg(double h1, double h2)
-{
+double headingAvg(double h1, double h2) {
   std::list<double> pair;
   pair.push_front(h1);
   pair.push_front(h2);
-  return(headingAvg(pair));
+  return (headingAvg(pair));
 }
 
 //----------------------------------------------------------------
@@ -817,21 +769,19 @@ double headingAvg(double h1, double h2)
 //            heading, determine if this would result in a port or
 //            starboard turn. Presuming a vessel would turn port
 //            for delta headings in the range of [0,180) and
-//            starboard turns in the range of (0,180]. 
+//            starboard turns in the range of (0,180].
 
-bool portTurn(double osh, double hdg)
-{
+bool portTurn(double osh, double hdg) {
   osh = angle360(osh);
   hdg = angle360(hdg);
-  if(hdg > osh) {
-    if((hdg - osh) < 180)
-      return(false);
+  if (hdg > osh) {
+    if ((hdg - osh) < 180)
+      return (false);
+  } else {
+    if ((osh - hdg) > 180)
+      return (false);
   }
-  else {
-    if((osh - hdg) > 180)
-      return(false);
-  }
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
@@ -839,18 +789,17 @@ bool portTurn(double osh, double hdg)
 //   Purpose: Given ownship position and heading, and given point
 //            Determine if the point is on the port side.
 
-bool ptPortOfOwnship(double osx, double osy, double osh,
-		     double ptx, double pty)
-{
+bool ptPortOfOwnship(double osx, double osy, double osh, double ptx,
+                     double pty) {
   // Sanity check
-  if((osx == ptx) && (osy == pty))
-    return(false);
+  if ((osx == ptx) && (osy == pty))
+    return (false);
 
   double rel_bng = relBearing(osx, osy, osh, ptx, pty);
-  if((rel_bng > 180) && (rel_bng < 360))
-    return(true);
-  
-  return(false);
+  if ((rel_bng > 180) && (rel_bng < 360))
+    return (true);
+
+  return (false);
 }
 
 //----------------------------------------------------------------
@@ -858,18 +807,17 @@ bool ptPortOfOwnship(double osx, double osy, double osh,
 //   Purpose: Given ownship position and heading, and given point
 //            Determine if the point is on the starboard side.
 
-bool ptStarOfOwnship(double osx, double osy, double osh,
-		     double ptx, double pty)
-{
+bool ptStarOfOwnship(double osx, double osy, double osh, double ptx,
+                     double pty) {
   // Sanity check
-  if((osx == ptx) && (osy == pty))
-    return(false);
+  if ((osx == ptx) && (osy == pty))
+    return (false);
 
   double rel_bng = relBearing(osx, osy, osh, ptx, pty);
-  if((rel_bng > 0) && (rel_bng < 180))
-    return(true);
-  
-  return(false);
+  if ((rel_bng > 0) && (rel_bng < 180))
+    return (true);
+
+  return (false);
 }
 
 //----------------------------------------------------------------
@@ -877,21 +825,19 @@ bool ptStarOfOwnship(double osx, double osy, double osh,
 //   Purpose: Given ownship position and heading, and given poly
 //            Determine if the poly is completely on the port side.
 
-bool polyPortOfOwnship(double osx, double osy, double osh,
-		       XYPolygon poly)
-{
+bool polyPortOfOwnship(double osx, double osy, double osh, XYPolygon poly) {
   // Sanity check
-  if(!poly.is_convex())
-    return(false);
+  if (!poly.is_convex())
+    return (false);
 
-  for(unsigned int i=0; i<poly.size(); i++) {
+  for (unsigned int i = 0; i < poly.size(); i++) {
     double vx = poly.get_vx(i);
     double vy = poly.get_vy(i);
-    if(!ptPortOfOwnship(osx, osy, osh, vx, vy))
-      return(false);
+    if (!ptPortOfOwnship(osx, osy, osh, vx, vy))
+      return (false);
   }
-  
-  return(true);
+
+  return (true);
 }
 
 //----------------------------------------------------------------
@@ -900,21 +846,17 @@ bool polyPortOfOwnship(double osx, double osy, double osh,
 //            Determine if the poly is completely on the
 //            starboard side.
 
-bool polyStarOfOwnship(double osx, double osy, double osh,
-		       XYPolygon poly)
-{
+bool polyStarOfOwnship(double osx, double osy, double osh, XYPolygon poly) {
   // Sanity check
-  if(!poly.is_convex())
-    return(false);
+  if (!poly.is_convex())
+    return (false);
 
-  for(unsigned int i=0; i<poly.size(); i++) {
+  for (unsigned int i = 0; i < poly.size(); i++) {
     double vx = poly.get_vx(i);
     double vy = poly.get_vy(i);
-    if(!ptStarOfOwnship(osx, osy, osh, vx, vy))
-      return(false);
+    if (!ptStarOfOwnship(osx, osy, osh, vx, vy))
+      return (false);
   }
-  
-  return(true);
+
+  return (true);
 }
-
-

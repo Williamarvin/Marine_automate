@@ -27,73 +27,67 @@
 // Defined to silence GL deprecation warnings in OSX
 #define GL_SILENCE_DEPRECATION
 
-#include <string>
 #include "FL/Fl.H"
 #include "FL/Fl_Gl_Window.H"
 #include "FL/gl.h"
-#include "ZAIC_Model.h"
 #include "IvPDomain.h"
+#include "ZAIC_Model.h"
+#include <string>
 
-class ZAIC_Viewer : public Fl_Gl_Window
-{
- public:
-  ZAIC_Viewer(int x,int y,int w,int h,const char *l=0);
+class ZAIC_Viewer : public Fl_Gl_Window {
+public:
+  ZAIC_Viewer(int x, int y, int w, int h, const char *l = 0);
   virtual ~ZAIC_Viewer();
-  
+
   // virtuals overloaded
-  void  draw();
-  int   handle(int);
-  void  resize(int, int, int, int);
+  void draw();
+  int handle(int);
+  void resize(int, int, int, int);
 
- public:
-  void  setModel(ZAIC_Model*);
-  void  setParam(std::string, std::string);
-  void  setVerbose(bool v) {m_verbose=v;}
-  void  toggleVerbose()    {m_verbose=!m_verbose;}
+public:
+  void setModel(ZAIC_Model *);
+  void setParam(std::string, std::string);
+  void setVerbose(bool v) { m_verbose = v; }
+  void toggleVerbose() { m_verbose = !m_verbose; }
 
-  unsigned int getTotalPieces() const {return(m_pieces);}
+  unsigned int getTotalPieces() const { return (m_pieces); }
 
- protected:
-  void  setColorScheme(int index);
-  void  setCellDomainWidth();
-  void  drawAxes();
-  void  drawLabels();
-  void  drawPieces();
-  void  drawPiece(const IvPBox*, int mode=0);
-  void  drawText(int, int, std::string);
+protected:
+  void setColorScheme(int index);
+  void setCellDomainWidth();
+  void drawAxes();
+  void drawLabels();
+  void drawPieces();
+  void drawPiece(const IvPBox *, int mode = 0);
+  void drawText(int, int, std::string);
 
- protected:
-  ZAIC_Model* m_model;
+protected:
+  ZAIC_Model *m_model;
 
   double m_back_shade;
   double m_grid_shade;
   double m_line_shade;
-  bool   m_draw_labels;
+  bool m_draw_labels;
 
-  int    m_dompts;
+  int m_dompts;
   double m_pixels_per_dompt;
 
-  bool   m_verbose;
+  bool m_verbose;
 
   unsigned int m_pieces;
-  
-  int          m_color_scheme;
-  std::string  m_label_color;
-  std::string  m_line_color;
-  std::string  m_display_color;
-  std::string  m_point_color;
 
-  int    m_xoffset;       // Margin x
-  int    m_yoffset;       // Margin y
-  int    m_grid_hgt;      // overall grid height in pixels
-  int    m_grid_wid;      // overall grid width  in pixels
-  int    m_cell_pix_hgt;
-  int    m_cell_pix_wid;
-  int    m_cell_dom_wid;
+  int m_color_scheme;
+  std::string m_label_color;
+  std::string m_line_color;
+  std::string m_display_color;
+  std::string m_point_color;
+
+  int m_xoffset;  // Margin x
+  int m_yoffset;  // Margin y
+  int m_grid_hgt; // overall grid height in pixels
+  int m_grid_wid; // overall grid width  in pixels
+  int m_cell_pix_hgt;
+  int m_cell_pix_wid;
+  int m_cell_dom_wid;
 };
-#endif 
-
-
-
-
-
+#endif

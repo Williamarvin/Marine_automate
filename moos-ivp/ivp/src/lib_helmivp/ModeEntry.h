@@ -24,9 +24,9 @@
 #ifndef MODE_ENTRY_HEADER
 #define MODE_ENTRY_HEADER
 
-#include <vector>
-#include <string>
 #include "LogicCondition.h"
+#include <string>
+#include <vector>
 
 class ModeEntry {
 public:
@@ -39,10 +39,10 @@ public:
 
   std::vector<std::string> getConditionVars();
 
-  std::string getModeVarName()      {return(m_mode_var);}
-  std::string getModeVarValue()     {return(m_mode_val);}
-  std::string getModeVarElseValue() {return(m_mode_val_else);}
-  std::string getModePrefix()       {return(m_mode_prefix);}
+  std::string getModeVarName() { return (m_mode_var); }
+  std::string getModeVarValue() { return (m_mode_val); }
+  std::string getModeVarElseValue() { return (m_mode_val_else); }
+  std::string getModePrefix() { return (m_mode_prefix); }
   std::string getModeParent();
 
   void print();
@@ -50,43 +50,30 @@ public:
 
   // IO for Conditions - Related to conditions evaluations.
   void clearConditionVarVals();
-  void setVarVal(const std::string&, const std::string&);
-  void setVarVal(const std::string&, double);
+  void setVarVal(const std::string &, const std::string &);
+  void setVarVal(const std::string &, double);
 
   bool evalConditions();
   bool evalModeVarConditions();
 
   // Added by tes to support graphviz
-  std::vector<LogicCondition> getNonModeLogicConditions() const
-    {
-      std::vector<LogicCondition> non_mode_logic_cond;
-      for(int i = 0, n = m_logic_conditions.size(); i < n; ++i)
-	{
-          if(!m_modevar_conditions.at(i))
-	    non_mode_logic_cond.push_back(m_logic_conditions[i]);
-	}
-      return non_mode_logic_cond;
+  std::vector<LogicCondition> getNonModeLogicConditions() const {
+    std::vector<LogicCondition> non_mode_logic_cond;
+    for (int i = 0, n = m_logic_conditions.size(); i < n; ++i) {
+      if (!m_modevar_conditions.at(i))
+        non_mode_logic_cond.push_back(m_logic_conditions[i]);
     }
+    return non_mode_logic_cond;
+  }
 
 protected:
-  std::string  m_mode_var;
-  std::string  m_mode_val;
-  std::string  m_mode_val_else;
-  std::string  m_mode_prefix;
-  
+  std::string m_mode_var;
+  std::string m_mode_val;
+  std::string m_mode_val_else;
+  std::string m_mode_prefix;
+
   std::vector<LogicCondition> m_logic_conditions;
-  std::vector<bool>           m_modevar_conditions;
+  std::vector<bool> m_modevar_conditions;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

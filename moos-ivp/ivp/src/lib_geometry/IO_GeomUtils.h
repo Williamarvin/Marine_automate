@@ -26,37 +26,25 @@
 #ifndef IO_GEOM_UTILS_HEADER
 #define IO_GEOM_UTILS_HEADER
 
+#include "XYArc.h"
+#include "XYCircle.h"
+#include "XYGrid.h"
+#include "XYHexagon.h"
+#include "XYPolygon.h"
+#include "XYSquare.h"
 #include <string>
 #include <vector>
-#include "XYPolygon.h"
-#include "XYGrid.h"
-#include "XYSquare.h"
-#include "XYCircle.h"
-#include "XYArc.h"
-#include "XYHexagon.h"
 
-std::vector<std::string> readPolyStringsFromFile(const std::string&);
+std::vector<std::string> readPolyStringsFromFile(const std::string &);
 
-std::vector<XYPolygon> readPolysFromFile(const std::string&);
-std::vector<XYGrid>    readGridsFromFile(const std::string&);
-std::vector<XYCircle>  readCirclesFromFile(const std::string&);
-std::vector<XYArc>     readArcsFromFile(const std::string&);
-std::vector<XYHexagon> readHexagonsFromFile(const std::string&);
+std::vector<XYPolygon> readPolysFromFile(const std::string &);
+std::vector<XYGrid> readGridsFromFile(const std::string &);
+std::vector<XYCircle> readCirclesFromFile(const std::string &);
+std::vector<XYArc> readArcsFromFile(const std::string &);
+std::vector<XYHexagon> readHexagonsFromFile(const std::string &);
 
-std::string  GridToString(const XYGrid&);
+std::string GridToString(const XYGrid &);
 
-void printSquare(const XYSquare&);
+void printSquare(const XYSquare &);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

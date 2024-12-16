@@ -35,23 +35,14 @@ class Regressor;
 
 class RT_Uniform {
 public:
-  RT_Uniform(Regressor *regressor) {m_regressor=regressor;}
+  RT_Uniform(Regressor *regressor) { m_regressor = regressor; }
   virtual ~RT_Uniform() {}
-  
-public: 
-  PDMap*  create(const IvPBox*u, const IvPBox*);
-  
- protected:
-  Regressor* m_regressor;
+
+public:
+  PDMap *create(const IvPBox *u, const IvPBox *);
+
+protected:
+  Regressor *m_regressor;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

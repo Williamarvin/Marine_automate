@@ -8,46 +8,44 @@
 #ifndef SEARCH_DETECT_X_HEADER
 #define SEARCH_DETECT_X_HEADER
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include <string>
-#include <map>
-#include "CPAMonitor.h"
 #include "CPAEventNew.h"
-#include "VarDataPair.h"
-#include "LogicCondition.h"
+#include "CPAMonitor.h"
 #include "InfoBuffer.h"
+#include "LogicCondition.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "VarDataPair.h"
+#include <map>
+#include <string>
 
-class SearchDetect : public AppCastingMOOSApp
-{
- public:
-   SearchDetect();
-  ~SearchDetect() {};
+class SearchDetect : public AppCastingMOOSApp {
+public:
+  SearchDetect();
+  ~SearchDetect(){};
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+protected:
+  void registerVariables();
+  void handleMailNodeReport(std::string);
+  void handleCPAEventNew(CPAEventNew event);
+  void getEstimate();
+  bool initRange(std::string);
 
- protected:
-   void registerVariables();
-   void handleMailNodeReport(std::string);
-   void handleCPAEventNew(CPAEventNew event);
-   void getEstimate();
-   bool initRange(std::string);
-
- protected: // Config params
-  bool        m_prob;
+protected: // Config params
+  bool m_prob;
   std::string m_target_name;
-  double      m_encounter_dist;
-  double      m_sigma;
+  double m_encounter_dist;
+  double m_sigma;
 
- protected: // State variables
-  bool   m_hit;
+protected: // State variables
+  bool m_hit;
   double m_p;
   double m_cpaunder;
 
@@ -57,13 +55,12 @@ class SearchDetect : public AppCastingMOOSApp
   double m_time_elapse;
   double m_time1;
 
-  bool   m_mission_start;
+  bool m_mission_start;
 
   std::string m_first_report;
   std::string m_second_report;
   std::string m_target_report;
 
-  
   std::vector<double> m_detection_dist;
   std::vector<double> m_more_than_one;
   std::vector<bool> m_first_detection;
@@ -75,9 +72,9 @@ class SearchDetect : public AppCastingMOOSApp
 
   std::map<std::string, unsigned int> m_map_vname_detections;
   std::vector<unsigned int> m_total_detections;
-  
+
   std::string m_param_summary;
   std::vector<std::string> m_notified_vehicles;
 };
 
-#endif 
+#endif

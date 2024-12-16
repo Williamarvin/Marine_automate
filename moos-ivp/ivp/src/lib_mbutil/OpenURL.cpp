@@ -23,17 +23,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "OpenURL.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 #ifdef __linux__
-  #define OPEN_URL_FUNCTION "xdg-open "
+#define OPEN_URL_FUNCTION "xdg-open "
 #elif _WIN32
-  #define OPEN_URL_FUNCTION "xdg-open "
+#define OPEN_URL_FUNCTION "xdg-open "
 #else
-  #define OPEN_URL_FUNCTION "open "
+#define OPEN_URL_FUNCTION "open "
 #endif
 
 using namespace std;
@@ -41,9 +41,8 @@ using namespace std;
 //---------------------------------------------------------
 // Procedure: openURL
 
-void openURL(string url)
-{
-  if(!strBegins(url, "http"))
+void openURL(string url) {
+  if (!strBegins(url, "http"))
     return;
 
   string system_cmd = OPEN_URL_FUNCTION + url;
@@ -53,18 +52,8 @@ void openURL(string url)
 //---------------------------------------------------------
 // Procedure: openURLX
 
-void openURLX(string url)
-{
+void openURLX(string url) {
   cout << "Opening browser to: " << url << endl;
   openURL(url);
   exit(0);
 }
-
-
-
-
-
-
-
-
-

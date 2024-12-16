@@ -19,41 +19,40 @@
 /* Software Foundation, Inc., 59 Temple Place - Suite 330,       */
 /* Boston, MA 02111-1307, USA.                                   */
 /*****************************************************************/
- 
+
 #ifndef BHV_RANDOM_SURVEY_HEADER
 #define BHV_RANDOM_SURVEY_HEADER
 
-#include <string>
 #include "IvPBehavior.h"
 #include "XYPoint.h"
 #include "XYPolygon.h"
+#include <string>
 
 class BHV_RandomSurvey : public IvPBehavior {
 public:
   BHV_RandomSurvey(IvPDomain);
-  ~BHV_RandomSurvey() {};
-  
-  bool         setParam(std::string, std::string);
-  void         onIdleState();
-  IvPFunction* onRunState();
-  void         onEveryState(std::string);
-  void         onIdleToRunState();
-  void         onRunToIdleState();
+  ~BHV_RandomSurvey(){};
 
-  
+  bool setParam(std::string, std::string);
+  void onIdleState();
+  IvPFunction *onRunState();
+  void onEveryState(std::string);
+  void onIdleToRunState();
+  void onRunToIdleState();
+
 protected:
-  IvPFunction* buildFunction();
-  void         updateWaypoint();
-  void         postViewPoint(bool viewable=true);
+  IvPFunction *buildFunction();
+  void updateWaypoint();
+  void postViewPoint(bool viewable = true);
 
 protected: // State variables
-  double   m_osx;
-  double   m_osy;
-  double   m_curr_time;
+  double m_osx;
+  double m_osy;
+  double m_curr_time;
 
-  double   m_ptx;
-  double   m_pty;
-  bool     m_pt_set;
+  double m_ptx;
+  double m_pty;
+  bool m_pt_set;
 
   XYPolygon m_survey_region;
 
@@ -64,7 +63,9 @@ protected: // Config variables
 
 #define IVP_EXPORT_FUNCTION
 extern "C" {
-  IVP_EXPORT_FUNCTION IvPBehavior * createBehavior(std::string name, IvPDomain domain) 
-  {return new BHV_RandomSurvey(domain);}
+IVP_EXPORT_FUNCTION IvPBehavior *createBehavior(std::string name,
+                                                IvPDomain domain) {
+  return new BHV_RandomSurvey(domain);
+}
 }
 #endif

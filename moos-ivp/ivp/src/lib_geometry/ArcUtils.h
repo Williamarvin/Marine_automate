@@ -26,101 +26,85 @@
 #ifndef GEOM_ARC_UTILS_HEADER
 #define GEOM_ARC_UTILS_HEADER
 
-#include <vector>
-#include "XYSegList.h"
 #include "XYArc.h"
+#include "XYSegList.h"
+#include <vector>
 
 // Unit test: testAngleInArc
 bool angleInArc(double langle, double rangle, double query_angle);
 
-bool pointInArc(double px, double py, double ax, double ay,
-		double ar, double langle, double rangle);
+bool pointInArc(double px, double py, double ax, double ay, double ar,
+                double langle, double rangle);
 
 // Unit test: testDistPointToArc
-double distPointToArc(double px, double py, double ax, double ay,
-		      double ar, double langle, double rangle);
+double distPointToArc(double px, double py, double ax, double ay, double ar,
+                      double langle, double rangle);
 
-double distPointToArcPt(double px, double py, double ax, double ay,
-			double ar, double langle, double rangle,
-			double&ix, double& iy);
+double distPointToArcPt(double px, double py, double ax, double ay, double ar,
+                        double langle, double rangle, double &ix, double &iy);
 
 double arclen(double inscribed_angle, double radius);
 
-void arcturn(double px, double py, double ph, double ang,
-	     double radius, double& rx, double& ry);
-
+void arcturn(double px, double py, double ph, double ang, double radius,
+             double &rx, double &ry);
 
 //===============================================================
 // Group 1: Whether and where arcs, segments, seglists intersect
 //===============================================================
 
-// Unit test: testArcSegCross 
-bool arcSegCross(double x1, double y1, double x2, double y2,
-		 double ax, double ay, double ar,
-		 double langle, double rangle);
+// Unit test: testArcSegCross
+bool arcSegCross(double x1, double y1, double x2, double y2, double ax,
+                 double ay, double ar, double langle, double rangle);
 
 // Unit test: testArcSegCrossPts
-int arcSegCrossPts(double x1, double y1, double x2, double y2,
-		   double ax, double ay, double ar,
-		   double langle, double rangle,
-		   double& ix1, double& iy1,
-		   double& ix2, double& iy2);
+int arcSegCrossPts(double x1, double y1, double x2, double y2, double ax,
+                   double ay, double ar, double langle, double rangle,
+                   double &ix1, double &iy1, double &ix2, double &iy2);
 
 // Unit test: tbd
-bool arcSegListCross(double ax, double ay, double ar,
-		     double langle, double rangle,
-		     XYSegList seglist);
+bool arcSegListCross(double ax, double ay, double ar, double langle,
+                     double rangle, XYSegList seglist);
 
 // Unit test: tbd
-int arcSegListCrossPts(double ax, double ay, double ar,
-		       double langle, double rangle,
-		       XYSegList seglist,
-		       std::vector<double>& rx,
-		       std::vector<double>& ry);
+int arcSegListCrossPts(double ax, double ay, double ar, double langle,
+                       double rangle, XYSegList seglist,
+                       std::vector<double> &rx, std::vector<double> &ry);
 
 //===============================================================
 // Group 2: Want CPA information when arc does not intersect
 //===============================================================
 
 // Unit test: testDistSegToArc
-double distSegToArc(double x1, double y1, double x2, double y2,
-		    double ax, double ay, double ar,
-		    double langle, double rangle);
+double distSegToArc(double x1, double y1, double x2, double y2, double ax,
+                    double ay, double ar, double langle, double rangle);
 
 // Unit test: tbd
-double distSegListToArc(double ax, double ay, double ar, 
-			double langle, double rangle,
-			const XYSegList& seglist);
+double distSegListToArc(double ax, double ay, double ar, double langle,
+                        double rangle, const XYSegList &seglist);
 
 //===============================================================
 // Group 3: Other
 //===============================================================
 
 // Unit test: tbd
-double distPtsOnArc(double x1, double y1, double x2, double y2,
-		    double ax, double ay, double ar,
-		    double langle, double rangle,
-		    double rad_thresh=0.1, double ang_thresh=0.1);
+double distPtsOnArc(double x1, double y1, double x2, double y2, double ax,
+                    double ay, double ar, double langle, double rangle,
+                    double rad_thresh = 0.1, double ang_thresh = 0.1);
 
 // Unit test: testDistPointOnArc
-double distPointOnArc(double px, double py, 
-		      double ax, double ay, double ar,
-		      double langle, double rangle,
-		      bool langle_is_origin=true,
-		      double rad_thresh=0.1, double ang_thresh=0.1);
+double distPointOnArc(double px, double py, double ax, double ay, double ar,
+                      double langle, double rangle,
+                      bool langle_is_origin = true, double rad_thresh = 0.1,
+                      double ang_thresh = 0.1);
 
 // Unit test: testCpasRaySegl
 unsigned int cpasRaySegl(double rx, double ry, double ray_angle,
-			 const XYSegList& segl, double thresh,	      
-			 std::vector<double>& vcpa,
-			 std::vector<double>& vray);
+                         const XYSegList &segl, double thresh,
+                         std::vector<double> &vcpa, std::vector<double> &vray);
 
 // Unit test: tbd
-unsigned int cpasArcSegl(double ax, double ay, double ar,
-			 double langle, double rangle,
-			 const XYSegList& segl, double thresh,
-			 bool langle_is_origin,
-			 std::vector<double>& vcpa,
-			 std::vector<double>& vray);
+unsigned int cpasArcSegl(double ax, double ay, double ar, double langle,
+                         double rangle, const XYSegList &segl, double thresh,
+                         bool langle_is_origin, std::vector<double> &vcpa,
+                         std::vector<double> &vray);
 #endif
-

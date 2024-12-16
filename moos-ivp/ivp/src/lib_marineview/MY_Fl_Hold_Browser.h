@@ -24,42 +24,23 @@
 #ifndef MY_FLTK_HOLD_BROWSER_HEADER
 #define MY_FLTK_HOLD_BROWSER_HEADER
 
-#include <iostream>
 #include <FL/Fl.H>
 #include <FL/Fl_Hold_Browser.H>
+#include <iostream>
 
 class MY_Fl_Hold_Browser : public Fl_Hold_Browser {
 public:
- MY_Fl_Hold_Browser(int x, int y, int w, int h, const char *l=0) :
-  Fl_Hold_Browser(x, y, w, h, l) 
-    {
-      textfont(FL_COURIER);
-      box(FL_DOWN_BOX);
-      textcolor(FL_BLACK);
-    };
-  
+  MY_Fl_Hold_Browser(int x, int y, int w, int h, const char *l = 0)
+      : Fl_Hold_Browser(x, y, w, h, l) {
+    textfont(FL_COURIER);
+    box(FL_DOWN_BOX);
+    textcolor(FL_BLACK);
+  };
+
   int handle(int event) {
-    if((event == 1) || (event == 2))
-      return(Fl_Hold_Browser::handle(event));
-    return(0);
+    if ((event == 1) || (event == 2))
+      return (Fl_Hold_Browser::handle(event));
+    return (0);
   };
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

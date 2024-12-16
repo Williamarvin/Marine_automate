@@ -26,51 +26,48 @@
 
 #include <string>
 
-class NodeRider
-{
+class NodeRider {
 public:
   NodeRider();
-  ~NodeRider() {};
+  ~NodeRider(){};
 
   bool setVar(std::string);
   bool setPolicyConfig(std::string);
   bool setRiderFld(std::string);
 
-  void setFresh(bool v=true)    {m_fresh=v;}
-  void setLastUTC(double utc)   {m_last_utc=utc;}       
+  void setFresh(bool v = true) { m_fresh = v; }
+  void setLastUTC(double utc) { m_last_utc = utc; }
 
   bool updateValue(std::string, double utc);
-  
-  std::string getVar() const      {return(m_moosvar);}
-  std::string getPolicy() const   {return(m_policy);}
-  std::string getRiderFld() const {return(m_rider_fld);}
-  double getFrequency() const     {return(m_frequency);}
 
-  bool   isFresh() const         {return(m_fresh);}
-  double getLastUTC() const      {return(m_last_utc);}
+  std::string getVar() const { return (m_moosvar); }
+  std::string getPolicy() const { return (m_policy); }
+  std::string getRiderFld() const { return (m_rider_fld); }
+  double getFrequency() const { return (m_frequency); }
 
-  std::string getCurrVal() const {return(m_curr_value);}
+  bool isFresh() const { return (m_fresh); }
+  double getLastUTC() const { return (m_last_utc); }
+
+  std::string getCurrVal() const { return (m_curr_value); }
   std::string getSpec() const;
 
   bool valid() const;
-  
- protected:  
+
+protected:
   bool setPolicy(std::string);
   bool setFrequency(double);
-    
- protected: // config vars
-  std::string  m_moosvar;
-  std::string  m_policy;
-  double       m_frequency;
-  std::string  m_rider_fld;
 
- protected: // state vars
-  std::string  m_curr_value;
-  double       m_last_utc;
-  bool         m_fresh;
+protected: // config vars
+  std::string m_moosvar;
+  std::string m_policy;
+  double m_frequency;
+  std::string m_rider_fld;
+
+protected: // state vars
+  std::string m_curr_value;
+  double m_last_utc;
+  bool m_fresh;
   unsigned int m_total_updates;
-  
 };
 
-#endif 
-
+#endif

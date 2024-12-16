@@ -21,39 +21,26 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_RANGE_PULSE_HEADER
 #define BHV_RANGE_PULSE_HEADER
 
-#include "XYRangePulse.h"
 #include "IvPBehavior.h"
+#include "XYRangePulse.h"
 
 class BHV_RangePulse : public IvPBehavior {
 public:
   BHV_RangePulse(IvPDomain);
   ~BHV_RangePulse() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onSetParamComplete();
 
-protected:  // configuration parameters
-  double    m_line_pct;
-  XYPoint   m_bearing_pt;
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onSetParamComplete();
+
+protected: // configuration parameters
+  double m_line_pct;
+  XYPoint m_bearing_pt;
   XYSegList m_seglist;
-  bool      m_show_pt;
+  bool m_show_pt;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

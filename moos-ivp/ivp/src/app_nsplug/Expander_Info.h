@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef EXPANDER_INFO_HEADER
 #define EXPANDER_INFO_HEADER
 
@@ -31,12 +31,3 @@ void showManualAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-
-

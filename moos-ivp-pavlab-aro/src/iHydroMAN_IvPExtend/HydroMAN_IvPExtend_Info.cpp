@@ -5,19 +5,18 @@
 /*   DATE: July 29th, 2021                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "HydroMAN_IvPExtend_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("------------------------------------                            ");
   blk("  The iHydroMAN_IvPExtend serves as an intermediary between     ");
   blk("  the client MOOS community that anticipates to use HydroMAN    ");
@@ -43,8 +42,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: iHydroMAN_IvPExtend file.moos [OPTIONS]                   ");
@@ -53,7 +51,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch iHydroMAN_IvPExtend with the given process name         ");
   blk("      rather than iHydroMAN_IvPExtend.                           ");
   mag("  --example, -e                                                 ");
@@ -75,8 +73,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("iHydroMAN_IvPExtend Example MOOS Configuration                   ");
@@ -98,7 +95,8 @@ void showExampleConfigAndExit()
   blk("                                                                ");
   blk("  gps_expiration_time = 5 ");
   blk("                                                                ");
-  blk("  // Prefixes of the ownship sensor data messages, which will be sent to HydroMAN ");
+  blk("  // Prefixes of the ownship sensor data messages, which will be sent "
+      "to HydroMAN ");
   blk("  prefix_gps_msg = GPS_ ");
   blk("  prefix_imu_msg = IMU_ ");
   blk("  prefix_compass_msg = COMPASS_ ");
@@ -115,13 +113,15 @@ void showExampleConfigAndExit()
   blk("  //target_vehicles=JING,KIRK,IDA,GUS ");
   blk("  //ownship_name=JING ");
   blk("                                                                ");
-  blk("  // Prefixes of the target vehicle sensor data messages, which will be sent to HydroMAN ");
+  blk("  // Prefixes of the target vehicle sensor data messages, which will be "
+      "sent to HydroMAN ");
   blk("  // Msg style eg: 'range_msg'  ");
   blk("  range_msg = CRS_RANGE_REPORT ");
   blk("  bearing_msg = CRS_BEARING_REPORT  ");
   blk("  track_msg = UNIT_TRACK_IN  ");
   blk("                                                                ");
-  blk("  // Msg style eg: 'prefix_target_nav_output' + 'target_name' + X/Y/LAT/LONG/HEADING ");
+  blk("  // Msg style eg: 'prefix_target_nav_output' + 'target_name' + "
+      "X/Y/LAT/LONG/HEADING ");
   blk("  prefix_target_nav_output = HYDROMAN_TARGET_NAV_ ");
   blk("                                                                ");
   blk("}                                                               ");
@@ -129,12 +129,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("iHydroMAN_IvPExtend INTERFACE                                    ");
@@ -157,9 +155,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("iHydroMAN_IvPExtend", "gpl");
   exit(0);
 }
-

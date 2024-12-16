@@ -29,42 +29,38 @@ using namespace std;
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_Timer::BHV_Timer(IvPDomain gdomain) : IvPBehavior(gdomain)
-{
+BHV_Timer::BHV_Timer(IvPDomain gdomain) : IvPBehavior(gdomain) {
   m_descriptor = "bhv_timer";
 
-  m_var_status_idle    = "TIMER_IDLE";
+  m_var_status_idle = "TIMER_IDLE";
   m_var_status_running = "TIMER_RUNNING";
-  m_var_status_suffix  = "";
+  m_var_status_suffix = "";
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_Timer::setParam(string param, string val) 
-{
-  if((param == "var_status_idle") && !strContainsWhite(val))
+bool BHV_Timer::setParam(string param, string val) {
+  if ((param == "var_status_idle") && !strContainsWhite(val))
     m_var_status_idle = val;
 
-  else if((param == "var_status_running") && !strContainsWhite(val))
+  else if ((param == "var_status_running") && !strContainsWhite(val))
     m_var_status_running = val;
 
-  else if((param == "status_suffix") && !strContainsWhite(val)) {
-    if(val.at(0) != '_')
+  else if ((param == "status_suffix") && !strContainsWhite(val)) {
+    if (val.at(0) != '_')
       val = "_" + val;
-    m_var_status_suffix  = val;
-  }
-  else
-    return(false);
+    m_var_status_suffix = val;
+  } else
+    return (false);
 
-  return(true);      
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: onIdleState
 
-void BHV_Timer::onIdleState() 
-{
+void BHV_Timer::onIdleState() {
   string ivar = m_var_status_idle + m_var_status_suffix;
   postMessage(ivar, m_duration_idle_time);
 
@@ -75,31 +71,12 @@ void BHV_Timer::onIdleState()
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_Timer::onRunState() 
-{
+IvPFunction *BHV_Timer::onRunState() {
   string ivar = m_var_status_idle + m_var_status_suffix;
   postMessage(ivar, m_duration_idle_time);
 
   string rvar = m_var_status_running + m_var_status_suffix;
   postMessage(rvar, m_duration_running_time);
-  
-  return(0);
+
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

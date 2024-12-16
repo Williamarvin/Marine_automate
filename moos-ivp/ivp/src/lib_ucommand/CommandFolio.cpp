@@ -21,31 +21,27 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "CommandFolio.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Constructor
 
-CommandFolio::CommandFolio() 
-{
-  m_limited_vnames = false;
-}
+CommandFolio::CommandFolio() { m_limited_vnames = false; }
 
 //----------------------------------------------------------------
 // Procedure: addCmdItem()
 
-bool CommandFolio::addCmdItem(CommandItem item)
-{
-  if(item.totalReceivers() == 0)
-    return(false);
+bool CommandFolio::addCmdItem(CommandItem item) {
+  if (item.totalReceivers() == 0)
+    return (false);
 
   m_cmd_items.push_back(item);
 
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
@@ -54,100 +50,85 @@ bool CommandFolio::addCmdItem(CommandItem item)
 //            receiver names keeping only those in the given set,
 //            and "all" and "each".
 
-void CommandFolio::limitedVNames(set<string> vnames)
-{
-  if(vnames.size() == 0)
+void CommandFolio::limitedVNames(set<string> vnames) {
+  if (vnames.size() == 0)
     return;
 
-  for(unsigned int i=0; i<m_cmd_items.size(); i++) 
+  for (unsigned int i = 0; i < m_cmd_items.size(); i++)
     m_cmd_items[i].limitedVNames(vnames);
 
   m_limited_vnames = true;
   m_set_limited_vnames = vnames;
 }
 
-
-
 //----------------------------------------------------------------
 // Procedure: getCmdItem
 
-CommandItem CommandFolio::getCmdItem(unsigned int ix) const
-{
+CommandItem CommandFolio::getCmdItem(unsigned int ix) const {
   CommandItem empty_item;
-  if(ix >= m_cmd_items.size())
-    return(empty_item);
+  if (ix >= m_cmd_items.size())
+    return (empty_item);
 
-  return(m_cmd_items[ix]);
+  return (m_cmd_items[ix]);
 }
 
 //----------------------------------------------------------------
 // Procedure: getAllCmdItems()
 
-vector<CommandItem> CommandFolio::getAllCmdItems() const
-{
-  return(m_cmd_items);
+vector<CommandItem> CommandFolio::getAllCmdItems() const {
+  return (m_cmd_items);
 }
 
 //----------------------------------------------------------------
 // Procedure: getCmdColor()
 
-string CommandFolio::getCmdColor(string label) const
-{
+string CommandFolio::getCmdColor(string label) const {
   string bcolor;
-  for(unsigned int i=0; i<m_cmd_items.size(); i++) {
+  for (unsigned int i = 0; i < m_cmd_items.size(); i++) {
     string icolor = m_cmd_items[i].getCmdColor();
-    if((m_cmd_items[i].getCmdLabel() == label) && (icolor != ""))
+    if ((m_cmd_items[i].getCmdLabel() == label) && (icolor != ""))
       bcolor = m_cmd_items[i].getCmdColor();
   }
-  return(bcolor);
+  return (bcolor);
 }
 
 //----------------------------------------------------------------
 // Procedure: getAllReceivers()
 
-set<string> CommandFolio::getAllReceivers() const
-{
+set<string> CommandFolio::getAllReceivers() const {
   set<string> return_set;
 
-  for(unsigned int i=0; i<m_cmd_items.size(); i++) {
-    vector<string> receivers = m_cmd_items[i].getAllReceivers(); 
-    for(unsigned int j=0; j<receivers.size(); j++)
+  for (unsigned int i = 0; i < m_cmd_items.size(); i++) {
+    vector<string> receivers = m_cmd_items[i].getAllReceivers();
+    for (unsigned int j = 0; j < receivers.size(); j++)
       return_set.insert(receivers[j]);
   }
 
-  return(return_set);
+  return (return_set);
 }
 
 //----------------------------------------------------------------
 // Procedure: getAllLabels()
 
-set<string> CommandFolio::getAllLabels(string vname) const
-{
+set<string> CommandFolio::getAllLabels(string vname) const {
   set<string> return_set;
-  
-  for(unsigned int i=0; i<m_cmd_items.size(); i++) {
-    if(m_cmd_items[i].hasReceiver(vname)) {
-      string label = m_cmd_items[i].getCmdLabel(); 
+
+  for (unsigned int i = 0; i < m_cmd_items.size(); i++) {
+    if (m_cmd_items[i].hasReceiver(vname)) {
+      string label = m_cmd_items[i].getCmdLabel();
       return_set.insert(label);
     }
   }
 
-  return(return_set);
+  return (return_set);
 }
 
 //----------------------------------------------------------------
 // Procedure: print()
 
-void CommandFolio::print() const
-{
+void CommandFolio::print() const {
   cout << "=====================================================" << endl;
   cout << "CommandFolio: " << m_cmd_items.size() << " items" << endl;
-  for(unsigned int i=0; i<m_cmd_items.size(); i++)
+  for (unsigned int i = 0; i < m_cmd_items.size(); i++)
     m_cmd_items[i].print();
 }
-
-
-
-
-
-

@@ -1,34 +1,34 @@
 /*==============================================================================
 File that defines commonly used types throughout the BPX framework
 ==============================================================================*/
-//Prevent multiple inclusions of this file
+// Prevent multiple inclusions of this file
 #ifndef COMMON_H
 #define COMMON_H
 
 //------------------------------------------------------------------------------
-//Include C++ Libraries
+// Include C++ Libraries
 #ifdef __cplusplus
-	//#include <iostream>
-	using namespace std;	//Allow use of the standard namespace without explicit declaration
+//#include <iostream>
+using namespace std; // Allow use of the standard namespace without explicit
+                     // declaration
 #endif
 
 //------------------------------------------------------------------------------
-//Include system libraries
-#include <stdint.h>
+// Include system libraries
 #include <assert.h>
-#include <stdlib.h>	//Include library with the malloc, realloc and free functions
+#include <stdint.h>
+#include <stdlib.h> //Include library with the malloc, realloc and free functions
 
 //------------------------------------------------------------------------------
-//Include the CMSIS platform definitions
+// Include the CMSIS platform definitions
 
-//Include other definitions
-#include "types.h"
+// Include other definitions
 #include "macros.h"
+#include "types.h"
 
 //==============================================================================
-//Definitions...
+// Definitions...
 //==============================================================================
-
 
 //==============================================================================
 #endif

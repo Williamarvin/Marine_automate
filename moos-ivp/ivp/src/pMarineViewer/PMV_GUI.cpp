@@ -21,11 +21,11 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <FL/fl_ask.H>
-#include "MOOS/libMOOS/MOOSLib.h"
 #include "PMV_GUI.h"
-#include "MBUtils.h"
 #include "ACTable.h"
+#include "MBUtils.h"
+#include "MOOS/libMOOS/MOOSLib.h"
+#include <FL/fl_ask.H>
 
 using namespace std;
 
@@ -33,12 +33,11 @@ using namespace std;
 // Constructor
 
 PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
-  : MarineVehiGUI(g_w, g_h, g_l) 
-{
-  this->user_data((void*)(this));
+    : MarineVehiGUI(g_w, g_h, g_l) {
+  this->user_data((void *)(this));
   this->when(FL_WHEN_CHANGED);
   this->begin();
-  this->size_range(600,400);
+  this->size_range(600, 400);
 
   m_start_hgt = g_h;
   m_start_wid = g_w;
@@ -50,7 +49,7 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_show_title_ip = true;
   m_show_title_user = true;
   m_show_title_mhash = true;
-  
+
   m_cmd_gui_start_wid = 850;
   m_cmd_gui_start_hgt = 600;
   m_cmd_gui_start_bpost_cnt = 0;
@@ -58,8 +57,8 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_cmd_gui_start_show_posts = true;
 
   m_button_cols = 0;
-  
-  mviewer   = new PMV_Viewer(0, 0, 1, 1);
+
+  mviewer = new PMV_Viewer(0, 0, 1, 1);
   m_mviewer = mviewer;
 
   // Configure the AppCasting Browsing Widgets
@@ -69,7 +68,7 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_brw_nodes->box(FL_DOWN_BOX);
   m_brw_nodes->clear_visible_focus();
 
-  m_brw_procs = new MY_Fl_Hold_Browser(0, 0, 1, 1); 
+  m_brw_procs = new MY_Fl_Hold_Browser(0, 0, 1, 1);
   m_brw_procs->callback(cb_SelectAppCastProc, 0);
   m_brw_procs->textfont(FL_COURIER);
   m_brw_procs->box(FL_DOWN_BOX);
@@ -80,7 +79,7 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_brw_casts->textfont(FL_COURIER);
   m_brw_casts->box(FL_DOWN_BOX);
   m_brw_casts->clear_visible_focus();
-  
+
   // Configure the RealmCasting Browsing Widgets
   m_rc_brw_nodes = new MY_Fl_Hold_Browser(0, 0, 1, 1);
   m_rc_brw_nodes->callback(cb_SelectRealmCastNode, 0);
@@ -88,7 +87,7 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_rc_brw_nodes->box(FL_DOWN_BOX);
   m_rc_brw_nodes->clear_visible_focus();
 
-  m_rc_brw_procs = new MY_Fl_Hold_Browser(0, 0, 1, 1); 
+  m_rc_brw_procs = new MY_Fl_Hold_Browser(0, 0, 1, 1);
   m_rc_brw_procs->callback(cb_SelectRealmCastProc, 0);
   m_rc_brw_procs->textfont(FL_COURIER);
   m_rc_brw_procs->box(FL_DOWN_BOX);
@@ -99,20 +98,20 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_rc_brw_casts->textfont(FL_COURIER);
   m_rc_brw_casts->box(FL_DOWN_BOX);
   m_rc_brw_casts->clear_visible_focus();
-  
-  // Configure the DataField Widgets  
-  v_nam = new Fl_Output(0, 0, 1, 1, "VName:"); 
-  v_typ = new Fl_Output(0, 0, 1, 1, "VType:"); 
-  x_mtr = new Fl_Output(0, 0, 1, 1, "X(m):"); 
-  y_mtr = new Fl_Output(0, 0, 1, 1, "Y(m):"); 
-  v_lat = new Fl_Output(0, 0, 1, 1, "Lat:"); 
-  v_lon = new Fl_Output(0, 0, 1, 1, "Lon:"); 
-  v_spd = new Fl_Output(0, 0, 1, 1, "Spd:"); 
-  v_crs = new Fl_Output(0, 0, 1, 1, "Hdg:"); 
-  v_dep = new Fl_Output(0, 0, 1, 1, "Dep(m):"); 
-  v_ais = new Fl_Output(0, 0, 1, 1, "Age(s):"); 
-  time  = new Fl_Output(0, 0, 1, 1, "Time:"); 
-  warp  = new Fl_Output(0, 0, 1, 1, "Warp:"); 
+
+  // Configure the DataField Widgets
+  v_nam = new Fl_Output(0, 0, 1, 1, "VName:");
+  v_typ = new Fl_Output(0, 0, 1, 1, "VType:");
+  x_mtr = new Fl_Output(0, 0, 1, 1, "X(m):");
+  y_mtr = new Fl_Output(0, 0, 1, 1, "Y(m):");
+  v_lat = new Fl_Output(0, 0, 1, 1, "Lat:");
+  v_lon = new Fl_Output(0, 0, 1, 1, "Lon:");
+  v_spd = new Fl_Output(0, 0, 1, 1, "Spd:");
+  v_crs = new Fl_Output(0, 0, 1, 1, "Hdg:");
+  v_dep = new Fl_Output(0, 0, 1, 1, "Dep(m):");
+  v_ais = new Fl_Output(0, 0, 1, 1, "Age(s):");
+  time = new Fl_Output(0, 0, 1, 1, "Time:");
+  warp = new Fl_Output(0, 0, 1, 1, "Warp:");
 
   v_nam->set_output();
   v_typ->set_output();
@@ -127,13 +126,13 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   time->set_output();
   warp->set_output();
 
-  m_scope_variable = new Fl_Output(0, 0, 1, 1, "Variable:"); 
-  m_scope_time = new Fl_Output(0, 0, 1, 1, "Tm:"); 
-  m_scope_value = new Fl_Output(0, 0, 1, 1, "Value:"); 
+  m_scope_variable = new Fl_Output(0, 0, 1, 1, "Variable:");
+  m_scope_time = new Fl_Output(0, 0, 1, 1, "Tm:");
+  m_scope_value = new Fl_Output(0, 0, 1, 1, "Value:");
   m_scope_variable->set_output();
   m_scope_time->set_output();
   m_scope_value->set_output();
-  
+
   m_rc_button_src = new Fl_Button(0, 0, 1, 1, "SRC");
   m_rc_button_com = new Fl_Button(0, 0, 1, 1, "COM");
   m_rc_button_utc = new Fl_Button(0, 0, 1, 1, "UTC");
@@ -193,41 +192,58 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
   m_buttons.push_back(m_rc_button_msk);
   m_buttons.push_back(m_rc_button_trc);
 
-  
-  for(unsigned int i=0; i<m_buttons.size(); i++)
+  for (unsigned int i = 0; i < m_buttons.size(); i++)
     m_buttons[i]->clear_visible_focus();
 
-  m_rc_button_utc->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)24);
-  m_rc_button_src->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)25);
-  m_rc_button_com->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)26);
-  m_rc_button_wrp->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)27);
+  m_rc_button_utc->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)24);
+  m_rc_button_src->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)25);
+  m_rc_button_com->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)26);
+  m_rc_button_wrp->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)27);
 
-  m_rc_button_sub->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)28);
-  m_rc_button_msk->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)29);
-  m_rc_button_trc->callback((Fl_Callback*)PMV_GUI::cb_REALM_Button,(void*)30);
+  m_rc_button_sub->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)28);
+  m_rc_button_msk->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)29);
+  m_rc_button_trc->callback((Fl_Callback *)PMV_GUI::cb_REALM_Button,
+                            (void *)30);
 
-  m_user_button_1->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)1);
-  m_user_button_2->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)2);
-  m_user_button_3->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)3);
-  m_user_button_4->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)4);
-  m_user_button_5->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)5);
-  m_user_button_6->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)6);
-  m_user_button_7->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)7);  
-  m_user_button_8->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)8);  
-  m_user_button_9->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)9);  
-  m_user_button_10->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)10);  
-  m_user_button_11->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)11);  
-  m_user_button_12->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)12);  
-  m_user_button_13->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)13);  
-  m_user_button_14->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)14);  
-  m_user_button_15->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)15);  
-  m_user_button_16->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)16);  
-  m_user_button_17->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)17);  
-  m_user_button_18->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)18);  
-  m_user_button_19->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)19);  
-  m_user_button_20->callback((Fl_Callback*)PMV_GUI::cb_MOOS_Button,(void*)20);  
-  
-  for(unsigned int i=0; i<m_buttons.size(); i++)
+  m_user_button_1->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)1);
+  m_user_button_2->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)2);
+  m_user_button_3->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)3);
+  m_user_button_4->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)4);
+  m_user_button_5->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)5);
+  m_user_button_6->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)6);
+  m_user_button_7->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)7);
+  m_user_button_8->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)8);
+  m_user_button_9->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button, (void *)9);
+  m_user_button_10->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)10);
+  m_user_button_11->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)11);
+  m_user_button_12->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)12);
+  m_user_button_13->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)13);
+  m_user_button_14->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)14);
+  m_user_button_15->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)15);
+  m_user_button_16->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)16);
+  m_user_button_17->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)17);
+  m_user_button_18->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)18);
+  m_user_button_19->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)19);
+  m_user_button_20->callback((Fl_Callback *)PMV_GUI::cb_MOOS_Button,
+                             (void *)20);
+
+  for (unsigned int i = 0; i < m_buttons.size(); i++)
     m_buttons[i]->clear_visible_focus();
 
   augmentMenu();
@@ -241,319 +257,320 @@ PMV_GUI::PMV_GUI(int g_w, int g_h, const char *g_l)
 //----------------------------------------------------------
 // Procedure: augmentMenu()
 
-void PMV_GUI::augmentMenu()
-{
+void PMV_GUI::augmentMenu() {
   m_menubar->add("BackView/full_screen=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)30,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)30,
+                 FL_MENU_RADIO);
   m_menubar->add("BackView/full_screen=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)31,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)31,
+                 FL_MENU_RADIO);
   m_menubar->add("BackView/    Toggle Full-Screen", 'f',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)32,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)32,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/infocast_viewable=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)40,
-		 FL_MENU_RADIO);    
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)40,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/infocast_viewable=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)41,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/    Toggle InfoCasting", FL_CTRL+'a',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)42,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)41,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/    Toggle InfoCasting", FL_CTRL + 'a',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)42,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/content_mode=appcast", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)45,
-		 FL_MENU_RADIO);    
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)45,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/content_mode=realmcast", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)46,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)46,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/  Toggle InfoCast Content", 'a',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)47,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)47,
+                 FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/refresh_mode=paused",    FL_CTRL+' ',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)50,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/refresh_mode=events",    FL_CTRL+'e',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)51,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/refresh_mode=streaming", FL_CTRL+'s',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)52,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER);
+  m_menubar->add("InfoCasting/refresh_mode=paused", FL_CTRL + ' ',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)50,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/refresh_mode=events", FL_CTRL + 'e',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)51,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/refresh_mode=streaming", FL_CTRL + 's',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)52,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/nodes_font_size=xlarge",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)64,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/nodes_font_size=large",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)63,
-		 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/nodes_font_size=xlarge", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)64,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/nodes_font_size=large", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)63,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/nodes_font_size=medium", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)62,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/nodes_font_size=small",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)61,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)62,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/nodes_font_size=small", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)61,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/nodes_font_size=xsmall", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)60,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)60,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/procs_font_size=xlarge", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)74,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/procs_font_size=large",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)73,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)74,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/procs_font_size=large", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)73,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/procs_font_size=medium", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)72,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/procs_font_size=small",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)71,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)72,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/procs_font_size=small", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)71,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/procs_font_size=xsmall", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)70,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)70,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/infocast_font_size=xlarge", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)84,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/infocast_font_size=large",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)83,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)84,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/infocast_font_size=large", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)83,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/infocast_font_size=medium", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)82,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/infocast_font_size=small",  0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)81,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)82,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/infocast_font_size=small", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)81,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/infocast_font_size=xsmall", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)80,
-		 FL_MENU_RADIO); 
-  m_menubar->add("InfoCasting/infocast_font_size bigger",  '}',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)89,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)80,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/infocast_font_size bigger", '}',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)89,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/infocast_font_size smaller", '{',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)88,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)88,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/appcast_color_scheme=white",     0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)300,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/appcast_color_scheme=indigo",      0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)301,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/appcast_color_scheme=beige",       0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)302,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/appcast_color_scheme Toggle", FL_ALT+'a',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)310,
-		 FL_MENU_DIVIDER);
+  m_menubar->add("InfoCasting/appcast_color_scheme=white", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)300,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/appcast_color_scheme=indigo", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)301,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/appcast_color_scheme=beige", 0,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)302,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/appcast_color_scheme Toggle", FL_ALT + 'a',
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)310,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/realmcast_color_scheme=white", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)305,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)305,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/realmcast_color_scheme=indigo", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)306,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)306,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/realmcast_color_scheme=beige", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)307,
-		 FL_MENU_RADIO);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)307,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/realmcast_color_scheme=hillside", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)308,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_color_scheme Toggle", FL_SHIFT+FL_ALT+'a',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)309,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)308,
+                 FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_color_scheme Toggle", FL_SHIFT + FL_ALT + 'a',
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)309, FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/InfoCast Pane Thinner",   FL_SHIFT+FL_Left,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)100, 0); 
-  m_menubar->add("InfoCasting/InfoCast Pane Wider", FL_SHIFT+FL_Right,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)101, 0); 
+  m_menubar->add("InfoCasting/InfoCast Pane Thinner", FL_SHIFT + FL_Left,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)100, 0);
+  m_menubar->add("InfoCasting/InfoCast Pane Wider", FL_SHIFT + FL_Right,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)101, 0);
 
-  m_menubar->add("InfoCasting/InfoCast Pane Taller",  FL_SHIFT+FL_Up,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)200, 0); 
-  m_menubar->add("InfoCasting/InfoCast Pane Shorter", FL_SHIFT+FL_Down,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)201,
-		 FL_MENU_DIVIDER); 
+  m_menubar->add("InfoCasting/InfoCast Pane Taller", FL_SHIFT + FL_Up,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)200, 0);
+  m_menubar->add("InfoCasting/InfoCast Pane Shorter", FL_SHIFT + FL_Down,
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)201,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/InfoCast Pane Reset Size", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)102,
-		 FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)102,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=20", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)120,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)120,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=25", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)125,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)125,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=30", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)130,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)130,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=35", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)135,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)135,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=40", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)140,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)140,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=45", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)145,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)145,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=50", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)150,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)150,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=55", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)155,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)155,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=60", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)160,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)160,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=65", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)165,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)165,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Width/infocast_width=70", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)170,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)170,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
   m_menubar->add("InfoCasting/InfoCast Pane Height/reset", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)102,
-		 FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)102,
+                 FL_MENU_DIVIDER);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=90", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)290,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)290,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=85", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)285,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)285,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=80", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)280,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)280,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=75", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)275,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)275,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=70", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)270,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)270,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=65", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)265,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)265,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=60", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)260,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)260,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=55", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)255,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)255,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=50", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)250,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)250,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=45", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)245,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)245,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=40", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)240,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)240,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=35", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)235,
-		 FL_MENU_RADIO); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)235,
+                 FL_MENU_RADIO);
   m_menubar->add("InfoCasting/InfoCast Pane Height/infocast_height=30", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)230,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER); 
+                 (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)230,
+                 FL_MENU_RADIO | FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/realmcast_show_source/realmcast_show_source=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)320,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_source/realmcast_show_source=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)321,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_source/realmcast_show_source Toggle", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)322,
-		 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/realmcast_show_source/realmcast_show_source=true",
+                 0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)320,
+                 FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_source/realmcast_show_source=false", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)321, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_source/realmcast_show_source Toggle", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)322, FL_MENU_RADIO);
 
-  m_menubar->add("InfoCasting/realmcast_show_community/realmcast_show_community=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)330,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_community/realmcast_show_community=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)331,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_community/realmcast_show_community Toggle", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)332,
-		 FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_community/realmcast_show_community=true", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)330, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_community/realmcast_show_community=false", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)331, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_community/realmcast_show_community Toggle", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)332, FL_MENU_RADIO);
 
-  m_menubar->add("InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)340,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)341,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions Toggle", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)342,
-		 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/realmcast_show_subscriptions/"
+                 "realmcast_show_subscriptions=true",
+                 0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)340,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/realmcast_show_subscriptions/"
+                 "realmcast_show_subscriptions=false",
+                 0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)341,
+                 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/realmcast_show_subscriptions/"
+                 "realmcast_show_subscriptions Toggle",
+                 0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)342,
+                 FL_MENU_RADIO);
 
-  
-  m_menubar->add("InfoCasting/realmcast_show_masked/realmcast_show_masked=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)350,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_masked/realmcast_show_masked=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)351,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_show_masked/realmcast_show_masked Toggle", 'k',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)352,
-		 FL_MENU_RADIO);
+  m_menubar->add("InfoCasting/realmcast_show_masked/realmcast_show_masked=true",
+                 0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)350,
+                 FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_masked/realmcast_show_masked=false", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)351, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_show_masked/realmcast_show_masked Toggle", 'k',
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)352, FL_MENU_RADIO);
 
-  m_menubar->add("InfoCasting/realmcast_wrap_content/realmcast_wrap_content=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)360,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_wrap_content/realmcast_wrap_content=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)361,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_wrap_content/realmcast_wrap_content Toggle", 'w',
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)362,
-		 FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_wrap_content/realmcast_wrap_content=true", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)360, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_wrap_content/realmcast_wrap_content=false", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)361, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_wrap_content/realmcast_wrap_content Toggle", 'w',
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)362, FL_MENU_RADIO);
 
-  m_menubar->add("InfoCasting/realmcast_trunc_content/realmcast_trunc_content=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)370,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_trunc_content/realmcast_trunc_content=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)371,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_trunc_content/realmcast_trunc_content Toggle", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)372,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER);
+  m_menubar->add(
+      "InfoCasting/realmcast_trunc_content/realmcast_trunc_content=true", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)370, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_trunc_content/realmcast_trunc_content=false", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)371, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_trunc_content/realmcast_trunc_content Toggle", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)372,
+      FL_MENU_RADIO | FL_MENU_DIVIDER);
 
-  m_menubar->add("InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=true", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)380,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=false", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)381,
-		 FL_MENU_RADIO);
-  m_menubar->add("InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc Toggle", 0,
-		 (Fl_Callback*)PMV_GUI::cb_InfoCastSetting, (void*)382,
-		 FL_MENU_RADIO|FL_MENU_DIVIDER);
+  m_menubar->add(
+      "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=true", 0,
+      (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)380, FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=false",
+      0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)381,
+      FL_MENU_RADIO);
+  m_menubar->add(
+      "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc Toggle",
+      0, (Fl_Callback *)PMV_GUI::cb_InfoCastSetting, (void *)382,
+      FL_MENU_RADIO | FL_MENU_DIVIDER);
 
-  
   m_menubar->add("MOOS-Scope/Add Variable", 'A',
-		 (Fl_Callback*)PMV_GUI::cb_Scope, (void*)0,
-		 FL_MENU_DIVIDER);
-    
-  m_menubar->add("Vehicles/ClearHistory/All Vehicles", FL_CTRL+'9',
-		 (Fl_Callback*)PMV_GUI::cb_FilterOut, (void*)-1,
-		 FL_MENU_DIVIDER);
-  m_menubar->add("Vehicles/ClearHistory/Selected", FL_CTRL+'k',
-		 (Fl_Callback*)PMV_GUI::cb_DeleteActiveNode, (void*)0,
-		 FL_MENU_DIVIDER);
-  m_menubar->add("Vehicles/ClearHistory/Reset All", FL_ALT+'k',
-		 (Fl_Callback*)PMV_GUI::cb_DeleteActiveNode, (void*)1,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_Scope, (void *)0, FL_MENU_DIVIDER);
+
+  m_menubar->add("Vehicles/ClearHistory/All Vehicles", FL_CTRL + '9',
+                 (Fl_Callback *)PMV_GUI::cb_FilterOut, (void *)-1,
+                 FL_MENU_DIVIDER);
+  m_menubar->add("Vehicles/ClearHistory/Selected", FL_CTRL + 'k',
+                 (Fl_Callback *)PMV_GUI::cb_DeleteActiveNode, (void *)0,
+                 FL_MENU_DIVIDER);
+  m_menubar->add("Vehicles/ClearHistory/Reset All", FL_ALT + 'k',
+                 (Fl_Callback *)PMV_GUI::cb_DeleteActiveNode, (void *)1,
+                 FL_MENU_DIVIDER);
 
   m_menubar->add("Action/Open Command GUI", ' ',
-		 (Fl_Callback*)PMV_GUI::cb_CommandGUI, (void*)0,
-		 FL_MENU_DIVIDER);
+                 (Fl_Callback *)PMV_GUI::cb_CommandGUI, (void *)0,
+                 FL_MENU_DIVIDER);
 }
 
 //----------------------------------------------------------
 // Procedure: resize()
 
-void PMV_GUI::resize(int lx, int ly, int lw, int lh)
-{
+void PMV_GUI::resize(int lx, int ly, int lw, int lh) {
   Fl_Window::resize(lx, ly, lw, lh);
   resizeWidgets();
 }
@@ -561,26 +578,24 @@ void PMV_GUI::resize(int lx, int ly, int lw, int lh)
 //----------------------------------------------------------
 // Procedure: setVerbose()
 
-void PMV_GUI::setVerbose(bool bval)
-{
-  if(m_mviewer)
+void PMV_GUI::setVerbose(bool bval) {
+  if (m_mviewer)
     m_mviewer->setVerbose(bval);
 }
 
 //----------------------------------------------------------
 // Procedure: calcButtonColumns()
 
-void PMV_GUI::calcButtonColumns()
-{
-  string label_1  = m_user_button_1->label();
-  string label_2  = m_user_button_2->label();
-  string label_3  = m_user_button_3->label();
-  string label_4  = m_user_button_4->label();
-  string label_5  = m_user_button_5->label();
-  string label_6  = m_user_button_6->label();
-  string label_7  = m_user_button_7->label();
-  string label_8  = m_user_button_8->label();
-  string label_9  = m_user_button_9->label();
+void PMV_GUI::calcButtonColumns() {
+  string label_1 = m_user_button_1->label();
+  string label_2 = m_user_button_2->label();
+  string label_3 = m_user_button_3->label();
+  string label_4 = m_user_button_4->label();
+  string label_5 = m_user_button_5->label();
+  string label_6 = m_user_button_6->label();
+  string label_7 = m_user_button_7->label();
+  string label_8 = m_user_button_8->label();
+  string label_9 = m_user_button_9->label();
   string label_10 = m_user_button_10->label();
   string label_11 = m_user_button_11->label();
   string label_12 = m_user_button_12->label();
@@ -592,96 +607,114 @@ void PMV_GUI::calcButtonColumns()
   string label_18 = m_user_button_18->label();
   string label_19 = m_user_button_19->label();
   string label_20 = m_user_button_20->label();
-  
-  if((label_20 != "Disabled") || (label_19 != "Disabled"))
+
+  if ((label_20 != "Disabled") || (label_19 != "Disabled"))
     m_button_cols = 10;
-  else if((label_18 != "Disabled") || (label_17 != "Disabled"))
+  else if ((label_18 != "Disabled") || (label_17 != "Disabled"))
     m_button_cols = 9;
-  else if((label_16 != "Disabled") || (label_15 != "Disabled"))
+  else if ((label_16 != "Disabled") || (label_15 != "Disabled"))
     m_button_cols = 8;
-  else if((label_14 != "Disabled") || (label_13 != "Disabled"))
+  else if ((label_14 != "Disabled") || (label_13 != "Disabled"))
     m_button_cols = 7;
-  else if((label_12 != "Disabled") || (label_11 != "Disabled"))
+  else if ((label_12 != "Disabled") || (label_11 != "Disabled"))
     m_button_cols = 6;
-  else if((label_10 != "Disabled") || (label_9 != "Disabled"))
+  else if ((label_10 != "Disabled") || (label_9 != "Disabled"))
     m_button_cols = 5;
-  else if((label_8 != "Disabled") || (label_7 != "Disabled"))
+  else if ((label_8 != "Disabled") || (label_7 != "Disabled"))
     m_button_cols = 4;
-  else if((label_6 != "Disabled") || (label_5 != "Disabled"))
+  else if ((label_6 != "Disabled") || (label_5 != "Disabled"))
     m_button_cols = 3;
 
-  else if((label_4 != "Disabled") || (label_3 != "Disabled"))
+  else if ((label_4 != "Disabled") || (label_3 != "Disabled"))
     m_button_cols = 2;
-  else if((label_2 != "Disabled") || (label_1 != "Disabled"))
+  else if ((label_2 != "Disabled") || (label_1 != "Disabled"))
     m_button_cols = 1;
-  else 
+  else
     m_button_cols = 0;
 }
 
 //----------------------------------------------------------
 // Procedure: addButtonAction()
 
-string PMV_GUI::getButtonAction(string btype) const
-{
+string PMV_GUI::getButtonAction(string btype) const {
   string action_str;
-  for(unsigned int i=0; i<m_button_keys.size(); i++) {
-    if(m_button_keys[i] == btype) {
-      if(action_str != "")
-	action_str += " # ";
+  for (unsigned int i = 0; i < m_button_keys.size(); i++) {
+    if (m_button_keys[i] == btype) {
+      if (action_str != "")
+        action_str += " # ";
       action_str += m_button_vars[i] + "=";
       action_str += m_button_vals[i];
     }
   }
 
-  return(action_str);
+  return (action_str);
 }
 
 //----------------------------------------------------------
 // Procedure: addButton()
 
-bool PMV_GUI::addButton(string btype, string svalue) 
-{
+bool PMV_GUI::addButton(string btype, string svalue) {
   Fl_Button *button = 0;
-  if(btype == "button_one") button = m_user_button_1;
-  else if(btype == "button_two")      button = m_user_button_2;
-  else if(btype == "button_three")    button = m_user_button_3;
-  else if(btype == "button_four")     button = m_user_button_4;
-  else if(btype == "button_five")     button = m_user_button_5;
-  else if(btype == "button_six")      button = m_user_button_6;
-  else if(btype == "button_seven")    button = m_user_button_7;
-  else if(btype == "button_eight")    button = m_user_button_8;
-  else if(btype == "button_nine")     button = m_user_button_9;
-  else if(btype == "button_ten")      button = m_user_button_10;
-  else if(btype == "button_eleven")   button = m_user_button_11;
-  else if(btype == "button_twelve")   button = m_user_button_12;
-  else if(btype == "button_thirteen") button = m_user_button_13;
-  else if(btype == "button_fourteen") button = m_user_button_14;
-  else if(btype == "button_fifteen")  button = m_user_button_15;
-  else if(btype == "button_sixteen")  button = m_user_button_16;
-  else if(btype == "button_seventeen") button = m_user_button_17;
-  else if(btype == "button_eighteen") button = m_user_button_18;
-  else if(btype == "button_nineteen") button = m_user_button_19;
-  else if(btype == "button_twenty")   button = m_user_button_20;
+  if (btype == "button_one")
+    button = m_user_button_1;
+  else if (btype == "button_two")
+    button = m_user_button_2;
+  else if (btype == "button_three")
+    button = m_user_button_3;
+  else if (btype == "button_four")
+    button = m_user_button_4;
+  else if (btype == "button_five")
+    button = m_user_button_5;
+  else if (btype == "button_six")
+    button = m_user_button_6;
+  else if (btype == "button_seven")
+    button = m_user_button_7;
+  else if (btype == "button_eight")
+    button = m_user_button_8;
+  else if (btype == "button_nine")
+    button = m_user_button_9;
+  else if (btype == "button_ten")
+    button = m_user_button_10;
+  else if (btype == "button_eleven")
+    button = m_user_button_11;
+  else if (btype == "button_twelve")
+    button = m_user_button_12;
+  else if (btype == "button_thirteen")
+    button = m_user_button_13;
+  else if (btype == "button_fourteen")
+    button = m_user_button_14;
+  else if (btype == "button_fifteen")
+    button = m_user_button_15;
+  else if (btype == "button_sixteen")
+    button = m_user_button_16;
+  else if (btype == "button_seventeen")
+    button = m_user_button_17;
+  else if (btype == "button_eighteen")
+    button = m_user_button_18;
+  else if (btype == "button_nineteen")
+    button = m_user_button_19;
+  else if (btype == "button_twenty")
+    button = m_user_button_20;
   else
-    return(false);
+    return (false);
 
   // Set the default label if none is provided in the svalue.
   // The default is the *current* value of the label.
   string button_label = button->label();
   string bcolor;
-  
+
   bool ok_line = true;
   vector<string> svector = parseStringQ(svalue, '#');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string param = stripBlankEnds(biteString(svector[i], '='));
     string value = stripBlankEnds(svector[i]);
-    if(param == "") 
+    if (param == "")
       ok_line = false;
-    else if(param == "color") 
+    else if (param == "color")
       bcolor = value;
     else {
-      if(value == "")
+      if (value == "")
         button_label = param;
       else {
         m_button_keys.push_back(btype);
@@ -690,14 +723,14 @@ bool PMV_GUI::addButton(string btype, string svalue)
       }
     }
   }
-  
+
   button->copy_label(button_label.c_str());
   button->show();
 
   string tooltip = getButtonAction(btype);
   button->copy_tooltip(tooltip.c_str());
 
-  if(isColor(bcolor)) {
+  if (isColor(bcolor)) {
     ColorPack cpack(bcolor);
     int red_int = cpack.red() * 255;
     int grn_int = cpack.grn() * 255;
@@ -706,17 +739,16 @@ bool PMV_GUI::addButton(string btype, string svalue)
     button->color(fcolor);
   }
   button->redraw();
-  
+
   calcButtonColumns();
   resizeWidgets();
-  return(ok_line);
+  return (ok_line);
 }
 
 //----------------------------------------------------------
 // Procedure: addAction()
 
-bool PMV_GUI::addAction(string svalue, bool separator) 
-{
+bool PMV_GUI::addAction(string svalue, bool separator) {
   // We call the Q-version of parseString to allow separators in vals
   vector<string> svector = parseStringQ(svalue, '#');
   unsigned int i, vsize = svector.size();
@@ -724,45 +756,47 @@ bool PMV_GUI::addAction(string svalue, bool separator)
 
   vector<string> vars, vals;
   string key = "";
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string param = stripBlankEnds(biteString(svector[i], '='));
     string value = stripBlankEnds(svector[i]);
-    if(isQuoted(value))
+    if (isQuoted(value))
       value = stripQuotes(value);
-    if(param == "")
-      return(false);
-    if(tolower(param)=="menu_key") 
+    if (param == "")
+      return (false);
+    if (tolower(param) == "menu_key")
       key = value;
     else {
       vars.push_back(param);
       vals.push_back(value);
     }
   }
-  
+
   unsigned int psize = vars.size();
-  for(i=0; i<psize; i++) {
+  for (i = 0; i < psize; i++) {
     m_action_vars.push_back(vars[i]);
     m_action_vals.push_back(vals[i]);
     m_action_keys.push_back(key);
   }
 
-  for(i=0; i<psize; i++) {
+  for (i = 0; i < psize; i++) {
     // Use special unsigned int type having same size as pointer (void*)
     uintptr_t index = pindex + i;
-    string left  = truncString(vars[i], 25, "middle");
+    string left = truncString(vars[i], 25, "middle");
     string right = vals[i];
-    //string right = truncString(vals[i], 25, "middle");
+    // string right = truncString(vals[i], 25, "middle");
     string label = ("Action/" + left + "=" + right);
     label = padString(label, 25, false);
-    if(key != "")
+    if (key != "")
       label += (" <" + key + ">");
-    if(separator)
-      m_menubar->add(label.c_str(), 0, (Fl_Callback*)PMV_GUI::cb_DoAction, (void*)index, FL_MENU_DIVIDER);
+    if (separator)
+      m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_DoAction,
+                     (void *)index, FL_MENU_DIVIDER);
     else
-      m_menubar->add(label.c_str(), 0, (Fl_Callback*)PMV_GUI::cb_DoAction, (void*)index, 0);
+      m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_DoAction,
+                     (void *)index, 0);
   }
   m_menubar->redraw();
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------
@@ -772,41 +806,35 @@ bool PMV_GUI::addAction(string svalue, bool separator)
 //            class should work fine. But if we want to tinker
 //            with event handling, this method is the place.
 
-int PMV_GUI::handle(int event) 
-{
-  return(Fl_Window::handle(event));
-}
+int PMV_GUI::handle(int event) { return (Fl_Window::handle(event)); }
 
 //----------------------------------------------------------
 // Procedure: showingInfoCasts()
 
-bool PMV_GUI::showingInfoCasts() const
-{
-  if(m_icast_settings.getContentMode() == "off")
-    return(false);
+bool PMV_GUI::showingInfoCasts() const {
+  if (m_icast_settings.getContentMode() == "off")
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------
 // Procedure:  augmentTitleWithIP()
 
-bool PMV_GUI::augmentTitleWithIP(string ip_str)
-{
-  if(!isValidIPAddress(ip_str))
-    return(false);
+bool PMV_GUI::augmentTitleWithIP(string ip_str) {
+  if (!isValidIPAddress(ip_str))
+    return (false);
 
   m_title_ip = ip_str;
   refreshTitle();
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------
 // Procedure:  augmentTitleWithMHash()
 
-void PMV_GUI::augmentTitleWithMHash(string mhash)
-{
-  if(mhash.length() != 9) 
+void PMV_GUI::augmentTitleWithMHash(string mhash) {
+  if (mhash.length() != 9)
     return;
   m_title_mhash = mhash;
   refreshTitle();
@@ -815,8 +843,7 @@ void PMV_GUI::augmentTitleWithMHash(string mhash)
 //----------------------------------------------------------
 // Procedure:  augmentTitleWithUser()
 
-void PMV_GUI::augmentTitleWithUser(string user)
-{
+void PMV_GUI::augmentTitleWithUser(string user) {
   m_title_user = user;
   refreshTitle();
 }
@@ -824,15 +851,14 @@ void PMV_GUI::augmentTitleWithUser(string user)
 //----------------------------------------------------------
 // Procedure:  refreshTitle()
 
-void PMV_GUI::refreshTitle()
-{
+void PMV_GUI::refreshTitle() {
   string new_title = m_title_base;
 
-  if(m_show_title_user && (m_title_user != ""))
+  if (m_show_title_user && (m_title_user != ""))
     new_title += " [" + m_title_user + "]";
-  if(m_show_title_mhash && (m_title_mhash != ""))
+  if (m_show_title_mhash && (m_title_mhash != ""))
     new_title += " [" + m_title_mhash + "]";
-  if(m_show_title_ip && (m_title_ip != ""))
+  if (m_show_title_ip && (m_title_ip != ""))
     new_title += " [" + m_title_ip + "]";
 
   label(new_title.c_str());
@@ -845,18 +871,17 @@ void PMV_GUI::refreshTitle()
 //            If the new active vehicle is also a known appcast
 //            node, adjust the appcast browsers accordingly.
 
-bool PMV_GUI::syncNodesAtoB()
-{
+bool PMV_GUI::syncNodesAtoB() {
   string vname = mviewer->getStringInfo("active_vehicle_name");
 
   bool valid_node = m_repo->setCurrentNode(vname);
-  if(!valid_node)
-    return(false);
+  if (!valid_node)
+    return (false);
 
   updateAppCastNodes(true);
   updateAppCastProcs(true);
   updateAppCast();
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------
@@ -864,51 +889,47 @@ bool PMV_GUI::syncNodesAtoB()
 //   Purpose: Used when user selects a new node in the
 //            appcast browsers. If the new node is a known
 //            vehicle, i.e., we have received node reports
-//            for it, then make it the active vehicle in 
-//            the panes at the bottom of the window. 
+//            for it, then make it the active vehicle in
+//            the panes at the bottom of the window.
 
-bool PMV_GUI::syncNodesBtoA()
-{
+bool PMV_GUI::syncNodesBtoA() {
   string curr_node = m_repo->getCurrentNode();
-  if(curr_node == "")
-    return(false);
+  if (curr_node == "")
+    return (false);
 
   //  vector<string> vnames = m_vehiset.getVehiNames();
-  //if(vectorContains(vnames, curr_node))
-    mviewer->setParam("active_vehicle_name", curr_node);
+  // if(vectorContains(vnames, curr_node))
+  mviewer->setParam("active_vehicle_name", curr_node);
 
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------
 // Procedure: clearGeoShapes()
 
-void PMV_GUI::clearGeoShapes(string vname, string shape, string stype)
-{
+void PMV_GUI::clearGeoShapes(string vname, string shape, string stype) {
   mviewer->clearGeoShapes(vname, shape, stype);
 }
 
 //----------------------------------------- UpdateXY
-void PMV_GUI::updateXY() 
-{
-  if(m_icast_settings.getFullScreen())
+void PMV_GUI::updateXY() {
+  if (m_icast_settings.getFullScreen())
     return;
 
-  
   double dwarp = GetMOOSTimeWarp();
   string time_str = doubleToString(m_curr_time, 1);
 
-  string swarp      = dstringCompact(doubleToString(dwarp,2));
-  string scope_var  = mviewer->getStringInfo("scope_var");
+  string swarp = dstringCompact(doubleToString(dwarp, 2));
+  string scope_var = mviewer->getStringInfo("scope_var");
   string scope_time = mviewer->getStringInfo("scope_time");
-  string scope_val  = mviewer->getStringInfo("scope_val");
+  string scope_val = mviewer->getStringInfo("scope_val");
   string vname = mviewer->getStringInfo("active_vehicle_name");
 
   m_scope_variable->value(scope_var.c_str());
   m_scope_time->value(scope_time.c_str());
   m_scope_value->value(scope_val.c_str());
-  
-  if((vname == "") || (vname == "error")) {
+
+  if ((vname == "") || (vname == "error")) {
     v_nam->value(" n/a");
     v_typ->value(" n/a");
     x_mtr->value(" n/a");
@@ -920,8 +941,8 @@ void PMV_GUI::updateXY()
     v_dep->value(" n/a");
     v_ais->value(" n/a");
     warp->value(swarp.c_str());
-    //v_range->value(" n/a");
-    //v_bearing->value(" n/a");
+    // v_range->value(" n/a");
+    // v_bearing->value(" n/a");
     return;
   }
 
@@ -936,7 +957,7 @@ void PMV_GUI::updateXY()
   string age_ais = mviewer->getStringInfo("age_ais", 2);
   string range = mviewer->getStringInfo("range", 1);
   string bearing = mviewer->getStringInfo("bearing", 2);
-  if(age_ais == "-1")
+  if (age_ais == "-1")
     age_ais = "n/a";
 
   v_nam->value(vname.c_str());
@@ -953,8 +974,8 @@ void PMV_GUI::updateXY()
   time->value(time_str.c_str());
   warp->value(swarp.c_str());
 
-  //v_range->value(range.c_str());
-  //v_bearing->value(bearing.c_str());
+  // v_range->value(range.c_str());
+  // v_bearing->value(bearing.c_str());
 
   time->redraw();
   warp->redraw();
@@ -965,101 +986,96 @@ void PMV_GUI::updateXY()
   v_ais->redraw();
 }
 
-
-
 //----------------------------------------- REALM_Button
-inline void PMV_GUI::cb_REALM_Button_i(unsigned int val) {  
+inline void PMV_GUI::cb_REALM_Button_i(unsigned int val) {
 
-  if(val == 24)
+  if (val == 24)
     setRadioCastAttrib("realmcast_time_format_utc", "toggle");
-  else if(val == 25)
+  else if (val == 25)
     setRadioCastAttrib("realmcast_show_source", "toggle");
-  else if(val == 26)
+  else if (val == 26)
     setRadioCastAttrib("realmcast_show_community", "toggle");
-  else if(val == 27)
+  else if (val == 27)
     setRadioCastAttrib("realmcast_wrap_content", "toggle");
-  else if(val == 28) 
+  else if (val == 28)
     setRadioCastAttrib("realmcast_show_subscriptions", "toggle");
-  else if(val == 29)
+  else if (val == 29)
     setRadioCastAttrib("realmcast_show_masked", "toggle");
-  else if(val == 30) 
+  else if (val == 30)
     setRadioCastAttrib("realmcast_trunc_content", "toggle");
 }
 
-void PMV_GUI::cb_REALM_Button(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_REALM_Button_i(v);
+void PMV_GUI::cb_REALM_Button(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_REALM_Button_i(v);
 }
 
-
 //----------------------------------------- MOOS_Button
-inline void PMV_GUI::cb_MOOS_Button_i(unsigned int val) {  
+inline void PMV_GUI::cb_MOOS_Button_i(unsigned int val) {
 
   string skey = "";
-  if(val == 1)
+  if (val == 1)
     skey = "button_one";
-  else if(val == 2)
+  else if (val == 2)
     skey = "button_two";
-  else if(val == 3)
+  else if (val == 3)
     skey = "button_three";
-  else if(val == 4)
+  else if (val == 4)
     skey = "button_four";
-  else if(val == 5)
+  else if (val == 5)
     skey = "button_five";
-  else if(val == 6)
+  else if (val == 6)
     skey = "button_six";
-  else if(val == 7)
+  else if (val == 7)
     skey = "button_seven";
-  else if(val == 8)
+  else if (val == 8)
     skey = "button_eight";
-  else if(val == 9)
+  else if (val == 9)
     skey = "button_nine";
-  else if(val == 10)
+  else if (val == 10)
     skey = "button_ten";
-  else if(val == 11)
+  else if (val == 11)
     skey = "button_eleven";
-  else if(val == 12)
+  else if (val == 12)
     skey = "button_twelve";
-  else if(val == 13)
+  else if (val == 13)
     skey = "button_thirteen";
-  else if(val == 14)
+  else if (val == 14)
     skey = "button_fourteen";
-  else if(val ==15 )
+  else if (val == 15)
     skey = "button_fifteen";
-  else if(val == 16)
+  else if (val == 16)
     skey = "button_sixteen";
-  else if(val == 17)
+  else if (val == 17)
     skey = "button_seventeen";
-  else if(val == 18)
+  else if (val == 18)
     skey = "button_eighteen";
-  else if(val == 19)
+  else if (val == 19)
     skey = "button_nineteen";
-  else if(val == 20)
+  else if (val == 20)
     skey = "button_twenty";
-  
+
   unsigned int i, vsize = m_button_keys.size();
-  for(i=0; i<vsize; i++) {
-    if(m_button_keys[i] == skey)  {
+  for (i = 0; i < vsize; i++) {
+    if (m_button_keys[i] == skey) {
       pushPending(m_button_vars[i], m_button_vals[i]);
     }
   }
 }
 
-void PMV_GUI::cb_MOOS_Button(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_MOOS_Button_i(v);
+void PMV_GUI::cb_MOOS_Button(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_MOOS_Button_i(v);
 }
 
-
 //----------------------------------------- DoAction
-inline void PMV_GUI::cb_DoAction_i(unsigned int i) {  
+inline void PMV_GUI::cb_DoAction_i(unsigned int i) {
   string key = m_action_keys[i];
-  if(key == "") {
+  if (key == "") {
     cout << m_action_vars[i] << " = " << m_action_vals[i] << endl;
     pushPending(m_action_vars[i], m_action_vals[i]);
-  }
-  else {
+  } else {
     unsigned int j, vsize = m_action_vars.size();
-    for(j=0; j<vsize; j++) {
-      if(m_action_keys[j] == key) {
+    for (j = 0; j < vsize; j++) {
+      if (m_action_keys[j] == key) {
         cout << m_action_vars[j] << " = " << m_action_vals[j] << endl;
         pushPending(m_action_vars[j], m_action_vals[j]);
       }
@@ -1067,264 +1083,347 @@ inline void PMV_GUI::cb_DoAction_i(unsigned int i) {
   }
 }
 
-void PMV_GUI::cb_DoAction(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_DoAction_i(v);
+void PMV_GUI::cb_DoAction(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_DoAction_i(v);
 }
 
-
 //----------------------------------------- Scope
-inline void PMV_GUI::cb_Scope_i(unsigned int i) {  
-  if(i==0) {
-    const char *str = fl_input("Enter a new MOOS variable for scoping:", 
-			       "DB_CLIENTS");
-    if(str != 0) {
+inline void PMV_GUI::cb_Scope_i(unsigned int i) {
+  if (i == 0) {
+    const char *str =
+        fl_input("Enter a new MOOS variable for scoping:", "DB_CLIENTS");
+    if (str != 0) {
       string new_var = str;
       new_var = stripBlankEnds(new_var);
-      if(!strContainsWhite(new_var)) {
-	bool added = addScopeVariable(new_var);
-	if(added) {
-	  mviewer->addScopeVariable(new_var);
-	  pushPending("scope_register", new_var);
-	}
-	if(mviewer->isScopeVariable(new_var))
-	  mviewer->setActiveScope(new_var);
+      if (!strContainsWhite(new_var)) {
+        bool added = addScopeVariable(new_var);
+        if (added) {
+          mviewer->addScopeVariable(new_var);
+          pushPending("scope_register", new_var);
+        }
+        if (mviewer->isScopeVariable(new_var))
+          mviewer->setActiveScope(new_var);
       }
     }
     return;
   }
 
-  if(i>=m_scope_vars.size())
+  if (i >= m_scope_vars.size())
     return;
-  
+
   string varname = m_scope_vars[i];
   mviewer->setActiveScope(varname);
 }
 
-void PMV_GUI::cb_Scope(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_Scope_i(v);
+void PMV_GUI::cb_Scope(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_Scope_i(v);
 }
 
 //----------------------------------------- InfoCastSetting
-inline void PMV_GUI::cb_InfoCastSetting_i(unsigned int v) {  
+inline void PMV_GUI::cb_InfoCastSetting_i(unsigned int v) {
   // Reset all infocast panes to orig proportions
-  if(v==102)  {
+  if (v == 102) {
     setRadioCastAttrib("infocast_height", "70");
-    setRadioCastAttrib("infocast_width",  "30");
+    setRadioCastAttrib("infocast_width", "30");
   }
   // Handle fullscreen mode switching
-  else if(v==30)  setRadioCastAttrib("full_screen", "true");
-  else if(v==31)  setRadioCastAttrib("full_screen", "false");
-  else if(v==32)  setRadioCastAttrib("full_screen", "toggle");
+  else if (v == 30)
+    setRadioCastAttrib("full_screen", "true");
+  else if (v == 31)
+    setRadioCastAttrib("full_screen", "false");
+  else if (v == 32)
+    setRadioCastAttrib("full_screen", "toggle");
   // Handle infocast view mode switching
-  else if(v==40)  setRadioCastAttrib("infocast_viewable", "true");
-  else if(v==41)  setRadioCastAttrib("infocast_viewable", "false");
-  else if(v==42)  setRadioCastAttrib("infocast_viewable", "toggle");
+  else if (v == 40)
+    setRadioCastAttrib("infocast_viewable", "true");
+  else if (v == 41)
+    setRadioCastAttrib("infocast_viewable", "false");
+  else if (v == 42)
+    setRadioCastAttrib("infocast_viewable", "toggle");
   // Handle infocast view mode switching
-  else if(v==45)  setRadioCastAttrib("content_mode", "appcast");
-  else if(v==46)  setRadioCastAttrib("content_mode", "realmcast");
-  else if(v==47)  setRadioCastAttrib("content_mode", "toggle");
+  else if (v == 45)
+    setRadioCastAttrib("content_mode", "appcast");
+  else if (v == 46)
+    setRadioCastAttrib("content_mode", "realmcast");
+  else if (v == 47)
+    setRadioCastAttrib("content_mode", "toggle");
   // Handle infocast refresh setting
-  else if(v==50)  setRadioCastAttrib("refresh_mode", "paused");
-  else if(v==51)  setRadioCastAttrib("refresh_mode", "events");
-  else if(v==52)  setRadioCastAttrib("refresh_mode", "streaming");  
+  else if (v == 50)
+    setRadioCastAttrib("refresh_mode", "paused");
+  else if (v == 51)
+    setRadioCastAttrib("refresh_mode", "events");
+  else if (v == 52)
+    setRadioCastAttrib("refresh_mode", "streaming");
   // Handle node browser pane font size
-  else if(v==60)  setRadioCastAttrib("nodes_font_size", "xsmall");
-  else if(v==61)  setRadioCastAttrib("nodes_font_size", "small");
-  else if(v==62)  setRadioCastAttrib("nodes_font_size", "medium");
-  else if(v==63)  setRadioCastAttrib("nodes_font_size", "large");
-  else if(v==64)  setRadioCastAttrib("nodes_font_size", "xlarge");
+  else if (v == 60)
+    setRadioCastAttrib("nodes_font_size", "xsmall");
+  else if (v == 61)
+    setRadioCastAttrib("nodes_font_size", "small");
+  else if (v == 62)
+    setRadioCastAttrib("nodes_font_size", "medium");
+  else if (v == 63)
+    setRadioCastAttrib("nodes_font_size", "large");
+  else if (v == 64)
+    setRadioCastAttrib("nodes_font_size", "xlarge");
   // Handle procs browser pane font size
-  else if(v==70)  setRadioCastAttrib("procs_font_size", "xsmall");
-  else if(v==71)  setRadioCastAttrib("procs_font_size", "small");
-  else if(v==72)  setRadioCastAttrib("procs_font_size", "medium");
-  else if(v==73)  setRadioCastAttrib("procs_font_size", "large");
-  else if(v==74)  setRadioCastAttrib("procs_font_size", "xlarge");
+  else if (v == 70)
+    setRadioCastAttrib("procs_font_size", "xsmall");
+  else if (v == 71)
+    setRadioCastAttrib("procs_font_size", "small");
+  else if (v == 72)
+    setRadioCastAttrib("procs_font_size", "medium");
+  else if (v == 73)
+    setRadioCastAttrib("procs_font_size", "large");
+  else if (v == 74)
+    setRadioCastAttrib("procs_font_size", "xlarge");
   // Handle infocast browser pane font size
-  else if(v==80)  setRadioCastAttrib("infocast_font_size", "xsmall");
-  else if(v==81)  setRadioCastAttrib("infocast_font_size", "small");
-  else if(v==82)  setRadioCastAttrib("infocast_font_size", "medium");
-  else if(v==83)  setRadioCastAttrib("infocast_font_size", "large");
-  else if(v==84)  setRadioCastAttrib("infocast_font_size", "xlarge");
-  else if(v==88)  setRadioCastAttrib("infocast_font_size", "smaller");
-  else if(v==89)  setRadioCastAttrib("infocast_font_size", "bigger");
+  else if (v == 80)
+    setRadioCastAttrib("infocast_font_size", "xsmall");
+  else if (v == 81)
+    setRadioCastAttrib("infocast_font_size", "small");
+  else if (v == 82)
+    setRadioCastAttrib("infocast_font_size", "medium");
+  else if (v == 83)
+    setRadioCastAttrib("infocast_font_size", "large");
+  else if (v == 84)
+    setRadioCastAttrib("infocast_font_size", "xlarge");
+  else if (v == 88)
+    setRadioCastAttrib("infocast_font_size", "smaller");
+  else if (v == 89)
+    setRadioCastAttrib("infocast_font_size", "bigger");
   // Handle pane width relative adjustment
-  else if(v==100) setRadioCastAttrib("infocast_width", "delta:-5");
-  else if(v==101) setRadioCastAttrib("infocast_width", "delta:5");
+  else if (v == 100)
+    setRadioCastAttrib("infocast_width", "delta:-5");
+  else if (v == 101)
+    setRadioCastAttrib("infocast_width", "delta:5");
   // Handle pane width explicit setting
-  else if(v==120) setRadioCastAttrib("infocast_width", "20");
-  else if(v==125) setRadioCastAttrib("infocast_width", "25");
-  else if(v==130) setRadioCastAttrib("infocast_width", "30");
-  else if(v==135) setRadioCastAttrib("infocast_width", "35");
-  else if(v==140) setRadioCastAttrib("infocast_width", "40");
-  else if(v==145) setRadioCastAttrib("infocast_width", "45");
-  else if(v==150) setRadioCastAttrib("infocast_width", "50");
-  else if(v==155) setRadioCastAttrib("infocast_width", "55");
-  else if(v==160) setRadioCastAttrib("infocast_width", "60");
-  else if(v==165) setRadioCastAttrib("infocast_width", "65");
-  else if(v==170) setRadioCastAttrib("infocast_width", "70");
+  else if (v == 120)
+    setRadioCastAttrib("infocast_width", "20");
+  else if (v == 125)
+    setRadioCastAttrib("infocast_width", "25");
+  else if (v == 130)
+    setRadioCastAttrib("infocast_width", "30");
+  else if (v == 135)
+    setRadioCastAttrib("infocast_width", "35");
+  else if (v == 140)
+    setRadioCastAttrib("infocast_width", "40");
+  else if (v == 145)
+    setRadioCastAttrib("infocast_width", "45");
+  else if (v == 150)
+    setRadioCastAttrib("infocast_width", "50");
+  else if (v == 155)
+    setRadioCastAttrib("infocast_width", "55");
+  else if (v == 160)
+    setRadioCastAttrib("infocast_width", "60");
+  else if (v == 165)
+    setRadioCastAttrib("infocast_width", "65");
+  else if (v == 170)
+    setRadioCastAttrib("infocast_width", "70");
   // Handle InfoCast pane height relative adjustment
-  else if(v==200) setRadioCastAttrib("infocast_height", "delta:5");
-  else if(v==201) setRadioCastAttrib("infocast_height", "delta:-5");
+  else if (v == 200)
+    setRadioCastAttrib("infocast_height", "delta:5");
+  else if (v == 201)
+    setRadioCastAttrib("infocast_height", "delta:-5");
   // Handle InfoCast pane height explicit setting
-  else if(v==230) setRadioCastAttrib("infocast_height", "30");
-  else if(v==235) setRadioCastAttrib("infocast_height", "35");
-  else if(v==240) setRadioCastAttrib("infocast_height", "40");
-  else if(v==245) setRadioCastAttrib("infocast_height", "45");
-  else if(v==250) setRadioCastAttrib("infocast_height", "50");
-  else if(v==255) setRadioCastAttrib("infocast_height", "55");
-  else if(v==260) setRadioCastAttrib("infocast_height", "60");
-  else if(v==265) setRadioCastAttrib("infocast_height", "65");
-  else if(v==270) setRadioCastAttrib("infocast_height", "70");
-  else if(v==275) setRadioCastAttrib("infocast_height", "75");
-  else if(v==280) setRadioCastAttrib("infocast_height", "80");
-  else if(v==285) setRadioCastAttrib("infocast_height", "85");
-  else if(v==290) setRadioCastAttrib("infocast_height", "90");
+  else if (v == 230)
+    setRadioCastAttrib("infocast_height", "30");
+  else if (v == 235)
+    setRadioCastAttrib("infocast_height", "35");
+  else if (v == 240)
+    setRadioCastAttrib("infocast_height", "40");
+  else if (v == 245)
+    setRadioCastAttrib("infocast_height", "45");
+  else if (v == 250)
+    setRadioCastAttrib("infocast_height", "50");
+  else if (v == 255)
+    setRadioCastAttrib("infocast_height", "55");
+  else if (v == 260)
+    setRadioCastAttrib("infocast_height", "60");
+  else if (v == 265)
+    setRadioCastAttrib("infocast_height", "65");
+  else if (v == 270)
+    setRadioCastAttrib("infocast_height", "70");
+  else if (v == 275)
+    setRadioCastAttrib("infocast_height", "75");
+  else if (v == 280)
+    setRadioCastAttrib("infocast_height", "80");
+  else if (v == 285)
+    setRadioCastAttrib("infocast_height", "85");
+  else if (v == 290)
+    setRadioCastAttrib("infocast_height", "90");
 
-  else if(v==300) setRadioCastAttrib("appcast_color_scheme", "white");
-  else if(v==301) setRadioCastAttrib("appcast_color_scheme", "indigo");
-  else if(v==302) setRadioCastAttrib("appcast_color_scheme", "beige");
-  else if(v==310) setRadioCastAttrib("appcast_color_scheme", "toggle");
+  else if (v == 300)
+    setRadioCastAttrib("appcast_color_scheme", "white");
+  else if (v == 301)
+    setRadioCastAttrib("appcast_color_scheme", "indigo");
+  else if (v == 302)
+    setRadioCastAttrib("appcast_color_scheme", "beige");
+  else if (v == 310)
+    setRadioCastAttrib("appcast_color_scheme", "toggle");
 
-  else if(v==305) setRadioCastAttrib("realmcast_color_scheme", "white");
-  else if(v==306) setRadioCastAttrib("realmcast_color_scheme", "indigo");
-  else if(v==307) setRadioCastAttrib("realmcast_color_scheme", "beige");
-  else if(v==308) setRadioCastAttrib("realmcast_color_scheme", "hillside");
-  else if(v==309) setRadioCastAttrib("realmcast_color_scheme", "toggle");
+  else if (v == 305)
+    setRadioCastAttrib("realmcast_color_scheme", "white");
+  else if (v == 306)
+    setRadioCastAttrib("realmcast_color_scheme", "indigo");
+  else if (v == 307)
+    setRadioCastAttrib("realmcast_color_scheme", "beige");
+  else if (v == 308)
+    setRadioCastAttrib("realmcast_color_scheme", "hillside");
+  else if (v == 309)
+    setRadioCastAttrib("realmcast_color_scheme", "toggle");
 
-  else if(v==320) setRadioCastAttrib("realmcast_show_source", "true");
-  else if(v==321) setRadioCastAttrib("realmcast_show_source", "false");
-  else if(v==322) setRadioCastAttrib("realmcast_show_source", "toggle");
+  else if (v == 320)
+    setRadioCastAttrib("realmcast_show_source", "true");
+  else if (v == 321)
+    setRadioCastAttrib("realmcast_show_source", "false");
+  else if (v == 322)
+    setRadioCastAttrib("realmcast_show_source", "toggle");
 
-  else if(v==330) setRadioCastAttrib("realmcast_show_community", "true");
-  else if(v==331) setRadioCastAttrib("realmcast_show_community", "false");
-  else if(v==332) setRadioCastAttrib("realmcast_show_community", "toggle");
+  else if (v == 330)
+    setRadioCastAttrib("realmcast_show_community", "true");
+  else if (v == 331)
+    setRadioCastAttrib("realmcast_show_community", "false");
+  else if (v == 332)
+    setRadioCastAttrib("realmcast_show_community", "toggle");
 
-  else if(v==340) setRadioCastAttrib("realmcast_show_subscriptions", "true");
-  else if(v==341) setRadioCastAttrib("realmcast_show_subscriptions", "false");
-  else if(v==342) setRadioCastAttrib("realmcast_show_subscriptions", "toggle");
+  else if (v == 340)
+    setRadioCastAttrib("realmcast_show_subscriptions", "true");
+  else if (v == 341)
+    setRadioCastAttrib("realmcast_show_subscriptions", "false");
+  else if (v == 342)
+    setRadioCastAttrib("realmcast_show_subscriptions", "toggle");
 
-  else if(v==350) setRadioCastAttrib("realmcast_show_masked", "true");
-  else if(v==351) setRadioCastAttrib("realmcast_show_masked", "false");
-  else if(v==352) setRadioCastAttrib("realmcast_show_masked", "toggle");
+  else if (v == 350)
+    setRadioCastAttrib("realmcast_show_masked", "true");
+  else if (v == 351)
+    setRadioCastAttrib("realmcast_show_masked", "false");
+  else if (v == 352)
+    setRadioCastAttrib("realmcast_show_masked", "toggle");
 
-  else if(v==360) setRadioCastAttrib("realmcast_wrap_content", "true");
-  else if(v==361) setRadioCastAttrib("realmcast_wrap_content", "false");
-  else if(v==362) setRadioCastAttrib("realmcast_wrap_content", "toggle");
+  else if (v == 360)
+    setRadioCastAttrib("realmcast_wrap_content", "true");
+  else if (v == 361)
+    setRadioCastAttrib("realmcast_wrap_content", "false");
+  else if (v == 362)
+    setRadioCastAttrib("realmcast_wrap_content", "toggle");
 
-  else if(v==370) setRadioCastAttrib("realmcast_trunc_content", "true");
-  else if(v==371) setRadioCastAttrib("realmcast_trunc_content", "false");
-  else if(v==372) setRadioCastAttrib("realmcast_trunc_content", "toggle");
+  else if (v == 370)
+    setRadioCastAttrib("realmcast_trunc_content", "true");
+  else if (v == 371)
+    setRadioCastAttrib("realmcast_trunc_content", "false");
+  else if (v == 372)
+    setRadioCastAttrib("realmcast_trunc_content", "toggle");
 
-  else if(v==380) setRadioCastAttrib("realmcast_time_format_utc", "true");
-  else if(v==381) setRadioCastAttrib("realmcast_time_format_utc", "false");
-  else if(v==382) setRadioCastAttrib("realmcast_time_format_utc", "toggle");
-  
+  else if (v == 380)
+    setRadioCastAttrib("realmcast_time_format_utc", "true");
+  else if (v == 381)
+    setRadioCastAttrib("realmcast_time_format_utc", "false");
+  else if (v == 382)
+    setRadioCastAttrib("realmcast_time_format_utc", "toggle");
+
   resizeWidgets();
   redraw();
 }
 
-void PMV_GUI::cb_InfoCastSetting(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_InfoCastSetting_i(v);
+void PMV_GUI::cb_InfoCastSetting(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_InfoCastSetting_i(v);
 }
 
 //----------------------------------------- LeftContext
-inline void PMV_GUI::cb_LeftContext_i(unsigned int i) {  
-  if(i>=m_left_mouse_keys.size())
+inline void PMV_GUI::cb_LeftContext_i(unsigned int i) {
+  if (i >= m_left_mouse_keys.size())
     return;
   string key_str = m_left_mouse_keys[i];
   mviewer->setLeftMouseKey(key_str);
 }
 
-void PMV_GUI::cb_LeftContext(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_LeftContext_i(v);
+void PMV_GUI::cb_LeftContext(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_LeftContext_i(v);
 }
 
 //----------------------------------------- RightContext
-inline void PMV_GUI::cb_RightContext_i(unsigned int i) {  
-  if(i>=m_right_mouse_keys.size())
+inline void PMV_GUI::cb_RightContext_i(unsigned int i) {
+  if (i >= m_right_mouse_keys.size())
     return;
   string key_str = m_right_mouse_keys[i];
   mviewer->setRightMouseKey(key_str);
 }
 
-void PMV_GUI::cb_RightContext(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_RightContext_i(v);
+void PMV_GUI::cb_RightContext(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_RightContext_i(v);
 }
 
 //----------------------------------------- Reference
-inline void PMV_GUI::cb_Reference_i(unsigned int i) {  
-  if(i>=m_reference_tags.size())
+inline void PMV_GUI::cb_Reference_i(unsigned int i) {
+  if (i >= m_reference_tags.size())
     return;
   string str = m_reference_tags[i];
   mviewer->setParam("reference_tag", str);
 }
 
-void PMV_GUI::cb_Reference(Fl_Widget* o, unsigned int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_Reference_i(v);
+void PMV_GUI::cb_Reference(Fl_Widget *o, unsigned int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_Reference_i(v);
 }
 
 //----------------------------------------- FilterOut
-inline void PMV_GUI::cb_FilterOut_i(int i) {  
-  if(i >= (int)(m_filter_tags.size()))
+inline void PMV_GUI::cb_FilterOut_i(int i) {
+  if (i >= (int)(m_filter_tags.size()))
     return;
-  if(i < 0)
+  if (i < 0)
     mviewer->setParam("filter_out_tag", "all");
   else {
     string str = m_filter_tags[i];
     mviewer->setParam("filter_out_tag", str);
-    if(m_repo)
+    if (m_repo)
       m_repo->removeNode(str);
     updateAppCastNodes(true);
   }
 }
 
-void PMV_GUI::cb_FilterOut(Fl_Widget* o, int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_FilterOut_i(v);
+void PMV_GUI::cb_FilterOut(Fl_Widget *o, int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_FilterOut_i(v);
 }
 
-
 //----------------------------------------- cb_DeleteActiveNode
-inline void PMV_GUI::cb_DeleteActiveNode_i(int i) {  
-  if(!m_repo)
+inline void PMV_GUI::cb_DeleteActiveNode_i(int i) {
+  if (!m_repo)
     return;
-  if(i==0) {
+  if (i == 0) {
     string active_node = m_repo->getCurrentNode();
-    if(active_node == "")
+    if (active_node == "")
       return;
-  
+
     mviewer->setParam("filter_out_tag", active_node);
     m_repo->removeNode(active_node);
     updateAppCastNodes(true);
     updateAppCastProcs(true);
     m_clear_stale_timestamp = m_curr_time;
   }
-  if(i==1)
+  if (i == 1)
     clearStaleVehicles(true);
 }
 
-void PMV_GUI::cb_DeleteActiveNode(Fl_Widget* o, int v) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_DeleteActiveNode_i(v);
+void PMV_GUI::cb_DeleteActiveNode(Fl_Widget *o, int v) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_DeleteActiveNode_i(v);
 }
 
 //----------------------------------------- cb_CommandGUI
-inline void PMV_GUI::cb_CommandGUI_i()
-{
-  if(m_cmd_gui) {
-    if(m_cmd_gui->isVisible()) {
+inline void PMV_GUI::cb_CommandGUI_i() {
+  if (m_cmd_gui) {
+    if (m_cmd_gui->isVisible()) {
       m_cmd_gui->makeTop();
       return;
-    }
-    else
-      delete(m_cmd_gui);
+    } else
+      delete (m_cmd_gui);
   }
 
-  if(m_cmd_folio.size() == 0)
+  if (m_cmd_folio.size() == 0)
     return;
-  
-  int  wid = m_cmd_gui_start_wid;
-  int  hgt = m_cmd_gui_start_hgt;
+
+  int wid = m_cmd_gui_start_wid;
+  int hgt = m_cmd_gui_start_hgt;
   bool posts = m_cmd_gui_start_show_posts;
-  
+
   UCMD_GUI *cmd_gui = new UCMD_GUI(wid, hgt, "Commander", posts);
   cmd_gui->setCommandFolio(m_cmd_folio);
   cmd_gui->setButPostCount(m_cmd_gui_start_bpost_cnt);
@@ -1334,73 +1433,68 @@ inline void PMV_GUI::cb_CommandGUI_i()
 
   vector<string> command_report = m_cmd_summary.getCommandReport();
   m_cmd_gui->setPostSummary(command_report);
-  
+
   cout << "Launching Command GUI" << endl;
   m_cmd_folio.print();
 }
 
-void PMV_GUI::cb_CommandGUI(Fl_Widget* o) {
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_CommandGUI_i();
+void PMV_GUI::cb_CommandGUI(Fl_Widget *o) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_CommandGUI_i();
 }
-
 
 //----------------------------------------------------------
 // Procedure: clearStaleVehicles()
 
-bool PMV_GUI::clearStaleVehicles(bool force) 
-{
-  if(!m_repo)
-    return(false);
+bool PMV_GUI::clearStaleVehicles(bool force) {
+  if (!m_repo)
+    return (false);
 
   double stale_report_thresh = mviewer->getStaleReportThresh();
   double stale_remove_thresh = mviewer->getStaleRemoveThresh();
 
-  if(!force && (stale_remove_thresh < 0))
-    return(false);
+  if (!force && (stale_remove_thresh < 0))
+    return (false);
 
   double total_thresh = stale_report_thresh + stale_remove_thresh;
-  if(force)
+  if (force)
     total_thresh = stale_report_thresh;
 
   vector<string> vnames = mviewer->getStaleVehicles(total_thresh);
 
-  for(unsigned int i=0; i<vnames.size(); i++) {
+  for (unsigned int i = 0; i < vnames.size(); i++) {
     mviewer->setParam("filter_out_tag", vnames[i]);
     m_repo->removeNode(vnames[i]);
     updateAppCastNodes(true);
     updateAppCastProcs(true);
   }
 
-  if(vnames.size() > 0)
+  if (vnames.size() > 0)
     m_clear_stale_timestamp = m_curr_time;
-  return(true);
+  return (true);
 }
-
-
 
 //----------------------------------------------------
 // Procedure: cb_SelectAppCastNode_i()
 
-inline void PMV_GUI::cb_SelectAppCastNode_i() 
-{
+inline void PMV_GUI::cb_SelectAppCastNode_i() {
   vector<string> nodes = m_repo->getCurrentNodes();
-  if(nodes.size() == 0)
+  if (nodes.size() == 0)
     return;
 
   int ix = ((Fl_Browser *)m_brw_nodes)->value();
 
   // If the user clicks below the list of items, treat as if the
   // last item were clicked. Figure out its index and set it.
-  if(ix == 0) {
+  if (ix == 0) {
     ix = 2 + (int)(nodes.size()); // Add 2 due to table header lines
-    m_brw_nodes->select(ix,1); 
+    m_brw_nodes->select(ix, 1);
   }
 
   // If the user clicks one of the two header lines, treat this
   // as a click of the first item in the list.
-  if(ix <= 2) {
+  if (ix <= 2) {
     ix = 3;
-    m_brw_nodes->select(ix,1);
+    m_brw_nodes->select(ix, 1);
   }
 
   unsigned int node_ix = ix - 3;
@@ -1415,38 +1509,35 @@ inline void PMV_GUI::cb_SelectAppCastNode_i()
 //----------------------------------------------------
 // Procedure: cb_SelectAppCastNode()
 
-void PMV_GUI::cb_SelectAppCastNode(Fl_Widget* o, long) 
-{
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_SelectAppCastNode_i();
+void PMV_GUI::cb_SelectAppCastNode(Fl_Widget *o, long) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_SelectAppCastNode_i();
 }
-
 
 //----------------------------------------------------
 // Procedure: cb_SelectAppCastProci()
 
-inline void PMV_GUI::cb_SelectAppCastProc_i() 
-{
+inline void PMV_GUI::cb_SelectAppCastProc_i() {
   vector<string> procs = m_repo->getCurrentProcs();
-  if(procs.size() == 0)
+  if (procs.size() == 0)
     return;
 
   int ix = ((Fl_Browser *)m_brw_procs)->value();
 
   // If the user clicks below the list of items, treat as if the
   // last item were clicked. Figure out its index and set it.
-  if(ix == 0) {
+  if (ix == 0) {
     ix = 2 + (int)(procs.size()); // Add 2 due to table header lines
-    m_brw_procs->select(ix,1);
-  }
-  
-  // If the user clicks one of the two header lines, treat this
-  // as a click of the first item in the list.
-  if(ix <= 2) {
-    ix = 3;
-    m_brw_procs->select(ix,1);
+    m_brw_procs->select(ix, 1);
   }
 
-  unsigned int proc_ix = ix - 3;  
+  // If the user clicks one of the two header lines, treat this
+  // as a click of the first item in the list.
+  if (ix <= 2) {
+    ix = 3;
+    m_brw_procs->select(ix, 1);
+  }
+
+  unsigned int proc_ix = ix - 3;
   m_repo->setCurrentProc(procs[proc_ix]);
 
   updateAppCastProcs();
@@ -1456,19 +1547,16 @@ inline void PMV_GUI::cb_SelectAppCastProc_i()
 //----------------------------------------------------
 // Procedure: cb_SelectAppCastProc()
 
-void PMV_GUI::cb_SelectAppCastProc(Fl_Widget* o, long) 
-{
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_SelectAppCastProc_i();
+void PMV_GUI::cb_SelectAppCastProc(Fl_Widget *o, long) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_SelectAppCastProc_i();
 }
-
 
 //----------------------------------------------------
 // Procedure: cb_SelectRealmCastNode_i()
 
-inline void PMV_GUI::cb_SelectRealmCastNode_i() 
-{
+inline void PMV_GUI::cb_SelectRealmCastNode_i() {
   vector<string> nodes = m_rc_repo->getCurrentNodes();
-  if(nodes.size() == 0)
+  if (nodes.size() == 0)
     return;
 
   vector<string> cluster_keys = m_rc_repo->getClusterKeys();
@@ -1478,30 +1566,30 @@ inline void PMV_GUI::cb_SelectRealmCastNode_i()
 
   // If the user clicked one of the two header lines, treat this
   // as a click of the first item in the list.
-  if(ix <= 2) {
+  if (ix <= 2) {
     ix = 3;
-    m_rc_brw_nodes->select(ix,1);
+    m_rc_brw_nodes->select(ix, 1);
   }
 
   string new_node = "error";
-  
+
   unsigned int node_ix = ix - 3;
-  if(node_ix < nodes.size())
+  if (node_ix < nodes.size())
     new_node = nodes[node_ix];
 
-  else if(cluster_keys.size() > 0) {
-    if(ix == (int)(3 + nodes.size())) {
+  else if (cluster_keys.size() > 0) {
+    if (ix == (int)(3 + nodes.size())) {
       ix = 4 + nodes.size();
-      m_rc_brw_nodes->select(ix,1);
+      m_rc_brw_nodes->select(ix, 1);
     }
-    if(ix >= (int)((nodes.size() + 4))) {
-      unsigned int key_ix = ix - (nodes.size() +4);
+    if (ix >= (int)((nodes.size() + 4))) {
+      unsigned int key_ix = ix - (nodes.size() + 4);
       new_node = cluster_keys[key_ix];
       m_rc_repo->setForceRefreshWC();
     }
   }
 
-  if(new_node == "error")
+  if (new_node == "error")
     return;
 
   m_rc_repo->setCurrentNode(new_node);
@@ -1512,42 +1600,38 @@ inline void PMV_GUI::cb_SelectRealmCastNode_i()
   updateXY();
 }
 
-
 //----------------------------------------------------
 // Procedure: cb_SelectRealmCastNode()
 
-void PMV_GUI::cb_SelectRealmCastNode(Fl_Widget* o, long) 
-{
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_SelectRealmCastNode_i();
+void PMV_GUI::cb_SelectRealmCastNode(Fl_Widget *o, long) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_SelectRealmCastNode_i();
 }
-
 
 //----------------------------------------------------
 // Procedure: cb_SelectRealmCastProci()
 
-inline void PMV_GUI::cb_SelectRealmCastProc_i() 
-{
+inline void PMV_GUI::cb_SelectRealmCastProc_i() {
   vector<string> procs = m_rc_repo->getCurrentProcs();
-  if(procs.size() == 0)
+  if (procs.size() == 0)
     return;
 
   int ix = ((Fl_Browser *)m_rc_brw_procs)->value();
 
   // If the user clicks below the list of items, treat as if the
   // last item were clicked. Figure out its index and set it.
-  if(ix == 0) {
+  if (ix == 0) {
     ix = 2 + (int)(procs.size()); // Add 2 due to table header lines
-    m_rc_brw_procs->select(ix,1);
-  }
-  
-  // If the user clicks one of the two header lines, treat this
-  // as a click of the first item in the list.
-  if(ix <= 2) {
-    ix = 3;
-    m_rc_brw_procs->select(ix,1);
+    m_rc_brw_procs->select(ix, 1);
   }
 
-  unsigned int proc_ix = ix - 3;  
+  // If the user clicks one of the two header lines, treat this
+  // as a click of the first item in the list.
+  if (ix <= 2) {
+    ix = 3;
+    m_rc_brw_procs->select(ix, 1);
+  }
+
+  unsigned int proc_ix = ix - 3;
   m_rc_repo->setCurrentProc(procs[proc_ix]);
 
   updateRealmCastProcs();
@@ -1557,39 +1641,34 @@ inline void PMV_GUI::cb_SelectRealmCastProc_i()
 //----------------------------------------------------
 // Procedure: cb_SelectRealmCastProc()
 
-void PMV_GUI::cb_SelectRealmCastProc(Fl_Widget* o, long) 
-{
-  ((PMV_GUI*)(o->parent()->user_data()))->cb_SelectRealmCastProc_i();
+void PMV_GUI::cb_SelectRealmCastProc(Fl_Widget *o, long) {
+  ((PMV_GUI *)(o->parent()->user_data()))->cb_SelectRealmCastProc_i();
 }
-
 
 //-------------------------------------------------------------------
 // Procedure: getPendingVar()
 
-string PMV_GUI::getPendingVar(unsigned int ix)
-{
-  if(ix < m_pending_vars.size())
-    return(m_pending_vars[ix]);
+string PMV_GUI::getPendingVar(unsigned int ix) {
+  if (ix < m_pending_vars.size())
+    return (m_pending_vars[ix]);
   else
-    return("");
+    return ("");
 }
 
 //-------------------------------------------------------------------
 // Procedure: getPendingVal()
 
-string PMV_GUI::getPendingVal(unsigned int ix)
-{
-  if(ix < m_pending_vals.size())
-    return(m_pending_vals[ix]);
+string PMV_GUI::getPendingVal(unsigned int ix) {
+  if (ix < m_pending_vals.size())
+    return (m_pending_vals[ix]);
   else
-    return("");
+    return ("");
 }
 
 //-------------------------------------------------------------------
 // Procedure: clearPending()
 
-void PMV_GUI::clearPending()
-{
+void PMV_GUI::clearPending() {
   m_pending_vars.clear();
   m_pending_vals.clear();
 }
@@ -1597,8 +1676,7 @@ void PMV_GUI::clearPending()
 //-------------------------------------------------------------------
 // Procedure: pushPending()
 
-void PMV_GUI::pushPending(string var, string val)
-{
+void PMV_GUI::pushPending(string var, string val) {
   m_pending_vars.push_back(var);
   m_pending_vals.push_back(val);
 }
@@ -1608,117 +1686,112 @@ void PMV_GUI::pushPending(string var, string val)
 //   Returns: false if no variable added
 //            true if the given variable is added
 
-bool PMV_GUI::addScopeVariable(string varname)
-{
+bool PMV_GUI::addScopeVariable(string varname) {
   // We dont allow white space in MOOS variables
-  if(strContainsWhite(varname))
-    return(false);
+  if (strContainsWhite(varname))
+    return (false);
 
   // If the varname is already added, just return false now.
   unsigned int i, vsize = m_scope_vars.size();
-  for(i=0; i<vsize; i++) {
-    if(varname == m_scope_vars[i])
-      return(false);
+  for (i = 0; i < vsize; i++) {
+    if (varname == m_scope_vars[i])
+      return (false);
   }
 
   // The index/ordering in the m_scope_vars vector is important. It is
   // correlated to the cb_Scope callback index in each of the new menu
-  // items. The zero'th index is meaningless since zero is handled 
-  // as a special case in cb_Scope. 
-  if(vsize == 0) {
+  // items. The zero'th index is meaningless since zero is handled
+  // as a special case in cb_Scope.
+  if (vsize == 0) {
     m_scope_vars.push_back("_add_moos_var_");
     m_scope_vars.push_back("_previous_scope_var_");
     m_scope_vars.push_back("_cycle_scope_var_");
-    m_menubar->add("MOOS-Scope/Toggle-Previous-Scope", '/', 
-	      (Fl_Callback*)PMV_GUI::cb_Scope, (void*)1, FL_MENU_DIVIDER);
-    m_menubar->add("MOOS-Scope/Cycle-Scope-Variables", FL_CTRL+'/', 
-	      (Fl_Callback*)PMV_GUI::cb_Scope, (void*)2, FL_MENU_DIVIDER);
+    m_menubar->add("MOOS-Scope/Toggle-Previous-Scope", '/',
+                   (Fl_Callback *)PMV_GUI::cb_Scope, (void *)1,
+                   FL_MENU_DIVIDER);
+    m_menubar->add("MOOS-Scope/Cycle-Scope-Variables", FL_CTRL + '/',
+                   (Fl_Callback *)PMV_GUI::cb_Scope, (void *)2,
+                   FL_MENU_DIVIDER);
   }
 
   m_scope_vars.push_back(varname);
-  uintptr_t index = m_scope_vars.size()-1;
-  
+  uintptr_t index = m_scope_vars.size() - 1;
+
   string label = "MOOS-Scope/";
   label += (truncString(varname, 25, "middle"));
-  m_menubar->add(label.c_str(), 0, 
-	    (Fl_Callback*)PMV_GUI::cb_Scope, (void*)index, 0);
-  
+  m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_Scope,
+                 (void *)index, 0);
+
   m_menubar->redraw();
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------------
 // Procedure: addMousePoke()
 
-bool PMV_GUI::addMousePoke(string side, string key, string vardata_pair)
-{
-  if(!mviewer)
-    return(false);
-  if(key == "error")
-    return(false);
+bool PMV_GUI::addMousePoke(string side, string key, string vardata_pair) {
+  if (!mviewer)
+    return (false);
+  if (key == "error")
+    return (false);
 
   side = tolower(side);
 
-  if(side == "left") {
+  if (side == "left") {
     mviewer->addMousePoke(side, key, vardata_pair);
-    if(!vectorContains(m_left_mouse_keys, key)) {
-      if(m_left_mouse_keys.size() == 0) {
-	m_left_mouse_keys.push_back("no-action");
-	m_menubar->add("Mouse-Context/Left/no-action", 0, 
-		  (Fl_Callback*)PMV_GUI::cb_LeftContext, (void*)0, 
-		  FL_MENU_RADIO);
+    if (!vectorContains(m_left_mouse_keys, key)) {
+      if (m_left_mouse_keys.size() == 0) {
+        m_left_mouse_keys.push_back("no-action");
+        m_menubar->add("Mouse-Context/Left/no-action", 0,
+                       (Fl_Callback *)PMV_GUI::cb_LeftContext, (void *)0,
+                       FL_MENU_RADIO);
       }
       m_left_mouse_keys.push_back(key);
-      uintptr_t index = m_left_mouse_keys.size()-1;
+      uintptr_t index = m_left_mouse_keys.size() - 1;
       string label = "Mouse-Context/Left/";
       label += (truncString(key, 40, "middle"));
 
       // If this was the first left context mode, make it the active
-      if(m_left_mouse_keys.size() == 2) {
-	mviewer->setLeftMouseKey(key);
-	m_menubar->add(label.c_str(), 0, 
-		  (Fl_Callback*)PMV_GUI::cb_LeftContext, 
-		  (void*)index, FL_MENU_RADIO|FL_MENU_VALUE);
-      }
-      else {
-	m_menubar->add(label.c_str(), 0, (Fl_Callback*)PMV_GUI::cb_LeftContext, 
-		       (void*)index, FL_MENU_RADIO);
+      if (m_left_mouse_keys.size() == 2) {
+        mviewer->setLeftMouseKey(key);
+        m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_LeftContext,
+                       (void *)index, FL_MENU_RADIO | FL_MENU_VALUE);
+      } else {
+        m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_LeftContext,
+                       (void *)index, FL_MENU_RADIO);
       }
       m_menubar->redraw();
     }
-  }
-  else if(side == "right") {
+  } else if (side == "right") {
     mviewer->addMousePoke(side, key, vardata_pair);
-    if(!vectorContains(m_right_mouse_keys, key)) {
-      if(m_right_mouse_keys.size() == 0) {
-	m_right_mouse_keys.push_back("no-action");
-	m_menubar->add("Mouse-Context/Right/no-action", 0, 
-		  (Fl_Callback*)PMV_GUI::cb_RightContext, (void*)0, 
-		  FL_MENU_RADIO);
+    if (!vectorContains(m_right_mouse_keys, key)) {
+      if (m_right_mouse_keys.size() == 0) {
+        m_right_mouse_keys.push_back("no-action");
+        m_menubar->add("Mouse-Context/Right/no-action", 0,
+                       (Fl_Callback *)PMV_GUI::cb_RightContext, (void *)0,
+                       FL_MENU_RADIO);
       }
       m_right_mouse_keys.push_back(key);
-      uintptr_t index = m_right_mouse_keys.size()-1;
+      uintptr_t index = m_right_mouse_keys.size() - 1;
       string label = "Mouse-Context/Right/";
       label += (truncString(key, 40, "middle"));
       // If this was the first right context mode, make it the active
-      if(m_right_mouse_keys.size() == 2) {
-	mviewer->setRightMouseKey(key);
-	m_menubar->add(label.c_str(), 0, 
-		  (Fl_Callback*)PMV_GUI::cb_RightContext, 
-		  (void*)index, FL_MENU_RADIO|FL_MENU_VALUE);
-      }
-      else {
-	m_menubar->add(label.c_str(), 0, 
-		  (Fl_Callback*)PMV_GUI::cb_RightContext, 
-		  (void*)index, FL_MENU_RADIO);
+      if (m_right_mouse_keys.size() == 2) {
+        mviewer->setRightMouseKey(key);
+        m_menubar->add(label.c_str(), 0,
+                       (Fl_Callback *)PMV_GUI::cb_RightContext, (void *)index,
+                       FL_MENU_RADIO | FL_MENU_VALUE);
+      } else {
+        m_menubar->add(label.c_str(), 0,
+                       (Fl_Callback *)PMV_GUI::cb_RightContext, (void *)index,
+                       FL_MENU_RADIO);
       }
       m_menubar->redraw();
     }
-  }
-  else  // side must be either left or right
-    return(false);
+  } else // side must be either left or right
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------------
@@ -1726,126 +1799,121 @@ bool PMV_GUI::addMousePoke(string side, string key, string vardata_pair)
 //      NOte: Add the vehicle with the given name as one of the possible
 //            reference vehicles. When none are given the datum is the
 //            the default reference point. So when the first vehicle is
-//            given, the datum is added as one of the menu choices. 
+//            given, the datum is added as one of the menu choices.
 
-bool PMV_GUI::addReferenceVehicle(string vehicle_name)
-{
+bool PMV_GUI::addReferenceVehicle(string vehicle_name) {
   // First check the current list of vehicles, ignore duplicates
   unsigned int i, vsize = m_reference_tags.size();
-  for(i=0; i<vsize; i++) {
-    if(vehicle_name == m_reference_tags[i])
-      return(false);
+  for (i = 0; i < vsize; i++) {
+    if (vehicle_name == m_reference_tags[i])
+      return (false);
   }
-  
+
   // If the list is currently empty, create the "datum" as a choice first.
-  if(vsize == 0) {
+  if (vsize == 0) {
     m_reference_tags.push_back("bearing-absolute");
     string label = "ReferencePoint/Bearing-Absolute";
-    m_menubar->add(label.c_str(), FL_CTRL+'a', 
-	      (Fl_Callback*)PMV_GUI::cb_Reference, 
-	      (void*)0, FL_MENU_RADIO|FL_MENU_VALUE);
+    m_menubar->add(label.c_str(), FL_CTRL + 'a',
+                   (Fl_Callback *)PMV_GUI::cb_Reference, (void *)0,
+                   FL_MENU_RADIO | FL_MENU_VALUE);
     m_reference_tags.push_back("bearing-relative");
     label = "ReferencePoint/Bearing-Relative";
-    m_menubar->add(label.c_str(), FL_CTRL+'r', 
-	      (Fl_Callback*)PMV_GUI::cb_Reference, 
-	      (void*)1, FL_MENU_DIVIDER|FL_MENU_RADIO);
+    m_menubar->add(label.c_str(), FL_CTRL + 'r',
+                   (Fl_Callback *)PMV_GUI::cb_Reference, (void *)1,
+                   FL_MENU_DIVIDER | FL_MENU_RADIO);
 
     m_reference_tags.push_back("datum");
     label = "ReferencePoint/Datum";
-    m_menubar->add(label.c_str(), 0, (Fl_Callback*)PMV_GUI::cb_Reference, 
-	      (void*)2, FL_MENU_RADIO|FL_MENU_VALUE);
+    m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_Reference,
+                   (void *)2, FL_MENU_RADIO | FL_MENU_VALUE);
   }
 
   // Add the new vehicle name as a menu choice
   m_reference_tags.push_back(vehicle_name);
-  intptr_t index = m_reference_tags.size()-1;
+  intptr_t index = m_reference_tags.size() - 1;
   string label = "ReferencePoint/";
   label += (truncString(vehicle_name, 25, "middle"));
-  m_menubar->add(label.c_str(), 0, 
-	    (Fl_Callback*)PMV_GUI::cb_Reference, (void*)index, FL_MENU_RADIO);
+  m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_Reference,
+                 (void *)index, FL_MENU_RADIO);
 
   m_menubar->redraw();
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------------
 // Procedure: addFilterVehicle()
 
-bool PMV_GUI::addFilterVehicle(string vehicle_name)
-{
+bool PMV_GUI::addFilterVehicle(string vehicle_name) {
   // First check the current list of vehicles, ignore duplicates
   unsigned int i, vsize = m_filter_tags.size();
-  for(i=0; i<vsize; i++) {
-    if(vehicle_name == m_filter_tags[i])
-      return(false);
+  for (i = 0; i < vsize; i++) {
+    if (vehicle_name == m_filter_tags[i])
+      return (false);
   }
 
   // Add the new vehicle name as a menu choice
   m_filter_tags.push_back(vehicle_name);
-  uintptr_t index = m_filter_tags.size()-1;
+  uintptr_t index = m_filter_tags.size() - 1;
   string label = "Vehicles/ClearHistory/";
   label += (truncString(vehicle_name, 25, "middle"));
-  m_menubar->add(label.c_str(), 0, 
-	    (Fl_Callback*)PMV_GUI::cb_FilterOut, (void*)index, 0);
+  m_menubar->add(label.c_str(), 0, (Fl_Callback *)PMV_GUI::cb_FilterOut,
+                 (void *)index, 0);
 
   m_menubar->redraw();
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------------
 // Procedure: removeFilterVehicle()
 
-void PMV_GUI::removeFilterVehicle(string vehicle_name)
-{
+void PMV_GUI::removeFilterVehicle(string vehicle_name) {
   // First check the current list of vehicles, ignore duplicates
   unsigned int i, vsize = m_filter_tags.size();
-  for(i=0; i<vsize; i++) {
-    if(vehicle_name == m_filter_tags[i])
-      m_menubar->remove(i+1);
+  for (i = 0; i < vsize; i++) {
+    if (vehicle_name == m_filter_tags[i])
+      m_menubar->remove(i + 1);
   }
 
   m_menubar->redraw();
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: closeCmdGUI()
 
-void PMV_GUI::closeCmdGUI()
-{
-  if(m_cmd_gui) {
+void PMV_GUI::closeCmdGUI() {
+  if (m_cmd_gui) {
     int wid = m_cmd_gui->getWid();
     int hgt = m_cmd_gui->getHgt();
 
     m_cmd_gui_start_wid = wid;
     m_cmd_gui_start_hgt = hgt;
-    m_cmd_gui_start_bpost_cnt  = m_cmd_gui->getButPostCount();
-    m_cmd_gui_start_cpost_cnt  = m_cmd_gui->getCmdPostCount();
+    m_cmd_gui_start_bpost_cnt = m_cmd_gui->getButPostCount();
+    m_cmd_gui_start_cpost_cnt = m_cmd_gui->getCmdPostCount();
     m_cmd_gui_start_show_posts = m_cmd_gui->getShowPosts();
 
-    delete(m_cmd_gui);
+    delete (m_cmd_gui);
     m_cmd_gui = 0;
   }
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateRealmCastNodes()
 
-void PMV_GUI::updateRealmCastNodes(bool clear) 
-{
-  if(!m_rc_repo)
+void PMV_GUI::updateRealmCastNodes(bool clear) {
+  if (!m_rc_repo)
     return;
 
-  vector<string> nodes  = m_rc_repo->getCurrentNodes();
-  if(nodes.size() == 0)
+  vector<string> nodes = m_rc_repo->getCurrentNodes();
+  if (nodes.size() == 0)
     return;
 
   // Part 1A: build the table which will be the items in the browser.
   // Note which line in the table corresponds to the "current_node".
-  ACTable actab(2,2);
+  ACTable actab(2, 2);
   actab << "Node | RC";
   actab.addHeaderLines();
-  
-  for(unsigned int i=0; i<nodes.size(); i++) {
+
+  for (unsigned int i = 0; i < nodes.size(); i++) {
     string node = nodes[i];
     unsigned int rc_cnt = m_rc_repo->rctree().getNodeRealmCastCount(node);
     actab << node;
@@ -1854,74 +1922,73 @@ void PMV_GUI::updateRealmCastNodes(bool clear)
 
   // Part 1B: Add the cluster keys if there are any
   vector<string> cluster_keys = m_rc_repo->getClusterKeys();
-  if(cluster_keys.size() > 0) {
+  if (cluster_keys.size() > 0) {
     actab.addHeaderLines();
-    for(unsigned int i=0; i<cluster_keys.size(); i++) {
+    for (unsigned int i = 0; i < cluster_keys.size(); i++) {
       string key = cluster_keys[i];
       unsigned int cluster_wcast_cnt = m_rc_repo->getWatchCastCount(key);
       actab << key << cluster_wcast_cnt;
     }
   }
-  
+
   // Part 2: Build up the browser lines from the previously gen'ed table.
-  if(clear)
+  if (clear)
     m_rc_brw_nodes->clear();
 
   vector<string> browser_lines = actab.getTableOutput();
 
-  string current_node    = m_rc_repo->getCurrentNode();
+  string current_node = m_rc_repo->getCurrentNode();
   string current_cluster = m_rc_repo->getCurrClusterKey();
 
   int brw_item_index = 3;
-  for(unsigned int j=0; j<browser_lines.size(); j++) {
+  for (unsigned int j = 0; j < browser_lines.size(); j++) {
     string line = browser_lines[j];
-    if(clear)
+    if (clear)
       m_rc_brw_nodes->add(line.c_str());
     else
-      m_rc_brw_nodes->text(j+1, line.c_str());
+      m_rc_brw_nodes->text(j + 1, line.c_str());
 
-    if(strBegins(line, current_cluster))
-      brw_item_index = j+1;
-    else if(strBegins(line, current_node))
-      brw_item_index = j+1;
+    if (strBegins(line, current_cluster))
+      brw_item_index = j + 1;
+    else if (strBegins(line, current_node))
+      brw_item_index = j + 1;
   }
 
-  if(clear)
+  if (clear)
     m_rc_brw_nodes->select(brw_item_index, 1);
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateAppCastNodes()
 
-void PMV_GUI::updateAppCastNodes(bool clear) 
-{
-  if(!m_repo)
+void PMV_GUI::updateAppCastNodes(bool clear) {
+  if (!m_repo)
     return;
 
-  vector<string> nodes  = m_repo->getCurrentNodes();
+  vector<string> nodes = m_repo->getCurrentNodes();
   unsigned int i, vsize = nodes.size();
 
-  if(vsize == 0)
+  if (vsize == 0)
     return;
 
-  int    curr_brw_ix  = ((Fl_Browser *)m_brw_nodes)->value();
+  int curr_brw_ix = ((Fl_Browser *)m_brw_nodes)->value();
   string current_node = m_repo->getCurrentNode();
 
   vector<bool> node_has_cfg_warning(vsize, false);
   vector<bool> node_has_run_warning(vsize, false);
-  
+
   // Part one: build the table which will be the items in the browser.
   // Note which line in the table corresponds to the "current_node".
-  ACTable actab(4,2);
+  ACTable actab(4, 2);
   actab << "Node | AC | CW | RW";
   actab.addHeaderLines();
-  
-  int brw_item_index   = 0;   // Zero indicates current_node not found
-  for(i=0; i<vsize; i++) {
+
+  int brw_item_index = 0; // Zero indicates current_node not found
+  for (i = 0; i < vsize; i++) {
     string node = nodes[i];
 
-    if(current_node == node)  // +1 because browser indices go 1-N
-      brw_item_index = i+3;   // +2 because of the two header lines
+    if (current_node == node) // +1 because browser indices go 1-N
+      brw_item_index = i + 3; // +2 because of the two header lines
 
     unsigned int apc_cnt, cfg_cnt, run_cnt;
     apc_cnt = m_repo->actree().getNodeAppCastCount(node);
@@ -1933,158 +2000,154 @@ void PMV_GUI::updateAppCastNodes(bool clear)
     actab << cfg_cnt;
     actab << run_cnt;
 
-    if(cfg_cnt > 0)
+    if (cfg_cnt > 0)
       node_has_cfg_warning[i] = true;
-    if(run_cnt > 0)
+    if (run_cnt > 0)
       node_has_run_warning[i] = true;
   }
 
   // Part 2: Build up the browser lines from the previously gen'ed table.
-  if(clear)
+  if (clear)
     m_brw_nodes->clear();
-  
+
   double stale_thresh = mviewer->getStaleReportThresh();
   vector<string> stale_names = mviewer->getStaleVehicles(stale_thresh);
 
-  unsigned int   curr_brw_size = m_brw_nodes->size();
+  unsigned int curr_brw_size = m_brw_nodes->size();
   vector<string> browser_lines = actab.getTableOutput();
 
-  for(unsigned int j=0; j<browser_lines.size(); j++) {
+  for (unsigned int j = 0; j < browser_lines.size(); j++) {
     string line = browser_lines[j];
-    if(j>=2) {
+    if (j >= 2) {
 
       string line_copy = line;
-      string node  = biteString(line_copy, ' ');
-      bool   stale = vectorContains(stale_names, node);
-      
-      if(stale) // Draw as yellow if the node is stale
-      	line = "@B" + uintToString(m_color_stlw) + line;
-      
-      else if(node_has_run_warning[j-2])
-	line = "@B" + uintToString(m_color_runw) + line;
-      else if(node_has_cfg_warning[j-2])
-	line = "@B" + uintToString(m_color_cfgw) + line;
+      string node = biteString(line_copy, ' ');
+      bool stale = vectorContains(stale_names, node);
+
+      if (stale) // Draw as yellow if the node is stale
+        line = "@B" + uintToString(m_color_stlw) + line;
+
+      else if (node_has_run_warning[j - 2])
+        line = "@B" + uintToString(m_color_runw) + line;
+      else if (node_has_cfg_warning[j - 2])
+        line = "@B" + uintToString(m_color_cfgw) + line;
     }
-    if((j+1) > curr_brw_size)
+    if ((j + 1) > curr_brw_size)
       m_brw_nodes->add(line.c_str());
     else
-      m_brw_nodes->text(j+1, line.c_str());
+      m_brw_nodes->text(j + 1, line.c_str());
   }
 
   // Part 3: Possibly select an item in the browser under rare circumstances
   // If we've cleared the nodes to build this, or if no userclicks prior
   // to this call, set the browser select to be the current_node.
-  if(clear || (curr_brw_ix==0))
+  if (clear || (curr_brw_ix == 0))
     m_brw_nodes->select(brw_item_index, 1);
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateRealmCastProcs()
 
-void PMV_GUI::updateRealmCastProcs(bool clear) 
-{
+void PMV_GUI::updateRealmCastProcs(bool clear) {
   string curr_cluster_key = m_rc_repo->getCurrClusterKey();
 
-  if(curr_cluster_key != "")
+  if (curr_cluster_key != "")
     updateRealmCastProcsWC(clear);
   else
     updateRealmCastProcsRC(clear);
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateRealmCastProcsWC()
 
-void PMV_GUI::updateRealmCastProcsWC(bool clear) 
-{
-  if(!m_rc_repo)
+void PMV_GUI::updateRealmCastProcsWC(bool clear) {
+  if (!m_rc_repo)
     return;
 
   string curr_cluster_key = m_rc_repo->getCurrClusterKey();
   string curr_cluster_var = m_rc_repo->getCurrClusterVar();
-  if(curr_cluster_key == "")
+  if (curr_cluster_key == "")
     return;
-  
+
   vector<string> vars = m_rc_repo->getClusterVars(curr_cluster_key);
-  if(vars.size() == 0)
+  if (vars.size() == 0)
     return;
 
   int curr_brw_ix = ((Fl_Browser *)m_rc_brw_procs)->value();
 
   // Part one: build the table which will be the items in the browser.
   // Note which line in the table corresponds to the "current_proc".
-  ACTable actab(2,2);
+  ACTable actab(2, 2);
   actab << "Variable | Updates ";
   actab.addHeaderLines();
 
-  int brw_item_index = 0;     // Zero indicates curr_cluster_var not found.
-  for(unsigned int i=0; i<vars.size(); i++) {
+  int brw_item_index = 0; // Zero indicates curr_cluster_var not found.
+  for (unsigned int i = 0; i < vars.size(); i++) {
     string var = vars[i];
 
-    if(curr_cluster_key == var) // +1 because browser indices go 1-N
-      brw_item_index = i+3;     // +2 because of the two header lines
+    if (curr_cluster_key == var) // +1 because browser indices go 1-N
+      brw_item_index = i + 3;    // +2 because of the two header lines
 
     unsigned int watch_cnt = 0;
-    //watch_cnt = m_rc_repo->getWatchCount(curr_cluster_key, curr_cluster_var);
+    // watch_cnt = m_rc_repo->getWatchCount(curr_cluster_key, curr_cluster_var);
     watch_cnt = m_rc_repo->getWatchCount(curr_cluster_key, var);
-    
+
     actab << var;
     actab << watch_cnt;
   }
 
   // Part 2: Build up the browser lines from the previously gen'ed table.
-  if(clear)
+  if (clear)
     m_rc_brw_procs->clear();
 
   unsigned int curr_brw_size = m_rc_brw_procs->size();
 
   vector<string> browser_lines = actab.getTableOutput();
-  for(unsigned int j=0; j<browser_lines.size(); j++) {
+  for (unsigned int j = 0; j < browser_lines.size(); j++) {
     string line = browser_lines[j];
-    if((j+1) > curr_brw_size)
+    if ((j + 1) > curr_brw_size)
       m_rc_brw_procs->add(line.c_str());
     else
-      m_rc_brw_procs->text(j+1, line.c_str());
+      m_rc_brw_procs->text(j + 1, line.c_str());
 
-    if(strBegins(line, curr_cluster_var))
-      brw_item_index = j+1;    
+    if (strBegins(line, curr_cluster_var))
+      brw_item_index = j + 1;
   }
 
   // Part 3: Possibly select an item in the browser under rare circumstances
   // If we've cleared the procs to build this, or if no userclicks prior
   // to this call, set the browser select to be the current_proc.
-  if(clear || (curr_brw_ix==0))
+  if (clear || (curr_brw_ix == 0))
     m_rc_brw_procs->select(brw_item_index, 1);
-
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateRealmCastProcsRC()
 
-void PMV_GUI::updateRealmCastProcsRC(bool clear) 
-{
-  if(!m_rc_repo)
-    return;
-  
-  vector<string> procs = m_rc_repo->getCurrentProcs();
-  if(procs.size() == 0)
+void PMV_GUI::updateRealmCastProcsRC(bool clear) {
+  if (!m_rc_repo)
     return;
 
-  int    curr_brw_ix  = ((Fl_Browser *)m_rc_brw_procs)->value();
+  vector<string> procs = m_rc_repo->getCurrentProcs();
+  if (procs.size() == 0)
+    return;
+
+  int curr_brw_ix = ((Fl_Browser *)m_rc_brw_procs)->value();
   string current_node = m_rc_repo->getCurrentNode();
   string current_proc = m_rc_repo->getCurrentProc();
 
   // Part one: build the table which will be the items in the browser.
   // Note which line in the table corresponds to the "current_proc".
-  ACTable actab(2,2);
+  ACTable actab(2, 2);
   actab << "App | RC ";
   actab.addHeaderLines();
 
-  int brw_item_index = 0;     // Zero indicates curr_proc not found.
-  for(unsigned int i=0; i<procs.size(); i++) {
+  int brw_item_index = 0; // Zero indicates curr_proc not found.
+  for (unsigned int i = 0; i < procs.size(); i++) {
     string proc = procs[i];
 
-    if(current_proc == proc)  // +1 because browser indices go 1-N
-      brw_item_index = i+3;   // +2 because of the two header lines
+    if (current_proc == proc) // +1 because browser indices go 1-N
+      brw_item_index = i + 3; // +2 because of the two header lines
 
     unsigned int apc_cnt = 0;
     apc_cnt = m_rc_repo->rctree().getProcRealmCastCount(current_node, proc);
@@ -2094,43 +2157,41 @@ void PMV_GUI::updateRealmCastProcsRC(bool clear)
   }
 
   // Part 2: Build up the browser lines from the previously gen'ed table.
-  if(clear)
+  if (clear)
     m_rc_brw_procs->clear();
 
   unsigned int curr_brw_size = m_rc_brw_procs->size();
 
   vector<string> browser_lines = actab.getTableOutput();
-  for(unsigned int j=0; j<browser_lines.size(); j++) {
+  for (unsigned int j = 0; j < browser_lines.size(); j++) {
     string line = browser_lines[j];
-    if((j+1) > curr_brw_size)
+    if ((j + 1) > curr_brw_size)
       m_rc_brw_procs->add(line.c_str());
     else
-      m_rc_brw_procs->text(j+1, line.c_str());
+      m_rc_brw_procs->text(j + 1, line.c_str());
   }
 
   // Part 3: Possibly select an item in the browser under rare circumstances
   // If we've cleared the procs to build this, or if no userclicks prior
   // to this call, set the browser select to be the current_proc.
-  if(clear || (curr_brw_ix==0))
+  if (clear || (curr_brw_ix == 0))
     m_rc_brw_procs->select(brw_item_index, 1);
-
 }
 
-//---------------------------------------------------------- 
+//----------------------------------------------------------
 // Procedure: updateAppCastProcs()
 
-void PMV_GUI::updateAppCastProcs(bool clear) 
-{
-  if(!m_repo)
-    return;
-  
-  vector<string> procs  = m_repo->getCurrentProcs();
-  unsigned int i, vsize = procs.size();
-  
-  if(vsize == 0)
+void PMV_GUI::updateAppCastProcs(bool clear) {
+  if (!m_repo)
     return;
 
-  int    curr_brw_ix  = ((Fl_Browser *)m_brw_procs)->value();
+  vector<string> procs = m_repo->getCurrentProcs();
+  unsigned int i, vsize = procs.size();
+
+  if (vsize == 0)
+    return;
+
+  int curr_brw_ix = ((Fl_Browser *)m_brw_procs)->value();
   string current_node = m_repo->getCurrentNode();
   string current_proc = m_repo->getCurrentProc();
 
@@ -2139,16 +2200,16 @@ void PMV_GUI::updateAppCastProcs(bool clear)
 
   // Part one: build the table which will be the items in the browser.
   // Note which line in the table corresponds to the "current_proc".
-  ACTable actab(4,2);
+  ACTable actab(4, 2);
   actab << "App | AC | CW | RW";
   actab.addHeaderLines();
 
-  int brw_item_index = 0;     // Zero indicates curr_proc not found.
-  for(i=0; i<vsize; i++) {
+  int brw_item_index = 0; // Zero indicates curr_proc not found.
+  for (i = 0; i < vsize; i++) {
     string proc = procs[i];
 
-    if(current_proc == proc)  // +1 because browser indices go 1-N
-      brw_item_index = i+3;   // +2 because of the two header lines
+    if (current_proc == proc) // +1 because browser indices go 1-N
+      brw_item_index = i + 3; // +2 because of the two header lines
 
     unsigned int apc_cnt, cfg_cnt, run_cnt;
     apc_cnt = m_repo->actree().getProcAppCastCount(current_node, proc);
@@ -2160,89 +2221,85 @@ void PMV_GUI::updateAppCastProcs(bool clear)
     actab << cfg_cnt;
     actab << run_cnt;
 
-    if(cfg_cnt > 0)
+    if (cfg_cnt > 0)
       proc_has_cfg_warning[i] = true;
-    if(run_cnt > 0)
+    if (run_cnt > 0)
       proc_has_run_warning[i] = true;
   }
 
   // Part 2: Build up the browser lines from the previously gen'ed table.
-  if(clear)
+  if (clear)
     m_brw_procs->clear();
 
-  unsigned int   curr_brw_size = m_brw_procs->size();
+  unsigned int curr_brw_size = m_brw_procs->size();
   vector<string> browser_lines = actab.getTableOutput();
-  for(unsigned int j=0; j<browser_lines.size(); j++) {
+  for (unsigned int j = 0; j < browser_lines.size(); j++) {
     string line = browser_lines[j];
-    if(j>=2) {
-      if(proc_has_run_warning[j-2])
-	line = "@B" + uintToString(m_color_runw) + line;
-      else if(proc_has_cfg_warning[j-2])
-	line = "@B" + uintToString(m_color_cfgw) + line;
+    if (j >= 2) {
+      if (proc_has_run_warning[j - 2])
+        line = "@B" + uintToString(m_color_runw) + line;
+      else if (proc_has_cfg_warning[j - 2])
+        line = "@B" + uintToString(m_color_cfgw) + line;
     }
 
-    if((j+1) > curr_brw_size)
+    if ((j + 1) > curr_brw_size)
       m_brw_procs->add(line.c_str());
     else
-      m_brw_procs->text(j+1, line.c_str());
+      m_brw_procs->text(j + 1, line.c_str());
   }
 
   // Part 3: Possibly select an item in the browser under rare circumstances
   // If we've cleared the procs to build this, or if no userclicks prior
   // to this call, set the browser select to be the current_proc.
-  if(clear || (curr_brw_ix==0))
+  if (clear || (curr_brw_ix == 0))
     m_brw_procs->select(brw_item_index, 1);
-
 }
 
-//----------------------------------------- 
+//-----------------------------------------
 // Procedure: updateRealmCast()
 
-void PMV_GUI::updateRealmCast() 
-{
-  if(!m_rc_repo)
+void PMV_GUI::updateRealmCast() {
+  if (!m_rc_repo)
     return;
 
   string node = m_rc_repo->getCurrentNode();
   string proc = m_rc_repo->getCurrentProc();
-  if((node == "") || (proc == ""))
+  if ((node == "") || (proc == ""))
     return;
 
   // Step 1: clear the Fl_Browser contents
   m_rc_brw_casts->clear();
 
-  if(m_rc_repo->getCurrClusterKey() == "") {
+  if (m_rc_repo->getCurrClusterKey() == "") {
     // Step 2: retrieve the current realmcast and its report lines
     RealmCast relcast = m_rc_repo->rctree().getRealmCast(node, proc);
     vector<string> svector = parseString(relcast.getFormattedString(), '\n');
-    
+
     // Step 3: De-colorize the report lines and add to the Browser
-    // Disable the removeTermColors() call by mikerb Oct 11, 2020. 
-    for(unsigned int i=0; i<svector.size(); i++) {
+    // Disable the removeTermColors() call by mikerb Oct 11, 2020.
+    for (unsigned int i = 0; i < svector.size(); i++) {
       m_rc_brw_casts->add(svector[i].c_str());
-      //cout << svector[i].c_str() << endl; // mikerb
-      //m_brw_casts->add(removeTermColors(svector[i]).c_str());
+      // cout << svector[i].c_str() << endl; // mikerb
+      // m_brw_casts->add(removeTermColors(svector[i]).c_str());
     }
-  }
-  else {
+  } else {
     vector<string> svector = m_rc_repo->getClusterReport(m_icast_settings);
-    for(unsigned int i=0; i<svector.size(); i++) {
+    for (unsigned int i = 0; i < svector.size(); i++) {
       m_rc_brw_casts->add(svector[i].c_str());
     }
   }
 }
 
-//----------------------------------------- 
+//-----------------------------------------
 // Procedure: updateAppCast()
 
-void PMV_GUI::updateAppCast() 
-{
-  if(!m_repo)
+void PMV_GUI::updateAppCast() {
+  if (!m_repo)
     return;
 
   string node = m_repo->getCurrentNode();
   string proc = m_repo->getCurrentProc();
-  if((node == "") || (proc == ""))
+  if ((node == "") || (proc == ""))
     return;
 
   // Step 1: clear the Fl_Browser contents
@@ -2252,24 +2309,21 @@ void PMV_GUI::updateAppCast()
   AppCast appcast = m_repo->actree().getAppCast(node, proc);
   vector<string> svector = parseString(appcast.getFormattedString(), '\n');
 
-
-
   // Step 3: De-colorize the report lines and add to the Browser
-  // Disable the removeTermColors() call by mikerb Oct 11, 2020. 
-  for(unsigned int i=0; i<svector.size(); i++) {
+  // Disable the removeTermColors() call by mikerb Oct 11, 2020.
+  for (unsigned int i = 0; i < svector.size(); i++) {
     m_brw_casts->add(svector[i].c_str());
-    //m_brw_casts->add(removeTermColors(svector[i]).c_str());
+    // m_brw_casts->add(removeTermColors(svector[i]).c_str());
   }
 
   // Step 4: If there are warnings, colorize line 2 of the browser
   //         appropriately. Red if run_warnings, Blue if config warnings
-  if(svector.size() >=2) {
-    if(appcast.getRunWarningCount() > 0) {
+  if (svector.size() >= 2) {
+    if (appcast.getRunWarningCount() > 0) {
       string txt = m_brw_casts->text(2);
       txt = "@B" + uintToString(m_color_runw) + txt;
       m_brw_casts->text(2, txt.c_str());
-    }
-    else if(appcast.getCfgWarningCount() > 0) {
+    } else if (appcast.getCfgWarningCount() > 0) {
       string txt = m_brw_casts->text(2);
       txt = "@B" + uintToString(m_color_cfgw) + txt;
       m_brw_casts->text(2, txt.c_str());
@@ -2277,12 +2331,10 @@ void PMV_GUI::updateAppCast()
   }
 }
 
-
-//----------------------------------------------------- 
+//-----------------------------------------------------
 // Procedure: updateRadios()
 
-void PMV_GUI::updateRadios()
-{
+void PMV_GUI::updateRadios() {
   MarineVehiGUI::updateRadios();
   setRadioCastAttrib("nodes_font_size");
   setRadioCastAttrib("procs_font_size");
@@ -2304,12 +2356,10 @@ void PMV_GUI::updateRadios()
   setRadioCastAttrib("realmcast_time_format_utc");
 }
 
-
-//----------------------------------------------------- 
+//-----------------------------------------------------
 // Procedure: setMenuItemColors()
 
-void PMV_GUI::setMenuItemColors()
-{
+void PMV_GUI::setMenuItemColors() {
   MarineVehiGUI::setMenuItemColors();
   setMenuItemColor("InfoCasting/infocast_viewable=true");
   setMenuItemColor("InfoCasting/infocast_viewable=false");
@@ -2374,193 +2424,198 @@ void PMV_GUI::setMenuItemColors()
   setMenuItemColor("InfoCasting/InfoCast Pane Height/infocast_height=85");
   setMenuItemColor("InfoCasting/InfoCast Pane Height/infocast_height=90");
 
-  setMenuItemColor("InfoCasting/realmcast_show_source/realmcast_show_source=true");
-  setMenuItemColor("InfoCasting/realmcast_show_source/realmcast_show_source=false");
-  
-  setMenuItemColor("InfoCasting/realmcast_show_community/realmcast_show_community=true");
-  setMenuItemColor("InfoCasting/realmcast_show_community/realmcast_show_community=false");
-  
-  setMenuItemColor("InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions=true");
-  setMenuItemColor("InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions=false");
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_source/realmcast_show_source=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_source/realmcast_show_source=false");
 
-  setMenuItemColor("InfoCasting/realmcast_show_masked/realmcast_show_masked=true");
-  setMenuItemColor("InfoCasting/realmcast_show_masked/realmcast_show_masked=false");
-  
-  setMenuItemColor("InfoCasting/realmcast_wrap_content/realmcast_wrap_content=true");
-  setMenuItemColor("InfoCasting/realmcast_wrap_content/realmcast_wrap_content=false");
-  
-  setMenuItemColor("InfoCasting/realmcast_trunc_content/realmcast_trunc_content=true");
-  setMenuItemColor("InfoCasting/realmcast_trunc_content/realmcast_trunc_content=false");
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_community/realmcast_show_community=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_community/realmcast_show_community=false");
 
-  setMenuItemColor("InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=true");
-  setMenuItemColor("InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=false");
+  setMenuItemColor("InfoCasting/realmcast_show_subscriptions/"
+                   "realmcast_show_subscriptions=true");
+  setMenuItemColor("InfoCasting/realmcast_show_subscriptions/"
+                   "realmcast_show_subscriptions=false");
+
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_masked/realmcast_show_masked=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_show_masked/realmcast_show_masked=false");
+
+  setMenuItemColor(
+      "InfoCasting/realmcast_wrap_content/realmcast_wrap_content=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_wrap_content/realmcast_wrap_content=false");
+
+  setMenuItemColor(
+      "InfoCasting/realmcast_trunc_content/realmcast_trunc_content=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_trunc_content/realmcast_trunc_content=false");
+
+  setMenuItemColor(
+      "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=true");
+  setMenuItemColor(
+      "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=false");
 
   setMenuItemColor("BackView/full_screen=true");
   setMenuItemColor("BackView/full_screen=false");
 }
 
-
-//----------------------------------------------------- 
+//-----------------------------------------------------
 // Procedure: setRadioCastAttrib()
-//   Purpose: A way of setting the appcast attribute assuring that 
+//   Purpose: A way of setting the appcast attribute assuring that
 //            the GUI radio buttons are properly updated.
-//  
+//
 //  Examples: "nodes_font_size", "xsmall"
 //            "refresh_mode", "false"
 
-bool PMV_GUI::setRadioCastAttrib(string attr, string value) 
-{
-  Fl_Color fcolor_grayBlu = fl_rgb_color(165,165,225);
-  Fl_Color fcolor_gray185 = fl_rgb_color(185,185,185);
-  Fl_Color fcolor_grayRed = fl_rgb_color(225,185,185);
-  
+bool PMV_GUI::setRadioCastAttrib(string attr, string value) {
+  Fl_Color fcolor_grayBlu = fl_rgb_color(165, 165, 225);
+  Fl_Color fcolor_gray185 = fl_rgb_color(185, 185, 185);
+  Fl_Color fcolor_grayRed = fl_rgb_color(225, 185, 185);
+
   string item_str = "InfoCasting/" + attr + "=";
 
   bool ok = false;
-  if(attr == "full_screen") {
+  if (attr == "full_screen") {
     ok = m_icast_settings.setFullScreen(value);
     item_str = "BackView/full_screen=";
     item_str += boolToString(m_icast_settings.getFullScreen());
-  }
-  else if(attr == "infocast_viewable") {
+  } else if (attr == "infocast_viewable") {
     ok = m_icast_settings.setInfoCastViewable(value);
     item_str += boolToString(m_icast_settings.getInfoCastViewable());
-  }
-  else if(attr == "content_mode") {
+  } else if (attr == "content_mode") {
     ok = m_icast_settings.setContentMode(value);
     item_str += m_icast_settings.getContentMode();
-  }
-  else if(attr == "refresh_mode") {
+  } else if (attr == "refresh_mode") {
     m_repo->setRefreshMode(value);
     ok = m_icast_settings.setRefreshMode(value);
     item_str += m_icast_settings.getRefreshMode();
-  }
-  else if(attr == "infocast_font_size") {
+  } else if (attr == "infocast_font_size") {
     ok = m_icast_settings.setInfoCastFontSize(value);
     item_str += m_icast_settings.getInfoCastFontSize();
-  }
-  else if(attr == "procs_font_size") {
+  } else if (attr == "procs_font_size") {
     ok = m_icast_settings.setProcsFontSize(value);
     item_str += m_icast_settings.getProcsFontSize();
-  }
-  else if(attr == "nodes_font_size") {
+  } else if (attr == "nodes_font_size") {
     ok = m_icast_settings.setNodesFontSize(value);
     item_str += m_icast_settings.getNodesFontSize();
-  }
-  else if(attr == "infocast_height") {
+  } else if (attr == "infocast_height") {
     ok = m_icast_settings.setInfoCastHeight(value);
     item_str = "InfoCasting/InfoCast Window Height/infocast_height=";
     item_str += intToString(m_icast_settings.getInfoCastHeight());
   }
 
-  else if(attr == "infocast_width") {
+  else if (attr == "infocast_width") {
     ok = m_icast_settings.setInfoCastWidth(value);
     item_str = "InfoCasting/InfoCast Window Width/infocast_width=";
     item_str += intToString(m_icast_settings.getInfoCastWidth());
   }
-  
-  else if(attr == "realmcast_show_source") {
+
+  else if (attr == "realmcast_show_source") {
     ok = m_icast_settings.setShowRealmCastSource(value);
     item_str = "InfoCasting/realmcast_show_source/realmcast_show_source=";
     item_str += boolToString(m_icast_settings.getShowRealmCastSource());
-    if(m_icast_settings.getShowRealmCastSource())
+    if (m_icast_settings.getShowRealmCastSource())
       m_rc_button_src->color(fcolor_gray185);
     else
       m_rc_button_src->color(fcolor_grayRed);
     updateRealmCast();
   }
-  
-  else if(attr == "realmcast_show_community") {
+
+  else if (attr == "realmcast_show_community") {
     ok = m_icast_settings.setShowRealmCastCommunity(value);
     item_str = "InfoCasting/realmcast_show_community/realmcast_show_community=";
     item_str += boolToString(m_icast_settings.getShowRealmCastCommunity());
-    if(m_icast_settings.getShowRealmCastCommunity())
+    if (m_icast_settings.getShowRealmCastCommunity())
       m_rc_button_com->color(fcolor_gray185);
     else
       m_rc_button_com->color(fcolor_grayRed);
     updateRealmCast();
   }
-  
-  else if(attr == "realmcast_show_subscriptions") {
+
+  else if (attr == "realmcast_show_subscriptions") {
     ok = m_icast_settings.setShowRealmCastSubs(value);
-    item_str = "InfoCasting/realmcast_show_subscriptions/realmcast_show_subscriptions=";
+    item_str = "InfoCasting/realmcast_show_subscriptions/"
+               "realmcast_show_subscriptions=";
     item_str += boolToString(m_icast_settings.getShowRealmCastSubs());
-    if(m_icast_settings.getShowRealmCastSubs())
+    if (m_icast_settings.getShowRealmCastSubs())
       m_rc_button_sub->color(fcolor_gray185);
     else
       m_rc_button_sub->color(fcolor_grayRed);
   }
-  
-  else if(attr == "realmcast_show_masked") {
+
+  else if (attr == "realmcast_show_masked") {
     ok = m_icast_settings.setShowRealmCastMasked(value);
     item_str = "InfoCasting/realmcast_show_masked/realmcast_show_masked=";
     item_str += boolToString(m_icast_settings.getShowRealmCastMasked());
-    if(m_icast_settings.getShowRealmCastMasked())
+    if (m_icast_settings.getShowRealmCastMasked())
       m_rc_button_msk->color(fcolor_gray185);
     else
       m_rc_button_msk->color(fcolor_grayRed);
   }
-  
-  else if(attr == "realmcast_wrap_content") {
+
+  else if (attr == "realmcast_wrap_content") {
     ok = m_icast_settings.setWrapRealmCastContent(value);
     item_str = "InfoCasting/realmcast_wrap_content/realmcast_wrap_content=";
     item_str += boolToString(m_icast_settings.getWrapRealmCastContent());
-    if(m_icast_settings.getWrapRealmCastContent())
+    if (m_icast_settings.getWrapRealmCastContent())
       m_rc_button_wrp->color(fcolor_grayBlu);
     else
       m_rc_button_wrp->color(fcolor_gray185);
   }
-  
-  else if(attr == "realmcast_trunc_content") {
+
+  else if (attr == "realmcast_trunc_content") {
     ok = m_icast_settings.setTruncRealmCastContent(value);
     item_str = "InfoCasting/realmcast_trunc_content/realmcast_trunc_content=";
     item_str += boolToString(m_icast_settings.getTruncRealmCastContent());
-    if(m_icast_settings.getTruncRealmCastContent())
+    if (m_icast_settings.getTruncRealmCastContent())
       m_rc_button_trc->color(fcolor_grayBlu);
     else
       m_rc_button_trc->color(fcolor_gray185);
   }
-  
-  else if(attr == "realmcast_time_format_utc") {
+
+  else if (attr == "realmcast_time_format_utc") {
     ok = m_icast_settings.setRealmCastTimeFormatUTC(value);
-    item_str = "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=";
+    item_str =
+        "InfoCasting/realmcast_time_format_utc/realmcast_time_format_utc=";
     item_str += boolToString(m_icast_settings.getRealmCastTimeFormatUTC());
-    if(m_icast_settings.getRealmCastTimeFormatUTC())
+    if (m_icast_settings.getRealmCastTimeFormatUTC())
       m_rc_button_utc->color(fcolor_grayBlu);
     else
       m_rc_button_utc->color(fcolor_gray185);
     updateRealmCast();
   }
-  
-  else if(attr == "appcast_color_scheme") {
+
+  else if (attr == "appcast_color_scheme") {
     ok = m_icast_settings.setAppCastColorScheme(value);
     item_str += m_icast_settings.getAppCastColorScheme();
   }
-  
-  else if(attr == "realmcast_color_scheme") {
+
+  else if (attr == "realmcast_color_scheme") {
     ok = m_icast_settings.setRealmCastColorScheme(value);
     item_str += m_icast_settings.getRealmCastColorScheme();
   }
 
   // Note: Even though perhaps ok=false, the attempted setting will
   // have no effect. Also when value="". In this case we just want
-  // to update the item radio button. 
-  
+  // to update the item radio button.
+
   const Fl_Menu_Item *item = m_menubar->find_item(item_str.c_str());
-  if(item)
+  if (item)
     ((Fl_Menu_Item *)item)->setonly();
 
   resizeWidgets();
   redraw();
-  return(ok);
+  return (ok);
 }
-
 
 //-------------------------------------------------------------------
 // Procedure: showDataFields()
 
-void PMV_GUI::showDataFields()
-{
+void PMV_GUI::showDataFields() {
   v_nam->show();
   v_typ->show();
   x_mtr->show();
@@ -2577,15 +2632,15 @@ void PMV_GUI::showDataFields()
   m_scope_time->show();
   m_scope_value->show();
 
-  for(unsigned int i=0; i<m_buttons.size(); i++) {
+  for (unsigned int i = 0; i < m_buttons.size(); i++) {
     string label = m_buttons[i]->label();
 
-    if((label != "SRC") && (label != "COM") && (label != "WRP") &&
-       (label != "SUBS") && (label != "MASK") && (label != "TRUNC")) {
-      if(label != "Disabled")
-	m_buttons[i]->show();
+    if ((label != "SRC") && (label != "COM") && (label != "WRP") &&
+        (label != "SUBS") && (label != "MASK") && (label != "TRUNC")) {
+      if (label != "Disabled")
+        m_buttons[i]->show();
       else
-	m_buttons[i]->hide();
+        m_buttons[i]->hide();
     }
   }
 }
@@ -2593,8 +2648,7 @@ void PMV_GUI::showDataFields()
 //-------------------------------------------------------------------
 // Procedure: hideDataFields()
 
-void PMV_GUI::hideDataFields()
-{
+void PMV_GUI::hideDataFields() {
   v_nam->hide();
   v_typ->hide();
   x_mtr->hide();
@@ -2611,21 +2665,19 @@ void PMV_GUI::hideDataFields()
   m_scope_time->hide();
   m_scope_value->hide();
 
-  for(unsigned int i=0; i<m_buttons.size(); i++) {
+  for (unsigned int i = 0; i < m_buttons.size(); i++) {
     string label = m_buttons[i]->label();
     m_buttons[i]->hide();
   }
-
 }
 
 //----------------------------------------------------------
 // Procedure: resizeDataText()
 
-void PMV_GUI::resizeDataText(int wsize) 
-{
-  for(unsigned int i=0; i<m_buttons.size(); i++) 
+void PMV_GUI::resizeDataText(int wsize) {
+  for (unsigned int i = 0; i < m_buttons.size(); i++)
     m_buttons[i]->labelsize(wsize);
-  
+
   v_nam->labelsize(wsize);
   v_typ->labelsize(wsize);
   x_mtr->labelsize(wsize);
@@ -2641,7 +2693,7 @@ void PMV_GUI::resizeDataText(int wsize)
   m_scope_variable->labelsize(wsize);
   m_scope_time->labelsize(wsize);
   m_scope_value->labelsize(wsize);
-  
+
   v_nam->textsize(wsize);
   v_typ->textsize(wsize);
   x_mtr->textsize(wsize);
@@ -2654,29 +2706,28 @@ void PMV_GUI::resizeDataText(int wsize)
   v_ais->textsize(wsize);
   time->textsize(wsize);
   warp->textsize(wsize);
-  m_scope_variable->textsize(wsize-1);
-  m_scope_time->textsize(wsize-1);
-  m_scope_value->textsize(wsize-1);
+  m_scope_variable->textsize(wsize - 1);
+  m_scope_time->textsize(wsize - 1);
+  m_scope_value->textsize(wsize - 1);
 }
 
 //-------------------------------------------------------------------
 // Procedure: resizeWidgets()
 
-void PMV_GUI::resizeWidgets()
-{
-  bool show_fullscreen  = m_icast_settings.getFullScreen();
+void PMV_GUI::resizeWidgets() {
+  bool show_fullscreen = m_icast_settings.getFullScreen();
   bool show_infocasting = m_icast_settings.getInfoCastViewable();
-  string content_mode  = m_icast_settings.getContentMode();
-  
+  string content_mode = m_icast_settings.getContentMode();
+
   // Part 1: Figure out the basic pane extents.
   // ================================================================
   // This is the default extent configuration so long as any minimal
   // constraints are not violated.
 
-  double pct_cast_wid = m_icast_settings.getInfoCastWidth()  / 100;
+  double pct_cast_wid = m_icast_settings.getInfoCastWidth() / 100;
   double pct_cast_hgt = m_icast_settings.getInfoCastHeight() / 100;
 
-  //double pct_view_wid = 1 - pct_cast_wid;
+  // double pct_view_wid = 1 - pct_cast_wid;
 
   double pct_view_hgt = 0.875;
   double pct_menu_hgt = 0.035;
@@ -2687,88 +2738,86 @@ void PMV_GUI::resizeWidgets()
   double now_wid = w();
 
   // Make sure the menu bar is at least 15 and at most 25
-  if((pct_menu_hgt * now_hgt) < 15) 
+  if ((pct_menu_hgt * now_hgt) < 15)
     pct_menu_hgt = 15 / now_hgt;
-  if((pct_menu_hgt * now_hgt) > 25) 
+  if ((pct_menu_hgt * now_hgt) > 25)
     pct_menu_hgt = 25 / now_hgt;
   pct_view_hgt = (1 - (pct_menu_hgt + pct_data_hgt));
-    
+
   // Make sure the data field is between 80 and 120
-  if((pct_data_hgt * now_hgt) < 80) 
+  if ((pct_data_hgt * now_hgt) < 80)
     pct_data_hgt = 80 / now_hgt;
-  if((pct_data_hgt * now_hgt) > 120) 
+  if ((pct_data_hgt * now_hgt) > 120)
     pct_data_hgt = 120 / now_hgt;
   pct_view_hgt = (1 - (pct_menu_hgt + pct_data_hgt));
 
   // Make sure the infocast pane is at least 300
-  if((pct_cast_wid * now_wid) < 300) {
+  if ((pct_cast_wid * now_wid) < 300) {
     pct_cast_wid = 300 / now_wid;
-    //pct_view_wid = (1 - pct_cast_wid);
+    // pct_view_wid = (1 - pct_cast_wid);
   }
 
-  
   // Part 2: Adjust the extents of the MENU Bar
-  // ================================================================  
+  // ================================================================
   double menu_hgt = h() * pct_menu_hgt;
 
   m_menubar->resize(0, 0, w(), menu_hgt);
-  
+
   int menu_font_size = 14;
-  if(now_hgt < 550) 
+  if (now_hgt < 550)
     menu_font_size = 10;
-  else if(now_hgt < 800) 
+  else if (now_hgt < 800)
     menu_font_size = 12;
-  
-  int  msize = m_menubar->size();
 
-  const Fl_Menu_Item* itemsx = m_menubar->menu();
-  Fl_Menu_Item* items = (Fl_Menu_Item*)(itemsx);
+  int msize = m_menubar->size();
 
-  //Fl_Color blue = fl_rgb_color(71, 71, 205);    
-  for(int i=0; i<msize; i++) {
-    //items[i].labelcolor(blue);
+  const Fl_Menu_Item *itemsx = m_menubar->menu();
+  Fl_Menu_Item *items = (Fl_Menu_Item *)(itemsx);
+
+  // Fl_Color blue = fl_rgb_color(71, 71, 205);
+  for (int i = 0; i < msize; i++) {
+    // items[i].labelcolor(blue);
     items[i].labelsize(menu_font_size);
   }
 
   // Part 3A: Pre-calculations for AppCast and RealmCast
-  // ================================================================  
+  // ================================================================
   double bx = 0;
   double by = menu_hgt;
   double bw = w() * pct_cast_wid;
   double bh = h() * pct_view_hgt;
-  
+
   double cast_wid = bw;
   double node_wid = bw * 0.45;
   double proc_wid = bw * 0.55;
-  
+
   double cast_hgt = bh * pct_cast_hgt;
   double node_hgt = bh * (1 - pct_cast_hgt);
-  double proc_hgt = bh * (1- pct_cast_hgt);
-  
-  int font_xlarge  = 16;
-  int font_large  = 14;
+  double proc_hgt = bh * (1 - pct_cast_hgt);
+
+  int font_xlarge = 16;
+  int font_large = 14;
   int font_medium = 12;
-  int font_small  = 10;
+  int font_small = 10;
   int font_xsmall = 8;
-  if(bw < 400) {
+  if (bw < 400) {
     font_xlarge = 14;
-    font_large  = 12;
+    font_large = 12;
     font_medium = 10;
-    font_small  = 8;
+    font_small = 8;
     font_xsmall = 7;
   }
-  
+
   // Part 3: Adjust the extents of the InfoCast browsers
-  // ================================================================  
-  if(!show_infocasting) {
+  // ================================================================
+  if (!show_infocasting) {
     m_brw_nodes->hide();
     m_brw_procs->hide();
     m_brw_casts->hide();
     m_rc_brw_nodes->hide();
     m_rc_brw_procs->hide();
     m_rc_brw_casts->hide();
-  }   
-  else if(content_mode == "appcast") {
+  } else if (content_mode == "appcast") {
     m_rc_brw_nodes->hide();
     m_rc_brw_procs->hide();
     m_rc_brw_casts->hide();
@@ -2785,33 +2834,47 @@ void PMV_GUI::resizeWidgets()
     m_brw_procs->show();
     m_brw_casts->show();
 
-   m_brw_nodes->resize(bx, menu_hgt, node_wid, node_hgt);
+    m_brw_nodes->resize(bx, menu_hgt, node_wid, node_hgt);
     m_brw_procs->resize(node_wid, menu_hgt, proc_wid, proc_hgt);
-    m_brw_casts->resize(bx, by+node_hgt, cast_wid, cast_hgt);
-    
-    string nodes_font_size   = m_icast_settings.getNodesFontSize();
-    string procs_font_size   = m_icast_settings.getProcsFontSize();
+    m_brw_casts->resize(bx, by + node_hgt, cast_wid, cast_hgt);
+
+    string nodes_font_size = m_icast_settings.getNodesFontSize();
+    string procs_font_size = m_icast_settings.getProcsFontSize();
     string infocast_font_size = m_icast_settings.getInfoCastFontSize();
-    
-    if(nodes_font_size == "xsmall")      m_brw_nodes->textsize(font_xsmall);
-    else if(nodes_font_size == "small")  m_brw_nodes->textsize(font_small);
-    else if(nodes_font_size == "medium") m_brw_nodes->textsize(font_medium);
-    else if(nodes_font_size == "large")  m_brw_nodes->textsize(font_large);
-    else                                 m_brw_nodes->textsize(font_xlarge);
-    
-    if(procs_font_size == "xsmall")      m_brw_procs->textsize(font_xsmall);
-    else if(procs_font_size == "small")  m_brw_procs->textsize(font_small);
-    else if(procs_font_size == "medium") m_brw_procs->textsize(font_medium);
-    else if(procs_font_size == "large")  m_brw_procs->textsize(font_large);
-    else                                 m_brw_procs->textsize(font_xlarge);
-    
-    if(infocast_font_size == "xsmall")      m_brw_casts->textsize(font_xsmall);
-    else if(infocast_font_size == "small")  m_brw_casts->textsize(font_small);
-    else if(infocast_font_size == "medium") m_brw_casts->textsize(font_medium);
-    else if(infocast_font_size == "large")  m_brw_casts->textsize(font_large);
-    else                                    m_brw_casts->textsize(font_xlarge);
-  }
-  else if(content_mode == "realmcast") {
+
+    if (nodes_font_size == "xsmall")
+      m_brw_nodes->textsize(font_xsmall);
+    else if (nodes_font_size == "small")
+      m_brw_nodes->textsize(font_small);
+    else if (nodes_font_size == "medium")
+      m_brw_nodes->textsize(font_medium);
+    else if (nodes_font_size == "large")
+      m_brw_nodes->textsize(font_large);
+    else
+      m_brw_nodes->textsize(font_xlarge);
+
+    if (procs_font_size == "xsmall")
+      m_brw_procs->textsize(font_xsmall);
+    else if (procs_font_size == "small")
+      m_brw_procs->textsize(font_small);
+    else if (procs_font_size == "medium")
+      m_brw_procs->textsize(font_medium);
+    else if (procs_font_size == "large")
+      m_brw_procs->textsize(font_large);
+    else
+      m_brw_procs->textsize(font_xlarge);
+
+    if (infocast_font_size == "xsmall")
+      m_brw_casts->textsize(font_xsmall);
+    else if (infocast_font_size == "small")
+      m_brw_casts->textsize(font_small);
+    else if (infocast_font_size == "medium")
+      m_brw_casts->textsize(font_medium);
+    else if (infocast_font_size == "large")
+      m_brw_casts->textsize(font_large);
+    else
+      m_brw_casts->textsize(font_xlarge);
+  } else if (content_mode == "realmcast") {
     m_brw_nodes->hide();
     m_brw_procs->hide();
     m_brw_casts->hide();
@@ -2830,76 +2893,88 @@ void PMV_GUI::resizeWidgets()
 
     m_rc_brw_nodes->resize(bx, menu_hgt, node_wid, node_hgt);
     m_rc_brw_procs->resize(node_wid, menu_hgt, proc_wid, proc_hgt);
-    m_rc_brw_casts->resize(bx, by+node_hgt, cast_wid, cast_hgt);
-    
-    string nodes_font_size   = m_icast_settings.getNodesFontSize();
-    string procs_font_size   = m_icast_settings.getProcsFontSize();
+    m_rc_brw_casts->resize(bx, by + node_hgt, cast_wid, cast_hgt);
+
+    string nodes_font_size = m_icast_settings.getNodesFontSize();
+    string procs_font_size = m_icast_settings.getProcsFontSize();
     string infocast_font_size = m_icast_settings.getInfoCastFontSize();
-    
-    if(nodes_font_size == "xsmall")      m_rc_brw_nodes->textsize(font_xsmall);
-    else if(nodes_font_size == "small")  m_rc_brw_nodes->textsize(font_small);
-    else if(nodes_font_size == "medium") m_rc_brw_nodes->textsize(font_medium);
-    else if(nodes_font_size == "large")  m_rc_brw_nodes->textsize(font_large);
-    else                                 m_rc_brw_nodes->textsize(font_xlarge);
-    
-    if(procs_font_size == "xsmall")      m_rc_brw_procs->textsize(font_xsmall);
-    else if(procs_font_size == "small")  m_rc_brw_procs->textsize(font_small);
-    else if(procs_font_size == "medium") m_rc_brw_procs->textsize(font_medium);
-    else if(procs_font_size == "large")  m_rc_brw_procs->textsize(font_large);
-    else                                 m_rc_brw_procs->textsize(font_xlarge);
-    
-    if(infocast_font_size == "xsmall")      m_rc_brw_casts->textsize(font_xsmall);
-    else if(infocast_font_size == "small")  m_rc_brw_casts->textsize(font_small);
-    else if(infocast_font_size == "medium") m_rc_brw_casts->textsize(font_medium);
-    else if(infocast_font_size == "large")  m_rc_brw_casts->textsize(font_large);
-    else                                    m_rc_brw_casts->textsize(font_xlarge);
+
+    if (nodes_font_size == "xsmall")
+      m_rc_brw_nodes->textsize(font_xsmall);
+    else if (nodes_font_size == "small")
+      m_rc_brw_nodes->textsize(font_small);
+    else if (nodes_font_size == "medium")
+      m_rc_brw_nodes->textsize(font_medium);
+    else if (nodes_font_size == "large")
+      m_rc_brw_nodes->textsize(font_large);
+    else
+      m_rc_brw_nodes->textsize(font_xlarge);
+
+    if (procs_font_size == "xsmall")
+      m_rc_brw_procs->textsize(font_xsmall);
+    else if (procs_font_size == "small")
+      m_rc_brw_procs->textsize(font_small);
+    else if (procs_font_size == "medium")
+      m_rc_brw_procs->textsize(font_medium);
+    else if (procs_font_size == "large")
+      m_rc_brw_procs->textsize(font_large);
+    else
+      m_rc_brw_procs->textsize(font_xlarge);
+
+    if (infocast_font_size == "xsmall")
+      m_rc_brw_casts->textsize(font_xsmall);
+    else if (infocast_font_size == "small")
+      m_rc_brw_casts->textsize(font_small);
+    else if (infocast_font_size == "medium")
+      m_rc_brw_casts->textsize(font_medium);
+    else if (infocast_font_size == "large")
+      m_rc_brw_casts->textsize(font_large);
+    else
+      m_rc_brw_casts->textsize(font_xlarge);
   }
 
   // Part 4: Adjust the color scheme of the InfoCast browsers
-  // ================================================================  
+  // ================================================================
   string infocast_color_scheme = m_icast_settings.getAppCastColorScheme();
-  if(content_mode == "realmcast")
+  if (content_mode == "realmcast")
     infocast_color_scheme = m_icast_settings.getRealmCastColorScheme();
-  
-  Fl_Color color_back = fl_rgb_color(255, 255, 255);  // white
-  Fl_Color color_text = fl_rgb_color(0, 0, 0);        // black
-  m_color_runw = fl_rgb_color(205, 71, 71);           // redish
-  m_color_cfgw = fl_rgb_color(50, 189, 149);          // greenish
-  m_color_stlw = fl_rgb_color(125, 125, 0);           // yellowish
 
-  if(infocast_color_scheme == "indigo") {
-    color_back = fl_rgb_color(95, 117, 182);   // indigo-lighter (65,87,152)
-    color_text = fl_rgb_color(255, 255, 255);  // white
-    m_color_runw = fl_rgb_color(205, 71, 71);  // redish
-    m_color_cfgw = fl_rgb_color(0, 159, 119);  // greenish
-  }
-  else if(infocast_color_scheme == "beige") {
-    color_back = fl_rgb_color(223, 219, 195);   // beige
-    color_text = fl_rgb_color(0, 0, 0);         // black
-    m_color_runw = fl_rgb_color(205, 71, 71);   // redish
-    m_color_cfgw = fl_rgb_color(0, 189, 149);   // greenish
-  }
-  else if(infocast_color_scheme == "hillside") {
-    color_back = fl_rgb_color(209, 203, 127);   // hillside
-    color_text = fl_rgb_color(0, 0, 0);         // black
-    m_color_runw = fl_rgb_color(205, 71, 71);   // redish
-    m_color_cfgw = fl_rgb_color(0, 189, 149);   // greenish
+  Fl_Color color_back = fl_rgb_color(255, 255, 255); // white
+  Fl_Color color_text = fl_rgb_color(0, 0, 0);       // black
+  m_color_runw = fl_rgb_color(205, 71, 71);          // redish
+  m_color_cfgw = fl_rgb_color(50, 189, 149);         // greenish
+  m_color_stlw = fl_rgb_color(125, 125, 0);          // yellowish
+
+  if (infocast_color_scheme == "indigo") {
+    color_back = fl_rgb_color(95, 117, 182);  // indigo-lighter (65,87,152)
+    color_text = fl_rgb_color(255, 255, 255); // white
+    m_color_runw = fl_rgb_color(205, 71, 71); // redish
+    m_color_cfgw = fl_rgb_color(0, 159, 119); // greenish
+  } else if (infocast_color_scheme == "beige") {
+    color_back = fl_rgb_color(223, 219, 195); // beige
+    color_text = fl_rgb_color(0, 0, 0);       // black
+    m_color_runw = fl_rgb_color(205, 71, 71); // redish
+    m_color_cfgw = fl_rgb_color(0, 189, 149); // greenish
+  } else if (infocast_color_scheme == "hillside") {
+    color_back = fl_rgb_color(209, 203, 127); // hillside
+    color_text = fl_rgb_color(0, 0, 0);       // black
+    m_color_runw = fl_rgb_color(205, 71, 71); // redish
+    m_color_cfgw = fl_rgb_color(0, 189, 149); // greenish
   }
 
-  if(content_mode == "appcast") {
+  if (content_mode == "appcast") {
     m_brw_nodes->color(color_back);
     m_brw_nodes->textcolor(color_text);
-    m_brw_nodes->position(0);    
+    m_brw_nodes->position(0);
     m_brw_procs->color(color_back);
     m_brw_procs->textcolor(color_text);
     m_brw_procs->position(0);
     m_brw_casts->color(color_back);
     m_brw_casts->textcolor(color_text);
-  }
-  else if(content_mode == "realmcast") {
+  } else if (content_mode == "realmcast") {
     m_rc_brw_nodes->color(color_back);
     m_rc_brw_nodes->textcolor(color_text);
-    m_rc_brw_nodes->position(0);    
+    m_rc_brw_nodes->position(0);
     m_rc_brw_procs->color(color_back);
     m_rc_brw_procs->textcolor(color_text);
     m_rc_brw_procs->position(0);
@@ -2907,8 +2982,7 @@ void PMV_GUI::resizeWidgets()
     m_rc_brw_casts->textcolor(color_text);
   }
 
-  //m_brw_casts->position(0);
-
+  // m_brw_casts->position(0);
 
   // Part 5: Adjust the extents of the VIEWER window
   // ================================================================
@@ -2920,70 +2994,65 @@ void PMV_GUI::resizeWidgets()
   double yhgt = h() - (int)(menu_hgt);
 
   // shrink the viewer width if showing appcasts
-  if(show_infocasting && !show_fullscreen) {
+  if (show_infocasting && !show_fullscreen) {
     double infocast_wid = w() * pct_cast_wid;
     xpos += infocast_wid;
     xwid -= infocast_wid;
   }
 
   // shrink the viewer height if not in fullscreen
-  if(!show_fullscreen) {
+  if (!show_fullscreen) {
     int datafld_hgt = h() * pct_data_hgt;
     yhgt -= datafld_hgt;
   }
 
   mviewer->resize(xpos, ypos, xwid, yhgt);
 
-
   // Part 6: Adjust the extents of the DATA block of widgets
   // ------------------------------------------------------------
-  if(show_fullscreen)
+  if (show_fullscreen)
     hideDataFields();
   else {
     showDataFields();
   }
   double dh = h() * pct_data_hgt;
-  double dy = h()-dh;
+  double dy = h() - dh;
   double dw = w();
 
   double fld_hgt = dh * 0.24; // height of data field output
 
-  if(dw < 900) {
+  if (dw < 900) {
     resizeDataText(6);
     m_scope_value->label("Val:");
-  }
-  else if(dw < 1100) {
+  } else if (dw < 1100) {
     resizeDataText(8);
     m_scope_value->label("Val:");
-  }
-  else if(dw < 1400) {
+  } else if (dw < 1400) {
     resizeDataText(10);
     m_scope_value->label("Valx:");
-  }
-  else {
+  } else {
     resizeDataText(12);
     m_scope_value->label("Value:");
   }
 
   // height = 150 is the "baseline" design. All adjustments from there.
-  double row1 = dy + 10 * (dh/150);
-  double row2 = dy + 55 * (dh/150);
-  double row3 = dy + 100 * (dh/150);
+  double row1 = dy + 10 * (dh / 150);
+  double row2 = dy + 55 * (dh / 150);
+  double row3 = dy + 100 * (dh / 150);
 
   // Calculate the Data columns and wids
 
   int col_offset = 0;
-  if(m_icast_settings.getInfoCastViewable() &&
-     (m_icast_settings.getContentMode() == "realmcast"))
+  if (m_icast_settings.getInfoCastViewable() &&
+      (m_icast_settings.getContentMode() == "realmcast"))
     col_offset = 140;
-  
-  
+
   int col1_pos = 60 + col_offset;
   int col1_wid = 150;
-  
+
   int col2_pos = col1_pos + col1_wid + 50;
   int col2_wid = 55;
-  
+
   int col3_pos = col2_pos + col2_wid + 50;
   int col3_wid = 80;
 
@@ -3003,7 +3072,7 @@ void PMV_GUI::resizeWidgets()
 
   int extra_rgt = extra_wid / 2;
   int max_extra_rgt = (m_button_cols * 75);
-  if(extra_rgt > max_extra_rgt)
+  if (extra_rgt > max_extra_rgt)
     extra_rgt = max_extra_rgt;
 
   int extra_lft = extra_wid - extra_rgt;
@@ -3022,7 +3091,7 @@ void PMV_GUI::resizeWidgets()
   col6_wid += dwid;
 
   int extra_bwid = 0;
-  if(m_button_cols > 0)
+  if (m_button_cols > 0)
     extra_bwid = (extra_rgt / (int)(m_button_cols));
 
   m_rc_button_src->resize(10, row1, 40, fld_hgt);
@@ -3033,43 +3102,43 @@ void PMV_GUI::resizeWidgets()
   m_rc_button_sub->resize(10, row2, 60, fld_hgt);
   m_rc_button_msk->resize(80, row2, 60, fld_hgt);
   m_rc_button_trc->resize(80, row3, 60, fld_hgt);
-    
-  int button_wid  = 100 + extra_bwid;
-  int col_b1_pos  = w() - (button_wid + 10);  
-  int col_b3_pos  = w() - ((button_wid + 10) * 2);  
-  int col_b5_pos  = w() - ((button_wid + 10) * 3);  
-  int col_b7_pos  = w() - ((button_wid + 10) * 4);  
-  int col_b9_pos  = w() - ((button_wid + 10) * 5);  
-  int col_b11_pos = w() - ((button_wid + 10) * 6);  
-  int col_b13_pos = w() - ((button_wid + 10) * 7);  
-  int col_b15_pos = w() - ((button_wid + 10) * 8);  
-  int col_b17_pos = w() - ((button_wid + 10) * 9);  
-  int col_b19_pos = w() - ((button_wid + 10) * 10);  
-  
+
+  int button_wid = 100 + extra_bwid;
+  int col_b1_pos = w() - (button_wid + 10);
+  int col_b3_pos = w() - ((button_wid + 10) * 2);
+  int col_b5_pos = w() - ((button_wid + 10) * 3);
+  int col_b7_pos = w() - ((button_wid + 10) * 4);
+  int col_b9_pos = w() - ((button_wid + 10) * 5);
+  int col_b11_pos = w() - ((button_wid + 10) * 6);
+  int col_b13_pos = w() - ((button_wid + 10) * 7);
+  int col_b15_pos = w() - ((button_wid + 10) * 8);
+  int col_b17_pos = w() - ((button_wid + 10) * 9);
+  int col_b19_pos = w() - ((button_wid + 10) * 10);
+
   int col1_xwid = (col2_pos + col2_wid) - col1_pos;
   int col4_xwid = w() - col4_pos - 10;
-  
-  v_nam->resize(col1_pos, row1, col1_wid, fld_hgt); 
-  v_typ->resize(col1_pos, row2, col1_wid, fld_hgt); 
 
-  x_mtr->resize(col2_pos, row1, col2_wid, fld_hgt); 
-  y_mtr->resize(col2_pos, row2, col2_wid, fld_hgt); 
+  v_nam->resize(col1_pos, row1, col1_wid, fld_hgt);
+  v_typ->resize(col1_pos, row2, col1_wid, fld_hgt);
 
-  v_lat->resize(col3_pos, row1, col3_wid, fld_hgt); 
-  v_lon->resize(col3_pos, row2, col3_wid, fld_hgt); 
+  x_mtr->resize(col2_pos, row1, col2_wid, fld_hgt);
+  y_mtr->resize(col2_pos, row2, col2_wid, fld_hgt);
 
-  v_spd->resize(col4_pos, row1, col4_wid, fld_hgt); 
-  v_crs->resize(col4_pos, row2, col4_wid, fld_hgt); 
+  v_lat->resize(col3_pos, row1, col3_wid, fld_hgt);
+  v_lon->resize(col3_pos, row2, col3_wid, fld_hgt);
 
-  v_dep->resize(col5_pos, row1, col5_wid, fld_hgt); 
-  v_ais->resize(col5_pos, row2, col5_wid, fld_hgt); 
+  v_spd->resize(col4_pos, row1, col4_wid, fld_hgt);
+  v_crs->resize(col4_pos, row2, col4_wid, fld_hgt);
 
-  time->resize(col6_pos, row1, col6_wid, fld_hgt); 
-  warp->resize(col6_pos, row2, col6_wid, fld_hgt); 
-  
-  m_scope_variable->resize(col1_pos, row3, col1_xwid, fld_hgt); 
-  m_scope_time->resize(col3_pos, row3, col3_wid, fld_hgt); 
-  m_scope_value->resize(col4_pos, row3, col4_xwid, fld_hgt); 
+  v_dep->resize(col5_pos, row1, col5_wid, fld_hgt);
+  v_ais->resize(col5_pos, row2, col5_wid, fld_hgt);
+
+  time->resize(col6_pos, row1, col6_wid, fld_hgt);
+  warp->resize(col6_pos, row2, col6_wid, fld_hgt);
+
+  m_scope_variable->resize(col1_pos, row3, col1_xwid, fld_hgt);
+  m_scope_time->resize(col3_pos, row3, col3_wid, fld_hgt);
+  m_scope_value->resize(col4_pos, row3, col4_xwid, fld_hgt);
 
   m_user_button_1->resize(col_b1_pos, row1, button_wid, fld_hgt);
   m_user_button_2->resize(col_b1_pos, row2, button_wid, fld_hgt);
@@ -3093,4 +3162,3 @@ void PMV_GUI::resizeWidgets()
   m_user_button_19->resize(col_b19_pos, row1, button_wid, fld_hgt);
   m_user_button_20->resize(col_b19_pos, row2, button_wid, fld_hgt);
 }
-

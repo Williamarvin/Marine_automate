@@ -22,21 +22,12 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_PATH_UTILS_HEADER
 #define XY_PATH_UTILS_HEADER
 
 #include "XYSegList.h"
 
 XYSegList greedyPath(XYSegList, double, double);
-  
+
 #endif
-
-
-
-
-
-
-
-
-

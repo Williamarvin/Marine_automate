@@ -38,39 +38,18 @@ public:
   virtual ~OF_Coupler() {}
 
   void disableNormalize();
-  void enableNormalize(double minwt=0, double maxwt=100);
-  
-  IvPFunction *couple(IvPFunction* ipf_one, IvPFunction* ipf_two);
-  IvPFunction *couple(IvPFunction* ipf_one, IvPFunction* ipf_two, 
-		      double pwt_one, double pwt_two);
+  void enableNormalize(double minwt = 0, double maxwt = 100);
 
- protected:
-  IvPFunction *coupleRaw(IvPFunction*, IvPFunction*);
+  IvPFunction *couple(IvPFunction *ipf_one, IvPFunction *ipf_two);
+  IvPFunction *couple(IvPFunction *ipf_one, IvPFunction *ipf_two,
+                      double pwt_one, double pwt_two);
 
- protected:
-  bool   m_normalize;
+protected:
+  IvPFunction *coupleRaw(IvPFunction *, IvPFunction *);
+
+protected:
+  bool m_normalize;
   double m_normalmin;
   double m_normalmax;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

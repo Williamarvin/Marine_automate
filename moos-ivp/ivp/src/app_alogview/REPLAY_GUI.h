@@ -24,194 +24,189 @@
 #ifndef REPLAY_GUI_HEADER
 #define REPLAY_GUI_HEADER
 
-#include <string>
-#include <list>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Repeat_Button.H>
-#include "NavPlotViewer.h"
-#include "LogPlotViewer.h"
-#include "MY_Repeat_Button.h"
-#include "MBTimer.h"
-#include "MarineVehiGUI.h"
-#include "GUI_IPF.h"
-#include "GUI_HelmScope.h"
-#include "GUI_VarScope.h"
+#include "ALogDataBroker.h"
 #include "GUI_AppLogScope.h"
 #include "GUI_Encounters.h"
+#include "GUI_HelmScope.h"
+#include "GUI_IPF.h"
 #include "GUI_TaskDiary.h"
-#include "ALogDataBroker.h"
+#include "GUI_VarScope.h"
+#include "LogPlotViewer.h"
+#include "MBTimer.h"
+#include "MY_Repeat_Button.h"
+#include "MarineVehiGUI.h"
+#include "NavPlotViewer.h"
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Output.H>
+#include <FL/Fl_Repeat_Button.H>
+#include <list>
+#include <string>
 
 class REPLAY_GUI : public MarineVehiGUI {
- public:
-  REPLAY_GUI(int w, int h, const char *l=0);
+public:
+  REPLAY_GUI(int w, int h, const char *l = 0);
   ~REPLAY_GUI();
-  
-  void   resize(int, int, int, int);
-  int    handle(int);
 
-  void   setDataBroker(const ALogDataBroker&);
-  void   setLogPlotMenus();
-  void   setVarHistMenus();
-  void   setAppLogMenus();
-  void   setTaskDiaryMenus();
-  void   setBehaviorVarMap(std::map<std::string, std::string>);
-  void   initLogPlotChoiceA(std::string vname, std::string varname);
-  void   initLogPlotChoiceB(std::string vname, std::string varname);
+  void resize(int, int, int, int);
+  int handle(int);
 
-  void   setIPFPlotMenus();
-  void   setEncounterPlotMenus();
-  void   setHelmPlotMenus();
+  void setDataBroker(const ALogDataBroker &);
+  void setLogPlotMenus();
+  void setVarHistMenus();
+  void setAppLogMenus();
+  void setTaskDiaryMenus();
+  void setBehaviorVarMap(std::map<std::string, std::string>);
+  void initLogPlotChoiceA(std::string vname, std::string varname);
+  void initLogPlotChoiceB(std::string vname, std::string varname);
 
-  void   conditionalStep();
-  void   updateXY();
+  void setIPFPlotMenus();
+  void setEncounterPlotMenus();
+  void setHelmPlotMenus();
 
-  bool   inNavPlotViewer() const;
-  bool   inLogPlotViewer() const;
+  void conditionalStep();
+  void updateXY();
 
-  void   steptime(int val=0);
-  void   streaming(int val=0);
-  void   streamspeed(bool faster);
+  bool inNavPlotViewer() const;
+  bool inLogPlotViewer() const;
 
-  void   setWindowLayout(std::string layout="normal");
-  void   setCurrTime(double=-1);
+  void steptime(int val = 0);
+  void streaming(int val = 0);
+  void streamspeed(bool faster);
 
-  void   resizeWidgetsShape();
+  void setWindowLayout(std::string layout = "normal");
+  void setCurrTime(double = -1);
 
-  void   setGrepStr1(std::string s) {m_grep1=s;}
-  void   setGrepStr2(std::string s) {m_grep2=s;}
-  
- protected:
-  void   augmentMenu();
-  
-  void   initWidgets();
-  void   resizeWidgetsText(int);
-  void   updatePlayRateMsg();
-  void   updateTimeSubGUI();
-  void   toggleLeftLogPlot();
-  void   toggleRightLogPlot();
+  void resizeWidgetsShape();
 
- private:
+  void setGrepStr1(std::string s) { m_grep1 = s; }
+  void setGrepStr2(std::string s) { m_grep2 = s; }
+
+protected:
+  void augmentMenu();
+
+  void initWidgets();
+  void resizeWidgetsText(int);
+  void updatePlayRateMsg();
+  void updateTimeSubGUI();
+  void toggleLeftLogPlot();
+  void toggleRightLogPlot();
+
+private:
   // Variants of the base class functions. Invoked in REPLAY_GUI::handle
-  void   handleLeftRight(int);
-  void   handleUpDown(int);
-  void   zoom(int);
+  void handleLeftRight(int);
+  void handleUpDown(int);
+  void zoom(int);
 
   // Implement these base class virtual functions so that the base
   // class version is not called. We handle all these keys in this class.
-  void   cb_HandleLeftRight_i(int) {}
-  void   cb_HandleUpDown_i(int) {}
-  void   cb_Zoom_i(int) {}
+  void cb_HandleLeftRight_i(int) {}
+  void cb_HandleUpDown_i(int) {}
+  void cb_Zoom_i(int) {}
 
   inline void cb_JumpTime_i(int);
-  static void cb_JumpTime(Fl_Widget*, int);
+  static void cb_JumpTime(Fl_Widget *, int);
 
   inline void cb_Step_i(int millisecs);
-  static void cb_Step(Fl_Widget*, int millisecs);
+  static void cb_Step(Fl_Widget *, int millisecs);
 
   inline void cb_StepType_i(int);
-  static void cb_StepType(Fl_Widget*, int);
+  static void cb_StepType(Fl_Widget *, int);
 
   inline void cb_LeftLogPlot_i(int);
-  static void cb_LeftLogPlot(Fl_Widget*, int);
+  static void cb_LeftLogPlot(Fl_Widget *, int);
 
   inline void cb_RightLogPlot_i(int);
-  static void cb_RightLogPlot(Fl_Widget*, int);
+  static void cb_RightLogPlot(Fl_Widget *, int);
 
   inline void cb_VarHist_i(int);
-  static void cb_VarHist(Fl_Widget*, int);
+  static void cb_VarHist(Fl_Widget *, int);
 
   inline void cb_AppLog_i(int);
-  static void cb_AppLog(Fl_Widget*, int);
+  static void cb_AppLog(Fl_Widget *, int);
 
   inline void cb_TaskDiary_i();
-  static void cb_TaskDiary(Fl_Widget*);
+  static void cb_TaskDiary(Fl_Widget *);
 
   inline void cb_Encounter_i(int);
-  static void cb_Encounter(Fl_Widget*, int);
+  static void cb_Encounter(Fl_Widget *, int);
 
   inline void cb_IPF_GUI_i(int);
-  static void cb_IPF_GUI(Fl_Widget*, int);
+  static void cb_IPF_GUI(Fl_Widget *, int);
 
   inline void cb_Helm_GUI_i(int);
-  static void cb_Helm_GUI(Fl_Widget*, int);
+  static void cb_Helm_GUI(Fl_Widget *, int);
 
   inline void cb_Streaming_i(int);
-  static void cb_Streaming(Fl_Widget*, int);
+  static void cb_Streaming(Fl_Widget *, int);
 
   inline void cb_StreamStep_i(int);
-  static void cb_StreamStep(Fl_Widget*, int);
+  static void cb_StreamStep(Fl_Widget *, int);
 
   inline void cb_StreamSpeed_i(bool);
-  static void cb_StreamSpeed(Fl_Widget*, bool);
+  static void cb_StreamSpeed(Fl_Widget *, bool);
 
   inline void cb_TimeZoom_i(int);
-  static void cb_TimeZoom(Fl_Widget*, int);
+  static void cb_TimeZoom(Fl_Widget *, int);
 
   inline void cb_ToggleSyncScales_i(int);
-  static void cb_ToggleSyncScales(Fl_Widget*, int);
+  static void cb_ToggleSyncScales(Fl_Widget *, int);
 
   inline void cb_ButtonHideLogPlot_i(int);
-  static void cb_ButtonHideLogPlot(Fl_Widget*, int);
+  static void cb_ButtonHideLogPlot(Fl_Widget *, int);
 
- public:
+public:
   NavPlotViewer *np_viewer;
   LogPlotViewer *lp_viewer;
-  
-  std::list<GUI_IPF*>         m_sub_guis;
-  std::list<GUI_HelmScope*>   m_sub_guis_h;
-  std::list<GUI_VarScope*>    m_sub_guis_v;
-  std::list<GUI_Encounters*>  m_sub_guis_e;
-  std::list<GUI_AppLogScope*> m_sub_guis_a;
-  std::list<GUI_TaskDiary*>   m_sub_guis_t;
 
- protected:
+  std::list<GUI_IPF *> m_sub_guis;
+  std::list<GUI_HelmScope *> m_sub_guis_h;
+  std::list<GUI_VarScope *> m_sub_guis_v;
+  std::list<GUI_Encounters *> m_sub_guis_e;
+  std::list<GUI_AppLogScope *> m_sub_guis_a;
+  std::list<GUI_TaskDiary *> m_sub_guis_t;
+
+protected:
   ALogDataBroker m_dbroker;
-  
+
   int m_left_mix;
   int m_right_mix;
 
- protected:
-  double      m_np_viewer_hgt;
-  double      m_lp_viewer_hgt;
+protected:
+  double m_np_viewer_hgt;
+  double m_lp_viewer_hgt;
 
   // map from behavior to scope vars for convenience in GUI_IPF
   std::map<std::string, std::string> m_map_bhv_vars;
-  
-  Fl_Output*  m_disp_time;
+
+  Fl_Output *m_disp_time;
 
   Fl_Check_Button *m_but_hide_lp;
   Fl_Check_Button *m_but_hide_rp;
-  
-  Fl_Output*  m_label1;
-  Fl_Output*  m_curr1;
-  Fl_Output*  m_label2;
-  Fl_Output*  m_curr2;
+
+  Fl_Output *m_label1;
+  Fl_Output *m_curr1;
+  Fl_Output *m_label2;
+  Fl_Output *m_curr2;
 
   Fl_Repeat_Button *m_but_zoom_in_time;
   Fl_Repeat_Button *m_but_zoom_out_time;
-  Fl_Button        *m_but_zoom_reset_time;
-  Fl_Button        *m_but_sync_scales;
+  Fl_Button *m_but_zoom_reset_time;
+  Fl_Button *m_but_sync_scales;
 
- protected:
-  bool    m_stream;
+protected:
+  bool m_stream;
   MBTimer m_timer;
 
   std::string m_replay_warp_msg;
-  int         m_replay_warp_ix;
-  double      m_replay_warp;
-  int         m_replay_disp_gap;  // milliseconds
+  int m_replay_warp_ix;
+  double m_replay_warp;
+  int m_replay_disp_gap; // milliseconds
 
   std::list<double> m_warp_gaps;
-  double            m_replay_warp_actual;
+  double m_replay_warp_actual;
 
   std::string m_grep1;
   std::string m_grep2;
 };
 #endif
-
-
-
-
-

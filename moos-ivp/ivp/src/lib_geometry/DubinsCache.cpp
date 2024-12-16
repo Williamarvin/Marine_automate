@@ -23,20 +23,19 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath> 
 #include "DubinsCache.h"
-#include "GeomUtils.h"
 #include "AngleUtils.h"
 #include "ArcUtils.h"
+#include "GeomUtils.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------
 // Procedure: Constructor
 
-DubinsCache::DubinsCache() 
-{
+DubinsCache::DubinsCache() {
   // Initialize config vars
   m_osx = 0;
   m_osy = 0;
@@ -48,34 +47,31 @@ DubinsCache::DubinsCache()
 //----------------------------------------------------------------
 // Procedure: setParams
 
-bool DubinsCache::setParams(double osx, double osy, double osh,
-			    double radius)
-{
-  if(radius < 0)
-    return(false);
+bool DubinsCache::setParams(double osx, double osy, double osh, double radius) {
+  if (radius < 0)
+    return (false);
 
   m_dturns.clear();
-  
+
   m_osx = osx;
   m_osy = osy;
   m_osh = osh;
   m_turn_radius = radius;
-  
-  return(true);
+
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: buildCache()
 
-bool DubinsCache::buildCache(unsigned int hdg_choices)
-{
+bool DubinsCache::buildCache(unsigned int hdg_choices) {
   // Turn radius must by non-negative, hdg_choices must be at least
   // every 30 degrees.
-  if((m_turn_radius < 0) || (hdg_choices < 12))
-    return(false);
-    
+  if ((m_turn_radius < 0) || (hdg_choices < 12))
+    return (false);
+
   m_dturns.clear();
-  for(unsigned int i=0; i<m_hdg_choices; i++) {
+  for (unsigned int i = 0; i < m_hdg_choices; i++) {
     double delta = 360.0 / (double)(m_hdg_choices);
     double desired_hdg = delta * (double)(i);
 
@@ -84,42 +80,36 @@ bool DubinsCache::buildCache(unsigned int hdg_choices)
     m_dturns.push_back(dturn);
   }
 
-  return(true);
+  return (true);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: getArc()
 
-bool DubinsCache::getArc(double new_hdg, double& ax,
-			 double& ay, double& ar, double& langle,
-			 double& rangle) const
-{
-  if((new_hdg < 0) || (new_hdg >= 360))
+bool DubinsCache::getArc(double new_hdg, double &ax, double &ay, double &ar,
+                         double &langle, double &rangle) const {
+  if ((new_hdg < 0) || (new_hdg >= 360))
     new_hdg = angle360(new_hdg);
 
   double delta = 360.0 / (double)(m_hdg_choices);
   unsigned int ix = (unsigned int)(new_hdg / delta);
 
-  return(getArcIX(ix, ax, ay, ar, langle, rangle));
+  return (getArcIX(ix, ax, ay, ar, langle, rangle));
 }
-
 
 //----------------------------------------------------------------
 // Procedure: getArcIX()
 
-bool DubinsCache::getArcIX(unsigned int ix, double& ax,
-			   double& ay, double& ar,
-			   double& langle, double& rangle) const
-{
+bool DubinsCache::getArcIX(unsigned int ix, double &ax, double &ay, double &ar,
+                           double &langle, double &rangle) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
     ax = 0;
     ay = 0;
     ar = 0;
     langle = 0;
     rangle = 0;
-    return(false);
+    return (false);
   }
 
   // General case
@@ -128,112 +118,99 @@ bool DubinsCache::getArcIX(unsigned int ix, double& ax,
   ar = m_dturns[ix].getArcRad();
   langle = m_dturns[ix].getArcLangle();
   rangle = m_dturns[ix].getArcRangle();
-  
-  return(true);
-}
 
+  return (true);
+}
 
 //----------------------------------------------------------------
 // Procedure: getRay()
 
-bool DubinsCache::getRay(double new_hdg, double& px, double& py) const
-{
-  if((new_hdg < 0) || (new_hdg >= 360))
+bool DubinsCache::getRay(double new_hdg, double &px, double &py) const {
+  if ((new_hdg < 0) || (new_hdg >= 360))
     new_hdg = angle360(new_hdg);
 
   double delta = 360.0 / (double)(m_hdg_choices);
   unsigned int ix = (unsigned int)(new_hdg / delta);
 
-  return(getRayIX(ix, px, py));
+  return (getRayIX(ix, px, py));
 }
-
-
 
 //----------------------------------------------------------------
 // Procedure: getRayIX()
 
-bool DubinsCache::getRayIX(unsigned int ix, double& px, double& py) const
-{
+bool DubinsCache::getRayIX(unsigned int ix, double &px, double &py) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
     px = 0;
     py = 0;
-    return(false);
+    return (false);
   }
 
   // General case
   px = m_dturns[ix].getOSRayX();
   py = m_dturns[ix].getOSRayY();
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: getArcLen()
 
-double DubinsCache::getArcLen(double new_hdg) const
-{
-  if((new_hdg < 0) || (new_hdg >= 360))
+double DubinsCache::getArcLen(double new_hdg) const {
+  if ((new_hdg < 0) || (new_hdg >= 360))
     new_hdg = angle360(new_hdg);
 
   double delta = 360.0 / (double)(m_hdg_choices);
   unsigned int ix = (unsigned int)(new_hdg / delta);
-  
-  return(getArcLenIX(ix));
-}
 
+  return (getArcLenIX(ix));
+}
 
 //----------------------------------------------------------------
 // Procedure: getArcLenIX()
 
-double DubinsCache::getArcLenIX(unsigned int ix) const
-{
+double DubinsCache::getArcLenIX(unsigned int ix) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
-    return(-1);
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+    return (-1);
   }
 
-  return(m_dturns[ix].getArcLen());
+  return (m_dturns[ix].getArcLen());
 }
-
 
 //----------------------------------------------------------------
 // Procedure: getTurnHdgIX()
 
-double DubinsCache::getTurnHdgIX(unsigned int ix) const
-{
+double DubinsCache::getTurnHdgIX(unsigned int ix) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
-    return(-1);
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+    return (-1);
   }
 
-  return(m_dturns[ix].getTurnHdg());
+  return (m_dturns[ix].getTurnHdg());
 }
-
 
 //----------------------------------------------------------------
 // Procedure: starTurn()
 
-bool DubinsCache::starTurnIX(unsigned int ix) const
-{
+bool DubinsCache::starTurnIX(unsigned int ix) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
-    return(false);
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+    return (false);
   }
 
-  return(m_dturns[ix].starTurn());
+  return (m_dturns[ix].starTurn());
 }
 
 //----------------------------------------------------------------
 // Procedure: portTurn()
 
-bool DubinsCache::portTurnIX(unsigned int ix) const
-{
+bool DubinsCache::portTurnIX(unsigned int ix) const {
   // This should never happen by the above logic but handle anyway
-  if((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
-    return(false);
+  if ((ix >= m_hdg_choices) || (ix >= m_dturns.size())) {
+    return (false);
   }
 
-  return(m_dturns[ix].portTurn());
+  return (m_dturns[ix].portTurn());
 }
 
 //----------------------------------------------------------------
@@ -241,36 +218,34 @@ bool DubinsCache::portTurnIX(unsigned int ix) const
 //   Purpose: Determine the max possible turn to the port before the
 //            turn request would be treated as a turn to starboard
 
-double DubinsCache::getMaxPortTurn(double& ax, double& ay, double& ar,
-				   double& langle, double& rangle) const
-{
-  if(m_dturns.size() == 0)
-    return(-1);
+double DubinsCache::getMaxPortTurn(double &ax, double &ay, double &ar,
+                                   double &langle, double &rangle) const {
+  if (m_dturns.size() == 0)
+    return (-1);
 
   unsigned int found_ix = 0;
   bool found = false;
-  
+
   cout << "getMaxPortTurn ****E" << endl;
 
-  for(unsigned int i=0; (i<m_dturns.size()) && !found ; i++) {
-    //    cout << "[" << i << "]: " << boolToString(m_dturns[i].starTurn()) << endl;
-    if(m_dturns[i].portTurn() && (i != 0)) {
+  for (unsigned int i = 0; (i < m_dturns.size()) && !found; i++) {
+    //    cout << "[" << i << "]: " << boolToString(m_dturns[i].starTurn()) <<
+    //    endl;
+    if (m_dturns[i].portTurn() && (i != 0)) {
       found_ix = i;
       found = true;
     }
   }
-      
 
 #if 0
   for(unsigned int i=0; i<m_dturns.size() && (found_ix == 0); i++) 
     if(m_dturns[i].portTurn()) 
       found_ix = i;
 #endif
-  
-  getArcIX(found_ix, ax, ay, ar, langle, rangle);
-  return(m_dturns[found_ix].getTurnHdg());
-}
 
+  getArcIX(found_ix, ax, ay, ar, langle, rangle);
+  return (m_dturns[found_ix].getTurnHdg());
+}
 
 //----------------------------------------------------------------
 // Procedure: getMaxStarTurn
@@ -279,30 +254,30 @@ double DubinsCache::getMaxPortTurn(double& ax, double& ay, double& ar,
 //   Returns: The desired_heading that would represent the max
 //            starboard turn. Ex, if osh=45, may return 225.
 
-double DubinsCache::getMaxStarTurn(double& ax, double& ay, double& ar,
-				   double& langle, double& rangle) const
-{
-  if(m_dturns.size() == 0)
-    return(-1);
+double DubinsCache::getMaxStarTurn(double &ax, double &ay, double &ar,
+                                   double &langle, double &rangle) const {
+  if (m_dturns.size() == 0)
+    return (-1);
 
   unsigned int found_ix = 0;
   bool found = false;
-  
+
   cout << "getMaxStarTurn ****E" << endl;
 
   bool in_star_group = false;
-  for(unsigned int i=0; (i<m_dturns.size()) && !found ; i++) {
-    //    cout << "[" << i << "]: " << boolToString(m_dturns[i].starTurn()) << endl;
-    if(m_dturns[i].starTurn())
+  for (unsigned int i = 0; (i < m_dturns.size()) && !found; i++) {
+    //    cout << "[" << i << "]: " << boolToString(m_dturns[i].starTurn()) <<
+    //    endl;
+    if (m_dturns[i].starTurn())
       in_star_group = true;
     else {
-      if(in_star_group) {
-	found_ix = i-1;
-	found = true;
+      if (in_star_group) {
+        found_ix = i - 1;
+        found = true;
       }
     }
   }
-      
+
 #if 0
   for(unsigned int i=0; i<m_dturns.size() && (found_ix == 0); i++) {
     cout << "[" << i << "]: " << boolToString(m_dturns[i].portTurn()) << endl;
@@ -313,8 +288,5 @@ double DubinsCache::getMaxStarTurn(double& ax, double& ay, double& ar,
 #endif
 
   getArcIX(found_ix, ax, ay, ar, langle, rangle);
-  return(m_dturns[found_ix].getTurnHdg());
-
+  return (m_dturns[found_ix].getTurnHdg());
 }
-
-

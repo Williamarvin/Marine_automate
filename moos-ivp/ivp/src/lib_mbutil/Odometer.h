@@ -22,37 +22,36 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef ODOMETER_HEADER
 #define ODOMETER_HEADER
 
 class Odometer {
- public:
+public:
   Odometer();
   ~Odometer() {}
 
-  void   setXY(double, double);
-  void   setX(double);
-  void   setY(double);
+  void setXY(double, double);
+  void setX(double);
+  void setY(double);
 
-  void   reset(double utc=0);
-  void   resetExtent();
-  
-  void   pause()   {m_paused = true;}
-  void   unpause() {m_paused = false;}
-  
-  void   updateTime(double);
-  void   updateDistance();
-  void   updateDistance(double x, double y);
+  void reset(double utc = 0);
+  void resetExtent();
 
-  bool   isPaused() const     {return(m_paused);}
-  double getTotalDist() const {return(m_total_distance);}
-  double getMaxExtent() const {return(m_max_extent);}
+  void pause() { m_paused = true; }
+  void unpause() { m_paused = false; }
 
-  double getTotalElapsed(double utc=-1);
-  
- private: // State variables
+  void updateTime(double);
+  void updateDistance();
+  void updateDistance(double x, double y);
 
+  bool isPaused() const { return (m_paused); }
+  double getTotalDist() const { return (m_total_distance); }
+  double getMaxExtent() const { return (m_max_extent); }
+
+  double getTotalElapsed(double utc = -1);
+
+private: // State variables
   double m_curr_x;
   double m_curr_y;
   double m_prev_x;
@@ -62,17 +61,16 @@ class Odometer {
 
   double m_curr_utc;
   double m_start_utc;
-  
-  bool   m_nav_x_received;
-  bool   m_nav_y_received;
+
+  bool m_nav_x_received;
+  bool m_nav_y_received;
 
   double m_total_distance;
 
   // max_extent is the farthest dist from orig_x,y
   double m_max_extent;
 
-  bool   m_paused;
+  bool m_paused;
 };
 
 #endif
-

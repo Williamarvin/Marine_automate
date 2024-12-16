@@ -21,41 +21,39 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "PartitionRecord.h"
+#include <iostream>
 
 using namespace std;
 
-PartitionRecord::PartitionRecord()
-{
+PartitionRecord::PartitionRecord() {
   // Init config vars
   m_high_val = 0;
-  m_low_val  = 0;
-  m_delta    = 0;
+  m_low_val = 0;
+  m_delta = 0;
 
   m_bar_color.setColor("light_blue");
 
   // By default, there is only one partition (everything)
-  m_partition_entry_cnt.push_back(0); 
+  m_partition_entry_cnt.push_back(0);
 
   // Init status variables
   m_entries_out_of_range = 0;
-  m_average              = 0;
+  m_average = 0;
 }
 
 //-------------------------------------------------------------
 // Procedure: init
 
-void PartitionRecord::init(double low, double high, unsigned int partitions)
-{
-  if(low > high)
+void PartitionRecord::init(double low, double high, unsigned int partitions) {
+  if (low > high)
     return;
-  if(partitions == 0)
+  if (partitions == 0)
     return;
 
   m_high_val = high;
-  m_low_val  = low;
-  m_delta    = (m_high_val-m_low_val) / (double)(partitions);
+  m_low_val = low;
+  m_delta = (m_high_val - m_low_val) / (double)(partitions);
 
   m_entries.clear();
 
@@ -63,21 +61,19 @@ void PartitionRecord::init(double low, double high, unsigned int partitions)
 
   m_partition_entry_cnt = part_cnt;
 }
-  
 
 //-------------------------------------------------------------
 // Procedure: addValue()
 //      Note: Add a new value/entry to memory, update running average
 
-void PartitionRecord::addValue(double val)
-{
+void PartitionRecord::addValue(double val) {
   // Determin if the new entry is within the stated min/max range
-  if((val > m_high_val) || (val < m_low_val)) {
+  if ((val > m_high_val) || (val < m_low_val)) {
     m_entries_out_of_range++;
     return;
   }
 
-  // Update the running average  
+  // Update the running average
   double old_count = (double)(m_entries.size());
   double old_total = m_average * old_count;
 
@@ -89,61 +85,48 @@ void PartitionRecord::addValue(double val)
 
   // Add the new entry to the correct partition
   unsigned int ix = (unsigned int)(val / m_delta);
-  if(ix < m_partition_entry_cnt.size())
+  if (ix < m_partition_entry_cnt.size())
     m_partition_entry_cnt[ix]++;
 }
 
 //-------------------------------------------------------------
 // Procedure: getValue()
 
-double PartitionRecord::getValue(unsigned int ix) const
-{
-  if(ix < m_entries.size())
-    return(m_entries[ix]);
-  return(0);
+double PartitionRecord::getValue(unsigned int ix) const {
+  if (ix < m_entries.size())
+    return (m_entries[ix]);
+  return (0);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: getEntryCount
 //      Note: Return the number of entries contained in given partition
 
-unsigned int PartitionRecord::getEntryCount(unsigned int ix) const
-{
-  if(ix < m_partition_entry_cnt.size())
-    return(m_partition_entry_cnt[ix]);
-  return(0);
+unsigned int PartitionRecord::getEntryCount(unsigned int ix) const {
+  if (ix < m_partition_entry_cnt.size())
+    return (m_partition_entry_cnt[ix]);
+  return (0);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: print()
 
-void PartitionRecord::print() const
-{
-  cout << "Low: " << m_low_val  << endl;
+void PartitionRecord::print() const {
+  cout << "Low: " << m_low_val << endl;
   cout << "Hgh: " << m_high_val << endl;
   cout << "Partitions: " << m_partition_entry_cnt.size() << endl;
 
-  for(unsigned int i=0; i<m_partition_entry_cnt.size(); i++)  {
+  for (unsigned int i = 0; i < m_partition_entry_cnt.size(); i++) {
     cout << "[" << i << "]: ";
-    cout << "[" << ((double)(i)*m_delta) << "," << (double)(i+1)*m_delta << "]:";
+    cout << "[" << ((double)(i)*m_delta) << "," << (double)(i + 1) * m_delta
+         << "]:";
     cout << m_partition_entry_cnt[i] << endl;
   }
 
-  for(unsigned int j=0; j<m_entries.size(); j++) {
-    if(j != 0)
+  for (unsigned int j = 0; j < m_entries.size(); j++) {
+    if (j != 0)
       cout << ",";
     cout << m_entries[j];
   }
   cout << endl;
 }
-
-
-
-
-
-
-
-
-

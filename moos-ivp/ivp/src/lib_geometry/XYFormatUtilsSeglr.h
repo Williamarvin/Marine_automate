@@ -22,18 +22,13 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_SEGLR_HEADER
 #define XY_FORMAT_UTILS_SEGLR_HEADER
 
-#include <string>
 #include "XYSeglr.h"
+#include <string>
 
-XYSeglr string2Seglr(const std::string&);
+XYSeglr string2Seglr(const std::string &);
 
 #endif
-
-
-
-
-

@@ -5,19 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "MapMarkers_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pMapMarkers app is configured with a number of markers    ");
@@ -31,8 +30,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pMapMarkers file.moos [OPTIONS]                          ");
@@ -41,7 +39,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pMapMarkers with the given process name            ");
   blk("      rather than pMapMarkers.                                  ");
   mag("  --example, -e                                                 ");
@@ -63,8 +61,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMapMarkers Example MOOS Configuration                          ");
@@ -90,12 +87,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMapMarkers INTERFACE                                           ");
@@ -117,9 +112,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pMapMarkers", "gpl");
   exit(0);
 }
-

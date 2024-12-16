@@ -21,113 +21,103 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
+#include "ModelTaskDiary.h"
+#include "ACTable.h"
+#include "BuildUtils.h"
+#include "MBUtils.h"
 #include <cstdio>
 #include <cstdlib>
-#include "ModelTaskDiary.h"
-#include "MBUtils.h"
-#include "BuildUtils.h"
-#include "ACTable.h"
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Constructor
 
-ModelTaskDiary::ModelTaskDiary()
-{
+ModelTaskDiary::ModelTaskDiary() {
   m_curr_time = 0;
 
-  m_wrap           = false;
-  m_future         = false;
-  m_truncate       = false;
+  m_wrap = false;
+  m_future = false;
+  m_truncate = false;
   m_show_separator = false;
 }
 
 //-------------------------------------------------------------
 // procedure: setTaskDiary()
 
-void ModelTaskDiary::setTaskDiary(const TaskDiary& task_diary)
-{
+void ModelTaskDiary::setTaskDiary(const TaskDiary &task_diary) {
   m_task_diary = task_diary;
 }
 
 //-------------------------------------------------------------
 // Procedure: setTime()
 
-void ModelTaskDiary::setTime(double gtime)
-{
-  m_curr_time = gtime;
-}
+void ModelTaskDiary::setTime(double gtime) { m_curr_time = gtime; }
 
 //-------------------------------------------------------------
 // Procedure: getLinesUpToNow()
 
-vector<string> ModelTaskDiary::getLinesUpToNow()
-{
+vector<string> ModelTaskDiary::getLinesUpToNow() {
   vector<TaskDiaryEntry> entries;
   entries = m_task_diary.getDiaryEntriesUpToTime(m_curr_time);
-    
+
   vector<string> lines;
   lines = m_task_diary.formattedLines(entries, m_show_separator, m_wrap);
 
-  return(lines);
+  return (lines);
 }
 
 //-------------------------------------------------------------
 // Procedure: getLinesPastNow()
 
-vector<string> ModelTaskDiary::getLinesPastNow() const
-{
+vector<string> ModelTaskDiary::getLinesPastNow() const {
   vector<TaskDiaryEntry> entries;
   entries = m_task_diary.getDiaryEntriesPastTime(m_curr_time);
 
   vector<string> lines;
   lines = m_task_diary.formattedLines(entries, m_show_separator, m_wrap);
 
-  return(lines);
+  return (lines);
 }
-
-
 
 //-------------------------------------------------------------
 // Procedure: processLines()
-//   Purpose: Do the work of converting all TaskDiaryEntries into 
+//   Purpose: Do the work of converting all TaskDiaryEntries into
 //            a set of user consumable lines. Applying:
 //              a) separator lines if activated
 //              b) truncation and/or wrapping if activated
 
-vector<string> ModelTaskDiary::processLines(vector<TaskDiaryEntry> entries) const
-{
-  ACTable actab(4,2);
+vector<string>
+ModelTaskDiary::processLines(vector<TaskDiaryEntry> entries) const {
+  ACTable actab(4, 2);
   actab.setColumnJustify(0, "right");
   actab << "Time | Source   | Received By  | Mission Task ";
   actab.addHeaderLines();
- 
-  for(unsigned int i=0; i<entries.size(); i++) {  
+
+  for (unsigned int i = 0; i < entries.size(); i++) {
     TaskDiaryEntry entry = entries[i];
-    if((i != 0) && m_show_separator)
+    if ((i != 0) && m_show_separator)
       actab.addHeaderLines();
 
-    string time     = doubleToString(entry.getTaskTime(),4);
-    string info     = entry.getTaskInfo();
-    string src_app  = entry.getSourceApp();
+    string time = doubleToString(entry.getTaskTime(), 4);
+    string info = entry.getTaskInfo();
+    string src_app = entry.getSourceApp();
     string src_node = entry.getSourceNode();
     string dest_nodes = entry.getDestNodesAll();
-    string res_time = doubleToString(entry.getResultTime(),4);
-    string result   = entry.getResultInfo();
-    if(result != "") {
+    string res_time = doubleToString(entry.getResultTime(), 4);
+    string result = entry.getResultInfo();
+    if (result != "") {
       result = findReplace(result, ":", "=");
       result = findReplace(result, "#", ", ");
     }
 
     src_node = "(" + src_node + ")";
-    actab << time     << src_app  << dest_nodes << info;
-    actab << res_time << src_node << ""         << result;
+    actab << time << src_app << dest_nodes << info;
+    actab << res_time << src_node << "" << result;
   }
 
   vector<string> all_lines = actab.getTableOutput();
-    
-  return(all_lines);
-}
 
+  return (all_lines);
+}

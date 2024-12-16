@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_CPA_HEADER
 #define AOF_CPA_HEADER
 
@@ -28,33 +28,25 @@
 #include "CPAEngine.h"
 
 class IvPDomain;
-class AOF_CPA: public AOF_Contact {
+class AOF_CPA : public AOF_Contact {
 public:
   AOF_CPA(IvPDomain);
   ~AOF_CPA() {}
 
 public: // virtuals defined
-  double evalBox(const IvPBox*) const;   
-  bool   setParam(const std::string&, double);
-  bool   setParam(const std::string&, const std::string&);
-  bool   initialize();
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool setParam(const std::string &, const std::string &);
+  bool initialize();
 
- protected:
+protected:
   double metric(double) const;
-  
- protected:
-  int    m_crs_ix;  // Index of "course" variable in IvPDomain
-  int    m_spd_ix;  // Index of "speed" variable in IvPDomain
 
-  bool   m_inextremis;
+protected:
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed" variable in IvPDomain
+
+  bool m_inextremis;
 };
 
 #endif
-
-
-
-
-
-
-
-

@@ -36,35 +36,26 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Config_INCLUDED
 #define MOOS_POCO_Foundation_Config_INCLUDED
-
-
 
 // Define to enable Windows Unicode (UTF-8) support
 //#define MOOS_POCO_WIN32_UTF8
 
-
 // Define to disable implicit linking
 #define MOOS_POCO_NO_AUTOMATIC_LIBS
-
 
 // Define to disable FPEnvironment support
 // #define MOOS_POCO_NO_FPENVIRONMENT
 
-
 // Define if std::wstring is not available
 // #define MOOS_POCO_NO_WSTRING
-
 
 // Define to disable shared memory
 // #define MOOS_POCO_NO_SHAREDMEMORY
 
-
 // Define to desired default thread stack size
 // Zero means OS default
 #define MOOS_POCO_THREAD_STACK_SIZE 0
-
 
 #endif // MOOS_POCO_Foundation_Config_INCLUDED

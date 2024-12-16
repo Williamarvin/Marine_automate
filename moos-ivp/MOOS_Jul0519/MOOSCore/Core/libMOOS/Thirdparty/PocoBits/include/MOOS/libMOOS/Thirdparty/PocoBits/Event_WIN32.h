@@ -36,58 +36,45 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Event_WIN32_INCLUDED
 #define MOOS_POCO_Foundation_Event_WIN32_INCLUDED
 
-
-#include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Exception.h"
+#include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
 #include "MOOS/libMOOS/Thirdparty/PocoBits/UnWindows.h"
-
 
 namespace MOOS {
 namespace Poco {
 
-
-class MOOS_POCO_Foundation_API EventImpl
-{
+class MOOS_POCO_Foundation_API EventImpl {
 protected:
-	EventImpl(bool autoReset = false);
-	~EventImpl();
-	void setImpl();
-	void waitImpl();
-	bool waitImpl(long milliseconds);
-	void resetImpl();
+  EventImpl(bool autoReset = false);
+  ~EventImpl();
+  void setImpl();
+  void waitImpl();
+  bool waitImpl(long milliseconds);
+  void resetImpl();
 
 private:
-	HANDLE _event;
+  HANDLE _event;
 };
-
 
 //
 // inlines
 //
-inline void EventImpl::setImpl()
-{
-	if (!SetEvent(_event))
-	{
-		throw SystemException("cannot signal event");
-	}
+inline void EventImpl::setImpl() {
+  if (!SetEvent(_event)) {
+    throw SystemException("cannot signal event");
+  }
 }
 
-
-inline void EventImpl::resetImpl()
-{
-	if (!ResetEvent(_event))
-	{
-		throw SystemException("cannot reset event");
-	}
+inline void EventImpl::resetImpl() {
+  if (!ResetEvent(_event)) {
+    throw SystemException("cannot reset event");
+  }
 }
-
 
 } // namespace Poco
 } // namespace MOOS
-
 
 #endif // MOOS_POCO_Foundation_Event_WIN32_INCLUDED

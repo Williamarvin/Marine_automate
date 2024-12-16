@@ -26,24 +26,14 @@
 #ifndef XY_ARTIFACTUTILS_HEADER
 #define XY_ARTIFACTUTILS_HEADER
 
-
-#include "XYSegList.h"
 #include "XYPolygon.h"
+#include "XYSegList.h"
 
-const XYSegList generateLawnmower(const XYPolygon&, double, double, double, double, bool);
-const XYSegList generateLawnmowerFull(const XYPolygon&, double, double);
-const std::vector<std::string> generateArtifacts(double, double, double, double, double, double, const XYPolygon&);
-
+const XYSegList generateLawnmower(const XYPolygon &, double, double, double,
+                                  double, bool);
+const XYSegList generateLawnmowerFull(const XYPolygon &, double, double);
+const std::vector<std::string> generateArtifacts(double, double, double, double,
+                                                 double, double,
+                                                 const XYPolygon &);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

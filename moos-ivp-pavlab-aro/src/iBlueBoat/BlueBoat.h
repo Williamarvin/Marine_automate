@@ -12,19 +12,18 @@
 #ifndef BlueBoat_HEADER
 #define BlueBoat_HEADER
 
-#include <string>
-#include <cmath>
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include <cmath>
+#include <string>
 
-#include "SockNinja.h"         // from lib_socket_utils
-#include "MBUtils.h"           // from lib_mbutil
-#include "LatLonFormatUtils.h" // from lib_mbutil
-#include "Thruster.h"
 #include "BlueBoatBridge.hpp"
+#include "LatLonFormatUtils.h" // from lib_mbutil
+#include "MBUtils.h"           // from lib_mbutil
+#include "SockNinja.h"         // from lib_socket_utils
+#include "Thruster.h"
 
-class BlueBoat : public AppCastingMOOSApp
-{
+class BlueBoat : public AppCastingMOOSApp {
 public:
   BlueBoat();
   ~BlueBoat();

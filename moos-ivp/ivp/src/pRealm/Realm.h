@@ -24,60 +24,57 @@
 #ifndef REALM_APP_HEADER
 #define REALM_APP_HEADER
 
-#include <map>
+#include "ACTable.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "PipeWay.h"
 #include <list>
+#include <map>
 #include <set>
 #include <string>
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "ACTable.h"
-#include "PipeWay.h"
 
-class Realm : public AppCastingMOOSApp
-{
- public:
+class Realm : public AppCastingMOOSApp {
+public:
   Realm();
-  ~Realm() {};
+  ~Realm(){};
 
- protected: // Standard MOOSApp functions to overload  
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard protected MOOS and Appcast functions
+protected: // Standard protected MOOS and Appcast functions
   bool buildReport();
   void registerVariables();
- 
- protected: // Auxilliary functions
 
+protected: // Auxilliary functions
   void buildRealmCast();
   bool buildRealmCastChannel(PipeWay);
   bool buildWatchCast(PipeWay);
   void buildRealmCastSummary();
-  
- protected:
+
+protected:
   bool handleConfigHistVar(std::string);
   bool handleConfigScopeSet(std::string);
   void handleMailDBRWSummary(std::string);
   void handleMailRealmCastReq(std::string);
 
-  void handleGeneralMail(const CMOOSMsg&);
+  void handleGeneralMail(const CMOOSMsg &);
 
   std::vector<std::string> getAppsVector() const;
 
   bool isIgnoreVar(std::string) const;
 
- protected: // convenience functions for ACTable operations
+protected: // convenience functions for ACTable operations
   void resetACTable(PipeWay);
-  void addRowACTab(PipeWay, std::string var, std::string src,
-		   std::string time, std::string comm, std::string val);
+  void addRowACTab(PipeWay, std::string var, std::string src, std::string time,
+                   std::string comm, std::string val);
 
   void addLatestOutCast(std::string);
 
   std::string getHistoryVars() const;
-  
- private: // Configuration variables
 
+private: // Configuration variables
   unsigned int m_msg_max_hist;
 
   double m_relcast_interval;
@@ -88,16 +85,15 @@ class Realm : public AppCastingMOOSApp
 
   std::set<std::string> m_set_hist_vars;
 
-  std::map<std::string, std::set<std::string> > m_map_scope_sets;
-  
- private: // State variables (DB Info)
+  std::map<std::string, std::set<std::string>> m_map_scope_sets;
 
+private: // State variables (DB Info)
   // A Map from var name to recently received values;
-  std::map<std::string, std::list<CMOOSMsg> > m_map_data;
+  std::map<std::string, std::list<CMOOSMsg>> m_map_data;
 
   // Maps from app name to list of pub/sub variables
-  std::map<std::string, std::set<std::string> > m_map_subs;
-  std::map<std::string, std::set<std::string> > m_map_pubs;
+  std::map<std::string, std::set<std::string>> m_map_subs;
+  std::map<std::string, std::set<std::string>> m_map_pubs;
 
   // Convenient summaries of overall pubs,subs,apps,vars
   std::set<std::string> m_set_apps;
@@ -107,29 +103,28 @@ class Realm : public AppCastingMOOSApp
 
   // Info about local MOOSDB
   std::string m_moosdb_name;
-  double      m_time_warp;
-  bool        m_new_app_noticed; 
+  double m_time_warp;
+  bool m_new_app_noticed;
 
   // Info about client interactions on requests and postings
   unsigned int m_summaries_posted;
 
-  // Key is the client, e.g., pmv, umview 
+  // Key is the client, e.g., pmv, umview
   std::map<std::string, PipeWay> m_map_pipeways;
 
   std::map<std::string, double> m_map_var_last_wcast;
 
   std::string m_last_post_summary_info;
-  double m_last_post_summary;  
+  double m_last_post_summary;
   double m_last_post_relcast;
 
   unsigned int m_total_realmcasts;
   unsigned int m_total_watchcasts;
-  
+
   std::list<std::string> m_recent_outcasts;
-  
-  // Keep an ACTable scope available  
+
+  // Keep an ACTable scope available
   ACTable m_actab;
 };
 
-#endif 
-
+#endif

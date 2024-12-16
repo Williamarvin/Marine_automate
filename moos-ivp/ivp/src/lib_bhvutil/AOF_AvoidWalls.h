@@ -22,45 +22,45 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_AVOID_WALLS_HEADER
 #define AOF_AVOID_WALLS_HEADER
 
 #include "AOF.h"
-#include "WallEngine.h"
 #include "IvPBox.h"
 #include "IvPDomain.h"
+#include "WallEngine.h"
 
 class IvPDomain;
 class AOF_AvoidWalls : public AOF {
- public:
+public:
   AOF_AvoidWalls(IvPDomain);
   ~AOF_AvoidWalls();
 
- public: // virtuals defined
-  double evalBox(const IvPBox*) const;   
-  bool   setParam(const std::string&, double);
-  bool   initialize();
+public: // virtuals defined
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool initialize();
 
- public: // More virtuals defined Declare a known min/max eval range
-  bool   minMaxKnown() const {return(true);}
-  double getKnownMin() const {return(0);}
-  double getKnownMax() const {return(m_max_util);}
-  
-  bool   setWalls(std::vector<XYSegList> walls);
+public: // More virtuals defined Declare a known min/max eval range
+  bool minMaxKnown() const { return (true); }
+  double getKnownMin() const { return (0); }
+  double getKnownMax() const { return (m_max_util); }
 
-  std::vector<double> getXpts()   {return(m_hit_cache_x);}
-  std::vector<double> getYpts()   {return(m_hit_cache_y);}
-  std::vector<bool>   getBools()  {return(m_hit_cache_b);}
+  bool setWalls(std::vector<XYSegList> walls);
 
-  void setVName(std::string str) {m_vname=str;}
-  
- protected:
+  std::vector<double> getXpts() { return (m_hit_cache_x); }
+  std::vector<double> getYpts() { return (m_hit_cache_y); }
+  std::vector<bool> getBools() { return (m_hit_cache_b); }
+
+  void setVName(std::string str) { m_vname = str; }
+
+protected:
   double metric(double) const;
-  
- protected:
-  int    m_crs_ix;  // Index of "course" variable in IvPDomain
-  int    m_spd_ix;  // Index of "speed" variable in IvPDomain
+
+protected:
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed" variable in IvPDomain
 
   double m_tol;
   double m_osx;
@@ -73,39 +73,37 @@ class AOF_AvoidWalls : public AOF {
   double m_safe_ttcpa;
   double m_ttc_base;
   double m_ttc_rate;
-  
+
   double m_collision_distance;
   double m_all_clear_distance;
 
-  bool   m_tol_set;
-  bool   m_osy_set;
-  bool   m_osx_set;
-  bool   m_osh_set;
-  bool   m_turn_radius_set;
-  bool   m_nogo_ttcpa_set;
-  bool   m_safe_ttcpa_set;
-  bool   m_ttc_base_set;
-  bool   m_ttc_rate_set;
-  bool   m_collision_distance_set;
-  bool   m_all_clear_distance_set;
+  bool m_tol_set;
+  bool m_osy_set;
+  bool m_osx_set;
+  bool m_osh_set;
+  bool m_turn_radius_set;
+  bool m_nogo_ttcpa_set;
+  bool m_safe_ttcpa_set;
+  bool m_ttc_base_set;
+  bool m_ttc_rate_set;
+  bool m_collision_distance_set;
+  bool m_all_clear_distance_set;
 
   WallEngine m_wall_engine;
-  bool       m_wall_engine_initialized;
+  bool m_wall_engine_initialized;
 
   std::vector<double> m_hit_cache_x;
   std::vector<double> m_hit_cache_y;
-  std::vector<bool>   m_hit_cache_b;
+  std::vector<bool> m_hit_cache_b;
 
   double m_max_util;
 
   unsigned int m_helm_iter;
   std::string m_vname;
-  
+
   FILE *fptr;
-  
+
   std::vector<XYSegList> m_walls;
 };
 
 #endif
-
-

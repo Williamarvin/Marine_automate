@@ -24,16 +24,15 @@
 #ifndef MARINE_PID_HEADER
 #define MARINE_PID_HEADER
 
-#include <string>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "PIDEngine.h"
+#include <string>
 
-class MarinePID : public AppCastingMOOSApp
-{
+class MarinePID : public AppCastingMOOSApp {
 public:
   MarinePID();
   virtual ~MarinePID() {}
-  
+
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
@@ -47,18 +46,12 @@ public:
 
 protected:
   PIDEngine m_pengine;
-  bool      m_pid_ignore_nav_yaw;
-  bool      m_pid_allstop_posted;
-  bool      m_pid_verbose;
-  double    m_pid_ok_skew;
+  bool m_pid_ignore_nav_yaw;
+  bool m_pid_allstop_posted;
+  bool m_pid_verbose;
+  double m_pid_ok_skew;
 
-  bool      m_enable_thrust_cap;
-  double    m_thrust_cap;
+  bool m_enable_thrust_cap;
+  double m_thrust_cap;
 };
-#endif 
-
-
-
-
-
-
+#endif

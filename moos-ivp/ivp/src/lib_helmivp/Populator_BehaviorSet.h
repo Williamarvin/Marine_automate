@@ -24,62 +24,62 @@
 #ifndef POPULATOR_BEHAVIORSET_HEADER
 #define POPULATOR_BEHAVIORSET_HEADER
 
-#include <string>
-#include <vector>
+#include "BFactoryDynamic.h"
+#include "BFactoryStatic.h"
 #include "BehaviorSet.h"
 #include "BehaviorSpec.h"
-#include "VarDataPair.h"
-#include "IvPDomain.h"
-#include "IvPBehavior.h"
 #include "InfoBuffer.h"
-#include "ModeSet.h"
+#include "IvPBehavior.h"
+#include "IvPDomain.h"
 #include "ModeEntry.h"
-#include "BFactoryStatic.h"
-#include "BFactoryDynamic.h"
+#include "ModeSet.h"
+#include "VarDataPair.h"
+#include <string>
+#include <vector>
 
 class Populator_BehaviorSet {
 
 public:
-  Populator_BehaviorSet(IvPDomain, InfoBuffer*);
+  Populator_BehaviorSet(IvPDomain, InfoBuffer *);
   virtual ~Populator_BehaviorSet() {}
 
-  void addBehaviorDir(std::string dir) {m_dir_names.push_back(dir);}
-  void setBHVDirNotFoundOK(bool v)     {m_bhv_dir_not_found_ok=v;}
-  void setOwnship(std::string s)       {m_ownship=s;}
+  void addBehaviorDir(std::string dir) { m_dir_names.push_back(dir); }
+  void setBHVDirNotFoundOK(bool v) { m_bhv_dir_not_found_ok = v; }
+  void setOwnship(std::string s) { m_ownship = s; }
 
-  BehaviorSet* populate(std::set<std::string>);
-  BehaviorSet* populate(std::string filename);
+  BehaviorSet *populate(std::set<std::string>);
+  BehaviorSet *populate(std::string filename);
 
   void printBehaviorSpecs() const;
 
-  std::vector<std::string> getConfigWarnings() const {return(m_config_warnings);}
+  std::vector<std::string> getConfigWarnings() const {
+    return (m_config_warnings);
+  }
 
 protected:
-
-  bool   handleLine(std::string, std::string, unsigned int line_num);
-  void   closeSetMode(); 
-  void   addConfigWarning(const std::string&);
-  void   addConfigWarnings(std::vector<std::string>);
-  void   clearConfigWarnings() {m_config_warnings.clear();}
+  bool handleLine(std::string, std::string, unsigned int line_num);
+  void closeSetMode();
+  void addConfigWarning(const std::string &);
+  void addConfigWarnings(std::vector<std::string>);
+  void clearConfigWarnings() { m_config_warnings.clear(); }
 
 protected:
-  std::vector<VarDataPair>   initial_vars;
-  std::vector<VarDataPair>   default_vars;
+  std::vector<VarDataPair> initial_vars;
+  std::vector<VarDataPair> default_vars;
 
-  std::vector<std::string>   m_dir_names;
-  std::vector<std::string>   m_config_warnings;
+  std::vector<std::string> m_dir_names;
+  std::vector<std::string> m_config_warnings;
 
-  std::vector<BehaviorSpec>  m_behavior_specs;
+  std::vector<BehaviorSpec> m_behavior_specs;
   BehaviorSpec m_curr_bhv_spec;
 
-  IvPDomain    m_domain;
-  InfoBuffer*  m_info_buffer;
-  ModeSet      m_mode_set;
-  ModeEntry    m_mode_entry;
-  std::string  m_parse_mode;
-  std::string  m_ownship;
+  IvPDomain m_domain;
+  InfoBuffer *m_info_buffer;
+  ModeSet m_mode_set;
+  ModeEntry m_mode_entry;
+  std::string m_parse_mode;
+  std::string m_ownship;
 
-  bool         m_bhv_dir_not_found_ok;
+  bool m_bhv_dir_not_found_ok;
 };
 #endif
-

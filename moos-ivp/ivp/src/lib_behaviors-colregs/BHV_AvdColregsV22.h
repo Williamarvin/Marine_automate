@@ -22,126 +22,122 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_AVD_COLREGS_V22_HEADER
 #define BHV_AVD_COLREGS_V22_HEADER
 
+#include "IvPContactBehavior.h"
+#include "VelocityFilter.h"
+#include "XYSegList.h"
 #include <list>
 #include <string>
-#include "IvPContactBehavior.h"
-#include "XYSegList.h"
-#include "VelocityFilter.h"
 
 class IvPDomain;
 class BHV_AvdColregsV22 : public IvPContactBehavior {
- public:
+public:
   BHV_AvdColregsV22(IvPDomain);
-  ~BHV_AvdColregsV22() {};
-  
-  void         onHelmStart();
-  bool         onRunStatePrior();
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onRunToIdleState();
-  void         onIdleState();
-  void         onInactiveState();
-  void         onCompleteState();
-  std::string  getInfo(std::string);
-  double       getDoubleInfo(std::string);
-  bool         isConstraint() {return(true);}
+  ~BHV_AvdColregsV22(){};
 
- protected:
-  void         updateAvoidMode();
+  void onHelmStart();
+  bool onRunStatePrior();
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onRunToIdleState();
+  void onIdleState();
+  void onInactiveState();
+  void onCompleteState();
+  std::string getInfo(std::string);
+  double getDoubleInfo(std::string);
+  bool isConstraint() { return (true); }
 
-  void         checkModeOvertaking();            // Rule-13
-  void         checkModeHeadOn();                // Rule-14
-  void         checkModeGiveWay();               // Rule-16
-  void         checkModeStandOn();               // Rule-17
-  void         checkModeStandOnOT();             // Rule-17 
-  void         checkModeCPA();                   // Catch-all
+protected:
+  void updateAvoidMode();
+
+  void checkModeOvertaking(); // Rule-13
+  void checkModeHeadOn();     // Rule-14
+  void checkModeGiveWay();    // Rule-16
+  void checkModeStandOn();    // Rule-17
+  void checkModeStandOnOT();  // Rule-17
+  void checkModeCPA();        // Catch-all
   IvPFunction *buildOvertakingIPF();
   IvPFunction *buildHeadOnIPF();
   IvPFunction *buildGiveWayIPF();
   IvPFunction *buildStandOnIPF();
   IvPFunction *buildCPA_IPF();
 
-  bool         resetAvoidModes(std::string m="none", std::string s="none");
-  double       getRelevance() const;
-  bool         findDecelerateSpeedRange(double&, double&);
-  bool         findAccelerateSpeedRange(double &, double&);
+  bool resetAvoidModes(std::string m = "none", std::string s = "none");
+  double getRelevance() const;
+  bool findDecelerateSpeedRange(double &, double &);
+  bool findAccelerateSpeedRange(double &, double &);
 
-  void         addHeading(double, double);
-  void         addRelBng(double, double);
-  void         clearHeadings();
-  void         clearRelBngs();
-  bool         getHeadingRate(double&, double min_secs=4);
-  bool         getRelBngRate(double&);
+  void addHeading(double, double);
+  void addRelBng(double, double);
+  void clearHeadings();
+  void clearRelBngs();
+  bool getHeadingRate(double &, double min_secs = 4);
+  bool getRelBngRate(double &);
 
-  void         postStatusInfo();
+  void postStatusInfo();
 
- private: // Configuration Parameters
-  double       m_pwt_outer_dist;
-  double       m_pwt_inner_dist;
-  double       m_min_util_cpa_dist;
-  double       m_max_util_cpa_dist;
-  double       m_completed_dist;
+private: // Configuration Parameters
+  double m_pwt_outer_dist;
+  double m_pwt_inner_dist;
+  double m_min_util_cpa_dist;
+  double m_max_util_cpa_dist;
+  double m_completed_dist;
 
-  double       m_giveway_bow_dist;
-  
-  double       m_overtaking_bng_range;
-  double       m_headon_abs_relbng_thresh;
+  double m_giveway_bow_dist;
 
-  std::string  m_pwt_grade;
-  std::string  m_contact_type_required;
+  double m_overtaking_bng_range;
+  double m_headon_abs_relbng_thresh;
 
-  bool         m_headon_only;
+  std::string m_pwt_grade;
+  std::string m_contact_type_required;
+
+  bool m_headon_only;
 
   VelocityFilter m_vfilter;
-  
- private:  // State Variables
-  std::string  m_avoid_mode;
-  double       m_avoid_mode_elaps_time;
-  double       m_avoid_mode_start_time;
 
-  std::string  m_avoid_submode;
-  double       m_avoid_submode_elaps_time;
-  double       m_avoid_submode_start_time;
+private: // State Variables
+  std::string m_avoid_mode;
+  double m_avoid_mode_elaps_time;
+  double m_avoid_mode_start_time;
 
-  double       m_osh_orig_standon;
-  double       m_spd_orig_standon;
-  bool         m_standon_set;
+  std::string m_avoid_submode;
+  double m_avoid_submode_elaps_time;
+  double m_avoid_submode_start_time;
 
-  double       m_turn_radius;
-  
-  std::string  m_debug1;
-  std::string  m_debug2;
-  std::string  m_debug3;
-  std::string  m_debug4;
+  double m_osh_orig_standon;
+  double m_spd_orig_standon;
+  bool m_standon_set;
 
-  bool         m_check_plateaus;
-  bool         m_check_validity;
-  double       m_pcheck_thresh;
-  bool         m_use_refinery;
-  
+  double m_turn_radius;
+
+  std::string m_debug1;
+  std::string m_debug2;
+  std::string m_debug3;
+  std::string m_debug4;
+
+  bool m_check_plateaus;
+  bool m_check_validity;
+  double m_pcheck_thresh;
+  bool m_use_refinery;
+
   unsigned int m_iterations;
-  bool         m_cn_crossed_os_port_star;
+  bool m_cn_crossed_os_port_star;
 
-  double       m_actual_pwt;
-  double       m_initial_speed;
-  XYSegList    m_bearing_segl;
+  double m_actual_pwt;
+  double m_initial_speed;
+  XYSegList m_bearing_segl;
 
   std::list<double> m_cn_heading_val;
   std::list<double> m_cn_rel_bng_val;
   std::list<double> m_cn_heading_time;
   std::list<double> m_cn_rel_bng_time;
-  double            m_memory_time;
+  double m_memory_time;
 
-  bool   m_verbose;
-  bool   m_no_alert_request;
+  bool m_verbose;
+  bool m_no_alert_request;
 };
 
 #endif
-
-
-
-

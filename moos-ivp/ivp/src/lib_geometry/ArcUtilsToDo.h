@@ -26,15 +26,11 @@
 #ifndef GEOM_ARC_UTILS_2DO_HEADER
 #define GEOM_ARC_UTILS_2DO_HEADER
 
-#include <vector>
 #include "XYSegList.h"
+#include <vector>
 
-double distSegToArcPts(double x1, double y1, double x2, double y2,
-		       double ax, double ay, double ar,
-		       double langle, double rangle, double thresh,
-		       std::vector<double>& vix,
-		       std::vector<double>& viy,
-		       std::vector<double>& dist);
+double distSegToArcPts(double x1, double y1, double x2, double y2, double ax,
+                       double ay, double ar, double langle, double rangle,
+                       double thresh, std::vector<double> &vix,
+                       std::vector<double> &viy, std::vector<double> &dist);
 #endif
-
-

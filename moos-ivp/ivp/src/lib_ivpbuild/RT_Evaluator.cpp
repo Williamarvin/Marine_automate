@@ -24,53 +24,45 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "RT_Evaluator.h"
 #include "BuildUtils.h"
 #include "Regressor.h"
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Procedure: Constructor
 
-RT_Evaluator::RT_Evaluator(Regressor *regressor) 
-{
-  m_regressor = regressor;
-}
+RT_Evaluator::RT_Evaluator(Regressor *regressor) { m_regressor = regressor; }
 
 //-------------------------------------------------------------
 // Procedure: create
 //   Purpose: Refine the given PDMap to be uniform in the region
 //            provided. The uniformity in this region is given by
 //            the size of the unibox.
-//      Note: The given PDMap will be destroyed in this process 
+//      Note: The given PDMap will be destroyed in this process
 //            and a new PDMap created and returned. Some of the
 //            boxes from the old PDMap will be stolen and used in
-//            the new PDmap. 
+//            the new PDmap.
 
-
-void RT_Evaluator::evaluate(PDMap *pdmap, PQueue& pqueue)
-{
+void RT_Evaluator::evaluate(PDMap *pdmap, PQueue &pqueue) {
   // Sanity Checks
-  if(!pdmap || !m_regressor)
+  if (!pdmap || !m_regressor)
     return;
-  if(pdmap->getDomain().size() != m_regressor->getAOF()->getDim())
+  if (pdmap->getDomain().size() != m_regressor->getAOF()->getDim())
     return;
 
   // If PQueue is null, just set piece weights
-  if(pqueue.null()) {
-    for(int i=0; i<pdmap->size(); i++) 
+  if (pqueue.null()) {
+    for (int i = 0; i < pdmap->size(); i++)
       m_regressor->setWeight(pdmap->bx(i), false);
   }
   // If PQueue is not null, set weights, calc delta, add to PQueue
   else {
-    for(int i=0; i<pdmap->size(); i++) {
+    for (int i = 0; i < pdmap->size(); i++) {
       double delta = m_regressor->setWeight(pdmap->bx(i), true);
       pqueue.insert(i, delta);
     }
   }
 }
-
-
-

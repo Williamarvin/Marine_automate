@@ -8,13 +8,12 @@
 #ifndef SeaTrac_HEADER
 #define SeaTrac_HEADER
 
+#include "BpSeatrac/seatrac_beacon.hpp"
+#include "BpSeatrac/seatrac_types.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "serial_device.h"
-#include "BpSeatrac/seatrac_types.h"
-#include "BpSeatrac/seatrac_beacon.hpp"
 
-class iSeaTracX150V0 : public AppCastingMOOSApp
-{
+class iSeaTracX150V0 : public AppCastingMOOSApp {
 public:
   iSeaTracX150V0();
   ~iSeaTracX150V0();
@@ -32,7 +31,6 @@ protected:
   void registerVariables();
 
 protected:
-
   bool connectToSeatrac();
 
   void sendPing(ESeatracBeaconId id);
@@ -43,17 +41,16 @@ protected:
   void messageDecoded(pointer context, PSeatracCmdDecodeMsgParams params);
   void lineDecoded(pointer context, PSeatracCmdDecodeLineParams params);
 
-  //Sys messages
+  // Sys messages
   void seatracSysAlive(pointer context, PSeatracSysAliveParams params);
   void seatracSysInfo(pointer context, PSeatracSysInfoParams params);
   void seatracStatus(pointer context, PSeatracStatusParams params);
 
-  //Ping Response
+  // Ping Response
   void seatracPingResponse(pointer context, PSeatracPingResponseParams params);
-  
-private: // Configuration variables
 
-  //Parameters and remappable subs and pubs
+private: // Configuration variables
+  // Parameters and remappable subs and pubs
   std::string m_nav_x_key;
   std::string m_nav_x_sub;
   double m_nav_x;
@@ -69,15 +66,15 @@ private: // Configuration variables
   std::string m_port_name_key;
   std::string m_port_name;
 
-  //State variables
-  //Utility
+  // State variables
+  // Utility
   bool m_port_is_opened;
   SerialDevice m_x150_beacon_interface;
   static const uint32 m_interface_buffer_length = 256;
   char m_interface_write_buffer[m_interface_buffer_length];
   CSeatrac *m_x150_object;
 
-  //Data
+  // Data
   double m_ping_send_moos_time;
   double m_ping_resp_moos_time;
   double m_ping_range_time;
@@ -90,8 +87,8 @@ private: // Configuration variables
   double m_last_ping;
   double m_next_ping;
   double m_ping_interval;
+
 private: // State variables
-  
 };
 
 #endif

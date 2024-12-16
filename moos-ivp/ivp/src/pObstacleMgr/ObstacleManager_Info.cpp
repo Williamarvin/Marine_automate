@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "ObstacleManager_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pObstacleMgr manages incoming sensor data about obstacles ");
@@ -46,8 +45,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blu("=============================================================== ");
   blu("Usage: pObstacleMgr file.moos [OPTIONS]                         ");
   blu("=============================================================== ");
@@ -55,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pObstacleMgr with the given process name           ");
   blk("      rather than pObstacleMgr.                                 ");
   mag("  --example, -e                                                 ");
@@ -79,8 +77,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("pObstacleMgr Example MOOS Configuration                         ");
   blu("=============================================================== ");
@@ -125,12 +122,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pObstacleMgr INTERFACE                                          ");
@@ -165,10 +160,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pObstacleMgr", "gpl");
   exit(0);
 }
-
-

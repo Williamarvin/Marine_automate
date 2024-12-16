@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef SEGLR_HEADER
 #define SEGLR_HEADER
 
@@ -31,7 +31,7 @@
 
 class Seglr {
 public:
-  Seglr(double ray_angle=0) {m_ray_angle=ray_angle;}
+  Seglr(double ray_angle = 0) { m_ray_angle = ray_angle; }
   virtual ~Seglr() {}
 
   // Setters
@@ -50,16 +50,15 @@ public:
   void reflect();
 
   // Analysis
-  unsigned int size() const {return(m_vx.size());}
+  unsigned int size() const { return (m_vx.size()); }
+
+  bool crossesLine(double x1, double y1, double x2, double y2, double &ix,
+                   double &iy, bool ray_first = true) const;
 
   bool crossesLine(double x1, double y1, double x2, double y2,
-		   double& ix, double& iy, bool ray_first=true) const;
+                   bool ray_first = true) const;
 
-  bool crossesLine(double x1, double y1, double x2, double y2,
-		   bool ray_first=true) const;
-
-  
-  std::string getSpec(int precision=2) const;
+  std::string getSpec(int precision = 2) const;
 
   double getMinX() const;
   double getMaxX() const;
@@ -69,12 +68,7 @@ public:
 protected:
   std::vector<double> m_vx;
   std::vector<double> m_vy;
-  double              m_ray_angle;
+  double m_ray_angle;
 };
 
 #endif
-
-
-
-
-

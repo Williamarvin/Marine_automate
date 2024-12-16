@@ -15,18 +15,17 @@
     except by the author(s), or those designated by the author.
 ************************************************************** */
 
-#include <cstdlib>
-#include <iostream>
-#include <cmath>
 #include "BHV_TaskFormationFollower.h"
+#include "AngleUtils.h"
 #include "MBUtils.h"
 #include "MacroUtils.h"
-#include "AngleUtils.h"
-#include "dubin.h"
-#include "XYPoint.h"
-#include "XYSegList.h"
-#include "XYPolygon.h"
 #include "XYFormatUtilsSegl.h"
+#include "XYPoint.h"
+#include "XYPolygon.h"
+#include "XYSegList.h"
+#include "dubin.h"
+#include <cmath>
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 
@@ -35,16 +34,15 @@ using namespace std;
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_TaskFormationFollower::BHV_TaskFormationFollower(IvPDomain domain) : IvPTaskBehavior(domain)
-{
+BHV_TaskFormationFollower::BHV_TaskFormationFollower(IvPDomain domain)
+    : IvPTaskBehavior(domain) {
   m_turn_radius = 3; // meters
 }
 
 //-----------------------------------------------------------
 // Procedure: onHelmStart()
 
-void BHV_TaskFormationFollower::onHelmStart()
-{
+void BHV_TaskFormationFollower::onHelmStart() {
   if (m_update_var == "")
     return;
 
@@ -56,19 +54,15 @@ void BHV_TaskFormationFollower::onHelmStart()
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_TaskFormationFollower::setParam(string param, string value)
-{
+bool BHV_TaskFormationFollower::setParam(string param, string value) {
   if (IvPTaskBehavior::setParam(param, value))
     return (true);
   param = tolower(param);
-  if ((param == "turn_radius") && isNumber(value))
-  {
+  if ((param == "turn_radius") && isNumber(value)) {
     m_turn_radius = atof(value.c_str());
     m_turn_radius_set = true;
     return (true);
-  }
-  else if ((param == "pos_idx") && isNumber(value))
-  {
+  } else if ((param == "pos_idx") && isNumber(value)) {
     m_pos_idx = atof(value.c_str());
     return (true);
   }
@@ -79,8 +73,7 @@ bool BHV_TaskFormationFollower::setParam(string param, string value)
 //-----------------------------------------------------------
 // Procedure: onIdleState()
 
-void BHV_TaskFormationFollower::onIdleState()
-{
+void BHV_TaskFormationFollower::onIdleState() {
   IvPTaskBehavior::onGeneralIdleState();
   return;
 }
@@ -89,8 +82,7 @@ void BHV_TaskFormationFollower::onIdleState()
 // Procedure: onRunState()
 //    States: spawned : noroster : roster : bidding
 
-IvPFunction *BHV_TaskFormationFollower::onRunState()
-{
+IvPFunction *BHV_TaskFormationFollower::onRunState() {
   IvPTaskBehavior::onGeneralRunState();
   return (0);
 }
@@ -98,19 +90,17 @@ IvPFunction *BHV_TaskFormationFollower::onRunState()
 //-----------------------------------------------------------
 // Procedure: getTaskBid()
 
-double pmod(double a, double b)
-{
+double pmod(double a, double b) {
   double r = fmod(a, b);
-  if (r < 0)
-  {
+  if (r < 0) {
     r += b;
   }
   return r;
 };
 
-double BHV_TaskFormationFollower::getTaskBid()
-{
-  // TODO: Get the projected point from the formation geometry class and utilities - the only contact should be the leader
+double BHV_TaskFormationFollower::getTaskBid() {
+  // TODO: Get the projected point from the formation geometry class and
+  // utilities - the only contact should be the leader
 
   double heading_to_target = relAng(m_osx, m_osy, m_cnx, m_cny);
   double precision = 1;
@@ -120,9 +110,9 @@ double BHV_TaskFormationFollower::getTaskBid()
   // Angle difference between heading and heading to target
   DubinsPath dubins_calculator;
 
-  string seglist_str = dubins_calculator.findOptimalWaypoints(Point(m_osx, m_osy), os_heading_rad,
-                                                              Point(m_cnx, m_cny), goal_heading_rad,
-                                                              m_turn_radius, m_turn_radius, m_turn_radius, precision);
+  string seglist_str = dubins_calculator.findOptimalWaypoints(
+      Point(m_osx, m_osy), os_heading_rad, Point(m_cnx, m_cny),
+      goal_heading_rad, m_turn_radius, m_turn_radius, m_turn_radius, precision);
   XYSegList predicted_trajectory = string2SegList(seglist_str);
 
   predicted_trajectory.add_vertex(m_cnx, m_cny);
@@ -137,15 +127,13 @@ double BHV_TaskFormationFollower::getTaskBid()
 //-----------------------------------------------------------
 // Procedure: applyFlagMacros()
 
-vector<VarDataPair> BHV_TaskFormationFollower::applyFlagMacros(vector<VarDataPair> flags)
-{
+vector<VarDataPair>
+BHV_TaskFormationFollower::applyFlagMacros(vector<VarDataPair> flags) {
   // ofstream dbg_file;
   // dbg_file.open(m_us_name + "_helmtask_dbg.txt", ios_base::app);
-  for (unsigned int i = 0; i < flags.size(); i++)
-  {
+  for (unsigned int i = 0; i < flags.size(); i++) {
     string var = flags[i].get_var();
-    if (flags[i].is_string())
-    {
+    if (flags[i].is_string()) {
       string sdata = flags[i].get_sdata();
       sdata = macroExpand(sdata, "CONTACT", tolower(m_contact));
       int next_pos_idx = m_pos_idx + 1;
@@ -153,7 +141,8 @@ vector<VarDataPair> BHV_TaskFormationFollower::applyFlagMacros(vector<VarDataPai
       postMessage("FORMATION_IDX", to_string(m_pos_idx));
       flags[i].set_sdata(sdata, true);
     }
-    // dbg_file << "Var: " << var << ", SData: " << flags[i].get_sdata() << endl;
+    // dbg_file << "Var: " << var << ", SData: " << flags[i].get_sdata() <<
+    // endl;
   }
   // dbg_file.close();
 

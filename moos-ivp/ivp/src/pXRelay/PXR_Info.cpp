@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "PXR_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The purpose of the pXRelay application is to provide a simple ");
@@ -45,8 +44,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pXRelay file.moos [OPTIONS]                              ");
@@ -55,18 +53,18 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pXRelay with the given process name rather         ");
   blk("      than pXRelay.                                             ");
   mag("  --example, -e                                                 ");
   blk("      Display example MOOS configuration block.                 ");
   mag("  --help, -h                                                    ");
   blk("      Display this help message.                                ");
-  mag("  --in","=<varname>                                             ");
+  mag("  --in", "=<varname>                                             ");
   blk("      Use <varname> as the Relay incoming variable              ");
   mag("  --interface, -i                                               ");
   blk("      Display MOOS publications and subscriptions.              ");
-  mag("  --out","=<varname>                                            ");
+  mag("  --out", "=<varname>                                            ");
   blk("      Use <varname> as the Relay outgoing variable              ");
   mag("  --version,-v                                                  ");
   blk("      Display the release version of pXRelay.                   ");
@@ -81,8 +79,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pXRelay Example MOOS Configuration                              ");
@@ -100,12 +97,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pXRelay INTERFACE                                               ");
@@ -129,17 +124,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pXRelay", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

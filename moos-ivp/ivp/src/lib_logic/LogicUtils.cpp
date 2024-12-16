@@ -23,9 +23,9 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstring>
 #include "LogicUtils.h"
 #include "MBUtils.h"
+#include <cstring>
 
 using namespace std;
 
@@ -37,10 +37,9 @@ using namespace std;
 //----------------------------------------------------------------
 // Procedure: parseRelation()
 
-vector<string> parseRelation(string gstr)
-{
+vector<string> parseRelation(string gstr) {
   vector<string> rvector;
-  
+
   gstr = findReplace(gstr, '\t', ' ');
   gstr = findReplace(gstr, ")", ") ");
   gstr = findReplace(gstr, "(", " (");
@@ -48,101 +47,92 @@ vector<string> parseRelation(string gstr)
 
   gstr = stripBlankEnds(gstr);
 
-  if(!legalParens(gstr))
-    return(rvector);
+  if (!legalParens(gstr))
+    return (rvector);
   gstr = pruneParens(gstr);
-  string left  = gstr;
+  string left = gstr;
   string right = gstr;
-  
+
   const char *str = gstr.c_str();
 
-  if(str[0] == '!') {
-    if(globalParens(str+1)) {
+  if (str[0] == '!') {
+    if (globalParens(str + 1)) {
       rvector.push_back("not");
-      rvector.push_back(str+1);
-      return(rvector);
+      rvector.push_back(str + 1);
+      return (rvector);
     }
   }
 
-  int  i;
-  int  len   = gstr.length();
-  int  depth = 0;
-  bool done  = false;
+  int i;
+  int len = gstr.length();
+  int depth = 0;
+  bool done = false;
 
-  for(i=0; (i<len)&&!done; i++) {
-    if(str[i] == '(')
+  for (i = 0; (i < len) && !done; i++) {
+    if (str[i] == '(')
       depth++;
-    if(str[i] == ')')
+    if (str[i] == ')')
       depth--;
- 
-    if(depth == 0) {
-      if(((len-i) >= 3) && (i!=0) &&
-	 (!strncasecmp(" OR ", str+i-1, 4))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+2, "");
-	rvector.push_back("or");
-	done = true;
-      }
-      else if(((len-i) >= 4) && (i!=0) && 
-	 (!strncasecmp(" AND ", str+i-1, 4))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+3, "");
-	rvector.push_back("and");
-	done = true;
-      }
-      else if(((len-i) >= 2) && (!strncmp("==", str+i, 2))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+2, "");
-	rvector.push_back("==");
-	done = true;
-      }
-      else if(((len-i) >= 1) && (!strncmp("=", str+i, 1))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+1, "");
-	rvector.push_back("=");
-	done = true;
-      }
-      else if(((len-i) >= 2) && (!strncmp("!=", str+i, 2))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+2, "");
-	rvector.push_back("!=");
-	done = true;
-      }
-      else if(((len-i) >= 2) && (!strncmp(">=", str+i, 2))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+2, "");
-	rvector.push_back(">=");
-	done = true;
-      }
-      else if(((len-i) >= 2) && (!strncmp("<=", str+i, 2))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+2, "");
-	rvector.push_back("<=");
-	done = true;
-      }
-      else if(((len-i) >= 1) && (!strncmp(">", str+i, 1))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+1, "");
-	rvector.push_back(">");
-	done = true;
-      }
-      else if(((len-i) >= 1) && (!strncmp("<", str+i, 1))) {
-	left.replace(i, len-i, "");
-	right.replace(0, i+1, "");
-	rvector.push_back("<");
-	done = true;
+
+    if (depth == 0) {
+      if (((len - i) >= 3) && (i != 0) &&
+          (!strncasecmp(" OR ", str + i - 1, 4))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 2, "");
+        rvector.push_back("or");
+        done = true;
+      } else if (((len - i) >= 4) && (i != 0) &&
+                 (!strncasecmp(" AND ", str + i - 1, 4))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 3, "");
+        rvector.push_back("and");
+        done = true;
+      } else if (((len - i) >= 2) && (!strncmp("==", str + i, 2))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 2, "");
+        rvector.push_back("==");
+        done = true;
+      } else if (((len - i) >= 1) && (!strncmp("=", str + i, 1))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 1, "");
+        rvector.push_back("=");
+        done = true;
+      } else if (((len - i) >= 2) && (!strncmp("!=", str + i, 2))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 2, "");
+        rvector.push_back("!=");
+        done = true;
+      } else if (((len - i) >= 2) && (!strncmp(">=", str + i, 2))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 2, "");
+        rvector.push_back(">=");
+        done = true;
+      } else if (((len - i) >= 2) && (!strncmp("<=", str + i, 2))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 2, "");
+        rvector.push_back("<=");
+        done = true;
+      } else if (((len - i) >= 1) && (!strncmp(">", str + i, 1))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 1, "");
+        rvector.push_back(">");
+        done = true;
+      } else if (((len - i) >= 1) && (!strncmp("<", str + i, 1))) {
+        left.replace(i, len - i, "");
+        right.replace(0, i + 1, "");
+        rvector.push_back("<");
+        done = true;
       }
     }
   }
 
-  // If we didnt find any relational connector, just return an 
+  // If we didnt find any relational connector, just return an
   // empty vector. Indicates a leaf/atom has been reached.
-  if(done) {
+  if (done) {
     rvector.push_back(stripBlankEnds(left));
     rvector.push_back(stripBlankEnds(right));
   }
-  return(rvector);
-
+  return (rvector);
 }
 
 //----------------------------------------------------------------
@@ -155,27 +145,25 @@ vector<string> parseRelation(string gstr)
 //            (A=2)or(B=3)     gives (A=2)or(B=3)
 //            (((A=2))or(B=3)) gives ((A=2))or(B=3)
 
-string pruneParens(string gstr)
-{
+string pruneParens(string gstr) {
   gstr = stripBlankEnds(gstr);
 
   bool done = false;
-  while(!done) {
+  while (!done) {
     int len = gstr.length();
-    
-    if(globalParens(gstr)) {  
-      gstr.replace(len-1, 1, "");
+
+    if (globalParens(gstr)) {
+      gstr.replace(len - 1, 1, "");
       gstr.replace(0, 1, "");
-    }
-    else
+    } else
       done = true;
   }
-  return(gstr);
+  return (gstr);
 }
 
 //----------------------------------------------------------------
 // Procedure: globalParens()
-//   Purpose: Returns TRUE if the string begins and ends with an 
+//   Purpose: Returns TRUE if the string begins and ends with an
 //            open and close parens, and the close parens closes the
 //            the open parens in the first character.
 //  Examples: (A=1)             true
@@ -183,47 +171,43 @@ string pruneParens(string gstr)
 //            ((A=2) and (C<4)) true
 //            A=1               false
 
-bool globalParens(string str)
-{
+bool globalParens(string str) {
   str = stripBlankEnds(str);
 
-  if(!legalParens(str)) {
-    return(false);
+  if (!legalParens(str)) {
+    return (false);
   }
 
   int len = str.length();
-  if(len<2)
-    return(false);
+  if (len < 2)
+    return (false);
 
-  if((str.at(0) != '(') || (str.at(len-1) != ')')) {
-    return(false);
+  if ((str.at(0) != '(') || (str.at(len - 1) != ')')) {
+    return (false);
   }
-          
-  str.replace(len-1, 1, "");
-  str.replace(0, 1, "");
-  
-  return(legalParens(str));
-}
 
+  str.replace(len - 1, 1, "");
+  str.replace(0, 1, "");
+
+  return (legalParens(str));
+}
 
 //----------------------------------------------------------------
 // Procedure: globalNotParens()
 //      Note: returns true if of the form !(SOMETHING), false otherwise.
 
-bool globalNotParens(string str)
-{
+bool globalNotParens(string str) {
   str = stripBlankEnds(str);
 
-  if(str.length() < 3)
-    return(false);
+  if (str.length() < 3)
+    return (false);
 
-  if(str.at(0) == '!')
-    if(globalParens(str.c_str()+1))
-      return(true);
+  if (str.at(0) == '!')
+    if (globalParens(str.c_str() + 1))
+      return (true);
 
-  return(false);
+  return (false);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: isValidVariable
@@ -231,27 +215,26 @@ bool globalNotParens(string str)
 //      Note: Disallowed characters due to logic syntax:
 //            >, <, =, !, ", ), (
 
-bool isValidVariable(string str)
-{
+bool isValidVariable(string str) {
   str = stripBlankEnds(str);
   unsigned int i, len = str.length();
 
-  if(len==0)
-    return(false);
+  if (len == 0)
+    return (false);
 
-  for(i=0; i<len; i++) {
+  for (i = 0; i < len; i++) {
     char c = str.at(i);
-    if((c=='"') || (c=='>') || (c=='<') || 
-       (c=='=') || (c=='!') || (c==')') || (c=='('))
-      return(false);
+    if ((c == '"') || (c == '>') || (c == '<') || (c == '=') || (c == '!') ||
+        (c == ')') || (c == '('))
+      return (false);
   }
-   
-  if(!strcasecmp("OR", str.c_str()))
-    return(false);
-  if(!strcasecmp("AND", str.c_str()))
-    return(false);
-  
-  return(true);
+
+  if (!strcasecmp("OR", str.c_str()))
+    return (false);
+  if (!strcasecmp("AND", str.c_str()))
+    return (false);
+
+  return (true);
 }
 
 //----------------------------------------------------------------
@@ -260,95 +243,91 @@ bool isValidVariable(string str)
 //      Note: Disallowed characters due to logic syntax:
 //            >, <, =, !, ), (
 
-bool isValidLiteral(string str)
-{
+bool isValidLiteral(string str) {
   str = stripBlankEnds(str);
   unsigned int len = str.length();
 
-  if(len==0)
-    return(false);
+  if (len == 0)
+    return (false);
 
-  if(len==1) {
+  if (len == 1) {
     char c = str.at(0);
-    if((c=='"') || (c=='>') || (c=='<') || 
-       (c=='=') || (c=='!') || (c==')') || (c=='('))
-      return(false);
+    if ((c == '"') || (c == '>') || (c == '<') || (c == '=') || (c == '!') ||
+        (c == ')') || (c == '('))
+      return (false);
     else
-      return(true);
+      return (true);
   }
-  
+
   // Do the following check before we strip off any potential quotes
-  // because "or", "and", with quotes around it, is an acceptable 
+  // because "or", "and", with quotes around it, is an acceptable
   // literal, but without quotes, they are not acceptable.
-  
-  if(!strcasecmp("OR", str.c_str()))
-    return(false);
-  if(!strcasecmp("AND", str.c_str()))
-    return(false);
-  
-  if((str.at(0)=='"') && (str.at(len-1)=='"')) {
-    str.replace(len-1, 1, "");
+
+  if (!strcasecmp("OR", str.c_str()))
+    return (false);
+  if (!strcasecmp("AND", str.c_str()))
+    return (false);
+
+  if ((str.at(0) == '"') && (str.at(len - 1) == '"')) {
+    str.replace(len - 1, 1, "");
     str.replace(0, 1, "");
     len = str.length();
   }
 
   unsigned int i;
-  for(i=0; i<len; i++) {
+  for (i = 0; i < len; i++) {
     char c = str.at(i);
-    if((c=='"') || (c=='>') || (c=='<') || (c=='=') || 
-       (c=='!') || (c==')') || (c=='('))
-      return(false);
+    if ((c == '"') || (c == '>') || (c == '<') || (c == '=') || (c == '!') ||
+        (c == ')') || (c == '('))
+      return (false);
   }
-   
-  return(true);
+
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: isValidRightVariable
 
-bool isValidRightVariable(string str)
-{
+bool isValidRightVariable(string str) {
   str = stripBlankEnds(str);
 
   int len = str.length();
-  if(len < 3)
-    return(false);
+  if (len < 3)
+    return (false);
 
-  if(str.at(0) != '$')
-    return(false);
-  if(!globalParens(str.c_str()+1))
-    return(false);
-  
-  str.replace(len-1, 1, "");
+  if (str.at(0) != '$')
+    return (false);
+  if (!globalParens(str.c_str() + 1))
+    return (false);
+
+  str.replace(len - 1, 1, "");
   str.replace(0, 2, "");
-  
-  return(isValidVariable(str));
-}
 
+  return (isValidVariable(str));
+}
 
 //----------------------------------------------------------------
 // Procedure: legalParens()
 
-bool legalParens(string gstr)
-{
+bool legalParens(string gstr) {
   const char *str = gstr.c_str();
-  
+
   int i;
-  int len   = gstr.length();
-  
+  int len = gstr.length();
+
   // First just check for balance of parentheses.
   int depth = 0;
-  for(i=0; i<len; i++) {
-    if(str[i] == '(')
+  for (i = 0; i < len; i++) {
+    if (str[i] == '(')
       depth++;
-    if(str[i] == ')')
+    if (str[i] == ')')
       depth--;
-    if(depth < 0)
-      return(false);
+    if (depth < 0)
+      return (false);
   }
-  if(depth != 0)
-    return(false);
-  return(true);
+  if (depth != 0)
+    return (false);
+  return (true);
 }
 
 //----------------------------------------------------------------
@@ -360,12 +339,10 @@ bool legalParens(string gstr)
 //     false: "abcd [sdfb] sdf "
 //     true:  "abcd [1234] // comment "
 
-bool isConditionalParamString(const string& giv_str,
-			      const string& com_str)
-{
+bool isConditionalParamString(const string &giv_str, const string &com_str) {
   string str;
 
-  if(com_str == "")
+  if (com_str == "")
     str = giv_str;
   else
     str = stripComment(giv_str, com_str);
@@ -374,98 +351,91 @@ bool isConditionalParamString(const string& giv_str,
 
   int len = str.length();
   int pos = str.find_last_of('[');
-  if(str[len-1] != ']')
-    return(false);
-  if(pos == -1)
-    return(false);
+  if (str[len - 1] != ']')
+    return (false);
+  if (pos == -1)
+    return (false);
 
-  return(true);
+  return (true);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: strFieldMatch
-//   Purpose: Performs a certain kind of string match. One string 
+//   Purpose: Performs a certain kind of string match. One string
 //            will match the other if it exactly matches a component
 //            of the other string. Components are separated by a
 //            a single separator character - by default ':'.
 //  Examples: "alpha:bravo:charlie" matches "charlie"
 //  Examples: "alpha"               matches "alpha:bravo:charlie"
 
-bool strFieldMatch(const string& str1, 
-		   const string& str2, char separator)
-{
+bool strFieldMatch(const string &str1, const string &str2, char separator) {
   // First we can eliminate pairs where one side is not a substring
   // of the other, regardless of separators.
 
   bool contains12 = strContains(str1, str2);
   bool contains21 = strContains(str2, str1);
-  if(!contains12 && !contains21)
-    return(false);
+  if (!contains12 && !contains21)
+    return (false);
 
   // Now check the more complex case where one side is a proper sub-
   // component of the other. For example:
   // For Example: "alpha:bravo" == "alpha:bravo:charlie"
   // But Not:     "pha:bra" == "alpha:bravo:charlie"
-  
+
   vector<string> svector1 = parseString(str1, separator);
   vector<string> svector2 = parseString(str2, separator);
   unsigned vsize1 = svector1.size();
   unsigned vsize2 = svector2.size();
-  if((vsize1 == 0) || (vsize2 == 0))
-    return(false);
+  if ((vsize1 == 0) || (vsize2 == 0))
+    return (false);
 
   unsigned int k;
-  for(k=0; k<vsize1; k++)
+  for (k = 0; k < vsize1; k++)
     svector1[k] = stripBlankEnds(svector1[k]);
-  for(k=0; k<vsize2; k++)
+  for (k = 0; k < vsize2; k++)
     svector2[k] = stripBlankEnds(svector2[k]);
 
   vector<string> short_vector, long_vector;
-  if(vsize1 < vsize2) {
+  if (vsize1 < vsize2) {
     short_vector = svector1;
-    long_vector  = svector2;
-  }
-  else {
+    long_vector = svector2;
+  } else {
     short_vector = svector2;
-    long_vector  = svector1;
+    long_vector = svector1;
   }
   unsigned int short_size = short_vector.size();
-  unsigned int long_size  = long_vector.size();
+  unsigned int long_size = long_vector.size();
 
   unsigned int i, j;
-  for(j=0; j<long_size; j++) {
-    if(short_vector[0] == long_vector[j]) {
+  for (j = 0; j < long_size; j++) {
+    if (short_vector[0] == long_vector[j]) {
       bool possible_match = true;
-      for(i=1; i<short_size; i++) {
-	j = j+i; 
-	if((j>=long_size) || (short_vector[i] != long_vector[j]))
-	  possible_match = false;
+      for (i = 1; i < short_size; i++) {
+        j = j + i;
+        if ((j >= long_size) || (short_vector[i] != long_vector[j]))
+          possible_match = false;
       }
-      if(possible_match == true)
-	return(true);
+      if (possible_match == true)
+        return (true);
     }
   }
 
-  return(false);
+  return (false);
 }
-    
-
 
 //----------------------------------------------------------------
 // Procedure: getUniqueVars()
 
-vector<string> getUniqueVars(const vector<LogicCondition>& conditions)
-{
+vector<string> getUniqueVars(const vector<LogicCondition> &conditions) {
   vector<string> all_vars;
-  for(unsigned int i=0; i<conditions.size(); i++) {
+  for (unsigned int i = 0; i < conditions.size(); i++) {
     vector<string> svector = conditions[i].getVarNames();
     all_vars = mergeVectors(all_vars, svector);
   }
 
   vector<string> unique_vars = removeDuplicates(all_vars);
 
-  return(unique_vars);
+  return (unique_vars);
 }
 
 //----------------------------------------------------------------
@@ -473,40 +443,34 @@ vector<string> getUniqueVars(const vector<LogicCondition>& conditions)
 //      Note: Same as getUniqueVars except this returns a set and
 //            therefore duplicate checking not needed.
 
-set<string> getLogicVars(const vector<LogicCondition>& conditions)
-{
+set<string> getLogicVars(const vector<LogicCondition> &conditions) {
   set<string> all_vars;
-  for(unsigned int i=0; i<conditions.size(); i++) {
+  for (unsigned int i = 0; i < conditions.size(); i++) {
     vector<string> svector = conditions[i].getVarNames();
-    for(unsigned int j=0; j<svector.size(); j++) { 
+    for (unsigned int j = 0; j < svector.size(); j++) {
       string var = svector[j];
       all_vars.insert(var);
-      if(strEnds(var, "_DELTA")) {
-	rbiteString(var, '_');
-	if(var != "")
-	  all_vars.insert(var);
+      if (strEnds(var, "_DELTA")) {
+        rbiteString(var, '_');
+        if (var != "")
+          all_vars.insert(var);
       }
     }
   }
-  
-  return(all_vars);
-}
 
+  return (all_vars);
+}
 
 //----------------------------------------------------------------
 // Procedure: setLogicConditionOnString()
 
-bool setLogicConditionOnString(vector<LogicCondition>& conditions, string sval)
-{
+bool setLogicConditionOnString(vector<LogicCondition> &conditions,
+                               string sval) {
   LogicCondition new_condition;
   bool handled = new_condition.setCondition(sval);
-  if(!handled)
-    return(false);
-  
+  if (!handled)
+    return (false);
+
   conditions.push_back(new_condition);
-  return(true);
+  return (true);
 }
-
-
-
-

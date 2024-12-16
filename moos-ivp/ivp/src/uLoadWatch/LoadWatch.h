@@ -24,28 +24,27 @@
 #ifndef U_LOAD_WATCH_HEADER
 #define U_LOAD_WATCH_HEADER
 
-#include <string>
-#include <map>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include <map>
+#include <string>
 
-class LoadWatch : public AppCastingMOOSApp
-{
- public:
+class LoadWatch : public AppCastingMOOSApp {
+public:
   LoadWatch();
   ~LoadWatch() {}
-  
- protected: // Standard MOOSApp functions to overload  
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
- protected: // Standard AppCastingMOOSApp function to overload 
+
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
-   
- protected:
+
+protected:
   void registerVariables();
-  
+
   void handleMailIterGap(std::string app, std::string mvar, double);
   void handleMailIterLen(std::string, double);
   bool handleConfigThresh(std::string);
@@ -53,30 +52,29 @@ class LoadWatch : public AppCastingMOOSApp
 
   void updateBreachSet(std::string app);
   void updateNearBreachSet(std::string app);
-  
- private: // Configuration variables
+
+private: // Configuration variables
   std::map<std::string, double> m_map_thresh;
-  unsigned int                  m_breach_trigger;
-   
- private: // State variables
-  std::map<std::string, double>       m_map_app_gap_total;
-  std::map<std::string, double>       m_map_app_gap_max;
+  unsigned int m_breach_trigger;
+
+private: // State variables
+  std::map<std::string, double> m_map_app_gap_total;
+  std::map<std::string, double> m_map_app_gap_max;
   std::map<std::string, unsigned int> m_map_app_gap_count;
   std::map<std::string, unsigned int> m_map_app_gap_xcount;
-  
-  std::map<std::string, double>       m_map_app_len_total;
-  std::map<std::string, double>       m_map_app_len_max;
+
+  std::map<std::string, double> m_map_app_len_total;
+  std::map<std::string, double> m_map_app_len_max;
   std::map<std::string, unsigned int> m_map_app_len_count;
 
-  unsigned int          m_breach_count;  // For any app
-  bool                  m_breach;        // For any app
+  unsigned int m_breach_count; // For any app
+  bool m_breach;               // For any app
   std::set<std::string> m_breach_set;
 
-  unsigned int          m_near_breach_count;  // For any app
-  bool                  m_near_breach;        // For any app
+  unsigned int m_near_breach_count; // For any app
+  bool m_near_breach;               // For any app
   std::set<std::string> m_near_breach_set;
-  double                m_near_breach_thresh;  
+  double m_near_breach_thresh;
 };
 
-#endif 
-
+#endif

@@ -26,60 +26,58 @@
 
 #include <string>
 
-class CPAEvent
-{
- public:
+class CPAEvent {
+public:
   CPAEvent();
-  CPAEvent(std::string v1, std::string v2, double cpa=0);
+  CPAEvent(std::string v1, std::string v2, double cpa = 0);
   CPAEvent(std::string spec);
-  ~CPAEvent() {};
+  ~CPAEvent(){};
 
-  void setVName1(std::string s) {m_vname1=s;}
-  void setVName2(std::string s) {m_vname2=s;}
-  void setCPA(double v)         {m_cpa=v;}
-  void setEFF(double v)         {m_eff=v;}
-  void setX(double v)           {m_x=v;}
-  void setY(double v)           {m_y=v;}
-  void setID(int id)            {m_id=id;}
-  void setAlpha(double v)       {m_alpha=v;}
-  void setBeta(double v)        {m_beta=v;}
-  void setPType(std::string s)  {m_ptype=s;}
-  void setXType(std::string s)  {m_xtype=s;}
-  void setCOLREGSsituation(std::string s) {m_COLREGS_situation=s;} //added
-  
-  std::string getVName1() const {return(m_vname1);}
-  std::string getVName2() const {return(m_vname2);}
-  double      getCPA() const    {return(m_cpa);}
-  double      getEFF() const    {return(m_eff);}
-  double      getX() const      {return(m_x);}
-  double      getY() const      {return(m_y);}
-  int         getID() const     {return(m_id);}
-  double      getAlpha() const  {return(m_alpha);}
-  double      getBeta() const   {return(m_beta);}
-  std::string getPType() const  {return(m_ptype);}
-  std::string getXType() const  {return(m_xtype);}
-  std::string getCOLREGSsituation() const {return(m_COLREGS_situation);} //added
-  
+  void setVName1(std::string s) { m_vname1 = s; }
+  void setVName2(std::string s) { m_vname2 = s; }
+  void setCPA(double v) { m_cpa = v; }
+  void setEFF(double v) { m_eff = v; }
+  void setX(double v) { m_x = v; }
+  void setY(double v) { m_y = v; }
+  void setID(int id) { m_id = id; }
+  void setAlpha(double v) { m_alpha = v; }
+  void setBeta(double v) { m_beta = v; }
+  void setPType(std::string s) { m_ptype = s; }
+  void setXType(std::string s) { m_xtype = s; }
+  void setCOLREGSsituation(std::string s) { m_COLREGS_situation = s; } // added
+
+  std::string getVName1() const { return (m_vname1); }
+  std::string getVName2() const { return (m_vname2); }
+  double getCPA() const { return (m_cpa); }
+  double getEFF() const { return (m_eff); }
+  double getX() const { return (m_x); }
+  double getY() const { return (m_y); }
+  int getID() const { return (m_id); }
+  double getAlpha() const { return (m_alpha); }
+  double getBeta() const { return (m_beta); }
+  std::string getPType() const { return (m_ptype); }
+  std::string getXType() const { return (m_xtype); }
+  std::string getCOLREGSsituation() const {
+    return (m_COLREGS_situation);
+  } // added
+
   std::string getSpec() const;
-  
- protected: 
-  std::string  m_vname1;  // The two vehicles involved
-  std::string  m_vname2; 
-  double       m_cpa;     // The core info: cpa distance
-  double       m_eff;     // Efficiency perhaps filled later
-  double       m_x;       // (x,y) midpt at time of cpa
-  double       m_y;
-  int          m_id;
 
-  double       m_alpha;   // relbng of v1 to v2
-  double       m_beta;    // relbng of v2 to v1
-  std::string  m_ptype;   // passing type, e.g. port:port
-  std::string  m_xtype;   // crossing type, e.g. aft:fore
-  std::string  m_COLREGS_situation; //"crossing", "overtaking", or "headon"; added
+protected:
+  std::string m_vname1; // The two vehicles involved
+  std::string m_vname2;
+  double m_cpa; // The core info: cpa distance
+  double m_eff; // Efficiency perhaps filled later
+  double m_x;   // (x,y) midpt at time of cpa
+  double m_y;
+  int m_id;
+
+  double m_alpha;      // relbng of v1 to v2
+  double m_beta;       // relbng of v2 to v1
+  std::string m_ptype; // passing type, e.g. port:port
+  std::string m_xtype; // crossing type, e.g. aft:fore
+  std::string
+      m_COLREGS_situation; //"crossing", "overtaking", or "headon"; added
 };
 
-#endif 
-
-
-
-
+#endif

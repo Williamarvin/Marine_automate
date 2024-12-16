@@ -24,32 +24,12 @@
 #ifndef SHAPE_DIAMOND_HEADER
 #define SHAPE_DIAMOND_HEADER
 
-double g_diamondBody[]=
-{
-   0.0,    12.0,
-  -8.0,     0.0,
-   0.0,   -12.0,
-   8.0,     0.0,
-   0.0,    12.0
-};
+double g_diamondBody[] = {0.0,   12.0, -8.0, 0.0, 0.0,
+                          -12.0, 8.0,  0.0,  0.0, 12.0};
 
-double       g_diamondCtrX     = 0.0;
-double       g_diamondCtrY     = 0.0;
+double g_diamondCtrX = 0.0;
+double g_diamondCtrY = 0.0;
 unsigned int g_diamondBodySize = 5;
-double       g_diamondWidth    = 16;
+double g_diamondWidth = 16;
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

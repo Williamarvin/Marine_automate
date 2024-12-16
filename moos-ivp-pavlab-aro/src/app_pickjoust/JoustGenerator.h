@@ -24,34 +24,33 @@
 #ifndef JOUST_GENERATOR_HEADER
 #define JOUST_GENERATOR_HEADER
 
-#include <vector>
-#include <string>
-#include "XYPolygon.h"
 #include "XYFormatUtilsPoly.h"
+#include "XYPolygon.h"
+#include <string>
+#include <vector>
 
-class JoustGenerator
-{
- public:
+class JoustGenerator {
+public:
   JoustGenerator();
   virtual ~JoustGenerator() {}
 
   // Setters
-  bool   setCircle(std::string);
-  bool   setPickAmt(std::string);
-  bool   setAngMinDiff(std::string);
-  bool   setAngMaxDiff(std::string);
-  bool   setMaxTries(std::string);
+  bool setCircle(std::string);
+  bool setPickAmt(std::string);
+  bool setAngMinDiff(std::string);
+  bool setAngMaxDiff(std::string);
+  bool setMaxTries(std::string);
 
-  bool   setHdgSnap(std::string);
-  bool   setSpdSnap(std::string);
-  bool   setPtSnap(std::string);
-  bool   setSpdConfig(std::string);
-  void   setVerbose(bool v) {m_verbose=v;}
-  void   seedRandom();
+  bool setHdgSnap(std::string);
+  bool setSpdSnap(std::string);
+  bool setPtSnap(std::string);
+  bool setSpdConfig(std::string);
+  void setVerbose(bool v) { m_verbose = v; }
+  void seedRandom();
 
   // Getters
-  unsigned int amt() const  {return(m_pick_amt);}
-  unsigned int size() const {return(m_pick_pos_x.size());}
+  unsigned int amt() const { return (m_pick_amt); }
+  unsigned int size() const { return (m_pick_pos_x.size()); }
 
   double getPosX(unsigned int) const;
   double getPosY(unsigned int) const;
@@ -60,50 +59,49 @@ class JoustGenerator
   double getDestY(unsigned int) const;
   double getSpeed(unsigned int) const;
 
-  double getCenterX() const   {return(m_circ_x);}
-  double getCenterY() const   {return(m_circ_y);}
-  double getCenterRad() const {return(m_circ_rad);}
+  double getCenterX() const { return (m_circ_x); }
+  double getCenterY() const { return (m_circ_y); }
+  double getCenterRad() const { return (m_circ_rad); }
 
   // Actions
-  bool   pick();
+  bool pick();
 
- protected:
+protected:
   bool pickPositions();
   void pickHeadingVals();
   void pickSpeedVals();
   void pickCircle();
 
- protected: // Config variables
+protected: // Config variables
   unsigned int m_pick_amt;
   unsigned int m_max_tries;
-  double       m_ang_min_diff;
-  double       m_ang_max_diff;
-  double       m_min_range;
-  
-  bool         m_verbose;
+  double m_ang_min_diff;
+  double m_ang_max_diff;
+  double m_min_range;
 
-  double       m_spd_val1;
-  double       m_spd_val2;
+  bool m_verbose;
 
-  double       m_circ_x;
-  double       m_circ_y;
-  double       m_circ_rad;
-  bool         m_circ_set;
-  
+  double m_spd_val1;
+  double m_spd_val2;
+
+  double m_circ_x;
+  double m_circ_y;
+  double m_circ_rad;
+  bool m_circ_set;
+
 protected: // State variables
-  double       m_pt_snap;
-  double       m_hdg_snap;
-  double       m_spd_snap;
-  
-  // The chosen positions regardless of how chosen
-  std::vector<double>       m_pick_pos_x;
-  std::vector<double>       m_pick_pos_y;
-  std::vector<double>       m_pick_pos_h;
+  double m_pt_snap;
+  double m_hdg_snap;
+  double m_spd_snap;
 
-  std::vector<double>       m_pick_dest_x;
-  std::vector<double>       m_pick_dest_y;
-  std::vector<double>       m_pick_speeds;
+  // The chosen positions regardless of how chosen
+  std::vector<double> m_pick_pos_x;
+  std::vector<double> m_pick_pos_y;
+  std::vector<double> m_pick_pos_h;
+
+  std::vector<double> m_pick_dest_x;
+  std::vector<double> m_pick_dest_y;
+  std::vector<double> m_pick_speeds;
 };
 
-#endif 
-
+#endif

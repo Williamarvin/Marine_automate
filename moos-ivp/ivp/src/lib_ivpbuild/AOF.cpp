@@ -30,53 +30,45 @@ using namespace std;
 //----------------------------------------------------------------
 // Procedure: extract()
 
-double AOF::extract(const string& var, const IvPBox* pbox) const 
-{
+double AOF::extract(const string &var, const IvPBox *pbox) const {
   int index = m_domain.getIndex(var);
-  if(index == -1)
-    return(0);
-  return(m_domain.getVal(index, pbox->pt(index)));
+  if (index == -1)
+    return (0);
+  return (m_domain.getVal(index, pbox->pt(index)));
 }
 
 //----------------------------------------------------------------
 // Procedure: extract()
 
-double AOF::extract(const string& varname, const vector<double>& point) const 
-{
+double AOF::extract(const string &varname, const vector<double> &point) const {
   int index = m_domain.getIndex(varname);
-  if((index == -1) || ((unsigned int)(index) >= point.size()))
-    return(0);
-  return(point[index]);
+  if ((index == -1) || ((unsigned int)(index) >= point.size()))
+    return (0);
+  return (point[index]);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: getCatMsgsAOF()
 
-string AOF::getCatMsgsAOF() const
-{
+string AOF::getCatMsgsAOF() const {
   list<string>::const_iterator p;
   string return_str;
-  for(p=m_msgs.begin(); p!=m_msgs.end(); p++) {
-    if(return_str != "")
+  for (p = m_msgs.begin(); p != m_msgs.end(); p++) {
+    if (return_str != "")
       return_str += " # ";
     return_str += *p;
   }
-  return(return_str);
+  return (return_str);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: postMsgAOF()
 
-bool AOF::postMsgAOF(string msg, bool res)
-{
-  if(msg != "") {
-    m_msgs.push_front(msg.substr(0,80));
-    if(m_msgs.size() > 20)
+bool AOF::postMsgAOF(string msg, bool res) {
+  if (msg != "") {
+    m_msgs.push_front(msg.substr(0, 80));
+    if (m_msgs.size() > 20)
       m_msgs.pop_back();
   }
-  return(res);
+  return (res);
 }
-
-

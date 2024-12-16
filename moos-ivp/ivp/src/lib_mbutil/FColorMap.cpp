@@ -23,104 +23,103 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath>
 #include "FColorMap.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Procedure: getIRVal  "get Interpolated Red Value"
 
-double FColorMap::getIRVal(double val) const
-{
-  if(val < 0) val=0.0;
-  if(val > 1) val=1.0;
+double FColorMap::getIRVal(double val) const {
+  if (val < 0)
+    val = 0.0;
+  if (val > 1)
+    val = 1.0;
 
   int sz = rval.size();
-  if(sz == 0)
-    return(0);
+  if (sz == 0)
+    return (0);
 
-  int ix  = (int)(((val * (double)sz) + 0.5) - 1.0);
-  return(rval[ix]);
+  int ix = (int)(((val * (double)sz) + 0.5) - 1.0);
+  return (rval[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: getIGVal  "get Interpolated Green Value"
 
-
-double FColorMap::getIGVal(double val) const
-{
-  if(val < 0) val=0.0;
-  if(val > 1) val=1.0;
+double FColorMap::getIGVal(double val) const {
+  if (val < 0)
+    val = 0.0;
+  if (val > 1)
+    val = 1.0;
 
   int sz = gval.size();
-  if(sz == 0)
-    return(0);
+  if (sz == 0)
+    return (0);
 
-  int ix  = (int)(((val * (double)sz) + 0.5) - 1.0);
-  return(gval[ix]);
+  int ix = (int)(((val * (double)sz) + 0.5) - 1.0);
+  return (gval[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: getIBVal  "get Interpolated Blue Value"
 
-double FColorMap::getIBVal(double val) const
-{
-  if(val < 0) val=0.0;
-  if(val > 1) val=1.0;
+double FColorMap::getIBVal(double val) const {
+  if (val < 0)
+    val = 0.0;
+  if (val > 1)
+    val = 1.0;
 
   int sz = bval.size();
-  if(sz == 0)
-    return(0);
+  if (sz == 0)
+    return (0);
 
-  int ix  = (int)(((val * (double)sz) + 0.5) - 1.0);
-  return(bval[ix]);
+  int ix = (int)(((val * (double)sz) + 0.5) - 1.0);
+  return (bval[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: setType
 
-void FColorMap::setType(const string &map_type)
-{
-  if(map_type == "copper")
+void FColorMap::setType(const string &map_type) {
+  if (map_type == "copper")
     setCopperMap();
-  else if(map_type == "bone")
+  else if (map_type == "bone")
     setBoneMap();
   else
     setStandardMap();
 }
 
-
 //-------------------------------------------------------------
 // Procedure: setStandarMap
 
-void FColorMap::applyMidWhite(double plateau, double basewidth)
-{
-  if((plateau < 0) || (basewidth < 0))
+void FColorMap::applyMidWhite(double plateau, double basewidth) {
+  if ((plateau < 0) || (basewidth < 0))
     return;
-  
+
   int vsize = rval.size();
 
-  //cout << "plateau: "   << plateau   << endl;
-  //cout << "basewidth: " << basewidth << endl;
+  // cout << "plateau: "   << plateau   << endl;
+  // cout << "basewidth: " << basewidth << endl;
 
   double whitener = 0;
-  for(int i=0; i<vsize; i++) {
+  for (int i = 0; i < vsize; i++) {
     double ipct = (double)(i) / (double)(vsize);
     double delta = 0.50 - ipct;
-    if(delta < 0) 
+    if (delta < 0)
       delta *= -1;
-    if(delta < plateau)
+    if (delta < plateau)
       whitener = 100.0;
-    else if(delta > plateau+basewidth)
+    else if (delta > plateau + basewidth)
       whitener = 0;
     else {
-      double pct = (delta-plateau) / basewidth;
+      double pct = (delta - plateau) / basewidth;
       whitener = (1.0 - pct) * 100.0;
     }
-    //cout << "delta[" << i << "]: " << delta << endl;
-    //cout << "whitener[" << i << "]: " << whitener << endl;
+    // cout << "delta[" << i << "]: " << delta << endl;
+    // cout << "whitener[" << i << "]: " << whitener << endl;
 
 #if 0
     rval[i] += ((1.0 - rval[i]) * whitener);
@@ -128,50 +127,46 @@ void FColorMap::applyMidWhite(double plateau, double basewidth)
     bval[i] += ((1.0 - bval[i]) * whitener);
 #endif
 #if 1
-    if(whitener >= 100.0) {
+    if (whitener >= 100.0) {
       rval[i] = 1.0;
       gval[i] = 1.0;
       bval[i] = 1.0;
     }
 #endif
-
   }
-
 }
-
 
 //-------------------------------------------------------------
 // Procedure: setStandarMap
 
-void FColorMap::setStandardMap()
-{
+void FColorMap::setStandardMap() {
   rval.clear();
   gval.clear();
   bval.clear();
-  addRGB(0.0,    0.0,    0.5625);
-  addRGB(0.0,    0.0,    0.6250);
-  addRGB(0.0,    0.0,    0.6875);
-  addRGB(0.0,    0.0,    0.7500);
-  addRGB(0.0,    0.0,    0.8125);
-  addRGB(0.0,    0.0,    0.8750);
-  addRGB(0.0,    0.0,    0.9375);
-  addRGB(0.0,    0.0,    1.0000);
-  addRGB(0.0,    0.0625, 1.0000);
-  addRGB(0.0,    0.1250, 1.0000);
-  addRGB(0.0,    0.1875, 1.0000);
-  addRGB(0.0,    0.2500, 1.0000);
-  addRGB(0.0,    0.3125, 1.0000);
-  addRGB(0.0,    0.3750, 1.0000);
-  addRGB(0.0,    0.4375, 1.0000);
-  addRGB(0.0,    0.5000, 1.0000);
-  addRGB(0.0,    0.5625, 1.0000);
-  addRGB(0.0,    0.6250, 1.0000);
-  addRGB(0.0,    0.6875, 1.0000);
-  addRGB(0.0,    0.7500, 1.0000);
-  addRGB(0.0,    0.8125, 1.0000);
-  addRGB(0.0,    0.8750, 1.0000);
-  addRGB(0.0,    0.9375, 1.0000);
-  addRGB(0.0,    1.0000, 1.0000);
+  addRGB(0.0, 0.0, 0.5625);
+  addRGB(0.0, 0.0, 0.6250);
+  addRGB(0.0, 0.0, 0.6875);
+  addRGB(0.0, 0.0, 0.7500);
+  addRGB(0.0, 0.0, 0.8125);
+  addRGB(0.0, 0.0, 0.8750);
+  addRGB(0.0, 0.0, 0.9375);
+  addRGB(0.0, 0.0, 1.0000);
+  addRGB(0.0, 0.0625, 1.0000);
+  addRGB(0.0, 0.1250, 1.0000);
+  addRGB(0.0, 0.1875, 1.0000);
+  addRGB(0.0, 0.2500, 1.0000);
+  addRGB(0.0, 0.3125, 1.0000);
+  addRGB(0.0, 0.3750, 1.0000);
+  addRGB(0.0, 0.4375, 1.0000);
+  addRGB(0.0, 0.5000, 1.0000);
+  addRGB(0.0, 0.5625, 1.0000);
+  addRGB(0.0, 0.6250, 1.0000);
+  addRGB(0.0, 0.6875, 1.0000);
+  addRGB(0.0, 0.7500, 1.0000);
+  addRGB(0.0, 0.8125, 1.0000);
+  addRGB(0.0, 0.8750, 1.0000);
+  addRGB(0.0, 0.9375, 1.0000);
+  addRGB(0.0, 1.0000, 1.0000);
   addRGB(0.0625, 1.0000, 0.9375);
   addRGB(0.1250, 1.0000, 0.8750);
   addRGB(0.1875, 1.0000, 0.8125);
@@ -203,26 +198,25 @@ void FColorMap::setStandardMap()
   addRGB(1.0000, 0.1875, 0.0);
   addRGB(1.0000, 0.1250, 0.0);
   addRGB(1.0000, 0.0625, 0.0);
-  addRGB(1.0000,    0.0, 0.0);
-  addRGB(0.9375,    0.0, 0.0);
-  addRGB(0.8750,    0.0, 0.0);
-  addRGB(0.8125,    0.0, 0.0);
-  addRGB(0.7500,    0.0, 0.0);
-  addRGB(0.6875,    0.0, 0.0);
-  addRGB(0.6250,    0.0, 0.0);
-  addRGB(0.5625,    0.0, 0.0);
-  addRGB(0.5000,    0.0, 0.0);
+  addRGB(1.0000, 0.0, 0.0);
+  addRGB(0.9375, 0.0, 0.0);
+  addRGB(0.8750, 0.0, 0.0);
+  addRGB(0.8125, 0.0, 0.0);
+  addRGB(0.7500, 0.0, 0.0);
+  addRGB(0.6875, 0.0, 0.0);
+  addRGB(0.6250, 0.0, 0.0);
+  addRGB(0.5625, 0.0, 0.0);
+  addRGB(0.5000, 0.0, 0.0);
 }
 
 //-------------------------------------------------------------
 // Procedure: setStandarMap
 
-void FColorMap::setCopperMap()
-{
+void FColorMap::setCopperMap() {
   rval.clear();
   gval.clear();
   bval.clear();
-  addRGB(0.0,    0.0,    0.0);
+  addRGB(0.0, 0.0, 0.0);
   addRGB(0.0198, 0.0124, 0.0079);
   addRGB(0.0397, 0.0248, 0.0158);
   addRGB(0.0595, 0.0372, 0.0237);
@@ -291,8 +285,7 @@ void FColorMap::setCopperMap()
 //-------------------------------------------------------------
 // Procedure: setBondMap
 
-void FColorMap::setBoneMap()
-{
+void FColorMap::setBoneMap() {
   rval.clear();
   gval.clear();
   bval.clear();
@@ -362,17 +355,3 @@ void FColorMap::setBoneMap()
   addRGB(0.9783, 0.9861, 0.9861);
   addRGB(1.0000, 1.0000, 1.0000);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

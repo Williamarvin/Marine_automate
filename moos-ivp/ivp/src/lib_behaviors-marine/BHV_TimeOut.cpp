@@ -24,51 +24,49 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_TimeOut.h"
 #include "MBUtils.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_TimeOut::BHV_TimeOut(IvPDomain gdomain) : IvPBehavior(gdomain)
-{
+BHV_TimeOut::BHV_TimeOut(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "(d)bhv_timeout");
   m_max_time = 0;
 
   // Keep a flag indicating whether this is the first time the
   // behavior is invoked.
-  m_first_time   = true;
+  m_first_time = true;
 
   // Time stamps for calculating how long the vehicle has been
   // inside or out of the polygon.
   m_previous_time = 0;
-  m_current_time  = 0;
-  m_elapsed_time  = 0;
-  m_start_time    = 0;
-  m_delta_time    = 0;
+  m_current_time = 0;
+  m_elapsed_time = 0;
+  m_start_time = 0;
+  m_delta_time = 0;
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_TimeOut::setParam(string param, string val) 
-{
-  if(IvPBehavior::setParam(param, val))
-    return(true);
+bool BHV_TimeOut::setParam(string param, string val) {
+  if (IvPBehavior::setParam(param, val))
+    return (true);
 
-  else if((param == "max_time") && isNumber(val)) {
+  else if ((param == "max_time") && isNumber(val)) {
     double dval = atof(val.c_str());
-    if(dval < 0)
-      return(false);
+    if (dval < 0)
+      return (false);
     m_max_time = dval;
-    return(true);
+    return (true);
   }
-  return(false);
+  return (false);
 }
 
 //-----------------------------------------------------------
@@ -77,9 +75,8 @@ bool BHV_TimeOut::setParam(string param, string val)
 //     Notes: Sets state_ok = false and posts an error message if
 //            the max-time condition is violated.
 
-IvPFunction *BHV_TimeOut::onRunState() 
-{
-  if(m_elapsed_time > m_max_time) {
+IvPFunction *BHV_TimeOut::onRunState() {
+  if (m_elapsed_time > m_max_time) {
     string emsg = "OpRegion timeout failure: MaxTime:";
     emsg += doubleToString(m_max_time);
     emsg += "  Elapsed Time: ";
@@ -87,28 +84,26 @@ IvPFunction *BHV_TimeOut::onRunState()
     postEMessage(emsg);
   }
 
-  return(0);
+  return (0);
 }
 
 //-----------------------------------------------------------
 // Procedure: setTimeStamps()
 
-void BHV_TimeOut::setTimeStamps()
-{
+void BHV_TimeOut::setTimeStamps() {
   // Grab current time from Info Buffer
   m_current_time = getBufferCurrTime();
-  
-  //cout << "Current Time -    " << delta_time << endl;
-  //cout << "Previous Time -    " << delta_time << endl;
+
+  // cout << "Current Time -    " << delta_time << endl;
+  // cout << "Previous Time -    " << delta_time << endl;
 
   // Calculate the Delta time since this behavior was invoked.
   // The delta time is 0 on first invocation.
-  if(m_first_time) {
+  if (m_first_time) {
     m_start_time = m_current_time;
     m_delta_time = 0;
     m_first_time = false;
-  }
-  else
+  } else
     m_delta_time = m_current_time - m_previous_time;
 
   // No longer need to access previous time. Set it now for
@@ -117,14 +112,3 @@ void BHV_TimeOut::setTimeStamps()
 
   m_elapsed_time = m_current_time - m_start_time;
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -10,13 +10,13 @@
 /* implied to use, copy, modify, and distribute this software    */
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
- 
+
 #ifndef BHV_TASK_CONVOY_HEADER
 #define BHV_TASK_CONVOY_HEADER
 
+#include "IvPTaskBehavior.h"
 #include <string>
 #include <vector>
-#include "IvPTaskBehavior.h"
 
 class IvPDomain;
 class BHV_TaskConvoy : public IvPTaskBehavior {
@@ -25,36 +25,30 @@ public:
   ~BHV_TaskConvoy() {}
 
   // virtuals defined
-  void   onHelmStart();
+  void onHelmStart();
   double getTaskBid();
-  bool   setParam(std::string, std::string);
+  bool setParam(std::string, std::string);
 
   std::vector<VarDataPair> applyFlagMacros(std::vector<VarDataPair>);
 
-  void         onIdleState();
-  IvPFunction* onRunState();
+  void onIdleState();
+  IvPFunction *onRunState();
 
- protected:  // Configuration Parameters
-
- protected:  // State Variables
-
+protected: // Configuration Parameters
+protected: // State Variables
 };
 
 #ifdef WIN32
-   // Windows needs to explicitly specify functions to export from a dll
-   #define IVP_EXPORT_FUNCTION __declspec(dllexport) 
+// Windows needs to explicitly specify functions to export from a dll
+#define IVP_EXPORT_FUNCTION __declspec(dllexport)
 #else
-   #define IVP_EXPORT_FUNCTION
+#define IVP_EXPORT_FUNCTION
 #endif
 
 extern "C" {
-  IVP_EXPORT_FUNCTION IvPBehavior * createBehavior(std::string name, IvPDomain domain) 
-  {return new BHV_TaskConvoy(domain);}
+IVP_EXPORT_FUNCTION IvPBehavior *createBehavior(std::string name,
+                                                IvPDomain domain) {
+  return new BHV_TaskConvoy(domain);
+}
 }
 #endif
-
-
-
-
-
-

@@ -21,12 +21,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
+#include "MBUtils.h"
+#include "ReleaseInfo.h"
+#include "TagHandler.h"
 #include <cstdlib>
 #include <iostream>
-#include "MBUtils.h"
-#include "TagHandler.h"
-#include "ReleaseInfo.h"
+#include <string>
 
 using namespace std;
 
@@ -35,70 +35,68 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   TagHandler handler;
 
   // First pass over args just to check verbosity
   bool verbose = false;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if(argi == "--verbose") {
+    if (argi == "--verbose") {
       handler.setVerbose();
       verbose = true;
     }
   }
 
   // Second pass over args
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("tagrep", "gpl");
-      return(0);
+      return (0);
     }
 
     bool handled = true;
-    if(strBegins(argi, "--file="))
+    if (strBegins(argi, "--file="))
       handled = handler.setInputFile(argi.substr(7));
-    else if(argi == "--hdr")
+    else if (argi == "--hdr")
       handled = handler.setHeader("same_as_tag");
-    else if(strBegins(argi, "--hdr="))
+    else if (strBegins(argi, "--hdr="))
       handled = handler.setHeader(argi.substr(6));
-    else if((argi=="-n") || (argi=="--noblanks")) 
+    else if ((argi == "-n") || (argi == "--noblanks"))
       handler.setNoBlankLines();
-    else if((argi=="-f") || (argi=="--first")) 
+    else if ((argi == "-f") || (argi == "--first"))
       handler.setFirstLineOnly();
-    else if((argi=="-k") || (argi=="--keep_tag_line")) 
+    else if ((argi == "-k") || (argi == "--keep_tag_line"))
       handler.setKeepTagLine();
     else {
-      if(!handler.isInputFileSet())
-	handled = handler.setInputFile(argi);
+      if (!handler.isInputFileSet())
+        handled = handler.setInputFile(argi);
       else
-	handled = handler.setTag(argi);
+        handled = handler.setTag(argi);
     }
-    
-    if(!handled) {
-      if(verbose) {
-	cout << "tagrep: Bad command line argument: " << argi << endl;
-	cout << "Use --help for usage. Exiting.   " << endl;
+
+    if (!handled) {
+      if (verbose) {
+        cout << "tagrep: Bad command line argument: " << argi << endl;
+        cout << "Use --help for usage. Exiting.   " << endl;
       }
       exit(1);
     }
   }
 
   bool ok = handler.handle();
-  if(!ok)
+  if (!ok)
     exit(1);
   exit(0);
 }
-  
-//------------------------------------------------------------
-// Procedure: showHelpAndExit()  
 
-void showHelpAndExit()
-{
+//------------------------------------------------------------
+// Procedure: showHelpAndExit()
+
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  tagrep file tag [OPTIONS]                                " << endl;
   cout << "                                                           " << endl;
@@ -125,9 +123,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-

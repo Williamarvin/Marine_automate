@@ -9,21 +9,19 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include <string>
-#include "MBUtils.h"
-#include "ColorParse.h"
 #include "BlueBoat.h"
 #include "BlueBoat_Info.h"
+#include "ColorParse.h"
+#include "MBUtils.h"
+#include <string>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
 
-  for (int i = 1; i < argc; i++)
-  {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
     if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();

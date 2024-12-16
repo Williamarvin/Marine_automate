@@ -5,19 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "GridSwitcher_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pGridSwitcher application is used for switching which grid");
@@ -30,8 +29,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pGridSwitcher file.moos [OPTIONS]                   ");
@@ -40,7 +38,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pGridSwitcher with the given process name         ");
   blk("      rather than pGridSwitcher.                           ");
   mag("  --example, -e                                                 ");
@@ -62,8 +60,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pGridSwitcher Example MOOS Configuration                        ");
@@ -77,7 +74,8 @@ void showExampleConfigAndExit()
 
   blk(" // These are the expected grids, the deltas are expected to    ");
   blk(" // have the same name with an added _DELTA at the end.         ");
-  blk(" input_grid_vars = VIEW_GRID_CONS_LOCAL, VIEW_GRID_GPR_LOCAL, VIEW_GRID_PSG_LOCAL, VIEW_GRID_OBS_LOCAL ");
+  blk(" input_grid_vars = VIEW_GRID_CONS_LOCAL, VIEW_GRID_GPR_LOCAL, "
+      "VIEW_GRID_PSG_LOCAL, VIEW_GRID_OBS_LOCAL ");
   blk("                                                                ");
   blk(" // The output variable name where the switched grid is posted  ");
   blk(" // This name is also appended with _DELTA when sending deltas  ");
@@ -99,12 +97,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pGridSwitcher INTERFACE                                    ");
@@ -137,7 +133,7 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("         GRID_READY  = true when the ground truth grid is loaded");
   blk("  GROUND_TRUTH_DEPTH = a string listing the depth of each grid  ");
-  blk("                       cell in the ground truth grid.           ");                      
+  blk("                       cell in the ground truth grid.           ");
   blk("                                                                ");
   blk("    These variables are posted after a vehicle finds a route    ");
   blk("                                                                ");
@@ -160,9 +156,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pGridSwitcher", "gpl");
   exit(0);
 }
-

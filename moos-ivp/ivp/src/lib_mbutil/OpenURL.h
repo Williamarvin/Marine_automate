@@ -32,5 +32,3 @@ void openURL(std::string);
 void openURLX(std::string);
 
 #endif
-
-

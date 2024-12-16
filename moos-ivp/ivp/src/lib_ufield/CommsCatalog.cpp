@@ -29,19 +29,9 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-CommsCatalog::CommsCatalog()
-{
-}
+CommsCatalog::CommsCatalog() {}
 
 //------------------------------------------------------------
 // Procedure: addEntry()
 
-void CommsCatalog::addEntry(double x, double y, double utc,
-			    unsigned int id)
-{
-  
-}
-
-
-
-
+void CommsCatalog::addEntry(double x, double y, double utc, unsigned int id) {}

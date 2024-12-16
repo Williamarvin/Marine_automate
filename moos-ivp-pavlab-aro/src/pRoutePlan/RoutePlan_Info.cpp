@@ -5,19 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "RoutePlan_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pRoutePlan application is used for both path planning and ");
@@ -32,8 +31,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pRoutePlan file.moos [OPTIONS]                           ");
@@ -42,7 +40,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pRoutePlan with the given process name             ");
   blk("      rather than pRoutePlan.                                   ");
   mag("  --example, -e                                                 ");
@@ -64,8 +62,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pRoutePlan Example MOOS Configuration                           ");
@@ -135,16 +132,14 @@ void showExampleConfigAndExit()
   blk("   // goal_cells = 5,6,7,8                                      ");
   blk("}                                                               ");
   blk("                                                                ");
-  
+
   exit(0);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pRoutePlan INTERFACE                                            ");
@@ -176,7 +171,7 @@ void showInterfaceAndExit()
   blk("                     'X.XXX,Y.YYY' to the start list (string)   ");
   blk("     CLEAR_END     = Add grid cell that contains point          ");
   blk("                     'X.XXX,Y.YYY' to the start list (string)   ");
-  blk("                                                                ");  
+  blk("                                                                ");
   blk("                                                                ");
   blk("PUBLICATIONS:                                                   ");
   blk("------------------------------------                            ");
@@ -200,16 +195,14 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("                                                                ");
   blk("                                                                ");
-   
+
   exit(0);
 }
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pRoutePlan", "gpl");
   exit(0);
 }
-

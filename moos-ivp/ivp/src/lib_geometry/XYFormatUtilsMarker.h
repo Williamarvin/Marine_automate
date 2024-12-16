@@ -22,12 +22,12 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_MARKER_HEADER
 #define XY_FORMAT_UTILS_MARKER_HEADER
 
-#include <string>
 #include "XYMarker.h"
+#include <string>
 
 //---------------------------------------------------------------
 // Create an XYMarker from a string specification. This function will
@@ -36,28 +36,18 @@
 // are subject to change without regard to backward compatibility.
 XYMarker string2Marker(std::string);
 
-// *** IMPORTANT NOTE **** 
-// The below functions are not intended to be invoked directly by 
+// *** IMPORTANT NOTE ****
+// The below functions are not intended to be invoked directly by
 // the user. They are subortinate functions called by the above
-// function. While the above function will be maintained in the 
+// function. While the above function will be maintained in the
 // future for backward compatibility, the below functions are not.
 
 //---------------------------------------------------------------
-// #1 Create an XYMarker from a string specification. 
+// #1 Create an XYMarker from a string specification.
 // This function is standard because it processes the string format
 // used when a string is created from an existing XYMarker instance.
-// Example: x=2,y=-8,type=triangle,width=44,primary_color=red, 
+// Example: x=2,y=-8,type=triangle,width=44,primary_color=red,
 //          secondary_color=blue, label=home,active=true
 XYMarker stringStandard2Marker(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

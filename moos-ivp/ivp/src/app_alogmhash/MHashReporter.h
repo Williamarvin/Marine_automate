@@ -27,25 +27,24 @@
 #include <map>
 #include <string>
 
-class MHashReporter
-{
- public:
+class MHashReporter {
+public:
   MHashReporter();
   ~MHashReporter() {}
 
   bool setALogFile(std::string);
-  void setTerse()          {m_terse=true;}
-  void setReportMHash()    {m_report="mhash";}
-  void setReportODist()    {m_report="odist";}
-  void setReportDuration() {m_report="duration";}
-  void setReportName()     {m_report="name";}
-  void setReportUTC()      {m_report="utc";}
-  void setReportXHash()    {m_report="xhash";}
-  void setReportAll()      {m_report="all";}
+  void setTerse() { m_terse = true; }
+  void setReportMHash() { m_report = "mhash"; }
+  void setReportODist() { m_report = "odist"; }
+  void setReportDuration() { m_report = "duration"; }
+  void setReportName() { m_report = "name"; }
+  void setReportUTC() { m_report = "utc"; }
+  void setReportXHash() { m_report = "xhash"; }
+  void setReportAll() { m_report = "all"; }
 
   bool handle();
 
-protected: 
+protected:
   void reportVerbose();
   void reportMHash();
   void reportODist();
@@ -57,30 +56,29 @@ protected:
 
   std::string getXHash() const;
   std::string getMaxOdoMHash() const;
-  
+
 protected: // config vars
   std::string m_alog_file;
   std::string m_report;
   std::string m_mhash_in;
-  bool        m_terse;
-  
+  bool m_terse;
+
 protected: // running state vars
-  bool        m_osx_virgin;
-  bool        m_osy_virgin;
-  double      m_osx;
-  double      m_osy;
-  double      m_osx_prev;
-  double      m_osy_prev;
-  double      m_prev_time;
-  double      m_curr_time;
-  double      m_utc_start_time;
+  bool m_osx_virgin;
+  bool m_osy_virgin;
+  double m_osx;
+  double m_osy;
+  double m_osx_prev;
+  double m_osy_prev;
+  double m_prev_time;
+  double m_curr_time;
+  double m_utc_start_time;
   std::string m_curr_mhash;
   std::string m_vname;
 
 protected: // assessment vars
-  double      m_odometry;
+  double m_odometry;
   std::map<std::string, double> m_hash_odo;
 };
 
 #endif
-

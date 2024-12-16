@@ -26,41 +26,39 @@
 #ifndef P_CONVEX_HULL_GENERATOR_HEADER
 #define P_CONVEX_HULL_GENERATOR_HEADER
 
-#include <list>
-#include <vector>
 #include "XYPoint.h"
 #include "XYPolygon.h"
+#include <list>
+#include <vector>
 
-class ConvexHullGenerator
-{
- public:
-  ConvexHullGenerator() {m_settling_enabled=true;}
+class ConvexHullGenerator {
+public:
+  ConvexHullGenerator() { m_settling_enabled = true; }
   ~ConvexHullGenerator() {}
 
   void addPoint(XYPoint);
   void addPoint(double, double);
   void addPoint(double, double, std::string);
 
-  void disableSettling() {m_settling_enabled=false;}
-  
+  void disableSettling() { m_settling_enabled = false; }
+
   XYPolygon generateConvexHull();
-  XYPoint   getRootPoint() {return(m_root);}
-  
- protected: // helper funcctions
-  void   findRoot();
-  void   sortPoints();
+  XYPoint getRootPoint() { return (m_root); }
+
+protected: // helper funcctions
+  void findRoot();
+  void sortPoints();
 
   XYPolygon generateConvexHullTwoPts(XYPoint, XYPoint);
   XYPolygon generateConvexHullOnePt(XYPoint);
 
- private: // Configuration variables
-  std::vector<XYPoint>  m_original_pts;
-  bool                  m_settling_enabled;
+private: // Configuration variables
+  std::vector<XYPoint> m_original_pts;
+  bool m_settling_enabled;
 
- private: // State variables
-  XYPoint               m_root;
-  std::vector<XYPoint>  m_points;
+private: // State variables
+  XYPoint m_root;
+  std::vector<XYPoint> m_points;
 };
 
-#endif 
-
+#endif

@@ -14,9 +14,9 @@
 //   This source code and the accompanying materials
 //   are made available under the terms of the GNU Lesser Public License v2.1
 //   which accompanies this distribution, and is available at
-//   http://www.gnu.org/licenses/lgpl.txtgram is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//   http://www.gnu.org/licenses/lgpl.txtgram is distributed in the hope that it
+//   will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+//   of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 ////////////////////////////////////////////////////////////////////////////
 /*
@@ -31,30 +31,21 @@
 
 #include "MOOS/libMOOS/Utils/MOOSLock.h"
 
-namespace MOOS
-{
-//pretty useful thing - idea borrowed from POCO
-//lock is opened in constructor unlocked in destruttor
-class ScopedLock
-{
+namespace MOOS {
+// pretty useful thing - idea borrowed from POCO
+// lock is opened in constructor unlocked in destruttor
+class ScopedLock {
 public:
-    explicit ScopedLock(CMOOSLock & Lock):_Lock(Lock)
-    {
-        _Lock.Lock();
-    }
-    ~ScopedLock()
-    {
-        _Lock.UnLock();
-    }
+  explicit ScopedLock(CMOOSLock &Lock) : _Lock(Lock) { _Lock.Lock(); }
+  ~ScopedLock() { _Lock.UnLock(); }
+
 private:
-    CMOOSLock & _Lock;
-	ScopedLock();
-	ScopedLock(const ScopedLock&);
-	ScopedLock& operator = (const ScopedLock&);
-
-
+  CMOOSLock &_Lock;
+  ScopedLock();
+  ScopedLock(const ScopedLock &);
+  ScopedLock &operator=(const ScopedLock &);
 };
 
-}
+} // namespace MOOS
 
 #endif /* MOOSSCOPEDLOCK_H_ */

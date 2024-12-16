@@ -23,24 +23,23 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "XYPoint.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include <cstdlib>
 #include <cstring>
-#include "XYPoint.h"
-#include "MBUtils.h"
-#include "GeomUtils.h"
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: clear()
 
-void XYPoint::clear()
-{
+void XYPoint::clear() {
   XYObject::clear();
 
-  m_x     = 0; 
-  m_y     = 0; 
-  m_z     = 0; 
+  m_x = 0;
+  m_y = 0;
+  m_z = 0;
   m_valid = false;
   m_pt_trans = 0;
 }
@@ -51,18 +50,16 @@ void XYPoint::clear()
 //            creating the string representation of the point. It
 //            affects only the x,y,z parameters.
 
-void XYPoint::set_spec_digits(unsigned int digits)
-{
+void XYPoint::set_spec_digits(unsigned int digits) {
   m_sdigits = digits;
-  if(m_sdigits > 6)
+  if (m_sdigits > 6)
     m_sdigits = 6;
 }
 
 //---------------------------------------------------------------
 // Procedure: apply_snap()
 
-void XYPoint::apply_snap(double snapval)
-{
+void XYPoint::apply_snap(double snapval) {
   m_x = snapToStep(m_x, snapval);
   m_y = snapToStep(m_y, snapval);
   m_z = snapToStep(m_z, snapval);
@@ -71,11 +68,10 @@ void XYPoint::apply_snap(double snapval)
 //---------------------------------------------------------------
 // Procedure: set_pt_trans()
 
-void XYPoint::set_pt_trans(double dval)
-{
-  if(dval < 0)
+void XYPoint::set_pt_trans(double dval) {
+  if (dval < 0)
     dval = 0;
-  else if(dval > 1)
+  else if (dval > 1)
     dval = 1;
   m_pt_trans = dval;
 }
@@ -83,8 +79,7 @@ void XYPoint::set_pt_trans(double dval)
 //---------------------------------------------------------------
 // Procedure: projectPt()
 
-void XYPoint::projectPt(const XYPoint& pt, double ang, double dist)
-{
+void XYPoint::projectPt(const XYPoint &pt, double ang, double dist) {
   projectPoint(ang, dist, pt.x(), pt.y(), m_x, m_y);
 }
 
@@ -92,41 +87,39 @@ void XYPoint::projectPt(const XYPoint& pt, double ang, double dist)
 // Procedure: get_spec_xy()
 //   returns: 5,6 or 5:6 based on given separation char
 
-string XYPoint::get_spec_xy(char sepchar) const
-{
+string XYPoint::get_spec_xy(char sepchar) const {
   string spec;
 
   spec += doubleToStringX(m_x, m_sdigits);
   spec += sepchar;
   spec += doubleToStringX(m_y, m_sdigits);
 
-  return(spec);
+  return (spec);
 }
 
 //---------------------------------------------------------------
 // Procedure: get_spec()
 
-string XYPoint::get_spec(string param) const
-{
+string XYPoint::get_spec(string param) const {
   string spec;
 
-  spec += "x="  + doubleToStringX(m_x, m_sdigits);
+  spec += "x=" + doubleToStringX(m_x, m_sdigits);
   spec += ",y=" + doubleToStringX(m_y, m_sdigits);
 
-  // Since z=0 is inferred if left unspecified, don't add it to the 
+  // Since z=0 is inferred if left unspecified, don't add it to the
   // string representation unless nonzero.
-  if(m_z != 0)
+  if (m_z != 0)
     spec += ",z=" + doubleToStringX(m_z, m_sdigits);
 
   // Point transparency is inferred to be zero
-  if(m_pt_trans != 0)
+  if (m_pt_trans != 0)
     spec += ",trans=" + doubleToStringX(m_pt_trans, 2);
-  
+
   string remainder = XYObject::get_spec(param);
-  if(remainder != "")
+  if (remainder != "")
     spec += "," + remainder;
 
-  return(spec);
+  return (spec);
 }
 
 //---------------------------------------------------------------
@@ -136,38 +129,32 @@ string XYPoint::get_spec(string param) const
 //            label, just generate a concise spec with a trivial
 //            coordinates.
 
-string XYPoint::get_spec_inactive() const
-{
+string XYPoint::get_spec_inactive() const {
   string spec = "x=0,y=0,active=false";
-  if(m_label != "")
-    spec += ",label=" + m_label; 
-  
-  return(spec);
-}
+  if (m_label != "")
+    spec += ",label=" + m_label;
 
+  return (spec);
+}
 
 //--------------------------------------------------------
 // Procedure: overloaded less than operator
 
-bool operator< (const XYPoint& one, const XYPoint& two)
-{
-  
-  if(one.magnitude() < two.magnitude())
-    return(true);
+bool operator<(const XYPoint &one, const XYPoint &two) {
+
+  if (one.magnitude() < two.magnitude())
+    return (true);
   else
-    return(false);
+    return (false);
 }
 
 //--------------------------------------------------------
 // Procedure: overload equals operator
 
-bool operator== (const XYPoint& one, const XYPoint& two)
-{
-  if(one.x() != two.x())
-    return(false);
-  if(one.y() != two.y())
-    return(false);
-  return(true);
+bool operator==(const XYPoint &one, const XYPoint &two) {
+  if (one.x() != two.x())
+    return (false);
+  if (one.y() != two.y())
+    return (false);
+  return (true);
 }
-
-

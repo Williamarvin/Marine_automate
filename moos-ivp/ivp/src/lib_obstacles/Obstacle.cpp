@@ -21,36 +21,33 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include "MBUtils.h"
 #include "Obstacle.h"
+#include "MBUtils.h"
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-Obstacle::Obstacle()
-{
-  m_range      = 0;
-  m_duration   = -1;
-  m_tstamp     = 0;
+Obstacle::Obstacle() {
+  m_range = 0;
+  m_duration = -1;
+  m_tstamp = 0;
   m_max_points = 20;
 
-  m_pts_total  = 0;
-  m_changed    = false;
+  m_pts_total = 0;
+  m_changed = false;
   m_updates_total = 0;
-  m_min_range  = -1;
+  m_min_range = -1;
 }
-
 
 //---------------------------------------------------------
 // Procedure: addPoint()
 
-bool Obstacle::addPoint(XYPoint point)
-{
+bool Obstacle::addPoint(XYPoint point) {
   m_points.push_front(point);
 
-  if(m_points.size() > m_max_points)
+  if (m_points.size() > m_max_points)
     m_points.pop_back();
 
   // Obstacle is point-based. Must have non-empty set of points
@@ -59,44 +56,41 @@ bool Obstacle::addPoint(XYPoint point)
 
   m_changed = true;
   m_pts_total++;
-  return(true);
+  return (true);
 }
-  
+
 //---------------------------------------------------------
 // Procedure: setPoly
 //      Note: Sometimes the poly originates as a given poly,
 //            and sometimes from a source that has generated
 //            the poly from the obstacle points.
 
-bool Obstacle::setPoly(XYPolygon new_poly)
-{
-  if(!new_poly.is_convex())
-    return(false);
+bool Obstacle::setPoly(XYPolygon new_poly) {
+  if (!new_poly.is_convex())
+    return (false);
 
   // If new poly is the same when rounding vertices to 1/10 meter
   // then we skip the update.
   string new_spec = new_poly.get_spec_pts_label(1);
-  if(new_spec == m_poly_spec)
-    return(true);
-  
-  m_polygon   = new_poly;
+  if (new_spec == m_poly_spec)
+    return (true);
+
+  m_polygon = new_poly;
   m_poly_spec = new_spec;
-  
+
   m_changed = true;
   m_updates_total++;
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: setRange()
 
-void Obstacle::setRange(double dval)
-{
+void Obstacle::setRange(double dval) {
   m_range = dval;
-  if((m_min_range < 0) || (m_range < m_min_range))
+  if ((m_min_range < 0) || (m_range < m_min_range))
     m_min_range = m_range;
 }
-
 
 //---------------------------------------------------------
 // Procedure: getTimeToLive()
@@ -104,66 +98,58 @@ void Obstacle::setRange(double dval)
 //            Or it never had a timestamp applied
 //      Note: 0 indicates that the time_to_live has been exhausted
 
-double Obstacle::getTimeToLive(double curr_time) const
-{
-  if((m_duration <= 0) || (m_tstamp <= 0))
-    return(-1);
-  
+double Obstacle::getTimeToLive(double curr_time) const {
+  if ((m_duration <= 0) || (m_tstamp <= 0))
+    return (-1);
+
   double age = curr_time - m_tstamp;
   double ttlive = m_duration - age;
-  if(ttlive < 0)
+  if (ttlive < 0)
     ttlive = 0;
 
-  return(ttlive);
+  return (ttlive);
 }
-
 
 //---------------------------------------------------------
 // Procedure: getPoints()
 
-vector<XYPoint> Obstacle::getPoints() const
-{
+vector<XYPoint> Obstacle::getPoints() const {
   vector<XYPoint> rvector;
-  
+
   list<XYPoint>::const_iterator p;
-  for(p=m_points.begin(); p!= m_points.end(); p++)
+  for (p = m_points.begin(); p != m_points.end(); p++)
     rvector.push_back(*p);
 
-  return(rvector);
+  return (rvector);
 }
 
 //---------------------------------------------------------
 // Procedure: isGiven()
 
-bool Obstacle::isGiven() const
-{
-  if((m_points.size() == 0) && (m_polygon.size() > 0))
-    return(true);
+bool Obstacle::isGiven() const {
+  if ((m_points.size() == 0) && (m_polygon.size() > 0))
+    return (true);
 
-  return(false);
+  return (false);
 }
-
 
 //---------------------------------------------------------
 // Procedure: getInfo()
 
-string Obstacle::getInfo(double curr_time) const
-{
+string Obstacle::getInfo(double curr_time) const {
   string info;
 
   info += "given=" + boolToString(isGiven());
   info += ", duration=" + doubleToStringX(m_duration);
 
-  if(curr_time > 0) {
+  if (curr_time > 0) {
     double age = curr_time - m_tstamp;
-    info += ", age=" + doubleToStringX(age,1);
+    info += ", age=" + doubleToStringX(age, 1);
   }
 
-  return(info);
+  return (info);
 }
 
-
-  
 //---------------------------------------------------------
 // Procedure: pruneByAge()
 //      Note: For point-based obstacles, this procedure will
@@ -174,35 +160,32 @@ string Obstacle::getInfo(double curr_time) const
 //            there hasn't been any recent updates.
 //   Returns: true if this obstacle is empty/removable.
 
-bool Obstacle::pruneByAge(double max_age, double curr_time)
-{
+bool Obstacle::pruneByAge(double max_age, double curr_time) {
   // Part 1: If obstacle is given (not point-based) then check
   // if its last update is older than the declared duration
   // A duration of -1 means the duration is unlimited.
-  if(m_points.size() == 0) {
-    if(m_duration >= 0) {
-      if((curr_time - m_tstamp) > m_duration)
-	return(true);
+  if (m_points.size() == 0) {
+    if (m_duration >= 0) {
+      if ((curr_time - m_tstamp) > m_duration)
+        return (true);
     }
-    return(false);
+    return (false);
   }
-  
+
   // Part 2: Go through all points and prune based on age
   list<XYPoint>::iterator p;
-  for(p=m_points.begin(); p!=m_points.end(); ) {
+  for (p = m_points.begin(); p != m_points.end();) {
     XYPoint pt = *p;
     double age = curr_time - pt.get_time();
-    if(age > max_age) {
+    if (age > max_age) {
       m_changed = true;
       p = m_points.erase(p);
-    }
-    else
+    } else
       ++p;
   }
   // If points are empty, return that it is removable
-  if(m_points.size() == 0)
-    return(true);
+  if (m_points.size() == 0)
+    return (true);
 
-  return(false);
+  return (false);
 }
-

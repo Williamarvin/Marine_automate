@@ -27,52 +27,45 @@
 #include <string>
 #include <vector>
 
-class ALogClipHandler
-{
- public:
+class ALogClipHandler {
+public:
   ALogClipHandler();
   ~ALogClipHandler() {}
 
-  void      setForceOverwrite()      {m_force_overwrite=true;}
-  void      setVerbose()             {m_verbose=true;}
-  void      setBatch()               {m_batch=true;}
-  bool      setSuffix(std::string s);
-  bool      setTimeStamp(double);
-  bool      addALogFile(std::string s);
+  void setForceOverwrite() { m_force_overwrite = true; }
+  void setVerbose() { m_verbose = true; }
+  void setBatch() { m_batch = true; }
+  bool setSuffix(std::string s);
+  bool setTimeStamp(double);
+  bool addALogFile(std::string s);
 
-  bool      process();
+  bool process();
 
- protected:
-  bool      preCheck();
-  bool      processBatch();
-  bool      processFile(std::string in, std::string out);
+protected:
+  bool preCheck();
+  bool processBatch();
+  bool processFile(std::string in, std::string out);
 
   std::string addSuffixToALogFile(std::string);
 
- protected:
-  double      m_min_time; 
-  double      m_max_time;
-  bool        m_min_time_set;
-  bool        m_max_time_set;
+protected:
+  double m_min_time;
+  double m_max_time;
+  bool m_min_time_set;
+  bool m_max_time_set;
 
-  bool        m_force_overwrite;
-  bool        m_verbose;
-  bool        m_batch;
+  bool m_force_overwrite;
+  bool m_verbose;
+  bool m_batch;
   std::string m_suffix;
 
- private:
-
+private:
   // For batch mode
   std::vector<std::string> m_batch_files;
 
   // For non-batch mode
-  std::string  m_infile;
-  std::string  m_outfile;
+  std::string m_infile;
+  std::string m_outfile;
 };
 
-#endif 
-
-
-
-
-
+#endif

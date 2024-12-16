@@ -23,31 +23,30 @@
 #ifdef _WIN32
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
-#endif 
+#endif
 #ifndef BHV_SHADOW_HEADER
 #define BHV_SHADOW_HEADER
 
-#include <string>
 #include "IvPContactBehavior.h"
+#include <string>
 
 class IvPDomain;
 class BHV_Shadow : public IvPContactBehavior {
 public:
   BHV_Shadow(IvPDomain);
   ~BHV_Shadow() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
+
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
 
 protected:
   double getRelevance();
-  
-private: // Configuration Parameters
-  double  m_pwt_outer_dist;     // if target not in range, 0 relevance
-  double  m_hdg_basewidth;
-  double  m_hdg_peakwidth;
-  double  m_spd_basewidth;
-  double  m_spd_peakwidth;
+
+private:                   // Configuration Parameters
+  double m_pwt_outer_dist; // if target not in range, 0 relevance
+  double m_hdg_basewidth;
+  double m_hdg_peakwidth;
+  double m_spd_basewidth;
+  double m_spd_peakwidth;
 };
 #endif
-

@@ -21,32 +21,30 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "ObstacleFieldGenerator_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "ObstacleFieldGenerator_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  gen_obstacles is a utility for generating a obstacle file,    ");
   blk("  a set of polygon obstacles, all guaranteed to be within the   ");
   blk("  user specified polygon region, none of them overlapping and   ");
-  blk("  guaranteed to have a minimum separation range.                "); 
+  blk("  guaranteed to have a minimum separation range.                ");
 }
 
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "=======================================================" << endl;
   cout << "Usage: gen_obstacles [OPTIONS]                         " << endl;
   cout << "=======================================================" << endl;
@@ -78,19 +76,19 @@ void showHelpAndExit()
   cout << "      generate. The default is 1.                      " << endl;
   cout << "                                                       " << endl;
   cout << "Example:                                               " << endl;
-  cout << "  gen_obstacles --poly=-50,-30:-50,-160:190,-160:190,-30 --amt=5 --min_size=2 --max_size=5 " << endl;
-  cout << "  gen_obstacles --poly=30,-20:30,-140:120,-140:120,-20 --amt=5 --min_size=2 --max_size=5 " << endl;
+  cout << "  gen_obstacles --poly=-50,-30:-50,-160:190,-160:190,-30 --amt=5 "
+          "--min_size=2 --max_size=5 "
+       << endl;
+  cout << "  gen_obstacles --poly=30,-20:30,-140:120,-140:120,-20 --amt=5 "
+          "--min_size=2 --max_size=5 "
+       << endl;
   exit(0);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("gen_obstacles", "gpl");
   exit(0);
 }
-  
-

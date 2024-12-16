@@ -8,43 +8,36 @@
 #ifndef OpinionRecord_HEADER
 #define OpinionRecord_HEADER
 
-#include <string>
-#include <vector>
 #include "MBUtils.h"
 #include <map>
+#include <string>
+#include <vector>
 
-
-class OpinionRecord
-{
- public:
+class OpinionRecord {
+public:
   OpinionRecord();
   ~OpinionRecord();
 
   bool setRecordFromMsg(std::string msg, double msg_time);
 
-  std::string getVname() {return(m_vname);};
-  std::string getGroup() {return(m_group);};
-  double getTime() {return(m_record_time);};
+  std::string getVname() { return (m_vname); };
+  std::string getGroup() { return (m_group); };
+  double getTime() { return (m_record_time); };
 
   bool isOptionExist(std::string q_val);
-  bool getOpinionForOption(std::string q_val, double& val);
-  std::string getLastRecordMsg() {return(m_last_record_msg);};
+  bool getOpinionForOption(std::string q_val, double &val);
+  std::string getLastRecordMsg() { return (m_last_record_msg); };
 
   double getOpinionsSquared();
   std::string getStrongestOpinion();
-  
 
-  
- private:
+private:
+  std::string m_last_record_msg;
 
-  std::string m_last_record_msg; 
- 
-  std::string m_vname;  // might be redundant
+  std::string m_vname; // might be redundant
   std::string m_group;
   std::map<std::string, double> m_opinion_vals;
-  double m_record_time; 
-
-  
+  double m_record_time;
 };
 
 #endif

@@ -24,69 +24,68 @@
 #ifndef UFLD_NODE_BROKER_HEADER
 #define UFLD_NODE_BROKER_HEADER
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "HostRecord.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class NodeBroker : public AppCastingMOOSApp
-{
- public:
+class NodeBroker : public AppCastingMOOSApp {
+public:
   NodeBroker();
   virtual ~NodeBroker() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
- protected:
-  bool handleConfigTryShoreHost(std::string, bool dup_warn=true);
+protected:
+  bool handleConfigTryShoreHost(std::string, bool dup_warn = true);
   bool handleConfigBridge(std::string);
-  bool handleConfigShadow(std::string, std::string&);
+  bool handleConfigShadow(std::string, std::string &);
 
   void sendNodeBrokerPing();
   void checkMessagingPolicy(std::string);
   void checkUnhandledShadows();
-  
+
   void handleMailHostInfo(std::string);
   void handleMailDBClients(std::string);
   void handleMailAck(std::string);
 
   void registerVariables();
-  void registerPingBridges(bool only_latest=false);
+  void registerPingBridges(bool only_latest = false);
   void registerUserBridges();
 
   void postPShareCommand(std::string src, std::string dest, std::string route);
 
- protected: // Configuration Variables
+protected: // Configuration Variables
   std::vector<std::string> m_bridge_src_var;
   std::vector<std::string> m_bridge_alias;
 
   // Index on below vectors is a host to try as shoreside
-  std::vector<std::string>  m_shore_community;
-  std::vector<std::string>  m_shore_routes;
+  std::vector<std::string> m_shore_community;
+  std::vector<std::string> m_shore_routes;
   std::vector<unsigned int> m_shore_pings_sent;
   std::vector<unsigned int> m_shore_pings_ack;
-  std::vector<std::string>  m_shore_ipaddr;
-  std::vector<std::string>  m_shore_timewarp;
-  std::vector<bool>         m_shore_bridged;
+  std::vector<std::string> m_shore_ipaddr;
+  std::vector<std::string> m_shore_timewarp;
+  std::vector<bool> m_shore_bridged;
 
   // Below maps keyed on IP address
-  //std::map<std::string, std::string> m_map_xshore_name;
-  //std::map<std::string, double>      m_map_xshore_start;
-  //std::map<std::string, double>      m_map_xshore_duration;
-  //std::map<std::string, bool>        m_map_xshore_handled;
+  // std::map<std::string, std::string> m_map_xshore_name;
+  // std::map<std::string, double>      m_map_xshore_start;
+  // std::map<std::string, double>      m_map_xshore_duration;
+  // std::map<std::string, bool>        m_map_xshore_handled;
 
   // A list of IP addresses on the pulled from the try_shore_host param
-  std::vector<std::string>  m_try_host_ips;
+  std::vector<std::string> m_try_host_ips;
 
   std::string m_messaging_policy;
-  
- protected: // State Variables
-  HostRecord   m_node_host_record;  // From PHI_HOST_INFO
+
+protected:                       // State Variables
+  HostRecord m_node_host_record; // From PHI_HOST_INFO
 
   unsigned int m_pshare_cmd_posted;
   unsigned int m_pings_posted;
@@ -98,8 +97,7 @@ class NodeBroker : public AppCastingMOOSApp
 
   double m_ok_ack_utc;
   double m_ping_sent_utc;
-  
-  std::string  m_pshare_cmd_latest;  
+
+  std::string m_pshare_cmd_latest;
 };
 #endif
-

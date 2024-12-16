@@ -24,39 +24,41 @@
 #ifndef GUI_TASK_DIARY_HEADER
 #define GUI_TASK_DIARY_HEADER
 
-#include <string>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Check_Button.H>
-#include "FL/Fl_Button.H"
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Output.H>
-#include "ModelTaskDiary.h"
 #include "ALogDataBroker.h"
+#include "FL/Fl_Button.H"
+#include "ModelTaskDiary.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Browser.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Output.H>
+#include <FL/Fl_Window.H>
+#include <string>
 
 class REPLAY_GUI;
 
 class GUI_TaskDiary : public Fl_Window {
 public:
-  GUI_TaskDiary(int w, int h, const char *l=0);
+  GUI_TaskDiary(int w, int h, const char *l = 0);
   ~GUI_TaskDiary();
-  
+
   static Fl_Menu_Item menu_[];
   Fl_Menu_Bar *mbar;
 
   void initWidgets();
 
-  void setParentGUI(REPLAY_GUI *gui) {m_parent_gui=gui;}
+  void setParentGUI(REPLAY_GUI *gui) { m_parent_gui = gui; }
   void setDataBroker(ALogDataBroker);
-  void setCurrTime(double=-1);
-  void setReplayWarpMsg(std::string s) {m_replay_warp_msg=s; updateXY();}
+  void setCurrTime(double = -1);
+  void setReplayWarpMsg(std::string s) {
+    m_replay_warp_msg = s;
+    updateXY();
+  }
 
   void resize(int, int, int, int);
-  int  handle(int);
+  int handle(int);
 
-  
- protected:
+protected:
   void resizeWidgetsShape();
   void resizeWidgetsText();
   void updateBrowsers();
@@ -68,31 +70,30 @@ public:
 
 private:
   inline void cb_BrowserInfo_i();
-  static void cb_BrowserInfo(Fl_Widget*);
+  static void cb_BrowserInfo(Fl_Widget *);
 
   inline void cb_ButtonSeparate_i(int);
-  static void cb_ButtonSeparate(Fl_Widget*, int);
+  static void cb_ButtonSeparate(Fl_Widget *, int);
 
   inline void cb_ButtonWrapLine_i(int);
-  static void cb_ButtonWrapLine(Fl_Widget*, int);
+  static void cb_ButtonWrapLine(Fl_Widget *, int);
 
   inline void cb_ButtonFuture_i(int);
-  static void cb_ButtonFuture(Fl_Widget*, int);
+  static void cb_ButtonFuture(Fl_Widget *, int);
 
   inline void cb_ModText_i(int);
-  static void cb_ModText(Fl_Widget*, int);
+  static void cb_ModText(Fl_Widget *, int);
 
   inline void cb_Step_i(int);
-  static void cb_Step(Fl_Widget*, int);
+  static void cb_Step(Fl_Widget *, int);
 
+public:
+  ModelTaskDiary m_tdmodel;
+  REPLAY_GUI *m_parent_gui;
+  ALogDataBroker m_dbroker;
 
- public:
-  ModelTaskDiary   m_tdmodel;
-  REPLAY_GUI      *m_parent_gui;
-  ALogDataBroker   m_dbroker;
-
- protected:
-  Fl_Output   *m_fld_time;
+protected:
+  Fl_Output *m_fld_time;
 
   Fl_Check_Button *m_but_separate;
   Fl_Check_Button *m_but_wrapline;
@@ -101,9 +102,9 @@ private:
   Fl_Browser *m_brw_info1;
   Fl_Browser *m_brw_info2;
 
-  Fl_Button  *m_but_text_more;
-  Fl_Button  *m_but_text_less;
-  
+  Fl_Button *m_but_text_more;
+  Fl_Button *m_but_text_less;
+
   std::string m_replay_warp_msg;
   std::string m_vname;
   std::string m_app_name;
@@ -112,8 +113,3 @@ private:
 };
 
 #endif
-
-
-
-
-

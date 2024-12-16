@@ -24,59 +24,47 @@
 #ifndef UPV_MOOS_APP_HEADER
 #define UPV_MOOS_APP_HEADER
 
-#include <string>
 #include "MOOS/libMOOS/MOOSLib.h"
-#include "UPV_GUI.h"
-#include "Threadsafe_pipe.h"
-#include "VarDataPair.h"
 #include "MOOS_event.h"
+#include "Threadsafe_pipe.h"
+#include "UPV_GUI.h"
+#include "VarDataPair.h"
+#include <string>
 
-class UPV_MOOSApp : public CMOOSApp  
-{
- public:
+class UPV_MOOSApp : public CMOOSApp {
+public:
   UPV_MOOSApp();
   virtual ~UPV_MOOSApp() {}
 
-  void setGUI(UPV_GUI* g_gui) {m_gui=g_gui;}
-  
-  void setPendingEventsPipe(Threadsafe_pipe<MOOS_event> 
-			    *pending_moos_events) 
-  {
+  void setGUI(UPV_GUI *g_gui) { m_gui = g_gui; }
+
+  void setPendingEventsPipe(Threadsafe_pipe<MOOS_event> *pending_moos_events) {
     m_pending_moos_events = pending_moos_events;
   }
-  
+
   bool Iterate();
-  
+
   // virtual overide of base class CMOOSApp member.
   // Here we register for data we wish be informed about
   bool OnConnectToServer();
-  
+
   bool OnStartUp();
   bool OnNewMail(MOOSMSG_LIST &NewMail);
-  
+
   // Only call these methods in the main FLTK l thread, for thread
   // safety w.r.t. that  library...
-  void handleNewMail(const MOOS_event & e);
-  void handleIterate(const MOOS_event & e);
-  void handleStartUp(const MOOS_event & e);
-  
- protected:
+  void handleNewMail(const MOOS_event &e);
+  void handleIterate(const MOOS_event &e);
+  void handleStartUp(const MOOS_event &e);
+
+protected:
   void registerVariables();
-  
- protected:
-  UPV_GUI* m_gui;
-  Threadsafe_pipe<MOOS_event> * m_pending_moos_events;
+
+protected:
+  UPV_GUI *m_gui;
+  Threadsafe_pipe<MOOS_event> *m_pending_moos_events;
 
   std::vector<std::string> m_plot_vars;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

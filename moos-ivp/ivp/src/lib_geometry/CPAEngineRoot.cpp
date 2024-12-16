@@ -23,11 +23,11 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath> 
 #include "CPAEngineRoot.h"
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -40,9 +40,8 @@ using namespace std;
 //      args: osy  Given Ownship Y Position
 //      args: osx  Given Ownship X Position
 
-CPAEngineRoot::CPAEngineRoot(double cny, double cnx, double cnh,
-			     double cnv, double osy, double osx)
-{
+CPAEngineRoot::CPAEngineRoot(double cny, double cnx, double cnh, double cnv,
+                             double osy, double osx) {
   CPAEngineRoot::reset(cny, cnx, cnh, cnv, osy, osx);
   m_openings = 0;
   m_openings_early = 0;
@@ -51,21 +50,15 @@ CPAEngineRoot::CPAEngineRoot(double cny, double cnx, double cnh,
 //----------------------------------------------------------
 // Procedure: reset
 
-void CPAEngineRoot::reset(double cny, double cnx, double cnh,
-			  double cnv, double osy, double osx)
-{
-  m_cny = cny; 
+void CPAEngineRoot::reset(double cny, double cnx, double cnh, double cnv,
+                          double osy, double osx) {
+  m_cny = cny;
   m_cnx = cnx;
   m_cnv = cnv;
   m_cnh = angle360(cnh);
   m_osx = osx;
   m_osy = osy;
 
-  if(m_cnv < 0)
+  if (m_cnv < 0)
     m_cnv = 0;
 }
-
-
-
-
-

@@ -20,38 +20,33 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_MEMORY_TURN_LIMIT_HEADER
 #define BHV_MEMORY_TURN_LIMIT_HEADER
 
-#include <list>
 #include "IvPBehavior.h"
+#include <list>
 
 class BHV_MemoryTurnLimit : public IvPBehavior {
 public:
   BHV_MemoryTurnLimit(IvPDomain);
   ~BHV_MemoryTurnLimit() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  bool         isConstraint() {return(true);}
+
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  bool isConstraint() { return (true); }
 
 protected:
-  void  addHeading(double, double);
-  bool  getHeadingAvg(double&);
-  bool  getHeadingAvg2(double&);
+  void addHeading(double, double);
+  bool getHeadingAvg(double &);
+  bool getHeadingAvg2(double &);
 
 private: // Configuration Parameters
-
   double m_memory_time;
   double m_turn_range;
 
-
 private: // State Variables
-
   std::list<double> m_heading_val;
   std::list<double> m_heading_time;
-
 };
 #endif
-

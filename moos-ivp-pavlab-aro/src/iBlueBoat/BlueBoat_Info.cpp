@@ -9,19 +9,18 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "BlueBoat_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The iBlueBoat application serves as an intermediary between       ");
@@ -38,8 +37,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: iBlueBoat file.moos [OPTIONS]                                ");
@@ -70,8 +68,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("iBlueBoat Example MOOS Configuration                                ");
@@ -106,8 +103,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("iBlueBoat INTERFACE                                    ");
   blu("=============================================================== ");
@@ -140,8 +136,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("iBlueBoat", "gpl");
   exit(0);
 }

@@ -35,115 +35,109 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Bugcheck_INCLUDED
 #define MOOS_POCO_Foundation_Bugcheck_INCLUDED
-
 
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
 #include <string>
 #if defined(_DEBUG)
-#	include <iostream>
+#include <iostream>
 #endif
-
 
 namespace MOOS {
 namespace Poco {
 
-
 class MOOS_POCO_Foundation_API Bugcheck
-	/// This class provides some static methods that are
-	/// used by the
-  /// moos_poco_assert_dbg(), moos_poco_assert(), moos_poco_check_ptr()
-  /// and moos_poco_bugcheck() macros.
-	/// You should not invoke these methods
-	/// directly. Use the macros instead, as they
-	/// automatically provide useful context information.
+/// This class provides some static methods that are
+/// used by the
+/// moos_poco_assert_dbg(), moos_poco_assert(), moos_poco_check_ptr()
+/// and moos_poco_bugcheck() macros.
+/// You should not invoke these methods
+/// directly. Use the macros instead, as they
+/// automatically provide useful context information.
 {
 public:
-	static void assertion(const char* cond, const char* file, int line);
-		/// An assertion failed. Break into the debugger, if
-		/// possible, then throw an AssertionViolationException.
+  static void assertion(const char *cond, const char *file, int line);
+  /// An assertion failed. Break into the debugger, if
+  /// possible, then throw an AssertionViolationException.
 
-	static void nullPointer(const char* ptr, const char* file, int line);
-		/// An null pointer was encountered. Break into the debugger, if
-		/// possible, then throw an NullPointerException.
+  static void nullPointer(const char *ptr, const char *file, int line);
+  /// An null pointer was encountered. Break into the debugger, if
+  /// possible, then throw an NullPointerException.
 
-	static void bugcheck(const char* file, int line);
-		/// An internal error was encountered. Break into the debugger, if
-		/// possible, then throw an BugcheckException.
+  static void bugcheck(const char *file, int line);
+  /// An internal error was encountered. Break into the debugger, if
+  /// possible, then throw an BugcheckException.
 
-	static void bugcheck(const char* msg, const char* file, int line);
-		/// An internal error was encountered. Break into the debugger, if
-		/// possible, then throw an BugcheckException.
+  static void bugcheck(const char *msg, const char *file, int line);
+  /// An internal error was encountered. Break into the debugger, if
+  /// possible, then throw an BugcheckException.
 
-	static void debugger(const char* file, int line);
-		/// An internal error was encountered. Break into the debugger, if
-		/// possible.
+  static void debugger(const char *file, int line);
+  /// An internal error was encountered. Break into the debugger, if
+  /// possible.
 
-	static void debugger(const char* msg, const char* file, int line);
-		/// An internal error was encountered. Break into the debugger, if
-		/// possible.
+  static void debugger(const char *msg, const char *file, int line);
+  /// An internal error was encountered. Break into the debugger, if
+  /// possible.
 
 protected:
-	static std::string what(const char* msg, const char* file, int line);
+  static std::string what(const char *msg, const char *file, int line);
 };
-
 
 } // namespace Poco
 } // namespace MOOS
-
 
 //
 // useful macros (these automatically supply line number and file name)
 //
 #if defined(_DEBUG)
-#	define moos_poco_assert_dbg(cond) \
-		if (!(cond)) Poco::Bugcheck::assertion(#cond, __FILE__, __LINE__); else (void) 0
+#define moos_poco_assert_dbg(cond)                                             \
+  if (!(cond))                                                                 \
+    Poco::Bugcheck::assertion(#cond, __FILE__, __LINE__);                      \
+  else                                                                         \
+    (void)0
 #else
-#	define moos_poco_assert_dbg(cond)
+#define moos_poco_assert_dbg(cond)
 #endif
 
+#define moos_poco_assert(cond)                                                 \
+  if (!(cond))                                                                 \
+    Poco::Bugcheck::assertion(#cond, __FILE__, __LINE__);                      \
+  else                                                                         \
+    (void)0
 
-#define moos_poco_assert(cond) \
-	if (!(cond)) Poco::Bugcheck::assertion(#cond, __FILE__, __LINE__); else (void) 0
+#define moos_poco_check_ptr(ptr)                                               \
+  if (!(ptr))                                                                  \
+    Poco::Bugcheck::nullPointer(#ptr, __FILE__, __LINE__);                     \
+  else                                                                         \
+    (void)0
 
+#define moos_poco_bugcheck() Poco::Bugcheck::bugcheck(__FILE__, __LINE__)
 
-#define moos_poco_check_ptr(ptr) \
-	if (!(ptr)) Poco::Bugcheck::nullPointer(#ptr, __FILE__, __LINE__); else (void) 0
+#define moos_poco_bugcheck_msg(msg)                                            \
+  Poco::Bugcheck::bugcheck(msg, __FILE__, __LINE__)
 
+#define moos_poco_debugger() Poco::Bugcheck::debugger(__FILE__, __LINE__)
 
-#define moos_poco_bugcheck() \
-	Poco::Bugcheck::bugcheck(__FILE__, __LINE__)
-
-
-#define moos_poco_bugcheck_msg(msg) \
-	Poco::Bugcheck::bugcheck(msg, __FILE__, __LINE__)
-
-
-#define moos_poco_debugger() \
-	Poco::Bugcheck::debugger(__FILE__, __LINE__)
-
-
-#define moos_poco_debugger_msg(msg) \
-	Poco::Bugcheck::debugger(msg, __FILE__, __LINE__)
-
+#define moos_poco_debugger_msg(msg)                                            \
+  Poco::Bugcheck::debugger(msg, __FILE__, __LINE__)
 
 #if defined(_DEBUG)
-#	define moos_poco_stdout_dbg(outstr) \
-		std::cout << __FILE__ << '(' << std::dec << __LINE__ << "):" << outstr << std::endl;
+#define moos_poco_stdout_dbg(outstr)                                           \
+  std::cout << __FILE__ << '(' << std::dec << __LINE__ << "):" << outstr       \
+            << std::endl;
 #else
-#	define moos_poco_stdout_dbg(outstr)
+#define moos_poco_stdout_dbg(outstr)
 #endif
-
 
 #if defined(_DEBUG)
-#	define moos_poco_stderr_dbg(outstr) \
-		std::cerr << __FILE__ << '(' << std::dec << __LINE__ << "):" << outstr << std::endl;
+#define moos_poco_stderr_dbg(outstr)                                           \
+  std::cerr << __FILE__ << '(' << std::dec << __LINE__ << "):" << outstr       \
+            << std::endl;
 #else
-#	define moos_poco_stderr_dbg(outstr)
+#define moos_poco_stderr_dbg(outstr)
 #endif
-
 
 //
 // poco_static_assert
@@ -151,36 +145,25 @@ protected:
 // The following was ported from <boost/static_assert.hpp>
 //
 
+template <bool x> struct MOOS_POCO_STATIC_ASSERTION_FAILURE;
 
-template <bool x>
-struct MOOS_POCO_STATIC_ASSERTION_FAILURE;
-
-
-template <>
-struct MOOS_POCO_STATIC_ASSERTION_FAILURE<true>
-{
-	enum
-	{
-		value = 1
-	};
+template <> struct MOOS_POCO_STATIC_ASSERTION_FAILURE<true> {
+  enum { value = 1 };
 };
 
+template <int x> struct moos_poco_static_assert_test {};
 
-template <int x>
-struct moos_poco_static_assert_test
-{
-};
-
-
-#if defined(__GNUC__) && (__GNUC__ == 3) && ((__GNUC_MINOR__ == 3) || (__GNUC_MINOR__ == 4))
-#define moos_poco_static_assert(B) \
-  typedef char MOOS_POCO_JOIN(moos_poco_static_assert_typedef_, __LINE__) \
-        [MOOS_POCO_STATIC_ASSERTION_FAILURE<(bool) (B)>::value]
+#if defined(__GNUC__) && (__GNUC__ == 3) &&                                    \
+    ((__GNUC_MINOR__ == 3) || (__GNUC_MINOR__ == 4))
+#define moos_poco_static_assert(B)                                             \
+  typedef char MOOS_POCO_JOIN(                                                 \
+      moos_poco_static_assert_typedef_,                                        \
+      __LINE__)[MOOS_POCO_STATIC_ASSERTION_FAILURE<(bool)(B)>::value]
 #else
-#define moos_poco_static_assert(B) \
-  typedef moos_poco_static_assert_test<sizeof(MOOS_POCO_STATIC_ASSERTION_FAILURE<(bool) (B)>)> \
-    MOOS_POCO_JOIN(moos_poco_static_assert_typedef_, __LINE__)
+#define moos_poco_static_assert(B)                                             \
+  typedef moos_poco_static_assert_test<sizeof(                                 \
+      MOOS_POCO_STATIC_ASSERTION_FAILURE<(bool)(B)>)>                          \
+  MOOS_POCO_JOIN(moos_poco_static_assert_typedef_, __LINE__)
 #endif
-
 
 #endif // MOOS_POCO_Foundation_Bugcheck_INCLUDED

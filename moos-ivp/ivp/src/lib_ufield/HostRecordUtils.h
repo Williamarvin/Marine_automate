@@ -26,16 +26,6 @@
 
 #include "HostRecord.h"
 
-HostRecord string2HostRecord(const std::string&);
+HostRecord string2HostRecord(const std::string &);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

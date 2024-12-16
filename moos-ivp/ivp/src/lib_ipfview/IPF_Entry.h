@@ -24,41 +24,31 @@
 #ifndef BUNDLE_ENTRY_HEADER
 #define BUNDLE_ENTRY_HEADER
 
-#include <string>
-#include "QuadSet.h"
 #include "IvPDomain.h"
 #include "IvPFunction.h"
+#include "QuadSet.h"
+#include <string>
 
-class IPF_Entry
-{
+class IPF_Entry {
 public:
-  IPF_Entry(const std::string&);
+  IPF_Entry(const std::string &);
   ~IPF_Entry() {}
-  
-  QuadSet       getQuadSet(IvPDomain, bool dense=false);
-  IvPFunction*  getIvPFunction();
 
-  std::string   getIPFString() const  {return(m_ipf_str);}
-  unsigned int  getPieces() const     {return(m_pieces);}
-  double        getPriority() const   {return(m_priority);}
-  IvPDomain     getDomain() const     {return(m_ivp_domain);}
+  QuadSet getQuadSet(IvPDomain, bool dense = false);
+  IvPFunction *getIvPFunction();
 
- protected:
-  std::string    m_ipf_str;
-  unsigned int   m_pieces;
-  double         m_priority;
-  IvPDomain      m_ivp_domain;
+  std::string getIPFString() const { return (m_ipf_str); }
+  unsigned int getPieces() const { return (m_pieces); }
+  double getPriority() const { return (m_priority); }
+  IvPDomain getDomain() const { return (m_ivp_domain); }
 
-  QuadSet        m_quadset;
+protected:
+  std::string m_ipf_str;
+  unsigned int m_pieces;
+  double m_priority;
+  IvPDomain m_ivp_domain;
+
+  QuadSet m_quadset;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

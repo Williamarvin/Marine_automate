@@ -28,37 +28,32 @@
 
 class ZAIC_PEAK_GUI : public ZAIC_GUI {
 public:
-  ZAIC_PEAK_GUI(int w, int h, const char *label=0);
+  ZAIC_PEAK_GUI(int w, int h, const char *label = 0);
   ~ZAIC_PEAK_GUI() {}
-  
+
   void updateOutput();
   void updateFieldColors();
   void augmentMenu();
 
 public:
-  Fl_Output   *m_fld_summit1;
-  Fl_Output   *m_fld_pwidth1;
-  Fl_Output   *m_fld_bwidth1;
-  Fl_Output   *m_fld_sdelta1;
+  Fl_Output *m_fld_summit1;
+  Fl_Output *m_fld_pwidth1;
+  Fl_Output *m_fld_bwidth1;
+  Fl_Output *m_fld_sdelta1;
 
-  Fl_Output   *m_fld_summit2;
-  Fl_Output   *m_fld_pwidth2;
-  Fl_Output   *m_fld_bwidth2;
-  Fl_Output   *m_fld_sdelta2;
+  Fl_Output *m_fld_summit2;
+  Fl_Output *m_fld_pwidth2;
+  Fl_Output *m_fld_bwidth2;
+  Fl_Output *m_fld_sdelta2;
 
-  Fl_Output   *m_fld_maxutil;
-  Fl_Output   *m_fld_minutil;
+  Fl_Output *m_fld_maxutil;
+  Fl_Output *m_fld_minutil;
 
 private:
   inline void cb_ToggleWRAP_i();
-  static void cb_ToggleWRAP(Fl_Widget*);
+  static void cb_ToggleWRAP(Fl_Widget *);
 
   inline void cb_DrawMode_i(int);
-  static void cb_DrawMode(Fl_Widget*, int);
+  static void cb_DrawMode(Fl_Widget *, int);
 };
 #endif
-
-
-
-
-

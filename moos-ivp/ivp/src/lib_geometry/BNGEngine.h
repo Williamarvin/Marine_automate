@@ -22,52 +22,31 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BNG_ENGINE_HEADER
 #define BNG_ENGINE_HEADER
 
 class BNGEngine {
 public:
   BNGEngine();
-  BNGEngine(double cnx, double cny, double cnh, double cnv, 
-	    double osx, double osy);
+  BNGEngine(double cnx, double cny, double cnh, double cnv, double osx,
+            double osy);
   ~BNGEngine() {}
 
-public:    
+public:
   double evalBNG(double osh, double osv) const;
   double evalBNGRate(double osh, double osv) const;
 
- protected:
-  void   setStatic();
+protected:
+  void setStatic();
 
- protected: // Config parameters
-  double m_cnx;   // Contact Lat position at time Tm.
-  double m_cny;   // Contact Lon position at time Tm.
-  double m_cnv;   // Contact Speed in kts.
-  double m_cnh;   // Contact Course in degrees (0-359).
-  double m_osx;   // Ownship Lat position at time Tm.
-  double m_osy;   // Ownship Lon position at time Tm.
-
+protected:      // Config parameters
+  double m_cnx; // Contact Lat position at time Tm.
+  double m_cny; // Contact Lon position at time Tm.
+  double m_cnv; // Contact Speed in kts.
+  double m_cnh; // Contact Course in degrees (0-359).
+  double m_osx; // Ownship Lat position at time Tm.
+  double m_osy; // Ownship Lon position at time Tm.
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

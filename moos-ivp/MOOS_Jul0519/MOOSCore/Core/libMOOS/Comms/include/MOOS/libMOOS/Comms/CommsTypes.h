@@ -8,8 +8,8 @@
 #ifndef COMMSTYPES_H_
 #define COMMSTYPES_H_
 
-#include <list>
 #include "MOOS/libMOOS/Comms/MOOSMsg.h"
+#include <list>
 typedef std::list<CMOOSMsg> MOOSMSG_LIST;
 
 #endif /* COMMSTYPES_H_ */

@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_CONSTANT_DEPTH_HEADER
 #define BHV_CONSTANT_DEPTH_HEADER
 
@@ -30,32 +30,22 @@ class BHV_ConstantDepth : public IvPBehavior {
 public:
   BHV_ConstantDepth(IvPDomain);
   ~BHV_ConstantDepth() {}
-  
-  void         onIdleState() {updateInfoIn();}
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
 
- protected:
-  bool         updateInfoIn();
+  void onIdleState() { updateInfoIn(); }
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
 
- protected: // Configuration variables
-  double      m_desired_depth;
-  double      m_peakwidth;
-  double      m_basewidth;
-  double      m_summitdelta;
+protected:
+  bool updateInfoIn();
+
+protected: // Configuration variables
+  double m_desired_depth;
+  double m_peakwidth;
+  double m_basewidth;
+  double m_summitdelta;
   std::string m_depth_mismatch_var;
 
- protected: // State variables
-  double      m_osd;
+protected: // State variables
+  double m_osd;
 };
 #endif
-
-
-
-
-
-
-
-
-
-

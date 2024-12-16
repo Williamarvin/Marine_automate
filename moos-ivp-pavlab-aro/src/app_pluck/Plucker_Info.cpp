@@ -5,19 +5,18 @@
 /*    DATE: Mar 8th, 2024                                        */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "Plucker_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "Plucker_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis()
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                    ");
   blk("------------------------------------                         ");
   blk("  pluck is a utility plucking values from a configurion file ");
@@ -66,8 +65,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "=====================================================" << endl;
   cout << "Usage: pluck [OPTIONS]                               " << endl;
   cout << "=====================================================" << endl;
@@ -106,7 +104,6 @@ void showHelpAndExit()
   cout << "  -nl                                                " << endl;
   cout << "     Add the newline char to the output (default no) " << endl;
 
-
   cout << "Examples:                                            " << endl;
   cout << "  pluck --file=config.txt --lnum=4 --fld=vname       " << endl;
   cout << "  pluck config.txt 4 --fld=vname                     " << endl;
@@ -115,12 +112,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit()
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pluck", "gpl");
   exit(0);
 }

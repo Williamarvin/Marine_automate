@@ -21,229 +21,215 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "RandomVariableSet.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Destructor
 
-RandomVariableSet::~RandomVariableSet()
-{
+RandomVariableSet::~RandomVariableSet() {
   unsigned int i, vsize = m_rvar_vector.size();
-  for(i=0; i<vsize; i++)
-    delete(m_rvar_vector[i]);
+  for (i = 0; i < vsize; i++)
+    delete (m_rvar_vector[i]);
 }
 
 //---------------------------------------------------------
 // Procedure: contains
 
-bool RandomVariableSet::contains(const string& varname) const
-{
+bool RandomVariableSet::contains(const string &varname) const {
   unsigned int i, vsize = m_rvar_vector.size();
-  for(i=0; i<vsize; i++) {
-    if(m_rvar_vector[i]->getVarName() == varname)
-      return(true);
+  for (i = 0; i < vsize; i++) {
+    if (m_rvar_vector[i]->getVarName() == varname)
+      return (true);
   }
-  return(false);
+  return (false);
 }
 
 //---------------------------------------------------------
 // Procedure: addRandomVar()
 
-string RandomVariableSet::addRandomVar(const string& spec)
-{
+string RandomVariableSet::addRandomVar(const string &spec) {
   string rvtype = tokStringParse(spec, "type", ',', '=');
-  
+
   cout << "rvtype: [" << rvtype << "]" << endl;
 
-  if((rvtype == "uniform") || (rvtype == ""))
-    return(addRandomVarUniform(spec));
+  if ((rvtype == "uniform") || (rvtype == ""))
+    return (addRandomVarUniform(spec));
 
-  if((rvtype == "gaussian") || (rvtype == "normal"))
-    return(addRandomVarGaussian(spec));
+  if ((rvtype == "gaussian") || (rvtype == "normal"))
+    return (addRandomVarGaussian(spec));
 
-  return("unknown random variable type: " + rvtype);
+  return ("unknown random variable type: " + rvtype);
 }
 
 //---------------------------------------------------------
 // Procedure: addRandomVarUniform()
 
-string RandomVariableSet::addRandomVarUniform(const string& spec)
-{
+string RandomVariableSet::addRandomVarUniform(const string &spec) {
   string varname;
   string keyname;
-  double minval=0;
-  double maxval=1;
-  double snapval=-1;
-  bool   minval_set = false;
-  bool   maxval_set = false;
-  
+  double minval = 0;
+  double maxval = 1;
+  double snapval = -1;
+  bool minval_set = false;
+  bool maxval_set = false;
+
   vector<string> svector = parseString(spec, ',');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
-    string orig  = stripBlankEnds(svector[i]);
-    string left  = biteStringX(svector[i], '=');
+  for (i = 0; i < vsize; i++) {
+    string orig = stripBlankEnds(svector[i]);
+    string left = biteStringX(svector[i], '=');
     string right = svector[i];
-    if(left == "varname")
+    if (left == "varname")
       varname = right;
-    else if(left == "key")
+    else if (left == "key")
       keyname = tolower(right);
-    else if((left == "min") && isNumber(right)) {
+    else if ((left == "min") && isNumber(right)) {
       minval = atof(right.c_str());
       minval_set = true;
-    }
-    else if((left == "max") && isNumber(right)) {
+    } else if ((left == "max") && isNumber(right)) {
       maxval = atof(right.c_str());
       maxval_set = true;
-    }
-    else if((left == "snap") && isNumber(right)) {
+    } else if ((left == "snap") && isNumber(right)) {
       snapval = atof(right.c_str());
-    }
-    else if(left != "type")
-      return("Bad parametery=value: " + left + "=" + right);
+    } else if (left != "type")
+      return ("Bad parametery=value: " + left + "=" + right);
   }
-  
-  if(keyname == "")
-    return("key is not specified");
 
-  if((keyname != "at_post") && (keyname != "at_start") && (keyname != "at_reset"))
-    return("unknown random_var key: " + keyname);
+  if (keyname == "")
+    return ("key is not specified");
 
-  if(varname == "")
-    return("Unset variable name");
+  if ((keyname != "at_post") && (keyname != "at_start") &&
+      (keyname != "at_reset"))
+    return ("unknown random_var key: " + keyname);
 
-  if(!minval_set)
-    return("Lower value of the range not set");
+  if (varname == "")
+    return ("Unset variable name");
 
-  if(!maxval_set)
-    return("Upper value of the range not set");
-  
-  if(minval > maxval)
-    return("Minimum value greater than maximum value");
+  if (!minval_set)
+    return ("Lower value of the range not set");
 
+  if (!maxval_set)
+    return ("Upper value of the range not set");
 
-  if(contains(varname))
-    return("Duplicate random variable");
+  if (minval > maxval)
+    return ("Minimum value greater than maximum value");
 
-  
+  if (contains(varname))
+    return ("Duplicate random variable");
+
   RandVarUniform *rand_var = new RandVarUniform();
   rand_var->setVarName(varname);
-  if(keyname != "")
+  if (keyname != "")
     rand_var->setKeyName(keyname);
   rand_var->setType("uniform");
   rand_var->setParam("min", minval);
   rand_var->setParam("max", maxval);
-  if(snapval > 0)
+  if (snapval > 0)
     rand_var->setParam("snap", snapval);
-  
+
   m_rvar_vector.push_back(rand_var);
-  return("");
+  return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: addRandomVarGaussian()
 
-string RandomVariableSet::addRandomVarGaussian(const string& spec)
-{
+string RandomVariableSet::addRandomVarGaussian(const string &spec) {
   string varname;
   string keyname;
-  double minval=0;
-  double maxval=1;
-  double snapval=-1;
-  double mu=0;
-  double sigma=1;
-  bool   minval_set = false;
-  bool   maxval_set = false;
-  bool   mu_set     = false;
-  bool   sigma_set  = false;
+  double minval = 0;
+  double maxval = 1;
+  double snapval = -1;
+  double mu = 0;
+  double sigma = 1;
+  bool minval_set = false;
+  bool maxval_set = false;
+  bool mu_set = false;
+  bool sigma_set = false;
 
   vector<string> svector = parseString(spec, ',');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
-    string left  = stripBlankEnds(biteString(svector[i], '='));
+  for (i = 0; i < vsize; i++) {
+    string left = stripBlankEnds(biteString(svector[i], '='));
     string right = stripBlankEnds(svector[i]);
-    if(left == "varname")
+    if (left == "varname")
       varname = right;
-    else if(left == "key")
+    else if (left == "key")
       keyname = tolower(right);
-    else if((left == "min") && isNumber(right)) {
+    else if ((left == "min") && isNumber(right)) {
       minval = atof(right.c_str());
       minval_set = true;
-    }
-    else if((left == "max") && isNumber(right)) {
+    } else if ((left == "max") && isNumber(right)) {
       maxval = atof(right.c_str());
       maxval_set = true;
-    }
-    else if((left == "snap") && isNumber(right)) {
+    } else if ((left == "snap") && isNumber(right)) {
       snapval = atof(right.c_str());
-    }
-    else if((left == "mu") && isNumber(right)) {
+    } else if ((left == "mu") && isNumber(right)) {
       mu = atof(right.c_str());
       mu_set = true;
-    }
-    else if((left == "sigma") && isNumber(right)) {
+    } else if ((left == "sigma") && isNumber(right)) {
       sigma = atof(right.c_str());
       sigma_set = true;
-    }
-    else if(left != "type")
-      return("Bad parameterx=value: " + left + "=" + right);
+    } else if (left != "type")
+      return ("Bad parameterx=value: " + left + "=" + right);
   }
-  
-  if(keyname == "")
-    return("key is not specified");
-  
-  if((keyname != "at_post") && (keyname != "at_start") && (keyname != "at_reset"))
-    return("unknown random_var key: " + keyname);
 
-  if(varname == "")
-    return("Unset variable name");
+  if (keyname == "")
+    return ("key is not specified");
 
-  if(!minval_set)
-    return("Lower value of the range not set");
+  if ((keyname != "at_post") && (keyname != "at_start") &&
+      (keyname != "at_reset"))
+    return ("unknown random_var key: " + keyname);
 
-  if(!maxval_set)
-    return("Upper value of the range not set");
+  if (varname == "")
+    return ("Unset variable name");
 
-  if(!mu_set)
-    return("Mu not set");
+  if (!minval_set)
+    return ("Lower value of the range not set");
 
-  if(!sigma_set)
-    return("Sigma not set");
-  
-  if(minval > maxval)
-    return("Minimum value greater than maximum value");
+  if (!maxval_set)
+    return ("Upper value of the range not set");
 
-  if(contains(varname))
-    return("Duplicate random variable");
-  
+  if (!mu_set)
+    return ("Mu not set");
+
+  if (!sigma_set)
+    return ("Sigma not set");
+
+  if (minval > maxval)
+    return ("Minimum value greater than maximum value");
+
+  if (contains(varname))
+    return ("Duplicate random variable");
+
   RandVarGaussian *rand_var = new RandVarGaussian();
   rand_var->setVarName(varname);
-  if(keyname != "")
+  if (keyname != "")
     rand_var->setKeyName(keyname);
   rand_var->setType("gaussian");
   rand_var->setParam("min", minval);
   rand_var->setParam("max", maxval);
-  rand_var->setParam("mu",  mu);
+  rand_var->setParam("mu", mu);
   rand_var->setParam("sigma", sigma);
-  if(snapval > 0)
+  if (snapval > 0)
     rand_var->setParam("snap", snapval);
-  
+
   m_rvar_vector.push_back(rand_var);
-  return("");
+  return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: reset
 
-void RandomVariableSet::reset(const string& key, double tstamp)
-{
+void RandomVariableSet::reset(const string &key, double tstamp) {
   unsigned int i, vsize = m_rvar_vector.size();
-  for(i=0; i<vsize; i++) {
-    if(m_rvar_vector[i]->getKeyName() == key)
+  for (i = 0; i < vsize; i++) {
+    if (m_rvar_vector[i]->getKeyName() == key)
       m_rvar_vector[i]->reset();
   }
 }
@@ -251,114 +237,94 @@ void RandomVariableSet::reset(const string& key, double tstamp)
 //---------------------------------------------------------
 // Procedure: getVarName(index)
 
-string RandomVariableSet::getVarName(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getVarName());
-  return("");
+string RandomVariableSet::getVarName(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getVarName());
+  return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: getKeyName(index)
 
-string RandomVariableSet::getKeyName(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getKeyName());
-  return("");
+string RandomVariableSet::getKeyName(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getKeyName());
+  return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: getType(index)
 
-string RandomVariableSet::getType(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getType());
-  return("");
+string RandomVariableSet::getType(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getType());
+  return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: getValue(index)
 
-double RandomVariableSet::getValue(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getValue());
-  return(0);
+double RandomVariableSet::getValue(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getValue());
+  return (0);
 }
 
 //---------------------------------------------------------
 // Procedure: getMinVal(index)
 
-double RandomVariableSet::getMinVal(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getMinVal());
-  return(0);
+double RandomVariableSet::getMinVal(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getMinVal());
+  return (0);
 }
 
 //---------------------------------------------------------
 // Procedure: getMaxVal(index)
 
-double RandomVariableSet::getMaxVal(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getMaxVal());
-  return(0);
+double RandomVariableSet::getMaxVal(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getMaxVal());
+  return (0);
 }
 
 //---------------------------------------------------------
 // Procedure: getStringSummary(index)
 
-string RandomVariableSet::getStringSummary(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getStringSummary());
+string RandomVariableSet::getStringSummary(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getStringSummary());
   else
-    return("");
+    return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: getStringValue(index)
 
-string RandomVariableSet::getStringValue(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getStringValue());
+string RandomVariableSet::getStringValue(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getStringValue());
   else
-    return("");
+    return ("");
 }
 
 //---------------------------------------------------------
 // Procedure: getParams(index)
 
-string RandomVariableSet::getParams(unsigned int ix) const
-{
-  if(ix < m_rvar_vector.size())
-    return(m_rvar_vector[ix]->getParams());
+string RandomVariableSet::getParams(unsigned int ix) const {
+  if (ix < m_rvar_vector.size())
+    return (m_rvar_vector[ix]->getParams());
   else
-    return("");
+    return ("");
 }
 
 //---------------------------------------------------------
-// Procedure: print() 
+// Procedure: print()
 
-void RandomVariableSet::print() const
-{
-  cout << "RandomVariableSet: " << m_rvar_vector.size() << endl; 
-  for(unsigned int i=0; i<m_rvar_vector.size(); i++) {
+void RandomVariableSet::print() const {
+  cout << "RandomVariableSet: " << m_rvar_vector.size() << endl;
+  for (unsigned int i = 0; i < m_rvar_vector.size(); i++) {
     cout << "[" << i << "]:" << m_rvar_vector[i]->getStringSummary() << endl;
   }
   cout << "done." << endl;
 }
-
-
-
-
-
-
-
-
-
-

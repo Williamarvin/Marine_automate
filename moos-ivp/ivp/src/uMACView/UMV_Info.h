@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef UMAC_VIEWER_INFO_HEADER
 #define UMAC_VIEWER_INFO_HEADER
 
@@ -31,12 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-
-

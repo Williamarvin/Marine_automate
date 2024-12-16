@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef UFLD_BEACON_RANGE_SENSOR_INFO_HEADER
 #define UFLD_BEACON_RANGE_SENSOR_INFO_HEADER
 
@@ -31,12 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-
-

@@ -5,20 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "HydroLinkArduinoBridge_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The iHydroLinkArduinoBridge application is used for               ");
@@ -31,8 +29,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: iHydroLinkArduinoBridge file.moos [OPTIONS]                   ");
@@ -41,8 +38,9 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
-  blk("      Launch iHydroLinkArduinoBridge with the given process name         ");
+  mag("  --alias", "=<ProcessName>                                      ");
+  blk("      Launch iHydroLinkArduinoBridge with the given process name        "
+      " ");
   blk("      rather than iHydroLinkArduinoBridge.                           ");
   mag("  --example, -e                                                 ");
   blk("      Display example MOOS configuration block.                 ");
@@ -63,25 +61,27 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit(HydroLinkArduinoBridge &hydrolink)
-{
-  std::cout << "//------------------------------------------------" << std::endl;
+void showExampleConfigAndExit(HydroLinkArduinoBridge &hydrolink) {
+  std::cout << "//------------------------------------------------"
+            << std::endl;
   std::cout << "//iHydroLink config block" << std::endl;
   std::cout << "ProcessConfig = iHydroLink" << std::endl;
   std::cout << "{" << std::endl;
   std::cout << "\tAppTick   = 4" << std::endl;
   std::cout << "\tCommsTick = 4" << std::endl;
-  
+
   std::unordered_map<std::string, std::string> params = hydrolink.get_params();
   uint64_t longest_name = 0;
   std::unordered_map<std::string, std::string>::iterator param_it;
-  for(param_it = params.begin(); param_it != params.end(); ++param_it)
-      if(param_it->first.size() > longest_name) longest_name = param_it->first.size();
+  for (param_it = params.begin(); param_it != params.end(); ++param_it)
+    if (param_it->first.size() > longest_name)
+      longest_name = param_it->first.size();
 
-  for(param_it = params.begin(); param_it != params.end(); ++param_it) {
-    std::cout << "\t    " << std::right << std::setw(longest_name) << param_it->first << " = " << param_it->second << std::endl;
+  for (param_it = params.begin(); param_it != params.end(); ++param_it) {
+    std::cout << "\t    " << std::right << std::setw(longest_name)
+              << param_it->first << " = " << param_it->second << std::endl;
   }
-  
+
   std::cout << "}" << std::endl;
   // iHydroLink config block
   // blk("                                                                ");
@@ -99,12 +99,10 @@ void showExampleConfigAndExit(HydroLinkArduinoBridge &hydrolink)
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("iHydroLink INTERFACE                                    ");
@@ -127,9 +125,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("iHydroLink", "gpl");
   exit(0);
 }
-

@@ -21,16 +21,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <iostream>
-#include "cmath"
+#include "ALogClipHandler.h"
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
 #include "TermUtils.h"
-#include "ALogClipHandler.h"
-#include <cstdlib>
+#include "cmath"
 #include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -39,37 +39,34 @@ void display_usage();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ALogClipHandler handler;
 
   //===================================================================
   // Pass #1: Check for version/help/batch args
   //===================================================================
   vector<string> pass_two_args;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    bool   handled = true;
+    bool handled = true;
 
-    if((argi == "-v") || (argi == "--version") || (argi =="-version")) {
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogclip", "gpl");
-      return(0);
-    }
-    else if((argi == "-h") || (argi == "--help") || (argi =="-help")) {
+      return (0);
+    } else if ((argi == "-h") || (argi == "--help") || (argi == "-help")) {
       display_usage();
-      return(0);
-    }
-    else if((argi == "-b") || (argi == "--batch") || (argi =="-batch")) 
+      return (0);
+    } else if ((argi == "-b") || (argi == "--batch") || (argi == "-batch"))
       handler.setBatch();
-    else if(strBegins(argi, "--suffix=")) 
+    else if (strBegins(argi, "--suffix="))
       handled = handler.setSuffix(argi.substr(9));
-    else if((argi == "-w") || (argi == "--web") || (argi =="-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogclip");
-    
+
     else
       pass_two_args.push_back(argi);
 
-    if(!handled) {
+    if (!handled) {
       cout << "Unhandled argument: " << argi << endl;
       exit(1);
     }
@@ -79,40 +76,38 @@ int main(int argc, char *argv[])
   // Pass #2: Handle all other args
   //===================================================================
 
-  for(unsigned int i=0; i<pass_two_args.size(); i++) {
+  for (unsigned int i = 0; i < pass_two_args.size(); i++) {
     string argi = pass_two_args[i];
-    bool   handled = true;
+    bool handled = true;
 
-    if(strEnds(argi, ".alog")) 
+    if (strEnds(argi, ".alog"))
       handled = handler.addALogFile(argi);
-    else if((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
+    else if ((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
       handler.setVerbose();
-    else if((argi == "--force") || (argi == "-f") || (argi == "-force"))
+    else if ((argi == "--force") || (argi == "-f") || (argi == "-force"))
       handler.setForceOverwrite();
-    else if(isNumber(argi)) 
+    else if (isNumber(argi))
       handled = handler.setTimeStamp(atof(argi.c_str()));
     else
       handled = false;
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled argument: " << argi << endl;
       exit(1);
     }
   }
-  
+
   // Now execute the job and note the result.
   bool ok = handler.process();
-  if(!ok) 
-    return(1);
-  return(0);
+  if (!ok)
+    return (1);
+  return (0);
 }
-
 
 //--------------------------------------------------------
 // Procedure: exit_with_usage
 
-void display_usage()
-{
+void display_usage() {
   cout << "Usage: " << endl;
   cout << "  alogclip in.alog mintime maxtime [out.alog] [OPTIONS]  " << endl;
   cout << "                                                         " << endl;
@@ -150,9 +145,3 @@ void display_usage()
   cout << "  (4) See also: alogscan, alogrm, aloggrep, alogview     " << endl;
   cout << endl;
 }
-
-
-
-
-
-

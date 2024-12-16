@@ -26,35 +26,24 @@
 
 #include <list>
 
-class ColoredPoint
-{
- public:
-  ColoredPoint() 
-    {m_valid=false;}
-  ColoredPoint(double x, double y)
-    {m_x=x; m_y=y; m_valid=true;}
-  
-  bool isValid()    {return(m_valid);}  
-  void setInvalid() {m_valid = false;}
-  void setValid()   {m_valid = true;}
+class ColoredPoint {
+public:
+  ColoredPoint() { m_valid = false; }
+  ColoredPoint(double x, double y) {
+    m_x = x;
+    m_y = y;
+    m_valid = true;
+  }
 
-  double  m_x;
-  double  m_y;
-  bool    m_valid;
+  bool isValid() { return (m_valid); }
+  void setInvalid() { m_valid = false; }
+  void setValid() { m_valid = true; }
+
+  double m_x;
+  double m_y;
+  bool m_valid;
 };
 
 typedef std::list<ColoredPoint> CPList;
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

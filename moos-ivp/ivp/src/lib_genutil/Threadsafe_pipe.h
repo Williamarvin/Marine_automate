@@ -23,120 +23,112 @@
 #ifndef THREADSAFE_PIPE_H
 #define THREADSAFE_PIPE_H
 
-#include <queue>
 #include <cassert>
+#include <queue>
 #ifdef _WIN32
-   #include "MOOSLock.h"
+#include "MOOSLock.h"
 #else
-   #include <pthread.h>
+#include <pthread.h>
 #endif
 
 /// This implements a thread-safe pipe.  To keep the implementation simple, this
 /// class makes no promises regarding first-come, first-serve access to the
 /// data.
-template <typename T>
-class Threadsafe_pipe {
-  public:
-    Threadsafe_pipe();
-    
-    /// Don't call this while there are still threads calling (or blocked on)
-    /// this object's methods, including the dequeue method.
-    virtual ~Threadsafe_pipe();
-    
-    /// Inserts a new element into the pipe.
-    /// @return If the operation was successful, this is true.  If this returns
-    ///   false that means the pipe has already been closed.
-    bool enqueue(const T & value);
-    
-    /// Closes the pipe.  Future enqueues are disabled.  Once this method 
-    /// executes and the queue is/becomes empty, any subsequent dequeue 
-    /// operations will fail (return false).
-    void close();
-    
-    /// If the queue isn't empty, this sets 'value' to the value of the item at
-    /// the front of the queue and returns true.
-    /// If the queue is empty and closed, this returns false.
-    /// @return true means that 'value' has been set to the dequeued value.
-    ///   'false' means that the dequeue operation was aborted because of an
-    ///   empty and closed pipe.
-    bool dequeue(T & value);
+template <typename T> class Threadsafe_pipe {
+public:
+  Threadsafe_pipe();
 
-    /// Returns true iff the pipe is empty.  This method says nothing about
-    /// whether or not the pipe is closed.
-    bool empty();
+  /// Don't call this while there are still threads calling (or blocked on)
+  /// this object's methods, including the dequeue method.
+  virtual ~Threadsafe_pipe();
 
-  private:
-    std::queue<T> data;
-    bool closed;
+  /// Inserts a new element into the pipe.
+  /// @return If the operation was successful, this is true.  If this returns
+  ///   false that means the pipe has already been closed.
+  bool enqueue(const T &value);
+
+  /// Closes the pipe.  Future enqueues are disabled.  Once this method
+  /// executes and the queue is/becomes empty, any subsequent dequeue
+  /// operations will fail (return false).
+  void close();
+
+  /// If the queue isn't empty, this sets 'value' to the value of the item at
+  /// the front of the queue and returns true.
+  /// If the queue is empty and closed, this returns false.
+  /// @return true means that 'value' has been set to the dequeued value.
+  ///   'false' means that the dequeue operation was aborted because of an
+  ///   empty and closed pipe.
+  bool dequeue(T &value);
+
+  /// Returns true iff the pipe is empty.  This method says nothing about
+  /// whether or not the pipe is closed.
+  bool empty();
+
+private:
+  std::queue<T> data;
+  bool closed;
 
 #ifdef _WIN32
-	CMOOSLock* m_lock;
+  CMOOSLock *m_lock;
 #else
-    pthread_mutex_t mtx;
+  pthread_mutex_t mtx;
 #endif
 };
 
 //==============================================================================
 
-template <typename T>
-Threadsafe_pipe<T>::Threadsafe_pipe() 
-  : closed(false)
-{
+template <typename T> Threadsafe_pipe<T>::Threadsafe_pipe() : closed(false) {
   int rc;
 
 #ifdef _WIN32
   m_lock = new CMOOSLock();
 #else
-  rc = pthread_mutex_init(& mtx, NULL);
+  rc = pthread_mutex_init(&mtx, NULL);
   assert(!rc);
 #endif
 }
 
 //==============================================================================
 
-template <typename T>
-Threadsafe_pipe<T>::~Threadsafe_pipe() 
-{
+template <typename T> Threadsafe_pipe<T>::~Threadsafe_pipe() {
   int rc;
 #ifdef _WIN32
   delete m_lock;
 #else
-  rc = pthread_mutex_destroy(& mtx);
+  rc = pthread_mutex_destroy(&mtx);
   assert(!rc);
-#endif 
+#endif
 }
 
 //==============================================================================
 
-template <typename T>
-bool Threadsafe_pipe<T>::enqueue(const T & value)
-{
+template <typename T> bool Threadsafe_pipe<T>::enqueue(const T &value) {
   int rc;
 
 #ifdef _WIN32
-	m_lock->Lock();
+  m_lock->Lock();
 #else
-  rc = pthread_mutex_lock(& mtx);
+  rc = pthread_mutex_lock(&mtx);
   assert(!rc);
 #endif
-  
+
   if (closed) {
 #ifdef _WIN32
     m_lock->UnLock();
 #else
-    rc = pthread_mutex_unlock(& mtx);
+    rc = pthread_mutex_unlock(&mtx);
     assert(!rc);
 #endif
 
     return false;
   }
-  
+
   data.push(value);
 
 #ifdef _WIN32
   m_lock->UnLock();
 #else
-  rc = pthread_mutex_unlock(& mtx);
+  rc = pthread_mutex_unlock(&mtx);
   assert(!rc);
 #endif
 
@@ -145,14 +137,12 @@ bool Threadsafe_pipe<T>::enqueue(const T & value)
 
 //==============================================================================
 
-template <typename T>
-void Threadsafe_pipe<T>::close()
-{
+template <typename T> void Threadsafe_pipe<T>::close() {
   int rc;
 #ifdef _WIN32
   m_lock->Lock();
 #else
-  rc = pthread_mutex_lock(& mtx);
+  rc = pthread_mutex_lock(&mtx);
   assert(!rc);
 #endif
 
@@ -161,46 +151,43 @@ void Threadsafe_pipe<T>::close()
 #ifdef _WIN32
   m_lock->UnLock();
 #else
-  rc = pthread_mutex_unlock(& mtx);
+  rc = pthread_mutex_unlock(&mtx);
   assert(!rc);
 #endif
 }
 
 //==============================================================================
 
-template <typename T>
-bool Threadsafe_pipe<T>::dequeue(T & value)
-{
+template <typename T> bool Threadsafe_pipe<T>::dequeue(T &value) {
   int rc;
 #ifdef _WIN32
   m_lock->Lock();
 #else
-  rc = pthread_mutex_lock(& mtx);
+  rc = pthread_mutex_lock(&mtx);
   assert(!rc);
 #endif
 
   // Is there data to get? ...
-  if (! data.empty()) {
+  if (!data.empty()) {
     value = data.front();
     data.pop();
 
 #ifdef _WIN32
-	m_lock->UnLock();
+    m_lock->UnLock();
 #else
-    rc = pthread_mutex_unlock(& mtx);
+    rc = pthread_mutex_unlock(&mtx);
     assert(!rc);
 #endif
-    
+
     return true;
-  }
-  else {
+  } else {
     // If we got here, then the pipe must have be empty and closed...
     assert(closed);
 
 #ifdef _WIN32
-	m_lock->UnLock();
+    m_lock->UnLock();
 #else
-    rc = pthread_mutex_unlock(& mtx);
+    rc = pthread_mutex_unlock(&mtx);
     assert(!rc);
 #endif
 
@@ -210,37 +197,27 @@ bool Threadsafe_pipe<T>::dequeue(T & value)
 
 //==============================================================================
 
-template <typename T>
-bool Threadsafe_pipe<T>::empty()
-{
+template <typename T> bool Threadsafe_pipe<T>::empty() {
   int rc;
 #ifdef _WIN32
   m_lock->Lock();
 #else
-  rc = pthread_mutex_lock(& mtx);
+  rc = pthread_mutex_lock(&mtx);
   assert(!rc);
 #endif
-  
+
   bool is_empty = data.empty();
-  
+
 #ifdef _WIN32
-	m_lock->UnLock();
+  m_lock->UnLock();
 #else
-    rc = pthread_mutex_unlock(& mtx);
-    assert(!rc);
+  rc = pthread_mutex_unlock(&mtx);
+  assert(!rc);
 #endif
-  
+
   return is_empty;
 }
 
 //==============================================================================
 
 #endif
-
-
-
-
-
-
-
-

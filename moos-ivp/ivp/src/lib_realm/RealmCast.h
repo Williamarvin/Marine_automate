@@ -28,30 +28,29 @@
 
 #include <string>
 
-class RealmCast
-{
- public:
+class RealmCast {
+public:
   RealmCast();
-  virtual ~RealmCast() {};
-  
-  void  msg(const std::string& str)     {m_messages = str;};
-  void  setProcName(std::string s)      {m_proc_name=s;}; 
-  void  setNodeName(std::string s)      {m_node_name=s;}; 
-  void  setCount(unsigned int val)      {m_count=val;}
-  
-  std::string::size_type size() const   {return(m_messages.size());}
-  
-  std::string  getProcName() const      {return(m_proc_name);}
-  std::string  getNodeName() const      {return(m_node_name);}
-  unsigned int getCount() const         {return(m_count);}
-  
-  std::string  getRealmCastString() const;
-  std::string  getFormattedString() const;
-  
- protected: // Configuration vars
-  std::string  m_proc_name;
-  std::string  m_node_name;
-  std::string  m_messages;
+  virtual ~RealmCast(){};
+
+  void msg(const std::string &str) { m_messages = str; };
+  void setProcName(std::string s) { m_proc_name = s; };
+  void setNodeName(std::string s) { m_node_name = s; };
+  void setCount(unsigned int val) { m_count = val; }
+
+  std::string::size_type size() const { return (m_messages.size()); }
+
+  std::string getProcName() const { return (m_proc_name); }
+  std::string getNodeName() const { return (m_node_name); }
+  unsigned int getCount() const { return (m_count); }
+
+  std::string getRealmCastString() const;
+  std::string getFormattedString() const;
+
+protected: // Configuration vars
+  std::string m_proc_name;
+  std::string m_node_name;
+  std::string m_messages;
 
   unsigned int m_count;
 };
@@ -59,4 +58,3 @@ class RealmCast
 RealmCast string2RealmCast(std::string);
 
 #endif
-

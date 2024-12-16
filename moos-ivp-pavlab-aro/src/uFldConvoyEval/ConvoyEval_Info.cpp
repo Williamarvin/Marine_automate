@@ -5,19 +5,18 @@
 /*   DATE: June 5th, 2022                                       */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "ConvoyEval_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uFldConvoyEval application is used for evaluating metrics ");
@@ -33,8 +32,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uFldConvoyEval file.moos [OPTIONS]                       ");
@@ -43,7 +41,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldConvoyEval with the given process name         ");
   blk("      rather than uFldConvoyEval.                               ");
   mag("  --example, -e                                                 ");
@@ -65,8 +63,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldConvoyEval Example MOOS Configuration                   ");
   blu("=============================================================== ");
@@ -84,12 +81,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("uFldConvoyEval INTERFACE                                    ");
   blu("=============================================================== ");
@@ -98,7 +93,7 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("SUBSCRIPTIONS:                                                  ");
   blk("------------------------------------                            ");
-  blk("  APPCAST_REG  (uFldEvalConvoy is an appcasting MOOS App)       "); 
+  blk("  APPCAST_REG  (uFldEvalConvoy is an appcasting MOOS App)       ");
   blk("                                                                ");
   blk("  CONVOY_RECAP = convoy_rng=27.36,vname=eve,rng_delta=2.36,     ");
   blk("                 tail_rng=3.13,tail_ang=2.90,mark_bng=13.27,    ");
@@ -116,16 +111,14 @@ void showInterfaceAndExit()
   blk("                                                                ");
   blk("PUBLICATIONS:                                                   ");
   blk("------------------------------------                            ");
-  blk("  APPCAST  (uFldEvalConvoy is an appcasting MOOS App)           "); 
+  blk("  APPCAST  (uFldEvalConvoy is an appcasting MOOS App)           ");
   exit(0);
 }
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldConvoyEval", "gpl");
   exit(0);
 }
-

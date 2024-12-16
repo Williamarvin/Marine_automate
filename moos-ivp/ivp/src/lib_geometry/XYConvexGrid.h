@@ -26,111 +26,106 @@
 #ifndef XY_CONVEX_GRID_HEADER
 #define XY_CONVEX_GRID_HEADER
 
+#include "XYObject.h"
+#include "XYPolygon.h"
+#include "XYSquare.h"
 #include <string>
 #include <vector>
-#include "XYObject.h"
-#include "XYSquare.h"
-#include "XYPolygon.h"
 
 class XYConvexGrid : public XYObject {
 public:
   XYConvexGrid();
   ~XYConvexGrid() {}
 
-  bool      initialize(const XYPolygon&, double cell_size, double init_val);
-  bool      initialize(const XYPolygon&, double cell_size,
-		       std::vector<std::string> cell_vars, 
-		       std::vector<double> cell_init_vals);
+  bool initialize(const XYPolygon &, double cell_size, double init_val);
+  bool initialize(const XYPolygon &, double cell_size,
+                  std::vector<std::string> cell_vars,
+                  std::vector<double> cell_init_vals);
 
-  bool      ptIntersect(unsigned int ix, double x, double y) const;
+  bool ptIntersect(unsigned int ix, double x, double y) const;
 
-  double    segIntersect(unsigned int ix, 
-			 double x1, double y1,
-			 double x2, double y2);
+  double segIntersect(unsigned int ix, double x1, double y1, double x2,
+                      double y2);
 
-  unsigned int size() const    {return(m_elements.size());}
+  unsigned int size() const { return (m_elements.size()); }
 
-  XYSquare     getElement(unsigned int index) const;
-  XYSquare     getSBound() const  {return(m_bounding_square);}
-  bool         ptIntersect(double, double) const;
-  bool         ptIntersectBound(double, double) const;
-  bool         segIntersectBound(double, double, double, double) const;
+  XYSquare getElement(unsigned int index) const;
+  XYSquare getSBound() const { return (m_bounding_square); }
+  bool ptIntersect(double, double) const;
+  bool ptIntersectBound(double, double) const;
+  bool segIntersectBound(double, double, double, double) const;
 
-  bool         hasCellVar(const std::string&) const;
-  unsigned int getCellVarIX(const std::string&) const;
-  unsigned int getCellVarCnt() const {return(m_cell_vars.size());}
-  std::string  getConfigStr() const;
-  std::string  get_spec() const;
+  bool hasCellVar(const std::string &) const;
+  unsigned int getCellVarIX(const std::string &) const;
+  unsigned int getCellVarCnt() const { return (m_cell_vars.size()); }
+  std::string getConfigStr() const;
+  std::string get_spec() const;
 
-  void    setVal(unsigned int ix, double val, unsigned int cix=0);
-  void    incVal(unsigned int ix, double val, unsigned int cix=0);
-  void    setMinLimit(double, unsigned int cix=0);
-  void    setMaxLimit(double, unsigned int cix=0);
+  void setVal(unsigned int ix, double val, unsigned int cix = 0);
+  void incVal(unsigned int ix, double val, unsigned int cix = 0);
+  void setMinLimit(double, unsigned int cix = 0);
+  void setMaxLimit(double, unsigned int cix = 0);
 
-  double      getVal(unsigned int ix, unsigned int cix=0) const;
-  std::string getVar(unsigned int cix=0) const;
-  double      getMin(unsigned int cix=0) const;
-  double      getMax(unsigned int cix=0) const;
-  double      getInitVal(unsigned int cix=0) const;
-  double      getMinLimit(unsigned int cix=0) const;
-  double      getMaxLimit(unsigned int cix=0) const;
-  bool        cellVarMinLimited(unsigned int cix=0) const;
-  bool        cellVarMaxLimited(unsigned int cix=0) const;
+  double getVal(unsigned int ix, unsigned int cix = 0) const;
+  std::string getVar(unsigned int cix = 0) const;
+  double getMin(unsigned int cix = 0) const;
+  double getMax(unsigned int cix = 0) const;
+  double getInitVal(unsigned int cix = 0) const;
+  double getMinLimit(unsigned int cix = 0) const;
+  double getMaxLimit(unsigned int cix = 0) const;
+  bool cellVarMinLimited(unsigned int cix = 0) const;
+  bool cellVarMaxLimited(unsigned int cix = 0) const;
 
-  double  getCellSize() const {return(m_config_cell_size);}
+  double getCellSize() const { return (m_config_cell_size); }
 
-  bool    processDelta(std::string);
+  bool processDelta(std::string);
 
-  void    reset();
-  void    reset(const std::string& cell_var);
-  void    print() const; 
+  void reset();
+  void reset(const std::string &cell_var);
+  void print() const;
 
- public: // Support for caching for drawing
-  bool    setEdgeCache(double, double);
-  double  getPixPerMtrX() const {return(m_pix_per_mtr_x);}
-  double  getPixPerMtrY() const {return(m_pix_per_mtr_y);}
+public: // Support for caching for drawing
+  bool setEdgeCache(double, double);
+  double getPixPerMtrX() const { return (m_pix_per_mtr_x); }
+  double getPixPerMtrY() const { return (m_pix_per_mtr_y); }
 
-  std::vector<std::vector<double> > getEdgeCache() const {return(m_edge_cache);}
+  std::vector<std::vector<double>> getEdgeCache() const {
+    return (m_edge_cache);
+  }
 
-
-  
 protected:
-  bool    initialize(const XYSquare&, const XYSquare&);
-    
- protected: // Config variables
+  bool initialize(const XYSquare &, const XYSquare &);
+
+protected: // Config variables
   XYPolygon m_config_poly;
-  double    m_config_cell_size;
+  double m_config_cell_size;
 
-  // Index is per cell variable 
-  std::vector<std::string>    m_cell_vars;
-  std::vector<double>         m_cell_init_vals;
-
-  std::vector<double>         m_cell_max_limit;
-  std::vector<double>         m_cell_min_limit;
-  std::vector<bool>           m_cell_max_limited;
-  std::vector<bool>           m_cell_min_limited;
-
-
- protected: // State variables
-  std::vector<XYSquare> m_elements;
-  XYSquare              m_bounding_square;
-  
-  // Outer IX: per grid element. Inner IX: per cellvar
-  std::vector<std::vector<double> >     m_cell_vals;
-  //std::vector<std::vector<unsigned int> m_cell_vals_cnt;
-  
   // Index is per cell variable
-  std::vector<double>                m_cell_max_sofar;
-  std::vector<double>                m_cell_min_sofar;
-  std::vector<bool>                  m_cell_minmax_noted;
+  std::vector<std::string> m_cell_vars;
+  std::vector<double> m_cell_init_vals;
 
- protected: // Support for caching for drawing
-  std::vector<std::vector<double> > m_edge_cache;
+  std::vector<double> m_cell_max_limit;
+  std::vector<double> m_cell_min_limit;
+  std::vector<bool> m_cell_max_limited;
+  std::vector<bool> m_cell_min_limited;
+
+protected: // State variables
+  std::vector<XYSquare> m_elements;
+  XYSquare m_bounding_square;
+
+  // Outer IX: per grid element. Inner IX: per cellvar
+  std::vector<std::vector<double>> m_cell_vals;
+  // std::vector<std::vector<unsigned int> m_cell_vals_cnt;
+
+  // Index is per cell variable
+  std::vector<double> m_cell_max_sofar;
+  std::vector<double> m_cell_min_sofar;
+  std::vector<bool> m_cell_minmax_noted;
+
+protected: // Support for caching for drawing
+  std::vector<std::vector<double>> m_edge_cache;
   double m_pix_per_mtr_x;
   double m_pix_per_mtr_y;
-
-  
 };
 
 #endif
-

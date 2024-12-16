@@ -24,35 +24,31 @@
 #ifndef LOG_BIN_HANDLER_HEADER
 #define LOG_BIN_HANDLER_HEADER
 
-#include <string>
-#include <map>
 #include "ExpEntry.h"
+#include <map>
+#include <string>
 
-class AvgHandler
-{
- public:
+class AvgHandler {
+public:
   AvgHandler();
   ~AvgHandler() {}
 
   bool handle();
-  
+
   bool setLogFile(std::string);
-  void setVerbose() {m_verbose=true;}
-  void setFormatAligned(bool v) {m_format_aligned=v;}
-  void setFormatNegPos()        {m_format_negpos=true;}
-  
- protected: // Config vars
+  void setVerbose() { m_verbose = true; }
+  void setFormatAligned(bool v) { m_format_aligned = v; }
+  void setFormatNegPos() { m_format_negpos = true; }
 
-  bool   m_verbose;
-  bool   m_format_aligned;
-  bool   m_format_negpos;
-  
- protected: // State vars
+protected: // Config vars
+  bool m_verbose;
+  bool m_format_aligned;
+  bool m_format_negpos;
 
+protected: // State vars
   FILE *m_file_in;
 
   std::map<double, ExpEntry> m_entries;
 };
 
 #endif
-

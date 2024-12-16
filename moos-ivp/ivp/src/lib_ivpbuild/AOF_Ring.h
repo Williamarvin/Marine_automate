@@ -22,77 +22,59 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_NRING_HEADER
 #define AOF_NRING_HEADER
 
-#include <string>
 #include "AOF.h"
 #include "IvPDomain.h"
+#include <string>
 
-class AOF_Ring: public AOF {
+class AOF_Ring : public AOF {
 public:
   AOF_Ring(IvPDomain);
   virtual ~AOF_Ring() {}
 
 public: // virtuals defined
   double evalBox(const IvPBox *b) const;
-  bool   setParam(const std::string&, double);
-  bool   setParam(const std::string&, const std::string&);
+  bool setParam(const std::string &, double);
+  bool setParam(const std::string &, const std::string &);
 
 public:
-  void    print() const;
+  void print() const;
 
-  IvPBox  getLOC() const    {return(m_location);}
-  bool    getRPK() const    {return(m_ring_peak);}
-  double  getRNG() const    {return(m_range);}
-  double  getBAS() const    {return(m_base);}
+  IvPBox getLOC() const { return (m_location); }
+  bool getRPK() const { return (m_ring_peak); }
+  double getRNG() const { return (m_range); }
+  double getBAS() const { return (m_base); }
 
-  unsigned int getRAD() const {return(radius);}
-  unsigned int getEXP() const {return(exponent);}
+  unsigned int getRAD() const { return (radius); }
+  unsigned int getEXP() const { return (exponent); }
 
-  std::string latexSTR(int full=0) const;
+  std::string latexSTR(int full = 0) const;
 
 protected:
-  double  boxDist(const IvPBox&, const IvPBox&) const;
-  bool    randomize();
+  double boxDist(const IvPBox &, const IvPBox &) const;
+  bool randomize();
 
 private:
-  unsigned int  radius;
-  unsigned int  radLow;
-  unsigned int  radHigh;
-  unsigned int  exponent;
-  unsigned int  expLow;
-  unsigned int  expHigh;
-  unsigned int  dim;
-  unsigned int  gradient_type;
+  unsigned int radius;
+  unsigned int radLow;
+  unsigned int radHigh;
+  unsigned int exponent;
+  unsigned int expLow;
+  unsigned int expHigh;
+  unsigned int dim;
+  unsigned int gradient_type;
 
-  IvPBox  m_location;
-  bool    m_ring_peak;  // 1 if pts on ring are peaks (vs. valleys)
-  double  m_base;
-  double  m_range;
-  double  plateau;
-  double  gradient_dist;
+  IvPBox m_location;
+  bool m_ring_peak; // 1 if pts on ring are peaks (vs. valleys)
+  double m_base;
+  double m_range;
+  double plateau;
+  double gradient_dist;
 
   // double  maxDist;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

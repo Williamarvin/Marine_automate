@@ -24,9 +24,9 @@
 #ifndef MY_HOLD_BROWSER_HEADER
 #define MY_HOLD_BROWSER_HEADER
 
-#include <iostream>
 #include <FL/Fl.H>
 #include <FL/Fl_Hold_Browser.H>
+#include <iostream>
 
 // This version of the Fl_Hold_Browser simply ignores the up and
 // down arrow keyboard events if the mouse is not over the region
@@ -34,42 +34,28 @@
 
 class MY_Hold_Browser : public Fl_Hold_Browser {
 public:
-  MY_Hold_Browser(int x, int y, int w, int h, const char *l=0) :
-    Fl_Hold_Browser(x, y, w, h, l) {hx=x;hy=y;hw=w;hh=h;}
-
-  int  handle(int event) {
-
-    if(event == FL_KEYBOARD) {
-      if((Fl::event_key()==FL_Up)   || (Fl::event_key()==FL_Down)) {
-	int vx = Fl::event_x();
-	int vy = Fl::event_y();
-	if((vx < hx) || (vx > (hx+hw)) || (vy < hy) || (vy > (hy+hh)))
-	  return(0);
-      }
-    }
-    return(Fl_Hold_Browser::handle(event));
+  MY_Hold_Browser(int x, int y, int w, int h, const char *l = 0)
+      : Fl_Hold_Browser(x, y, w, h, l) {
+    hx = x;
+    hy = y;
+    hw = w;
+    hh = h;
   }
 
- protected:
-  int hx, hy, hw, hh;
+  int handle(int event) {
 
+    if (event == FL_KEYBOARD) {
+      if ((Fl::event_key() == FL_Up) || (Fl::event_key() == FL_Down)) {
+        int vx = Fl::event_x();
+        int vy = Fl::event_y();
+        if ((vx < hx) || (vx > (hx + hw)) || (vy < hy) || (vy > (hy + hh)))
+          return (0);
+      }
+    }
+    return (Fl_Hold_Browser::handle(event));
+  }
+
+protected:
+  int hx, hy, hw, hh;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

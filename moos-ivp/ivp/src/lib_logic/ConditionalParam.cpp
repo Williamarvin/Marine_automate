@@ -23,23 +23,21 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "ConditionalParam.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: setFromString
 //
 //    "param = val [state = true]"
 
-
-bool ConditionalParam::setFromString(const string& giv_str)
-{
+bool ConditionalParam::setFromString(const string &giv_str) {
   string str;
 
-  if(m_comment_header == "")
+  if (m_comment_header == "")
     str = giv_str;
   else
     str = stripComment(giv_str, m_comment_header);
@@ -48,50 +46,47 @@ bool ConditionalParam::setFromString(const string& giv_str)
 
   int len = str.length();
   int pos = str.find_last_of('[');
-  if(str[len-1] != ']')
-    return(false);
-  if(pos <= 0)
-    return(false);
+  if (str[len - 1] != ']')
+    return (false);
+  if (pos <= 0)
+    return (false);
 
   string param_str, condi_str;
 
-  param_str.assign(str, 0, pos-1);
+  param_str.assign(str, 0, pos - 1);
   param_str = stripBlankEnds(param_str);
 
   // Assuming from above the '[' is at pos, and ']' at len-1
   // strip off the brackets here.
-  condi_str.assign(str, pos+1, len-2);
+  condi_str.assign(str, pos + 1, len - 2);
 
   int eqpos = param_str.find('=');
-  int plen  = param_str.length();
-  
+  int plen = param_str.length();
+
   // if '=' not present or in first or last position, ret false
-  if((eqpos <= 0) || (eqpos == len-1))
-    return(false);
-  
-  m_parameter.assign(param_str, 0, eqpos-1);
+  if ((eqpos <= 0) || (eqpos == len - 1))
+    return (false);
+
+  m_parameter.assign(param_str, 0, eqpos - 1);
   m_parameter = stripBlankEnds(m_parameter);
 
-  m_param_val.assign(param_str, eqpos+1, plen-1);
+  m_param_val.assign(param_str, eqpos + 1, plen - 1);
   m_param_val = stripBlankEnds(m_param_val);
-    
+
   m_ok = true;
-  return(true);
+  return (true);
 }
 
-
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: setFromString
-// 
+//
 //    "param", "val [state = true]"
 
-
-bool ConditionalParam::setFromString(const string& param_str,
-				     const string& value_str)
-{
+bool ConditionalParam::setFromString(const string &param_str,
+                                     const string &value_str) {
   string str;
 
-  if(m_comment_header == "")
+  if (m_comment_header == "")
     str = value_str;
   else
     str = stripComment(value_str, m_comment_header);
@@ -100,39 +95,23 @@ bool ConditionalParam::setFromString(const string& param_str,
 
   int len = str.length();
   int pos = str.find_last_of('[');
-  if(str[len-1] != ']')
-    return(false);
-  if(pos <= 0)
-    return(false);
-
+  if (str[len - 1] != ']')
+    return (false);
+  if (pos <= 0)
+    return (false);
 
   m_parameter = stripBlankEnds(param_str);
 
-  m_param_val.assign(str, 0, pos-1);
+  m_param_val.assign(str, 0, pos - 1);
   m_param_val = stripBlankEnds(m_param_val);
 
   // Assuming from above the '[' is at pos, and ']' at len-1
   // strip off the brackets here.
   string condi_str;
-  condi_str.assign(str, pos+1, len-2);
+  condi_str.assign(str, pos + 1, len - 2);
 
   m_condition.setCondition(condi_str);
 
-    
   m_ok = true;
-  return(true);
+  return (true);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

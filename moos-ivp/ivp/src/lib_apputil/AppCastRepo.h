@@ -24,34 +24,33 @@
 #ifndef APPCAST_REPO_HEADER
 #define APPCAST_REPO_HEADER
 
-#include <string>
-#include <map>
 #include "AppCastTree.h"
+#include <map>
+#include <string>
 
-class AppCastRepo
-{
- public:
-  AppCastRepo(bool strip_color=false);
+class AppCastRepo {
+public:
+  AppCastRepo(bool strip_color = false);
   ~AppCastRepo() {}
-  
+
   // Return true if first time heard from this node
-  bool addAppCast(const std::string&);
-  bool addAppCast(const AppCast&);
-  bool removeNode(const std::string& node);
+  bool addAppCast(const std::string &);
+  bool addAppCast(const AppCast &);
+  bool removeNode(const std::string &node);
 
-  bool setCurrentNode(const std::string& node);
-  bool setCurrentProc(const std::string& proc);
-  bool setRefreshMode(const std::string& mode);
+  bool setCurrentNode(const std::string &node);
+  bool setCurrentProc(const std::string &proc);
+  bool setRefreshMode(const std::string &mode);
 
-  std::string  getCurrentNode() const  {return(m_current_node);}
-  std::string  getCurrentProc() const  {return(m_current_proc);}
-  std::string  getRefreshMode() const  {return(m_refresh_mode);}
+  std::string getCurrentNode() const { return (m_current_node); }
+  std::string getCurrentProc() const { return (m_current_proc); }
+  std::string getRefreshMode() const { return (m_refresh_mode); }
 
   std::vector<std::string> getCurrentNodes() const;
   std::vector<std::string> getCurrentProcs() const;
-  
-  const AppCastTree& actree() const    {return(m_appcast_tree);}
-  
+
+  const AppCastTree &actree() const { return (m_appcast_tree); }
+
   // Methods for detecting potential need for refresh by users
   unsigned int getNodeCount() const;
   unsigned int getProcCount() const;
@@ -59,25 +58,16 @@ class AppCastRepo
   unsigned int getAppCastCount(std::string node, std::string proc) const;
   unsigned int getAppCastCount(std::string node) const;
 
- private: 
-  AppCastTree  m_appcast_tree;
-  std::string  m_current_node;
-  std::string  m_current_proc;
+private:
+  AppCastTree m_appcast_tree;
+  std::string m_current_node;
+  std::string m_current_proc;
 
-  std::string  m_refresh_mode; // paused,events,streaming
+  std::string m_refresh_mode; // paused,events,streaming
 
   std::map<std::string, std::string> m_map_node_proc;
 
   bool m_strip_color;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

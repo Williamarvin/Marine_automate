@@ -32,6 +32,4 @@ std::string getIndexVName3(unsigned int);
 std::string getIndexVName4(unsigned int);
 std::string getIndexVColor(unsigned int);
 
-#endif 
-
-
+#endif

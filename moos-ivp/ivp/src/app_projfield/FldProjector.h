@@ -24,32 +24,29 @@
 #ifndef FLD_PROJECTOR_HEADER
 #define FLD_PROJECTOR_HEADER
 
-#include <vector>
-#include <string>
-#include <map>
 #include "XYPoint.h"
+#include <map>
+#include <string>
+#include <vector>
 
-class FldProjector
-{
- public:
-  FldProjector(double rx=0, double ry=0, double ang=0);
+class FldProjector {
+public:
+  FldProjector(double rx = 0, double ry = 0, double ang = 0);
   ~FldProjector() {}
 
-  void setRootX(double x)  {m_root_x=x;}
-  void setRootY(double y)  {m_root_y=y;}
-  void setAngle(double a)  {m_angle=a;}
-  void setGrid(double g)   {m_grid=g;}
-  void setCellsX(double i) {m_cells_x=i;}
-  void setCellsY(double j) {m_cells_y=j;}
-  void setOffset(double v) {m_offset=v;}
-  
+  void setRootX(double x) { m_root_x = x; }
+  void setRootY(double y) { m_root_y = y; }
+  void setAngle(double a) { m_angle = a; }
+  void setGrid(double g) { m_grid = g; }
+  void setCellsX(double i) { m_cells_x = i; }
+  void setCellsY(double j) { m_cells_y = j; }
+  void setOffset(double v) { m_offset = v; }
+
   void buildProjection();
   void print();
-  
- protected:
 
- private:
-
+protected:
+private:
   double m_root_x;
   double m_root_y;
   double m_angle;
@@ -61,4 +58,4 @@ class FldProjector
   std::map<std::string, XYPoint> m_map_projections;
 };
 
-#endif 
+#endif

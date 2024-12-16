@@ -24,32 +24,31 @@
 #ifndef APP_LOG_PLOT_HEADER
 #define APP_LOG_PLOT_HEADER
 
-#include <map>
-#include <vector>
-#include <string>
 #include "AppLogEntry.h"
+#include <map>
+#include <string>
+#include <vector>
 
-class AppLogPlot
-{
- public:
-  AppLogPlot() {};
+class AppLogPlot {
+public:
+  AppLogPlot(){};
   virtual ~AppLogPlot() {}
 
   // Setters
-  void   setVName(std::string s)     {m_vname=s;}
-  void   setAppName(std::string s)   {m_app_name=s;}
-  
+  void setVName(std::string s) { m_vname = s; }
+  void setAppName(std::string s) { m_app_name = s; }
+
   void addAppLogEntry(double gtime, AppLogEntry entry);
-  
+
   // Getters
-  unsigned int size() const        {return(m_entries.size());}
+  unsigned int size() const { return (m_entries.size()); }
 
-  std::string  getAppName() const  {return(m_app_name);}
+  std::string getAppName() const { return (m_app_name); }
 
-  bool         containsTime(double) const;
+  bool containsTime(double) const;
 
-  AppLogEntry  getEntryByIndex(unsigned int index) const;
-  AppLogEntry  getEntryByTime(double gtime) const;
+  AppLogEntry getEntryByIndex(unsigned int index) const;
+  AppLogEntry getEntryByTime(double gtime) const;
 
   std::vector<AppLogEntry> getEntriesUpToTime(double gtime) const;
   std::vector<AppLogEntry> getEntriesPastTime(double gtime) const;
@@ -58,14 +57,8 @@ private:
   std::string m_vname;
   std::string m_app_name;
 
-  std::vector<double>      m_time;
+  std::vector<double> m_time;
   std::vector<AppLogEntry> m_entries;
 };
 
-
 #endif
-
-
-
-
-

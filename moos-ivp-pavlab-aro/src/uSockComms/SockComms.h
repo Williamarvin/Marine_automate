@@ -15,40 +15,36 @@
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "SockNinja.h"
 
-class SockComms : public AppCastingMOOSApp
-{
- public:
+class SockComms : public AppCastingMOOSApp {
+public:
   SockComms();
-  ~SockComms() {};
+  ~SockComms(){};
 
- protected: // Standard MOOSApp functions to overload  
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
- protected: // Standard AppCastingMOOSApp function to overload 
+
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
   void reportWarningsEvents();
-  
- protected:
+
+protected:
   void handleMailPostSockMsg(std::string);
   void sendMessagesToSocket();
   void readMessagesFromSocket();
   void registerVariables();
 
- private: // Config variable
+private: // Config variable
   std::string m_message;
-  
- private: // State variables
-  
-  SockNinja   m_ninja;
-  
+
+private: // State variables
+  SockNinja m_ninja;
+
   std::string m_latest_rx_msg;
   std::string m_latest_tx_msg;
   std::list<std::string> m_sock_msgs;
 };
 
-#endif 
-
-
+#endif

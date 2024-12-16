@@ -26,19 +26,17 @@
 #ifndef EX_FILTER_SET_HEADER
 #define EX_FILTER_SET_HEADER
 
+#include "NodeRecord.h"
+#include "XYPolygon.h"
 #include <set>
 #include <vector>
-#include "XYPolygon.h"
-#include "NodeRecord.h"
 
-class ExFilterSet
-{
- public:
+class ExFilterSet {
+public:
   ExFilterSet();
-  ~ExFilterSet() {};
+  ~ExFilterSet(){};
 
- public: // setters
-
+public: // setters
   bool addIgnoreName(std::string);
   bool addMatchName(std::string);
   bool addIgnoreGroup(std::string);
@@ -50,33 +48,33 @@ class ExFilterSet
 
   bool setOwnshipGroup(std::string);
   bool setOwnshipType(std::string);
-  
+
   bool setStrictIgnore(std::string);
-  
+
   bool addIgnoreRegion(XYPolygon);
   bool addMatchRegion(XYPolygon);
-  void setStrictIgnore(bool v) {m_strict_ignore=v;}
+  void setStrictIgnore(bool v) { m_strict_ignore = v; }
 
- public: // Analysis
+public: // Analysis
   bool filterCheck(NodeRecord) const;
   bool filterCheck(NodeRecord, double osx, double osy) const;
   bool filterCheckGroup(std::string group) const;
   bool filterCheckVType(std::string vtype) const;
   bool filterCheckVName(std::string vtype) const;
   bool filterCheckRegion(double cnx, double cny) const;
-  
- public: // Serialization
+
+public: // Serialization
   std::string configFilter(std::string);
   std::string getSummary() const;
 
   std::vector<std::string> getSummaryX() const;
-  
- private: 
-  bool     m_strict_ignore;
+
+private:
+  bool m_strict_ignore;
 
   std::string m_os_group;
   std::string m_os_type;
-  
+
   std::set<std::string> m_ignore_names;
   std::set<std::string> m_match_names;
 
@@ -86,9 +84,8 @@ class ExFilterSet
   std::set<std::string> m_ignore_types;
   std::set<std::string> m_match_types;
 
-  std::vector<XYPolygon>   m_ignore_regions;
-  std::vector<XYPolygon>   m_match_regions;
+  std::vector<XYPolygon> m_ignore_regions;
+  std::vector<XYPolygon> m_match_regions;
 };
 
-#endif 
-
+#endif

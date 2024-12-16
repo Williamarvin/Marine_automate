@@ -23,131 +23,115 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath>
 #include "ZAIC_HLEQ.h"
-#include "MBUtils.h"
 #include "BuildUtils.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Procedure: Constructor
 
-ZAIC_HLEQ::ZAIC_HLEQ(IvPDomain g_domain, const string& varname) 
-{
-  m_state_ok     = true;
+ZAIC_HLEQ::ZAIC_HLEQ(IvPDomain g_domain, const string &varname) {
+  m_state_ok = true;
 
-  m_ivp_domain   = subDomain(g_domain, varname);
-  if(m_ivp_domain.size() != 1)
+  m_ivp_domain = subDomain(g_domain, varname);
+  if (m_ivp_domain.size() != 1)
     m_state_ok = false;
 
-  if(m_ivp_domain.getVarDelta(0) <= 0)
+  if (m_ivp_domain.getVarDelta(0) <= 0)
     m_state_ok = false;
 
-  m_domain_ix    = m_ivp_domain.getIndex(varname);
-  m_domain_high  = m_ivp_domain.getVarHigh(m_domain_ix);
-  m_domain_low   = m_ivp_domain.getVarLow(m_domain_ix);
-  m_domain_pts   = m_ivp_domain.getVarPoints(m_domain_ix);
+  m_domain_ix = m_ivp_domain.getIndex(varname);
+  m_domain_high = m_ivp_domain.getVarHigh(m_domain_ix);
+  m_domain_low = m_ivp_domain.getVarLow(m_domain_ix);
+  m_domain_pts = m_ivp_domain.getVarPoints(m_domain_ix);
   m_domain_delta = m_ivp_domain.getVarDelta(m_domain_ix);
-  
-  m_summit       = 0;
-  m_summit_delta = 0;
-  m_basewidth    = 0;
-  m_minutil      = 0;
-  m_maxutil      = 100.0;
 
-  m_ipt_low      = 0;
-  m_ipt_one      = 0;
-  m_ipt_two      = 0;
-  m_ipt_high     = 0;
+  m_summit = 0;
+  m_summit_delta = 0;
+  m_basewidth = 0;
+  m_minutil = 0;
+  m_maxutil = 100.0;
+
+  m_ipt_low = 0;
+  m_ipt_one = 0;
+  m_ipt_two = 0;
+  m_ipt_high = 0;
 }
 
 //-------------------------------------------------------------
 // Procedure: setSummit
-//      Note: Setting the summit outside of the domain range is *not* 
+//      Note: Setting the summit outside of the domain range is *not*
 //            treated as a hard error resulting in setting state_ok to
 //            false, but will merely generate a warning.
 
-bool ZAIC_HLEQ::setSummit(double val)
-{
+bool ZAIC_HLEQ::setSummit(double val) {
   m_summit = val;
 
-  if((m_summit < m_domain_low) || (m_summit > m_domain_high))
+  if ((m_summit < m_domain_low) || (m_summit > m_domain_high))
     m_warning += "given summit value out of domain range (suspicious):";
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setSummitDelta
 
-bool ZAIC_HLEQ::setSummitDelta(double val)
-{
-  if(val < 0)
+bool ZAIC_HLEQ::setSummitDelta(double val) {
+  if (val < 0)
     val = 0;
 
   m_summit_delta = val;
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setBaseWidth
 
-bool ZAIC_HLEQ::setBaseWidth(double val)
-{
+bool ZAIC_HLEQ::setBaseWidth(double val) {
   bool ok = (val >= 0);
-  if(!ok) {
+  if (!ok) {
     m_state_ok = false;
     m_warning += "setBaseWidth:val<0 : ";
-  }
-  else
+  } else
     m_basewidth = val;
 
-  return(ok);
+  return (ok);
 }
 
 //------------------------------------------------
-bool ZAIC_HLEQ::setMinMaxUtil(double minval, double maxval)
-{
-  if(minval >= maxval) {
+bool ZAIC_HLEQ::setMinMaxUtil(double minval, double maxval) {
+  if (minval >= maxval) {
     m_state_ok = false;
     m_warning += "setMinMaxUtil:min>=max : ";
-    return(false);
+    return (false);
   }
 
   m_minutil = minval;
   m_maxutil = maxval;
-  
-  return(true);
+
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: getParam
-//   Purpose: 
+//   Purpose:
 
-double ZAIC_HLEQ::getParam(string param)
-{
+double ZAIC_HLEQ::getParam(string param) {
   param = tolower(param);
-  if(param == "summit")
-    return(m_summit);
-  else if(param == "summit_delta")
-    return(m_summit_delta);
-  else if(param == "basewidth")
-    return(m_basewidth);
-  else if(param == "minutil")
-    return(m_minutil);
-  else if(param == "maxutil")
-    return(m_maxutil);
+  if (param == "summit")
+    return (m_summit);
+  else if (param == "summit_delta")
+    return (m_summit_delta);
+  else if (param == "basewidth")
+    return (m_basewidth);
+  else if (param == "minutil")
+    return (m_minutil);
+  else if (param == "maxutil")
+    return (m_maxutil);
   else
-    return(0);
+    return (0);
 }
-
-
-
-
-
-
-
-
-

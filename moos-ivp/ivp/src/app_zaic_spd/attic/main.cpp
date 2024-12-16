@@ -9,11 +9,11 @@
 /* except by the author(s).                                      */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "ZAIC_SPD_GUI.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
+#include "ZAIC_SPD_GUI.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -22,8 +22,7 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: idleProc
 
-void idleProc(void *)
-{
+void idleProc(void *) {
   Fl::flush();
   millipause(10);
 }
@@ -31,44 +30,41 @@ void idleProc(void *)
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   bool verbose = false;
-  int  domain  = 410;
-  
+  int domain = 410;
+
   bool handled = true;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi == "--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("zaic_spd", "gpl");
-      return(0);
-    }
-    else if(strBegins(argi, "--domain=")) {
+      return (0);
+    } else if (strBegins(argi, "--domain=")) {
       string domain_str = argi.substr(9);
       domain = atoi(domain_str.c_str());
-      if(domain < 100)
-	domain = 100;
-      if(domain > 1000)
-	domain = 1000;   
-    }
-    else if(strBegins(argi, "--verbose")) 
+      if (domain < 100)
+        domain = 100;
+      if (domain > 1000)
+        domain = 1000;
+    } else if (strBegins(argi, "--verbose"))
       verbose = true;
     else
       handled = false;
 
-    if(!handled) {
+    if (!handled) {
       cout << "Exiting due to Unhandled arg: " << argi << endl;
       exit(1);
-    }      
+    }
   }
-      
+
   Fl::add_idle(idleProc);
-  ZAIC_SPD_GUI* gui = new ZAIC_SPD_GUI(domain+300, 450, "ZAIC_SPD-Viewer");
+  ZAIC_SPD_GUI *gui = new ZAIC_SPD_GUI(domain + 300, 450, "ZAIC_SPD-Viewer");
 
   cout << "Starting Domain: " << domain << endl;
-  
+
   gui->updateOutput();
   gui->setDomain((unsigned int)(domain));
   gui->setVerbose(verbose);
@@ -77,12 +73,10 @@ int main(int argc, char *argv[])
   return Fl::run();
 }
 
-
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << endl;
   cout << "Usage: zaic_spd [OPTIONS]                           " << endl;
   cout << "Options:                                            " << endl;

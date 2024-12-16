@@ -26,43 +26,32 @@
 #ifndef COLOR_PARSE_UTIL_HEADER
 #define COLOR_PARSE_UTIL_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
-std::vector<double> colorParse(const std::string&);
-std::vector<double> colorParse(const std::string&, bool& result);
-std::vector<double> colorHexToVector(const std::string&);
-std::vector<double> colorDecToVector(const std::string&);
-std::string         colorNameToHex(const std::string&);
-std::string         colorVectorToString(const std::vector<double>&);
-std::string         termColor(const std::string& color="");
+std::vector<double> colorParse(const std::string &);
+std::vector<double> colorParse(const std::string &, bool &result);
+std::vector<double> colorHexToVector(const std::string &);
+std::vector<double> colorDecToVector(const std::string &);
+std::string colorNameToHex(const std::string &);
+std::string colorVectorToString(const std::vector<double> &);
+std::string termColor(const std::string &color = "");
 
-std::string         removeTermColors(std::string);
+std::string removeTermColors(std::string);
 
-bool setColorOnString(std::string& color, std::string given_color);
+bool setColorOnString(std::string &color, std::string given_color);
 
-bool isColor(const std::string&);
-bool isTermColor(const std::string&);
+bool isColor(const std::string &);
+bool isTermColor(const std::string &);
 
-void blu(const std::string&, const std::string& s="");
-void blk(const std::string&, const std::string& s="");
-void red(const std::string&, const std::string& s="");
-void grn(const std::string&, const std::string& s="");
-void mag(const std::string&, const std::string& s="");
+void blu(const std::string &, const std::string &s = "");
+void blk(const std::string &, const std::string &s = "");
+void red(const std::string &, const std::string &s = "");
+void grn(const std::string &, const std::string &s = "");
+void mag(const std::string &, const std::string &s = "");
 
 double rOfRGB(const std::string);
 double gOfRGB(const std::string);
 double bOfRGB(const std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

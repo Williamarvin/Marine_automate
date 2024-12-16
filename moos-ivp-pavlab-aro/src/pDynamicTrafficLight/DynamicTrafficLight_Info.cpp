@@ -5,25 +5,24 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "DynamicTrafficLight_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pDynamicTrafficLight application is used for giving       ");
   blk("  vehicles demustering using BHV_DubinsPath a green or a red    ");
-  blk("  light, i.e a desired speed. This is the speed policy part of  "); 
-  blk("  the demustering. The plan is to make ONE BHV_Demuster that    "); 
+  blk("  light, i.e a desired speed. This is the speed policy part of  ");
+  blk("  the demustering. The plan is to make ONE BHV_Demuster that    ");
   blk("  handles both the speed policy and the dubins trajectory.      ");
   blk("                                                                ");
 }
@@ -31,8 +30,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pDynamicTrafficLight file.moos [OPTIONS]                 ");
@@ -41,7 +39,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pDynamicTrafficLight with the given process name   ");
   blk("      rather than pDynamicTrafficLight.                         ");
   mag("  --example, -e                                                 ");
@@ -63,8 +61,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pDynamicTrafficLight Example MOOS Configuration                 ");
@@ -91,12 +88,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pDynamicTrafficLight INTERFACE                                  ");
@@ -131,9 +126,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pDynamicTrafficLight", "gpl");
   exit(0);
 }
-

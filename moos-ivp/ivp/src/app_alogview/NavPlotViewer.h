@@ -24,101 +24,95 @@
 #ifndef NAVPLOT_VIEWER_HEADER
 #define NAVPLOT_VIEWER_HEADER
 
-#include <vector>
-#include "LogPlot.h"
-#include "VPlugPlot.h"
-#include "MarineViewer.h"
 #include "ALogDataBroker.h"
+#include "LogPlot.h"
+#include "MarineViewer.h"
+#include "VPlugPlot.h"
+#include <vector>
 
-class NavPlotViewer : public MarineViewer
-{
- public:
-  NavPlotViewer(int x,int y,int w,int h,const char *l=0);
+class NavPlotViewer : public MarineViewer {
+public:
+  NavPlotViewer(int x, int y, int w, int h, const char *l = 0);
   virtual ~NavPlotViewer() {}
-  
-  void   draw();
-  bool   setParam(std::string p, std::string v);
-  bool   setParam(std::string p, double v);  
-  void   modColorScheme() {};
 
-  void   setVerbose(bool v) {m_verbose=v;}
-  void   setMinimalMem();
-  void   setDataBroker(const ALogDataBroker& dbroker);
+  void draw();
+  bool setParam(std::string p, std::string v);
+  bool setParam(std::string p, double v);
+  void modColorScheme(){};
 
-  void   initPlots();
+  void setVerbose(bool v) { m_verbose = v; }
+  void setMinimalMem();
+  void setDataBroker(const ALogDataBroker &dbroker);
 
-  void   addLogPlotNAVX(const LogPlot& lp);
-  void   addLogPlotNAVY(const LogPlot& lp); 
-  void   addLogPlotHDG(const LogPlot& lp); 
-  void   addLogPlotNAVX_GT(const LogPlot& lp);
-  void   addLogPlotNAVY_GT(const LogPlot& lp); 
-  void   addLogPlotHDG_GT(const LogPlot& lp); 
+  void initPlots();
 
-  void   addLogPlotStartTime(double); 
-  void   addVPlugPlot(const VPlugPlot& vp); 
+  void addLogPlotNAVX(const LogPlot &lp);
+  void addLogPlotNAVY(const LogPlot &lp);
+  void addLogPlotHDG(const LogPlot &lp);
+  void addLogPlotNAVX_GT(const LogPlot &lp);
+  void addLogPlotNAVY_GT(const LogPlot &lp);
+  void addLogPlotHDG_GT(const LogPlot &lp);
 
-  void   setStreaming(bool v) {m_streaming=v;}
+  void addLogPlotStartTime(double);
+  void addVPlugPlot(const VPlugPlot &vp);
 
-  void   setCenterView(std::string centering="ctr_of_bounding");
-  void   setAltNavPrefix(std::string s)   {m_alt_nav_prefix=s;}
-  void   setStepType(const std::string&);
-  bool   stepTime(double);
-  bool   setCurrTime(double);
-  void   setCurrTimeStart() {m_curr_time=m_dbroker.getPrunedMinTime();}
-  void   setCurrTimeEnd() {m_curr_time=m_dbroker.getPrunedMaxTime();}
+  void setStreaming(bool v) { m_streaming = v; }
+
+  void setCenterView(std::string centering = "ctr_of_bounding");
+  void setAltNavPrefix(std::string s) { m_alt_nav_prefix = s; }
+  void setStepType(const std::string &);
+  bool stepTime(double);
+  bool setCurrTime(double);
+  void setCurrTimeStart() { m_curr_time = m_dbroker.getPrunedMinTime(); }
+  void setCurrTimeEnd() { m_curr_time = m_dbroker.getPrunedMaxTime(); }
   double getCurrTime();
   double getStartTimeHint();
 
 protected:
-  void  drawNavPlots();
-  void  drawNavPlot(unsigned int ix, bool alt=false);
-  void  drawTrails();
-  void  drawTrail(unsigned int ix);
-  void  drawVPlugPlots();
-  void  drawVPlugPlot(unsigned int ix);
+  void drawNavPlots();
+  void drawNavPlot(unsigned int ix, bool alt = false);
+  void drawTrails();
+  void drawTrail(unsigned int ix);
+  void drawVPlugPlots();
+  void drawVPlugPlot(unsigned int ix);
 
- protected:
+protected:
   ALogDataBroker m_dbroker;
 
 private:
-  double      m_curr_time;
-  bool        m_step_by_secs;
-  bool        m_draw_geo;
-  bool        m_verbose;
-  
+  double m_curr_time;
+  bool m_step_by_secs;
+  bool m_draw_geo;
+  bool m_verbose;
+
   // Bounding box of all vehicle positions and timestamps
-  double      m_min_xpos;
-  double      m_min_ypos;
-  double      m_max_xpos;
-  double      m_max_ypos;
+  double m_min_xpos;
+  double m_min_ypos;
+  double m_max_xpos;
+  double m_max_ypos;
 
   std::string m_trails;
-  double      m_shape_scale;
-  bool        m_center_refresh;
-  bool        m_streaming;
+  double m_shape_scale;
+  bool m_center_refresh;
+  bool m_streaming;
 
   // vectors - each index corresponds to one vehicle
-  std::vector<LogPlot>   m_navx_plot;
-  std::vector<LogPlot>   m_navy_plot;
-  std::vector<LogPlot>   m_hdg_plot;
-  std::vector<LogPlot>   m_navx_gt_plot;
-  std::vector<LogPlot>   m_navy_gt_plot;
-  std::vector<LogPlot>   m_hdg_gt_plot;
+  std::vector<LogPlot> m_navx_plot;
+  std::vector<LogPlot> m_navy_plot;
+  std::vector<LogPlot> m_hdg_plot;
+  std::vector<LogPlot> m_navx_gt_plot;
+  std::vector<LogPlot> m_navy_gt_plot;
+  std::vector<LogPlot> m_hdg_gt_plot;
 
   std::vector<VPlugPlot> m_vplug_plot;
-  std::vector<double>    m_start_time;
+  std::vector<double> m_start_time;
 
   std::vector<std::string> m_vnames;
   std::vector<std::string> m_vtypes;
   std::vector<std::string> m_vcolors;
-  std::vector<double>      m_vlengths;
+  std::vector<double> m_vlengths;
 
   std::string m_alt_nav_prefix;
 };
 
-#endif 
-
-
-
-
-
+#endif

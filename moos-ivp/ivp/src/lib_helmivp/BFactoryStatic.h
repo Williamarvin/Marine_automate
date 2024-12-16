@@ -24,34 +24,23 @@
 #ifndef BFACTORY_STATIC_HEADER
 #define BFACTORY_STATIC_HEADER
 
-#include <string>
-#include "IvPDomain.h"
 #include "IvPBehavior.h"
+#include "IvPDomain.h"
+#include <string>
 
 class BFactoryStatic {
- public:
+public:
   BFactoryStatic() {}
   virtual ~BFactoryStatic() {}
 
   // Configuring
-  void setDomain(IvPDomain domain) {m_domain = domain;}
+  void setDomain(IvPDomain domain) { m_domain = domain; }
 
   // Building Behaviors
-  bool         isKnownBehavior(std::string bhv_name) const;
-  IvPBehavior* newBehavior(std::string behavior_type) const;
+  bool isKnownBehavior(std::string bhv_name) const;
+  IvPBehavior *newBehavior(std::string behavior_type) const;
 
- private:
+private:
   IvPDomain m_domain;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-

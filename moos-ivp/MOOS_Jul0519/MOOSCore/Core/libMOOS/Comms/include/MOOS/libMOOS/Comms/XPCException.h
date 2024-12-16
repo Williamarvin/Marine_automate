@@ -30,16 +30,14 @@
 
 #include <cstring>
 
-
-class XPCException
-{
-    char sExceptMsg[255];    // Stores the exception message
+class XPCException {
+  char sExceptMsg[255]; // Stores the exception message
 public:
-    // Constructor.  Stores the application defined exception message
-    XPCException(const char *sMsg) { strcpy(sExceptMsg, sMsg); }
+  // Constructor.  Stores the application defined exception message
+  XPCException(const char *sMsg) { strcpy(sExceptMsg, sMsg); }
 
-    // Returns the exception message
-    char *sGetException() { return sExceptMsg; }
+  // Returns the exception message
+  char *sGetException() { return sExceptMsg; }
 };
 
 #endif

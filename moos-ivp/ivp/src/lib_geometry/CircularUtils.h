@@ -22,40 +22,19 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_CIRCULAR_UTILS_HEADER
 #define XY_CIRCULAR_UTILS_HEADER
 
-#include <string>
 #include "XYArc.h"
+#include <string>
 
 // Determine a new point and heading given a starting point, heading
 // and arc radius and port/starboard indication.
-bool   arcFlight(double x1, double y1, double heading, double radius,
-		 double dist, bool port, double& rx, double& ry,
-		 double& rheading);
+bool arcFlight(double x1, double y1, double heading, double radius, double dist,
+               bool port, double &rx, double &ry, double &rheading);
 
-XYArc  arcFlight(double x1, double y1, double heading, double radius,
-		 double dist, bool port);
-
+XYArc arcFlight(double x1, double y1, double heading, double radius,
+                double dist, bool port);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

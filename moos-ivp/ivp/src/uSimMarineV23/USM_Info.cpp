@@ -20,19 +20,18 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "USM_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uSimMarineV22 application is a simple 3D vehicle simulator");
@@ -52,8 +51,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blu("=============================================================== ");
   blu("Usage: uSimMarineV22 file.moos [OPTIONS]                        ");
   blu("=============================================================== ");
@@ -61,7 +59,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uSimMarineV22 with the given process name rather   ");
   blk("      than uSimMarineV22.                                       ");
   mag("  --example, -e                                                 ");
@@ -82,8 +80,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit()
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uSimMarineV22 Example MOOS Configuration                        ");
   blu("=============================================================== ");
@@ -103,13 +100,13 @@ void showExampleConfigAndExit()
   blk("  drift_x       = 0                                             ");
   blk("  drift_y       = 0                                             ");
   blk("  rotate_speed  = 0                                             ");
-  blk("  drift_vector  = 0,0     "," // heading, magnitude             ");
-  blk("                                                                ");  
-  blk("  turn_spd_map_full_speed = 1    // meters/sec (Default = 1)    ");  
-  blk("  turn_spd_map_null_speed = 0    // meters/sec (Default = 0)    ");  
+  blk("  drift_vector  = 0,0     ", " // heading, magnitude             ");
+  blk("                                                                ");
+  blk("  turn_spd_map_full_speed = 1    // meters/sec (Default = 1)    ");
+  blk("  turn_spd_map_null_speed = 0    // meters/sec (Default = 0)    ");
   blk("  turn_spd_map_full_rate = 100  // Range [0,100] (Default = 100)");
-  blk("  turn_spd_map_null_rate = 0    // Range [0,100] (Default = 0)  ");  
-  blk("                                                                ");  
+  blk("  turn_spd_map_null_rate = 0    // Range [0,100] (Default = 0)  ");
+  blk("                                                                ");
   blk("  buoyancy_rate        = 0.025    // meters/sec                 ");
   blk("  max_acceleration     = 0        // meters/sec^2               ");
   blk("  max_deceleration     = 0.5      // meters/sec^2               ");
@@ -127,7 +124,7 @@ void showExampleConfigAndExit()
   blk("  turn_rate            = 70       // range [0,100]              ");
   blk("  thrust_map           = 0:0, 20:1, 40:2, 60:3, 80:5, 100:5     ");
   blk("                                                                ");
-  blk("  prefix               = NAV_  ","// default is USM_            ");
+  blk("  prefix               = NAV_  ", "// default is USM_            ");
   blk("                                                                ");
   blk("                                                                ");
   blk("  // In Embedded PID mode, may want to publish DES_RUDDER/THRUST");
@@ -162,12 +159,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uSimMarineV22 INTERFACE                                         ");
@@ -237,11 +232,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit()
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uSimMarineV22", "gpl");
   exit(0);
 }
-
-
-

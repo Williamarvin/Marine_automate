@@ -29,27 +29,24 @@
 //
 //////////////////////////    END_GPL    //////////////////////////////////
 #ifdef _WIN32
-    #pragma warning(disable : 4786)
+#pragma warning(disable : 4786)
 #endif
 
 #include "MOOS/libMOOS/MOOSLib.h"
 #include "MOOSRemoteLite.h"
 
+int main(int argc, char *argv[]) {
 
-int main(int argc ,char * argv[])
-{
+  const char *sMissionFile = "Mission.moos";
 
-    const char * sMissionFile = "Mission.moos";
+  if (argc > 1) {
+    sMissionFile = argv[1];
+  }
 
-    if(argc>1)
-    {
-        sMissionFile = argv[1];
-    }
+  CMOOSRemoteLite Remote;
 
-    CMOOSRemoteLite Remote;
+  // GO!
+  Remote.Run("iRemote", sMissionFile);
 
-    //GO!
-    Remote.Run("iRemote",sMissionFile);
-
-    return 0;
+  return 0;
 }

@@ -28,32 +28,31 @@
 #include <FL/Fl_Button.H>
 
 class ZAIC_SPD_GUI : public ZAIC_GUI {
- public:
-  ZAIC_SPD_GUI(int w, int h, const char *label=0);
-  ~ZAIC_SPD_GUI() {};
-  
+public:
+  ZAIC_SPD_GUI(int w, int h, const char *label = 0);
+  ~ZAIC_SPD_GUI(){};
+
   void updateOutput(); // overloading virtual function of ZAIC_GUI
   void augmentMenu();
 
- protected:
+protected:
   void initWidgets();
   void updateFieldColors();
-  
- public:
-  Fl_Output  *m_fld_med_spd;
-  Fl_Output  *m_fld_low_spd;
-  Fl_Output  *m_fld_hgh_spd;
-  Fl_Output  *m_fld_low_spd_util;
-  Fl_Output  *m_fld_hgh_spd_util;
 
-  Fl_Output  *m_fld_min_spd_util;
-  Fl_Output  *m_fld_max_spd_util;
+public:
+  Fl_Output *m_fld_med_spd;
+  Fl_Output *m_fld_low_spd;
+  Fl_Output *m_fld_hgh_spd;
+  Fl_Output *m_fld_low_spd_util;
+  Fl_Output *m_fld_hgh_spd_util;
 
-  Fl_Button  *m_but_disable_lowspd;
-  Fl_Button  *m_but_enable_lowspd;
+  Fl_Output *m_fld_min_spd_util;
+  Fl_Output *m_fld_max_spd_util;
+
+  Fl_Button *m_but_disable_lowspd;
+  Fl_Button *m_but_enable_lowspd;
 
   inline void cb_Snap_i(int);
-  static void cb_Snap(Fl_Widget*, int);
+  static void cb_Snap(Fl_Widget *, int);
 };
 #endif
-

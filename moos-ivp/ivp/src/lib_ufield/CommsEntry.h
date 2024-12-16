@@ -26,43 +26,34 @@
 
 #include <string>
 
-class CommsEntry
-{
- public:
-  CommsEntry(double x=0, double y=0, double utc=0, unsigned int id=0);
+class CommsEntry {
+public:
+  CommsEntry(double x = 0, double y = 0, double utc = 0, unsigned int id = 0);
   ~CommsEntry() {}
 
-  void setX(double x)            {m_x=x;}
-  void setY(double y)            {m_y=y;}
-  void setXY(double x, double y) {m_x=x; m_y=y;}
-  void setUTC(double utc)        {m_utc=utc;}
-  void setID(unsigned int id)    {m_id=id;}
+  void setX(double x) { m_x = x; }
+  void setY(double y) { m_y = y; }
+  void setXY(double x, double y) {
+    m_x = x;
+    m_y = y;
+  }
+  void setUTC(double utc) { m_utc = utc; }
+  void setID(unsigned int id) { m_id = id; }
 
-  double getX() const        {return(m_x);}
-  double getY() const        {return(m_y);}
-  double getUTC() const      {return(m_utc);}
-  unsigned int getID() const {return(m_id);}
+  double getX() const { return (m_x); }
+  double getY() const { return (m_y); }
+  double getUTC() const { return (m_utc); }
+  unsigned int getID() const { return (m_id); }
 
   std::string getSpec() const;
-  
- protected:
 
+protected:
   double m_x;
   double m_y;
   double m_utc;
-  unsigned int m_id;    
+  unsigned int m_id;
 };
 
 CommsEntry stringToCommsEntry(std::string);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

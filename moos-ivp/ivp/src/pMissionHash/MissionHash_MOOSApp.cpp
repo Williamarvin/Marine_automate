@@ -21,23 +21,22 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iterator>
-#include "MBUtils.h"
-#include "HashUtils.h"
-#include "ACTable.h"
 #include "MissionHash_MOOSApp.h"
+#include "ACTable.h"
+#include "HashUtils.h"
+#include "MBUtils.h"
+#include <iterator>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor()
 
-MissionHash_MOOSApp::MissionHash_MOOSApp()
-{
+MissionHash_MOOSApp::MissionHash_MOOSApp() {
   // Init Config Vars
   m_mission_hash_var = "MISSION_HASH";
-  m_mhash_short_var  = "MHASH";
-  
+  m_mhash_short_var = "MHASH";
+
   // Init State Vars
   m_last_mhash_post = 0;
 }
@@ -45,14 +44,13 @@ MissionHash_MOOSApp::MissionHash_MOOSApp()
 //---------------------------------------------------------
 // Procedure: OnNewMail()
 
-bool MissionHash_MOOSApp::OnNewMail(MOOSMSG_LIST &NewMail)
-{
+bool MissionHash_MOOSApp::OnNewMail(MOOSMSG_LIST &NewMail) {
   AppCastingMOOSApp::OnNewMail(NewMail);
 
   MOOSMSG_LIST::iterator p;
-  for(p=NewMail.begin(); p!=NewMail.end(); p++) {
+  for (p = NewMail.begin(); p != NewMail.end(); p++) {
     CMOOSMsg &msg = *p;
-    string key  = msg.GetKey();
+    string key = msg.GetKey();
 
 #if 0 // Keep these around just for template
     string comm  = msg.GetCommunity();
@@ -61,41 +59,39 @@ bool MissionHash_MOOSApp::OnNewMail(MOOSMSG_LIST &NewMail)
     double mtime = msg.GetTime();
     bool   mdbl  = msg.IsDouble();
     bool   mstr  = msg.IsString();
-    string sval = msg.GetString(); 
+    string sval = msg.GetString();
 #endif
 
     bool handled = true;
-    if(key == "RESET_MHASH") 
-      handled = setMissionHash();    
-    else if(key != "APPCAST_REQ") // handled by AppCastingMOOSApp
+    if (key == "RESET_MHASH")
+      handled = setMissionHash();
+    else if (key != "APPCAST_REQ") // handled by AppCastingMOOSApp
       handled = false;
 
-    if(!handled) 
+    if (!handled)
       reportRunWarning("Unhandled Mail: " + key);
-   }
-	
-   return(true);
+  }
+
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: OnConnectToServer()
 
-bool MissionHash_MOOSApp::OnConnectToServer()
-{
-   registerVariables();
-   return(true);
+bool MissionHash_MOOSApp::OnConnectToServer() {
+  registerVariables();
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: Iterate()
 
-bool MissionHash_MOOSApp::Iterate()
-{
+bool MissionHash_MOOSApp::Iterate() {
   AppCastingMOOSApp::Iterate();
 
-  if(m_mission_hash_var != "") {
+  if (m_mission_hash_var != "") {
     double elapsed = m_curr_time - m_last_mhash_post;
-    if(elapsed > 30) {
+    if (elapsed > 30) {
       Notify(m_mission_hash_var, m_mission_hash);
       Notify(m_mhash_short_var, m_mhash_short);
       m_last_mhash_post = m_curr_time;
@@ -103,14 +99,13 @@ bool MissionHash_MOOSApp::Iterate()
   }
 
   AppCastingMOOSApp::PostReport();
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: OnStartUp()
 
-bool MissionHash_MOOSApp::OnStartUp()
-{
+bool MissionHash_MOOSApp::OnStartUp() {
   // App efaults are usually sufficient. No config block required
   string directives = "must_have_moosblock=false";
   AppCastingMOOSApp::OnStartUpDirectives(directives);
@@ -120,40 +115,37 @@ bool MissionHash_MOOSApp::OnStartUp()
   m_MissionReader.GetConfiguration(GetAppName(), sParams);
 
   STRING_LIST::iterator p;
-  for(p=sParams.begin(); p!=sParams.end(); p++) {
-    string orig  = *p;
-    string line  = *p;
+  for (p = sParams.begin(); p != sParams.end(); p++) {
+    string orig = *p;
+    string line = *p;
     string param = tolower(biteStringX(line, '='));
     string value = line;
 
     bool handled = false;
-    if(param == "mission_hash_var") {
+    if (param == "mission_hash_var") {
       handled = setNonWhiteVarOnString(m_mission_hash_var, value);
-      if(tolower(m_mission_hash_var) == "off")
-	m_mission_hash_var = "";
+      if (tolower(m_mission_hash_var) == "off")
+        m_mission_hash_var = "";
     }
-    if(param == "mhash_short_var") {
+    if (param == "mhash_short_var") {
       handled = setNonWhiteVarOnString(m_mhash_short_var, value);
-      if(tolower(m_mhash_short_var) == "off")
-	m_mhash_short_var = "";
+      if (tolower(m_mhash_short_var) == "off")
+        m_mhash_short_var = "";
     }
 
-
-    if(!handled)
+    if (!handled)
       reportUnhandledConfigWarning(orig);
-
   }
 
   setMissionHash();
-  registerVariables();	
-  return(true);
+  registerVariables();
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: registerVariables()
 
-void MissionHash_MOOSApp::registerVariables()
-{
+void MissionHash_MOOSApp::registerVariables() {
   AppCastingMOOSApp::RegisterVariables();
   Register("RESET_MHASH");
 }
@@ -161,35 +153,27 @@ void MissionHash_MOOSApp::registerVariables()
 //----------------------------------------------------------------------
 // Procedure: setMissionHash()
 
-bool MissionHash_MOOSApp::setMissionHash()
-{
+bool MissionHash_MOOSApp::setMissionHash() {
   double actual_utc = MOOSTime();
-  if(m_time_warp != 0)
+  if (m_time_warp != 0)
     actual_utc = MOOSTime() / m_time_warp;
 
   string hash = missionHash();
-  
+
   m_mission_hash = "mhash=" + hash;
-  m_mission_hash += ",utc=" + doubleToString(actual_utc,2);
+  m_mission_hash += ",utc=" + doubleToString(actual_utc, 2);
 
   m_mhash_short = missionHashShort(hash);
-  
-  return(true);
-}
 
+  return (true);
+}
 
 //------------------------------------------------------------
 // Procedure: buildReport()
 
-bool MissionHash_MOOSApp::buildReport() 
-{
+bool MissionHash_MOOSApp::buildReport() {
   m_msgs << m_mission_hash_var << "=" << m_mission_hash << endl;
   m_msgs << m_mhash_short_var << "=" << m_mhash_short << endl;
-  
-  return(true);
+
+  return (true);
 }
-
-
-
-
-

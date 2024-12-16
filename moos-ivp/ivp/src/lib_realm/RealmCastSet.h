@@ -26,47 +26,46 @@
 #ifndef REALMCAST_SET_HEADER
 #define REALMCAST_SET_HEADER
 
-#include <vector>
-#include <string>
-#include <map>
 #include "RealmCast.h"
 #include "RealmSummary.h"
+#include <map>
+#include <string>
+#include <vector>
 
-class RealmCastSet
-{
- public:
+class RealmCastSet {
+public:
   RealmCastSet();
   ~RealmCastSet() {}
 
-  bool         addRealmSummary(RealmSummary, std::string onstart_proc);
-  
-  bool         addRealmCast(const RealmCast& relcast);
-  RealmCast    getRealmCast(const std::string& proc) const;
+  bool addRealmSummary(RealmSummary, std::string onstart_proc);
 
-  std::string  getProcNameFromID(const std::string& id) const;
-  bool         hasProc(const std::string& proc) const;
-  unsigned int getRealmCastCount(const std::string& proc) const;
-  
-  unsigned int getTotalRealmCastCount() const {return(m_total_relcasts);}
-  unsigned int getTotalProcCount() const      {return(m_map_relcasts.size());}
+  bool addRealmCast(const RealmCast &relcast);
+  RealmCast getRealmCast(const std::string &proc) const;
+
+  std::string getProcNameFromID(const std::string &id) const;
+  bool hasProc(const std::string &proc) const;
+  unsigned int getRealmCastCount(const std::string &proc) const;
+
+  unsigned int getTotalRealmCastCount() const { return (m_total_relcasts); }
+  unsigned int getTotalProcCount() const { return (m_map_relcasts.size()); }
 
   std::vector<std::string> getIDs() const;
-  std::vector<std::string> getProcs() const {return(m_procs);}
+  std::vector<std::string> getProcs() const { return (m_procs); }
 
-  bool        setCurrentProc(std::string);
-  std::string getCurrentProc() const {return(m_current_proc);}
-  
+  bool setCurrentProc(std::string);
+  std::string getCurrentProc() const { return (m_current_proc); }
+
   std::string report() const;
-  
- protected:
+
+protected:
   void setNewProcID(std::string node);
-  
- private:
+
+private:
   // Map from ID to proc name
-  std::map<std::string, std::string>  m_map_id_src;
+  std::map<std::string, std::string> m_map_id_src;
 
   // Maps from proc name to various info
-  std::map<std::string, RealmCast>    m_map_relcasts;
+  std::map<std::string, RealmCast> m_map_relcasts;
   std::map<std::string, unsigned int> m_map_relcast_cnt;
 
   // total number of id's used so far
@@ -78,19 +77,12 @@ class RealmCastSet
   unsigned int m_total_relcasts;
 
   std::string m_current_proc;
-  
+
   // Keep a separate vector of proc names so that when proc name
   // vector is retrieved by caller, the earlier items stay in the same
   // order. The alternative, iterating through the map, means order
   // may shift as map grows.
   std::vector<std::string> m_procs;
-
-  
-
-  
 };
 
-#endif 
-
-
-
+#endif

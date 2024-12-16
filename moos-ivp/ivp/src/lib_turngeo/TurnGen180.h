@@ -24,21 +24,18 @@
 #ifndef TURN_GEN_180_HEADER
 #define TURN_GEN_180_HEADER
 
-#include <vector>
-#include <string>
 #include "TurnGenerator.h"
+#include <string>
+#include <vector>
 
-class TurnGen180 : public TurnGenerator
-{
+class TurnGen180 : public TurnGenerator {
 public:
   TurnGen180();
-  ~TurnGen180() {};
-  
-  void generate();
-  
-private:
+  ~TurnGen180(){};
 
+  void generate();
+
+private:
 };
 
-#endif 
-
+#endif

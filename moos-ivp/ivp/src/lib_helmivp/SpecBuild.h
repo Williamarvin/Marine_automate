@@ -24,60 +24,49 @@
 #ifndef SPEC_BUILD_HEADER
 #define SPEC_BUILD_HEADER
 
+#include "IvPBehavior.h"
 #include <string>
 #include <vector>
-#include "IvPBehavior.h"
 
 class SpecBuild {
- public:
-  SpecBuild() {m_behavior=0;}
+public:
+  SpecBuild() { m_behavior = 0; }
   ~SpecBuild() {}
 
- public: // Setters
-  void setIvPBehavior(IvPBehavior *bhv)   {m_behavior=bhv;}
-  void setKindResult(std::string str)     {m_bhv_kind_result=str;}
+public: // Setters
+  void setIvPBehavior(IvPBehavior *bhv) { m_behavior = bhv; }
+  void setKindResult(std::string str) { m_bhv_kind_result = str; }
 
   void setBehaviorKind(std::string bhv_kind, unsigned int lnum);
   void addBadConfig(std::string line, unsigned int lnum);
   void deleteBehavior();
 
- public: // Getters
-  bool          valid()           {return(m_behavior != 0);}
-  IvPBehavior*  getIvPBehavior()  {return(m_behavior);}
-  
-  std::string   getBehaviorName();
-  std::string   getBehaviorKind() {return(m_bhv_kind);}
-  std::string   getKindResult()   {return(m_bhv_kind_result);}
-  std::string   getBadConfigLine(unsigned int ix);
+public: // Getters
+  bool valid() { return (m_behavior != 0); }
+  IvPBehavior *getIvPBehavior() { return (m_behavior); }
 
-  unsigned int  getKindLine()     {return(m_bhv_kind_lnum);}
-  unsigned int  numBadConfigs()   {return(m_bad_config_lines.size());}
-  unsigned int  getBadConfigLineNum(unsigned int ix);
+  std::string getBehaviorName();
+  std::string getBehaviorKind() { return (m_bhv_kind); }
+  std::string getKindResult() { return (m_bhv_kind_result); }
+  std::string getBadConfigLine(unsigned int ix);
+
+  unsigned int getKindLine() { return (m_bhv_kind_lnum); }
+  unsigned int numBadConfigs() { return (m_bad_config_lines.size()); }
+  unsigned int getBadConfigLineNum(unsigned int ix);
 
   std::vector<VarDataPair> getHelmStartMessages();
 
   void print();
 
- private: // State Variables
-  IvPBehavior  *m_behavior;
+private: // State Variables
+  IvPBehavior *m_behavior;
 
-  std::string   m_bhv_kind;  
-  std::string   m_bhv_kind_result;  // "failed", "static", "dynamic"
-  unsigned int  m_bhv_kind_lnum; 
+  std::string m_bhv_kind;
+  std::string m_bhv_kind_result; // "failed", "static", "dynamic"
+  unsigned int m_bhv_kind_lnum;
 
-  std::vector<std::string>   m_bad_config_lines;
-  std::vector<unsigned int>  m_bad_config_lnums;
+  std::vector<std::string> m_bad_config_lines;
+  std::vector<unsigned int> m_bad_config_lnums;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

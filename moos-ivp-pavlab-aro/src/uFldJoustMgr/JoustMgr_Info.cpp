@@ -5,19 +5,18 @@
 /*   DATE: Mar 2nd 2024                                         */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "JoustMgr_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis()
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uFldJoustMgr app, the joust manager, is designed to run on");
@@ -33,8 +32,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blu("=============================================================== ");
   blu("Usage: uFldJoustMgr file.moos [OPTIONS]                         ");
   blu("=============================================================== ");
@@ -42,7 +40,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldJoustMgr with the given process name           ");
   blk("      rather than uFldJoustMgr.                                 ");
   mag("  --example, -e                                                 ");
@@ -64,8 +62,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit()
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldJoustMgr Example MOOS Configuration                         ");
   blu("=============================================================== ");
@@ -82,12 +79,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit()
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldJoustMgr INTERFACE                                          ");
@@ -115,9 +110,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit()
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldJoustMgr", "none");
   exit(0);
 }
-

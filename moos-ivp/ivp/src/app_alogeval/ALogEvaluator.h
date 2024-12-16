@@ -24,59 +24,56 @@
 #ifndef ALOG_EVALUATOR_HEADER
 #define ALOG_EVALUATOR_HEADER
 
-#include <vector>
-#include <string>
-#include "VCheckSet.h"
-#include "LogicTestSequence.h"
-#include "LogicAspect.h"
 #include "InfoBuffer.h"
+#include "LogicAspect.h"
+#include "LogicTestSequence.h"
+#include "VCheckSet.h"
+#include <string>
+#include <vector>
 
-class ALogEvaluator
-{
- public:
+class ALogEvaluator {
+public:
   ALogEvaluator();
   ~ALogEvaluator() {}
 
   bool setALogFile(std::string);
   bool setTestFile(std::string);
 
-  void setVerbose()            {m_verbose = true;}
-  void showSequence()          {m_show_sequence = true;}
-  
-  bool okALogFile() const      {return(m_alog_file != "");}
-  bool okTestFile() const      {return(m_test_file != "");}
+  void setVerbose() { m_verbose = true; }
+  void showSequence() { m_show_sequence = true; }
+
+  bool okALogFile() const { return (m_alog_file != ""); }
+  bool okTestFile() const { return (m_test_file != ""); }
 
   void outputTestSequence();
-  
+
   bool handle();
 
-  bool passed() const {return(m_passed);}
+  bool passed() const { return (m_passed); }
 
 protected: // Internal functions
   bool handleTestFile();
   bool handleALogFile();
-  
- protected: // Config vars
+
+protected: // Config vars
   std::string m_alog_file;
   std::string m_test_file;
-  bool        m_verbose;
-  bool        m_show_sequence;
-  
- protected: // State vars
+  bool m_verbose;
+  bool m_show_sequence;
+
+protected: // State vars
   LogicTestSequence m_logic_tests;
-  std::string       m_logic_tests_status_prev;
+  std::string m_logic_tests_status_prev;
 
   bool m_passed;
-  
+
   LogicAspect m_lcheck_set;
   std::string m_lcheck_status_prev;
-  
-  VCheckSet   m_vcheck_set;
+
+  VCheckSet m_vcheck_set;
   std::string m_vcheck_status_prev;
 
   InfoBuffer *m_info_buffer;
-
 };
 
 #endif
-

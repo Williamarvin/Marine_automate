@@ -26,97 +26,84 @@
 #ifndef VPLUG_GEO_SHAPES_MAP_HEADER
 #define VPLUG_GEO_SHAPES_MAP_HEADER
 
-#include <vector>
+#include "VPlug_GeoShapes.h"
 #include <map>
 #include <string>
-#include "VPlug_GeoShapes.h"
+#include <vector>
 
 class VPlug_GeoShapesMap {
 public:
   VPlug_GeoShapesMap();
   virtual ~VPlug_GeoShapesMap() {}
 
-  void   clear(const std::string& vname="");
-  void   clear(std::string vname, std::string shape, std::string stype);
+  void clear(const std::string &vname = "");
+  void clear(std::string vname, std::string shape, std::string stype);
 
-  bool   addGeoShape(const std::string& param, 
-		     const std::string& value, 
-		     const std::string& community, 
-		     double time=0);
+  bool addGeoShape(const std::string &param, const std::string &value,
+                   const std::string &community, double time = 0);
 
-  void   manageMemory(double curr_time);
-  
-  double getXMin() const {return(m_xmin);}
-  double getXMax() const {return(m_xmax);}
-  double getYMin() const {return(m_ymin);}
-  double getYMax() const {return(m_ymax);}
+  void manageMemory(double curr_time);
 
-  unsigned int sizeVehicles() const    {return(m_geoshapes_map.size());}
-  unsigned int sizePolygons() const    {return(size("polygons"));}
-  unsigned int sizeWedges() const      {return(size("wedges"));}
-  unsigned int sizeSegLists() const    {return(size("seglists"));}
-  unsigned int sizeSeglrs() const      {return(size("seglrs"));}
-  unsigned int sizeCircles() const     {return(size("circles"));}
-  unsigned int sizeOvals() const       {return(size("ovals"));}
-  unsigned int sizeArrows() const      {return(size("arrows"));}
-  unsigned int sizeHexagons() const    {return(size("hexagons"));}
-  unsigned int sizePoints() const      {return(size("points"));}
-  unsigned int sizeVectors() const     {return(size("vectors"));}
-  unsigned int sizeGrids() const       {return(size("grids"));}
-  unsigned int sizeConvexGrids() const {return(size("convex_grids"));}
-  unsigned int sizeRangePulses() const {return(size("range_pulses"));}
-  unsigned int sizeCommsPulses() const {return(size("comms_pulses"));}
-  unsigned int sizeMarkers() const     {return(size("markers"));}
-  unsigned int sizeTextBoxes() const   {return(size("textboxes"));}
-  unsigned int sizeTotalShapes() const {return(size("total_shapes"));}
+  double getXMin() const { return (m_xmin); }
+  double getXMax() const { return (m_xmax); }
+  double getYMin() const { return (m_ymin); }
+  double getYMax() const { return (m_ymax); }
 
-  std::vector<XYPolygon> getPolygons(const std::string&);
-  std::vector<XYWedge>   getWedges(const std::string&);
-  std::vector<XYHexagon> getHexagons(const std::string&);
+  unsigned int sizeVehicles() const { return (m_geoshapes_map.size()); }
+  unsigned int sizePolygons() const { return (size("polygons")); }
+  unsigned int sizeWedges() const { return (size("wedges")); }
+  unsigned int sizeSegLists() const { return (size("seglists")); }
+  unsigned int sizeSeglrs() const { return (size("seglrs")); }
+  unsigned int sizeCircles() const { return (size("circles")); }
+  unsigned int sizeOvals() const { return (size("ovals")); }
+  unsigned int sizeArrows() const { return (size("arrows")); }
+  unsigned int sizeHexagons() const { return (size("hexagons")); }
+  unsigned int sizePoints() const { return (size("points")); }
+  unsigned int sizeVectors() const { return (size("vectors")); }
+  unsigned int sizeGrids() const { return (size("grids")); }
+  unsigned int sizeConvexGrids() const { return (size("convex_grids")); }
+  unsigned int sizeRangePulses() const { return (size("range_pulses")); }
+  unsigned int sizeCommsPulses() const { return (size("comms_pulses")); }
+  unsigned int sizeMarkers() const { return (size("markers")); }
+  unsigned int sizeTextBoxes() const { return (size("textboxes")); }
+  unsigned int sizeTotalShapes() const { return (size("total_shapes")); }
 
-  const std::map<std::string, XYSeglr>    getSeglrs(const std::string&);
-  const std::map<std::string, XYSegList>  getSegLists(const std::string&);
-  const std::map<std::string, XYCircle>&  getCircles(const std::string&);
-  const std::map<std::string, XYOval>&    getOvals(const std::string&);
-  const std::map<std::string, XYArrow>&   getArrows(const std::string&);
-  const std::map<std::string, XYMarker>&  getMarkers(const std::string&);
-  const std::map<std::string, XYTextBox>& getTextBoxes(const std::string&);
-  const std::map<std::string, XYPoint>&   getPoints(const std::string&);
+  std::vector<XYPolygon> getPolygons(const std::string &);
+  std::vector<XYWedge> getWedges(const std::string &);
+  std::vector<XYHexagon> getHexagons(const std::string &);
 
-  std::vector<XYVector>     getVectors(const std::string&);
-  std::vector<XYGrid>       getGrids(const std::string&);
-  std::vector<XYConvexGrid> getConvexGrids(const std::string&);
-  std::vector<XYRangePulse> getRangePulses(const std::string&);
-  std::vector<XYCommsPulse> getCommsPulses(const std::string&);
+  const std::map<std::string, XYSeglr> getSeglrs(const std::string &);
+  const std::map<std::string, XYSegList> getSegLists(const std::string &);
+  const std::map<std::string, XYCircle> &getCircles(const std::string &);
+  const std::map<std::string, XYOval> &getOvals(const std::string &);
+  const std::map<std::string, XYArrow> &getArrows(const std::string &);
+  const std::map<std::string, XYMarker> &getMarkers(const std::string &);
+  const std::map<std::string, XYTextBox> &getTextBoxes(const std::string &);
+  const std::map<std::string, XYPoint> &getPoints(const std::string &);
 
-  std::vector<std::string> getVehiNames() const {return(m_vnames);}
+  std::vector<XYVector> getVectors(const std::string &);
+  std::vector<XYGrid> getGrids(const std::string &);
+  std::vector<XYConvexGrid> getConvexGrids(const std::string &);
+  std::vector<XYRangePulse> getRangePulses(const std::string &);
+  std::vector<XYCommsPulse> getCommsPulses(const std::string &);
 
-  unsigned int size(const std::string&, const std::string& vname="") const;
-  
- protected:
+  std::vector<std::string> getVehiNames() const { return (m_vnames); }
 
-  void  refreshVehiNames();
-  void  updateBounds(const VPlug_GeoShapes&);
+  unsigned int size(const std::string &, const std::string &vname = "") const;
+
+protected:
+  void refreshVehiNames();
+  void updateBounds(const VPlug_GeoShapes &);
 
 protected:
   std::map<std::string, VPlug_GeoShapes> m_geoshapes_map;
 
   std::vector<std::string> m_vnames;
 
-  double  m_xmin;
-  double  m_xmax;
-  double  m_ymin;
-  double  m_ymax;
+  double m_xmin;
+  double m_xmax;
+  double m_ymin;
+  double m_ymax;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

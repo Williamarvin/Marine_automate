@@ -31,51 +31,44 @@
 
 class XYGridUpdate {
 public:
-  XYGridUpdate(std::string grid_name="");
+  XYGridUpdate(std::string grid_name = "");
   virtual ~XYGridUpdate() {}
-  
-  void   setGridName(std::string s)    {m_grid_name=s;}
 
-  void   setUpdateTypeDelta();
-  void   setUpdateTypeReplace();
-  void   setUpdateTypeAverage();
-  
-  bool   addUpdate(unsigned int, std::string, double);
+  void setGridName(std::string s) { m_grid_name = s; }
 
-  bool   valid() const;
-  
-  std::string  getGridName() const  {return(m_grid_name);}
+  void setUpdateTypeDelta();
+  void setUpdateTypeReplace();
+  void setUpdateTypeAverage();
 
-  bool  isUpdateTypeDelta() const   {return(m_update_type_delta);}
-  bool  isUpdateTypeReplace() const {return(m_update_type_replace);}
-  bool  isUpdateTypeAverage() const {return(m_update_type_average);}
+  bool addUpdate(unsigned int, std::string, double);
 
-  unsigned int size() const {return(m_cell_ix.size());}
+  bool valid() const;
+
+  std::string getGridName() const { return (m_grid_name); }
+
+  bool isUpdateTypeDelta() const { return (m_update_type_delta); }
+  bool isUpdateTypeReplace() const { return (m_update_type_replace); }
+  bool isUpdateTypeAverage() const { return (m_update_type_average); }
+
+  unsigned int size() const { return (m_cell_ix.size()); }
 
   unsigned int getCellIX(unsigned int) const;
-  std::string  getCellVar(unsigned int) const;
-  double       getCellVal(unsigned int) const;
+  std::string getCellVar(unsigned int) const;
+  double getCellVal(unsigned int) const;
 
-  std::string  get_spec() const;
-  
+  std::string get_spec() const;
+
 protected:
-  std::string  m_grid_name;
+  std::string m_grid_name;
 
-  bool  m_update_type_delta;
-  bool  m_update_type_replace;
-  bool  m_update_type_average;
+  bool m_update_type_delta;
+  bool m_update_type_replace;
+  bool m_update_type_average;
 
   std::vector<unsigned int> m_cell_ix;
-  std::vector<std::string>  m_cell_var;					     
-  std::vector<double>       m_cell_val;
-
+  std::vector<std::string> m_cell_var;
+  std::vector<double> m_cell_val;
 };
 
 XYGridUpdate stringToGridUpdate(std::string);
 #endif
-
-
-
-
-
-

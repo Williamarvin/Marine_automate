@@ -20,25 +20,24 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "UMV_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "UMV_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  uMACView is a GUI tool for visually monitoring appcasts. It   ");
   blk("  will parse appcasts generated within its own MOOS community or");
-  blk("  those from other MOOS communities bridged or shared to the    "); 
+  blk("  those from other MOOS communities bridged or shared to the    ");
   blk("  local MOOSDB. Its capability is nearly identical to the       ");
   blk("  appcast viewing capability built into pMarineViewer. It was   ");
   blk("  intended to be an appcast viewer for non-pMarineViewer users. ");
@@ -47,8 +46,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uMACView file.moos [OPTIONS]                             ");
@@ -57,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uMACView with the given process name rather        ");
   blk("      than uMACView.                                            ");
   mag("  --example, -e                                                 ");
@@ -81,8 +79,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uMACView Example MOOS Configuration                             ");
@@ -100,7 +97,8 @@ void showExampleConfigAndExit()
   blk("  infocast_font_size = medium  // Default is medium             ");
   blk("                                                                ");
   blk("  appcast_color_scheme   = indigo    // {indigo, beige, white}  ");
-  blk("  realmcast_color_scheme = hillside  // {hillside, beige, indigo, white}");
+  blk("  realmcast_color_scheme = hillside  // {hillside, beige, indigo, "
+      "white}");
   blk("                                                                ");
   blk("  infocast_height      = 70       // [30,35,40,...,85,90]       ");
   blk("  refresh_mode         = events   // {paused, events, streaming}");
@@ -118,12 +116,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uMACView INTERFACE                                              ");
@@ -149,17 +145,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uMACView", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

@@ -36,43 +36,39 @@
 CMOOSLogger gLogger;
 
 #ifdef _WIN32
-BOOL CatchMeBeforeDeath( DWORD fdwCtrlType )
+BOOL CatchMeBeforeDeath(DWORD fdwCtrlType)
 #else
-void CatchMeBeforeDeath(int sig) 
+void CatchMeBeforeDeath(int sig)
 #endif
 {
-  
-	gLogger.ShutDown();
-    exit(0);
 
+  gLogger.ShutDown();
+  exit(0);
 }
 
-int main(int argc ,char * argv[])
-{
+int main(int argc, char *argv[]) {
 
-	//here we do some command line parsing...
-	MOOS::CommandLineParser P(argc,argv);
-	//mission file could be first free parameter
-	std::string mission_file = P.GetFreeParameter(0, "Mission.moos");
-	//mission name can be the  second free parameter
-	std::string app_name = P.GetFreeParameter(1, "pLogger");
+  // here we do some command line parsing...
+  MOOS::CommandLineParser P(argc, argv);
+  // mission file could be first free parameter
+  std::string mission_file = P.GetFreeParameter(0, "Mission.moos");
+  // mission name can be the  second free parameter
+  std::string app_name = P.GetFreeParameter(1, "pLogger");
 
-    //set up some control handling
+  // set up some control handling
 #ifndef _WIN32
-	//register a handler for shutdown
-	signal(SIGINT, CatchMeBeforeDeath);
-	signal(	SIGQUIT, CatchMeBeforeDeath);
-	signal(	SIGTERM, CatchMeBeforeDeath);
+  // register a handler for shutdown
+  signal(SIGINT, CatchMeBeforeDeath);
+  signal(SIGQUIT, CatchMeBeforeDeath);
+  signal(SIGTERM, CatchMeBeforeDeath);
 #else
-    if( !SetConsoleCtrlHandler( (PHANDLER_ROUTINE) CatchMeBeforeDeath, TRUE ))
-    {
-        MOOSTrace("this is bad");
-    }
+  if (!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CatchMeBeforeDeath, TRUE)) {
+    MOOSTrace("this is bad");
+  }
 #endif
 
-  
-    //GO!
-    gLogger.Run(app_name,mission_file,argc,argv);
+  // GO!
+  gLogger.Run(app_name, mission_file, argc, argv);
 
-    return 0;
+  return 0;
 }

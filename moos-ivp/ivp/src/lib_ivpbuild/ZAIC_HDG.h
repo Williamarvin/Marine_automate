@@ -26,9 +26,9 @@
 #ifndef OF_ZAIC_HDG_HEADER
 #define OF_ZAIC_HDG_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "IvPFunction.h"
+#include <string>
 
 class PDMap;
 
@@ -37,29 +37,29 @@ public:
   ZAIC_HDG(IvPDomain, std::string varname);
   virtual ~ZAIC_HDG() {}
 
-  bool   setParams(double summit, double ldelta,  double hdelta, 
-		   double ldelta_util, double hdelta_util,  
-		   double lminutil, double hminutil, double maxutil);
-  
-  bool   setSummit(double);
-  bool   setLowDelta(double);
-  bool   setHighDelta(double);
-  bool   setLowDeltaUtil(double);
-  bool   setHighDeltaUtil(double);
-  bool   setMinMaxUtil(double, double, double);
+  bool setParams(double summit, double ldelta, double hdelta,
+                 double ldelta_util, double hdelta_util, double lminutil,
+                 double hminutil, double maxutil);
+
+  bool setSummit(double);
+  bool setLowDelta(double);
+  bool setHighDelta(double);
+  bool setLowDeltaUtil(double);
+  bool setHighDeltaUtil(double);
+  bool setMinMaxUtil(double, double, double);
 
   double getParam(std::string);
 
-  IvPFunction* extractOF();
-  IvPFunction* extractIvPFunction() {return(extractOF());}
+  IvPFunction *extractOF();
+  IvPFunction *extractIvPFunction() { return (extractOF()); }
 
-  IvPDomain getIvPDomain() const {return(m_ivp_domain);}
-  
+  IvPDomain getIvPDomain() const { return (m_ivp_domain); }
+
 protected:
   double evalPoint(unsigned int pt_ix);
 
-  PDMap* setPDMap(double tolerance = 0.001);
-  
+  PDMap *setPDMap(double tolerance = 0.001);
+
 protected:
   double m_summit;
   double m_ldelta;
@@ -67,7 +67,7 @@ protected:
 
   double m_ldelta_util;
   double m_hdelta_util;
-  
+
   double m_lminutil;
   double m_hminutil;
   double m_maxutil;
@@ -80,11 +80,6 @@ private:
   double m_domain_delta;
 
   std::vector<double> m_ptvals;
-  IvPDomain           m_ivp_domain;
+  IvPDomain m_ivp_domain;
 };
 #endif
-
-
-
-
-

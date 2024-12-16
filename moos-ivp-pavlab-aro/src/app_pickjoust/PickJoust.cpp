@@ -21,17 +21,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
+#include <iostream>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "PickJoust.h"
-#include "MBUtils.h"
-#include "VQuals.h"
 #include "AngleUtils.h"
 #include "GeomUtils.h"
+#include "MBUtils.h"
+#include "PickJoust.h"
+#include "VQuals.h"
 #include "XYCircle.h"
 
 using namespace std;
@@ -39,63 +39,58 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-PickJoust::PickJoust()
-{
+PickJoust::PickJoust() {
   m_headers_enabled = false;
-  m_file_overwrite  = false;
-  m_reuse   = false;
+  m_file_overwrite = false;
+  m_reuse = false;
   m_verbose = false;
 }
-
 
 //---------------------------------------------------------
 // Procedure: setOutputFile()
 
-bool PickJoust::setOutputFile(string file)
-{
-  if(!okFileToWrite(file)) {
+bool PickJoust::setOutputFile(string file) {
+  if (!okFileToWrite(file)) {
     cout << "Not ok file to write:" << file << endl;
-    return(false);
+    return (false);
   }
 
   m_joust_file = file;
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------
 // Procedure: printChoices()
 
-void PickJoust::printChoices()
-{
-  if(okFileToRead(m_joust_file) && m_reuse)
+void PickJoust::printChoices() {
+  if (okFileToRead(m_joust_file) && m_reuse)
     return;
 
   FILE *fptr = 0;
-  if(m_joust_file != "") {
+  if (m_joust_file != "") {
     fptr = fopen(m_joust_file.c_str(), "w");
-    if(!fptr) {
+    if (!fptr) {
       cout << "Unable to open file: " << m_joust_file << endl;
       return;
     }
   }
 
-  if(m_headers_enabled && fptr) {
+  if (m_headers_enabled && fptr) {
     fprintf(fptr, "# Start Position seed file created by pickjoust\n");
     fprintf(fptr, "# %s\n", m_arg_summary.c_str());
   }
 
   string center_line;
-  center_line += "cx=" + doubleToStringX(m_gen.getCenterX(),2);
-  center_line += ",cy=" + doubleToStringX(m_gen.getCenterY(),2);
-  center_line += ",rad=" + doubleToStringX(m_gen.getCenterRad(),2);
-  if(fptr) 
+  center_line += "cx=" + doubleToStringX(m_gen.getCenterX(), 2);
+  center_line += ",cy=" + doubleToStringX(m_gen.getCenterY(), 2);
+  center_line += ",rad=" + doubleToStringX(m_gen.getCenterRad(), 2);
+  if (fptr)
     fprintf(fptr, "%s\n", center_line.c_str());
   else
     cout << center_line << endl;
 
   string line;
-  for(unsigned int i=0; i<m_gen.size(); i++) {
+  for (unsigned int i = 0; i < m_gen.size(); i++) {
 
     double px1 = m_gen.getPosX(i);
     double py1 = m_gen.getPosY(i);
@@ -103,25 +98,24 @@ void PickJoust::printChoices()
     double py2 = m_gen.getDestY(i);
     double hdg = m_gen.getPosH(i);
     double spd = m_gen.getSpeed(i);
-    string vname  = getIndexVName1(i);
+    string vname = getIndexVName1(i);
     string vcolor = getIndexVColor(i);
 
-    line = "px1="  + doubleToStringX(px1,3);
+    line = "px1=" + doubleToStringX(px1, 3);
     line += ",py1=" + doubleToStringX(py1);
     line += ",px2=" + doubleToStringX(px2);
     line += ",py2=" + doubleToStringX(py2);
     line += ",hdg=" + doubleToStringX(hdg);
     line += ",spd=" + doubleToStringX(spd);
     line += ",vname=" + vname;
-    line += ",vcolor="+ vcolor;
+    line += ",vcolor=" + vcolor;
 
-    if(fptr) 
-      fprintf(fptr, "%s\n",  line.c_str());
+    if (fptr)
+      fprintf(fptr, "%s\n", line.c_str());
     else
       cout << line << endl;
   }
-  
-  if(fptr)
+
+  if (fptr)
     fclose(fptr);
 }
-

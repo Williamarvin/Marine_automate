@@ -24,26 +24,25 @@
 #ifndef ZAIC_HDG_MODEL_HEADER
 #define ZAIC_HDG_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
-#include "ZAIC_Model.h"
 #include "ZAIC_HDG.h"
+#include "ZAIC_Model.h"
+#include <string>
 
-class ZAIC_HDG_Model : public ZAIC_Model
-{
- public:
+class ZAIC_HDG_Model : public ZAIC_Model {
+public:
   ZAIC_HDG_Model();
-  ~ZAIC_HDG_Model() {};
+  ~ZAIC_HDG_Model(){};
 
- public: // Virtual functions overloaded
+public: // Virtual functions overloaded
   IvPFunction *getIvPFunction();
-  void  setDomain(unsigned int);
-  void  moveX(double amt);
-  void  currMode(int);
+  void setDomain(unsigned int);
+  void moveX(double amt);
+  void currMode(int);
 
- public:
-  int getCurrMode() const {return(m_curr_mode);}
-  
+public:
+  int getCurrMode() const { return (m_curr_mode); }
+
   // Getters
   double getSummit();
   double getLowDelta();
@@ -55,13 +54,8 @@ class ZAIC_HDG_Model : public ZAIC_Model
   double getHighMinUtil();
   double getMaxUtil();
 
- protected:
-  ZAIC_HDG* m_zaic_hdg;
-  int       m_curr_mode;
+protected:
+  ZAIC_HDG *m_zaic_hdg;
+  int m_curr_mode;
 };
-#endif 
-
-
-
-
-
+#endif

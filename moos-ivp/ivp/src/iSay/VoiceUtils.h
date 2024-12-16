@@ -26,12 +26,6 @@
 
 #include <string>
 
-bool    isVoice(std::string);
+bool isVoice(std::string);
 
-#endif 
-
-
-
-
-
-
+#endif

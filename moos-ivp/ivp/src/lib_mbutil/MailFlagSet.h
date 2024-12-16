@@ -26,54 +26,40 @@
 #ifndef MAIL_FLAG_SET_HEADER
 #define MAIL_FLAG_SET_HEADER
 
+#include "VarDataPair.h"
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include "VarDataPair.h"
 
-class MailFlagSet
-{
+class MailFlagSet {
 public:
   MailFlagSet();
 
-  virtual ~MailFlagSet() {};
+  virtual ~MailFlagSet(){};
 
-  unsigned int size() const {return(m_map_mail_flags.size());}
+  unsigned int size() const { return (m_map_mail_flags.size()); }
 
   bool addFlag(std::string);
-  
+
   bool handleMail(std::string key, double curr_time);
 
   std::vector<VarDataPair> getNewFlags();
 
   std::vector<std::string> getMailFlagKeys() const;
 
- protected: // config vars
-
+protected: // config vars
   // Map keyed on Mail Key (MOOS Var Name)
-  std::map<std::string, std::vector<VarDataPair> > m_map_mail_flags;
+  std::map<std::string, std::vector<VarDataPair>> m_map_mail_flags;
 
   unsigned int m_max_new_flags;
-  
- protected: // state vars
 
+protected: // state vars
   unsigned int m_mail_total;
 
   // Map keyed on Mail Key (MOOS Var Name)
   std::map<std::string, unsigned int> m_map_mail_total;
 
   std::vector<VarDataPair> m_new_flags;
-  
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

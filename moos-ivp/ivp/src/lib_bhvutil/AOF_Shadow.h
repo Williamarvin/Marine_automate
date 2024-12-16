@@ -22,53 +22,34 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_SHADOW_HEADER
 #define AOF_SHADOW_HEADER
 
 #include "AOF.h"
 
 class IvPDomain;
-class AOF_Shadow: public AOF {
- public:
+class AOF_Shadow : public AOF {
+public:
   AOF_Shadow(IvPDomain);
   ~AOF_Shadow() {}
-  
- public: // virtual functions   
-  double evalBox(const IvPBox*) const;
-  bool   setParam(const std::string&, double);
-  bool   initialize();
 
- public: // non-virtual functions
+public: // virtual functions
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool initialize();
+
+public: // non-virtual functions
   double metric(double, double) const;
 
- protected:
-  double cn_spd;     // Contact Speed in kts.
-  double cn_crs;     // Contact Course in degrees (0-359).
-  bool   cn_spd_set;
-  bool   cn_crs_set;
-  
-  int    crs_ix;  // Index of "course" variable in IvPDomain
-  int    spd_ix;  // Index of "speed" variable in IvPDomain
+protected:
+  double cn_spd; // Contact Speed in kts.
+  double cn_crs; // Contact Course in degrees (0-359).
+  bool cn_spd_set;
+  bool cn_crs_set;
+
+  int crs_ix; // Index of "course" variable in IvPDomain
+  int spd_ix; // Index of "speed" variable in IvPDomain
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

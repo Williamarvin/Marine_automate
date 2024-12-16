@@ -22,40 +22,35 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef IVPPROBLEM_HEADER
 #define IVPPROBLEM_HEADER
 
-#include "Problem.h"
 #include "Compactor.h"
+#include "Problem.h"
 
-class IvPProblem: public Problem {
+class IvPProblem : public Problem {
 public:
-  IvPProblem(Compactor *c=0);
+  IvPProblem(Compactor *c = 0);
   ~IvPProblem();
 
-  void   preCompact();
-  bool   solve(const IvPBox *isolbox=0);
-  double getLeafsVisited() const {return(m_leafs_visited);}
+  void preCompact();
+  bool solve(const IvPBox *isolbox = 0);
+  double getLeafsVisited() const { return (m_leafs_visited); }
 
 protected:
-  void   solvePrior(const IvPBox *b=0);
-  void   solveRecurse(int);
-  void   solvePost();
-  double upperTightBound(int, IvPBox*);
-  double upperCheapBound(int, IvPBox*);
-  
-protected:  
-  IvPBox**   nodeBox;
-  Compactor* compactor;
-  bool       ownCompactor;
+  void solvePrior(const IvPBox *b = 0);
+  void solveRecurse(int);
+  void solvePost();
+  double upperTightBound(int, IvPBox *);
+  double upperCheapBound(int, IvPBox *);
 
-  double     m_leafs_visited;
-};  
+protected:
+  IvPBox **nodeBox;
+  Compactor *compactor;
+  bool ownCompactor;
+
+  double m_leafs_visited;
+};
 
 #endif
-
-
-
-
-

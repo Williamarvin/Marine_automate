@@ -26,20 +26,10 @@
 #ifndef UFIELD_UTILITIES_HEADER
 #define UFIELD_UTILITIES_HEADER
 
-bool isValidPShareRoute(const std::string&);
+bool isValidPShareRoute(const std::string &);
 
-bool isValidPShareRoute(std::string& route, std::string& err_msg);
+bool isValidPShareRoute(std::string &route, std::string &err_msg);
 
-std::string resolveDomainName(const std::string&, std::string& err_msg);
+std::string resolveDomainName(const std::string &, std::string &err_msg);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

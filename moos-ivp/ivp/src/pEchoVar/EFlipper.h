@@ -24,12 +24,11 @@
 #ifndef EFLIPPER_HEADER
 #define EFLIPPER_HEADER
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
-class EFlipper
-{
+class EFlipper {
 public:
   EFlipper();
   virtual ~EFlipper() {}
@@ -37,23 +36,23 @@ public:
   bool setParam(std::string param, std::string value);
   bool valid();
   void print();
-  
-  std::string  getKey()       {return(m_key);}
-  std::string  getSourceVar() {return(m_source_variable);}
-  std::string  getDestVar()   {return(m_dest_variable);}
-  std::string  getSourceSep() {return(m_source_separator);}
-  std::string  getDestSep()   {return(m_dest_separator);}
-  std::string  getFilters();
-  std::string  getComponents();
 
-  std::string  flip(std::string);
+  std::string getKey() { return (m_key); }
+  std::string getSourceVar() { return (m_source_variable); }
+  std::string getDestVar() { return (m_dest_variable); }
+  std::string getSourceSep() { return (m_source_separator); }
+  std::string getDestSep() { return (m_dest_separator); }
+  std::string getFilters();
+  std::string getComponents();
+
+  std::string flip(std::string);
 
 protected:
-  std::string  m_key;
-  std::string  m_source_variable;
-  std::string  m_dest_variable; 
-  std::string  m_source_separator;
-  std::string  m_dest_separator;
+  std::string m_key;
+  std::string m_source_variable;
+  std::string m_dest_variable;
+  std::string m_source_separator;
+  std::string m_dest_separator;
 
   // The "component" mapping, e.g. "x" -> "xpos"
   std::map<std::string, std::string> m_cmap;
@@ -62,15 +61,3 @@ protected:
   std::map<std::string, std::string> m_fmap;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

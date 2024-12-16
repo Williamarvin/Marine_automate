@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "PickPos_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "PickPos_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  pick_pos is a utility for generating starting points for      ");
@@ -48,8 +47,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "=====================================================" << endl;
   cout << "Usage: pickpos [OPTIONS]                             " << endl;
   cout << "=====================================================" << endl;
@@ -148,9 +146,15 @@ void showHelpAndExit()
   cout << "  pickpos --amt=4 --grps=red,blue,blue               " << endl;
   cout << "  pickpos --amt=4 --grps=true,false:alt              " << endl;
   cout << "  pickpos --amt=5 --poly=pavlab                      " << endl;
-  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" --hdg=-45:45" << endl;
-  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" --hdg=-10,10,-45 --spd=1:5" << endl;
-  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" --buffer=10 --maxtries=200 " << endl;
+  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" "
+          "--hdg=-45:45"
+       << endl;
+  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" "
+          "--hdg=-10,10,-45 --spd=1:5"
+       << endl;
+  cout << "  pickpos --amt=5 --poly=\"60,-40:60,-160:150,-160:180,-100\" "
+          "--buffer=10 --maxtries=200 "
+       << endl;
   cout << "                                                     " << endl;
   cout << "Notes:                                               " << endl;
   cout << "  (1) The --spd switch can be used for generating a  " << endl;
@@ -158,17 +162,14 @@ void showHelpAndExit()
   cout << "  (1) The --grps switch can be used for any kind of   " << endl;
   cout << "      group, e.g., true,false or clockwise,counter.  " << endl;
   cout << "                                                     " << endl;
-  
+
   exit(0);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pickpos", "gpl");
   exit(0);
 }
-

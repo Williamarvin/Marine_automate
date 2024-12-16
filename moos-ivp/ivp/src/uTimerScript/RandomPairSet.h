@@ -24,52 +24,41 @@
 #ifndef RANDOM_PAIR_SET_HEADER
 #define RANDOM_PAIR_SET_HEADER
 
+#include "RandPairPoly.h"
+#include "RandomPair.h"
 #include <string>
 #include <vector>
-#include "RandomPair.h"
-#include "RandPairPoly.h"
 
-class RandomPairSet 
-{
- public:
+class RandomPairSet {
+public:
   RandomPairSet() {}
   ~RandomPairSet();
 
- public:
-  std::string  addRandomPair(std::string spec);
-  std::string  addRandomPairPoly(std::string spec);
-  void         reset(std::string key, double timestamp=0);
+public:
+  std::string addRandomPair(std::string spec);
+  std::string addRandomPairPoly(std::string spec);
+  void reset(std::string key, double timestamp = 0);
 
-  unsigned int size() const  {return(m_rpair_vector.size());}
+  unsigned int size() const { return (m_rpair_vector.size()); }
 
-  std::string  getVarName1(unsigned int index) const;
-  std::string  getVarName2(unsigned int index) const;
-  std::string  getKeyName(unsigned int index) const;
-  std::string  getType(unsigned int index) const;
-  double       getValue1(unsigned int index) const;
-  double       getValue2(unsigned int index) const;
+  std::string getVarName1(unsigned int index) const;
+  std::string getVarName2(unsigned int index) const;
+  std::string getKeyName(unsigned int index) const;
+  std::string getType(unsigned int index) const;
+  double getValue1(unsigned int index) const;
+  double getValue2(unsigned int index) const;
 
-  bool         contains(std::string varname) const;
+  bool contains(std::string varname) const;
 
-  std::string  getStringValue1(unsigned int index) const;
-  std::string  getStringValue2(unsigned int index) const;
-  std::string  getStringSummary(unsigned int index) const;
-  std::string  getParams(unsigned int index) const;
+  std::string getStringValue1(unsigned int index) const;
+  std::string getStringValue2(unsigned int index) const;
+  std::string getStringSummary(unsigned int index) const;
+  std::string getParams(unsigned int index) const;
 
-  void         print() const;
+  void print() const;
 
- protected: // Configuration Parameters
-
-  std::vector<RandomPair*> m_rpair_vector;
+protected: // Configuration Parameters
+  std::vector<RandomPair *> m_rpair_vector;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

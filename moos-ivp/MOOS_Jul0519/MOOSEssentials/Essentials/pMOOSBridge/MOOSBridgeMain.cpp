@@ -31,30 +31,24 @@
 #include "MOOS/libMOOS/MOOSLib.h"
 #include "MOOSBridge.h"
 
+int main(int argc, char *argv[]) {
+  // Test();
+  const char *sMissionFile = "Mission.moos";
+  const char *sMOOSName = "pMOOSBridge";
 
+  switch (argc) {
+  case 3:
+    sMOOSName = argv[2];
+  case 2:
+    sMissionFile = argv[1];
+  }
 
+  // sMissionFile =
+  // "/Users/pnewman/links/MOOS/Essentials/pMOOSBridge/Examples/V1.moos";
 
+  CMOOSBridge TheBridge;
 
-int main(int argc,char* argv[])
-{
-    //Test();
-    const char * sMissionFile = "Mission.moos";
-    const char * sMOOSName = "pMOOSBridge";
-    
+  TheBridge.Run(sMissionFile, sMOOSName);
 
-    switch(argc)
-    {
-    case 3:
-        sMOOSName  = argv[2];
-    case 2:
-        sMissionFile = argv[1];
-    }
-
-    //sMissionFile = "/Users/pnewman/links/MOOS/Essentials/pMOOSBridge/Examples/V1.moos";
-
-    CMOOSBridge TheBridge;
-
-    TheBridge.Run(sMissionFile,sMOOSName);
-
-    return 0;
+  return 0;
 }

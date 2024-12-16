@@ -22,45 +22,24 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef IVPPROBLEM_V2_HEADER
 #define IVPPROBLEM_V2_HEADER
 
 #include "IvPProblem.h"
 
-class IvPProblem_v2: public IvPProblem {
+class IvPProblem_v2 : public IvPProblem {
 public:
-  IvPProblem_v2() {m_full_tree=false;}
+  IvPProblem_v2() { m_full_tree = false; }
   ~IvPProblem_v2() {}
 
-  bool solve(const IvPBox *isolbox=0);
+  bool solve(const IvPBox *isolbox = 0);
   void solveRecurse(int);
 
-  void setFullTreeTraversal() {m_full_tree=true;}
+  void setFullTreeTraversal() { m_full_tree = true; }
 
- private:
+private:
   bool m_full_tree;
-  
-};  
+};
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

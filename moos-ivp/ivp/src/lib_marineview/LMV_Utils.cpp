@@ -22,56 +22,42 @@
 /*****************************************************************/
 
 #include "LMV_Utils.h"
-#include "MBUtils.h"
 #include "FileBuffer.h"
+#include "MBUtils.h"
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: readEntriesFromFile
 
-vector<string> readEntriesFromFile(const string& filestr, 
-				   const string& param)
-{
+vector<string> readEntriesFromFile(const string &filestr, const string &param) {
   vector<string> return_vector;
 
-  // Can take multiple parameter strings separated by colons. 
+  // Can take multiple parameter strings separated by colons.
   // For example "polygon:poly" or "seglist:segl:seg_list"
   vector<string> pvector = parseString(param, ':');
   int psize = pvector.size();
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = tolower(stripBlankEnds(svector[0]));
-	bool param_match = false;
-	for(int j=0; j<psize; j++)
-	  if(left == pvector[j])
-	    param_match = true;
-	if(param_match) {
-	  string right = stripBlankEnds(svector[1]);
-	  return_vector.push_back(right);
-	}
+      if (svector.size() == 2) {
+        string left = tolower(stripBlankEnds(svector[0]));
+        bool param_match = false;
+        for (int j = 0; j < psize; j++)
+          if (left == pvector[j])
+            param_match = true;
+        if (param_match) {
+          string right = stripBlankEnds(svector[1]);
+          return_vector.push_back(right);
+        }
       }
     }
   }
-  return(return_vector);
+  return (return_vector);
 }
-
-
-
-
-
-
-
-
-
-
-
-

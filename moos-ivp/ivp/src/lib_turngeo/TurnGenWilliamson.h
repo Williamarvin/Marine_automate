@@ -24,51 +24,52 @@
 #ifndef TURN_GEN_WILLIAMSON_HEADER
 #define TURN_GEN_WILLIAMSON_HEADER
 
-#include <vector>
-#include <string>
 #include "TurnGenerator.h"
+#include <string>
+#include <vector>
 
-class TurnGenWilliamson : public TurnGenerator
-{
- public:
+class TurnGenWilliamson : public TurnGenerator {
+public:
   TurnGenWilliamson();
-  ~TurnGenWilliamson() {};
+  ~TurnGenWilliamson(){};
 
- public: // virtual functiona overloaded 
+public: // virtual functiona overloaded
   void generate();
   bool setTurnRadius(double radius);
   void setEndPos(double endx, double endy);
   void setEndHeading(double endh);
-  void setAutoTurnDir(bool v) {m_auto_turn_dir=v;}
-  
- public: 
-  void   setLaneGap(double lane_gap);
-  void   setDesiredExtent(double extent);
-  void   setBias(double bias);
-  void   setBiasPct(double bias_pct);
-  double getAngW() const {return(m_ang_w);}
-  double getDistB() const {return(m_dist_b);}
-  double getDesiredExtent() const {return(m_desired_extent);}
-  double getNaturalExtent() const {return(m_natural_extent);}
-  double getDistX() const {return(m_dist_b + m_natural_extent + m_desired_extent);}
+  void setAutoTurnDir(bool v) { m_auto_turn_dir = v; }
 
-  XYPoint getPointC0() const {return(m_c0);}
-  XYPoint getPointC1() const {return(m_c1);}
-  XYPoint getPointC2() const {return(m_c2);}
-  XYPoint getPointC3() const {return(m_c3);}
+public:
+  void setLaneGap(double lane_gap);
+  void setDesiredExtent(double extent);
+  void setBias(double bias);
+  void setBiasPct(double bias_pct);
+  double getAngW() const { return (m_ang_w); }
+  double getDistB() const { return (m_dist_b); }
+  double getDesiredExtent() const { return (m_desired_extent); }
+  double getNaturalExtent() const { return (m_natural_extent); }
+  double getDistX() const {
+    return (m_dist_b + m_natural_extent + m_desired_extent);
+  }
 
-  double getTheta1() const {return(m_theta1);}
-  double getTheta2() const {return(m_theta2);}
-  double getBias() const {return(m_bias);}
-  double getMaxBias() const {return(m_max_bias);}
-  
- private: 
+  XYPoint getPointC0() const { return (m_c0); }
+  XYPoint getPointC1() const { return (m_c1); }
+  XYPoint getPointC2() const { return (m_c2); }
+  XYPoint getPointC3() const { return (m_c3); }
+
+  double getTheta1() const { return (m_theta1); }
+  double getTheta2() const { return (m_theta2); }
+  double getBias() const { return (m_bias); }
+  double getMaxBias() const { return (m_max_bias); }
+
+private:
   void generateLaneSwitch();
   void generateLaneSwitch1();
   void generateLaneSwitch2();
   void generateNormal();
 
- private: // config vars
+private: // config vars
   double m_lane_gap;
   double m_desired_extent;
   double m_natural_extent;
@@ -76,12 +77,12 @@ class TurnGenWilliamson : public TurnGenerator
 
   double m_bias;
 
- private: // state vars
+private: // state vars
   double m_ang_w;
   double m_dist_b;
 
   double m_max_bias;
-  
+
   XYPoint m_c0;
   XYPoint m_c1;
   XYPoint m_c2;
@@ -91,5 +92,4 @@ class TurnGenWilliamson : public TurnGenerator
   double m_theta2;
 };
 
-#endif 
-
+#endif

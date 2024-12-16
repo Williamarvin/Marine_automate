@@ -25,15 +25,15 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_HeadingHysteresis.h"
-#include "ZAIC_PEAK.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
-#include "GeomUtils.h"
 #include "BuildUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 #ifndef M_PI
 #define M_PI 3.1415926
@@ -44,15 +44,14 @@ using namespace std;
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_HeadingHysteresis::BHV_HeadingHysteresis(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_HeadingHysteresis::BHV_HeadingHysteresis(IvPDomain gdomain)
+    : IvPBehavior(gdomain) {
   this->setParam("descriptor", "heading_hysteresis");
 
   m_domain = subDomain(m_domain, "course");
 
-  m_memory_time   = -1;
-  m_filter_level  = 1;
+  m_memory_time = -1;
+  m_filter_level = 1;
   m_variable_name = "DESIRED_HEADING_UNFILTERED";
 
   addInfoVars(m_variable_name);
@@ -61,52 +60,47 @@ BHV_HeadingHysteresis::BHV_HeadingHysteresis(IvPDomain gdomain) :
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_HeadingHysteresis::setParam(string param, string val) 
-{
-  if(param == "memory_time") {
+bool BHV_HeadingHysteresis::setParam(string param, string val) {
+  if (param == "memory_time") {
     double dval = atof(val.c_str());
-    if((dval < 0) || (!isNumber(val)))
-      return(false);
+    if ((dval < 0) || (!isNumber(val)))
+      return (false);
     m_memory_time = dval;
-    return(true);
-  }
-  else if(param == "filter_var") {
+    return (true);
+  } else if (param == "filter_var") {
     val = stripBlankEnds(val);
-    if(strContainsWhite(val))
-      return(false);
+    if (strContainsWhite(val))
+      return (false);
     m_variable_name = toupper(val);
     addInfoVars(m_variable_name);
-    return(true);
+    return (true);
   }
 
-  return(false);
+  return (false);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: onIdleState
 
-void BHV_HeadingHysteresis::onIdleState() 
-{
+void BHV_HeadingHysteresis::onIdleState() {
   string check_result = updateHeadingHistory();
-  if(check_result != "ok") 
+  if (check_result != "ok")
     postWMessage(check_result);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_HeadingHysteresis::onRunState() 
-{
+IvPFunction *BHV_HeadingHysteresis::onRunState() {
   string check_result = updateHeadingHistory();
-  if(check_result != "ok") {
+  if (check_result != "ok") {
     postWMessage(check_result);
-    return(0);
+    return (0);
   }
-  
-  double hdg_average  = getHeadingAverage();
+
+  double hdg_average = getHeadingAverage();
   double hdg_variance = getHeadingVariance(hdg_average);
-  
+
   // round to integer to reduce distinct posts to the db
   postMessage("HIST_HEADING_AVERAGE", hdg_average);
   postMessage("HIST_HEADING_VARIANCE", hdg_variance);
@@ -140,52 +134,49 @@ IvPFunction *BHV_HeadingHysteresis::onRunState()
   ipf = crs_zaic.extractOF();
 #endif
 
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
 
-  return(ipf);
+  return (ipf);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: updateHeadingHistory
 
-string BHV_HeadingHysteresis::updateHeadingHistory()
-{
-  if(m_memory_time < 0)
-    return("Variable memory_time not specified");
+string BHV_HeadingHysteresis::updateHeadingHistory() {
+  if (m_memory_time < 0)
+    return ("Variable memory_time not specified");
 
   bool ok;
   m_current_heading = getBufferDoubleVal(m_variable_name, ok);
-  
-  if(!ok) 
-    return("HeadingHysteresis filter variable not found in info_buffer");
-  
+
+  if (!ok)
+    return ("HeadingHysteresis filter variable not found in info_buffer");
+
   double currtime = getBufferCurrTime();
   addHeadingEntry(m_current_heading, currtime);
-  return("ok");
+  return ("ok");
 }
 
 //-----------------------------------------------------------
 // Procedure: addHeadingEntry(double, double)
 
-void BHV_HeadingHysteresis::addHeadingEntry(double value, double currtime)
-{
+void BHV_HeadingHysteresis::addHeadingEntry(double value, double currtime) {
   m_heading_val.push_back(value);
   m_heading_time.push_back(currtime);
-  
+
   int counter = 0;
 
   // Remove all stale elements from memory
   list<double>::iterator p;
-  for(p = m_heading_time.begin(); p!=m_heading_time.end(); p++) {
+  for (p = m_heading_time.begin(); p != m_heading_time.end(); p++) {
     double itime = *p;
-    if((currtime - itime) > m_memory_time) {
+    if ((currtime - itime) > m_memory_time) {
       counter++;
     }
   }
 
-  for(int i=0; i<counter; i++) {
+  for (int i = 0; i < counter; i++) {
     m_heading_val.pop_front();
     m_heading_time.pop_front();
   }
@@ -194,49 +185,35 @@ void BHV_HeadingHysteresis::addHeadingEntry(double value, double currtime)
 //-----------------------------------------------------------
 // Procedure: getHeadingAverage
 
-double BHV_HeadingHysteresis::getHeadingAverage()
-{
+double BHV_HeadingHysteresis::getHeadingAverage() {
   double ssum = 0.0;
   double csum = 0.0;
   list<double>::iterator p;
-  for(p = m_heading_val.begin(); p!=m_heading_val.end(); p++) {
-    double iheading = *p;      
-    double s = sin(iheading*M_PI/180.0);
-    double c = cos(iheading*M_PI/180.0);
+  for (p = m_heading_val.begin(); p != m_heading_val.end(); p++) {
+    double iheading = *p;
+    double s = sin(iheading * M_PI / 180.0);
+    double c = cos(iheading * M_PI / 180.0);
     ssum += s;
-    csum += c;    
+    csum += c;
   }
-  double avg = atan2(ssum,csum)*180.0/M_PI;
+  double avg = atan2(ssum, csum) * 180.0 / M_PI;
   avg = angle360(avg);
-  return(avg);
+  return (avg);
 }
 
 //-----------------------------------------------------------
 // Procedure: getHeadingVariance
 
-double BHV_HeadingHysteresis::getHeadingVariance(double current_average)
-{
+double BHV_HeadingHysteresis::getHeadingVariance(double current_average) {
   double total = 0;
   unsigned int entry_count = m_heading_val.size();
-  
+
   list<double>::iterator p;
-  for(p = m_heading_val.begin(); p!=m_heading_val.end(); p++) {
+  for (p = m_heading_val.begin(); p != m_heading_val.end(); p++) {
     double value = *p;
     double delta = angle180(value - current_average);
     total += (delta * delta);
   }
 
-  return(sqrt(total)/(double)(entry_count));
+  return (sqrt(total) / (double)(entry_count));
 }
-
-
-
-
-
-
-
-
-
-
-
-

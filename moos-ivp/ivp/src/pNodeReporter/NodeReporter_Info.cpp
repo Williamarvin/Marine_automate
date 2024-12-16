@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "NodeReporter_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "NodeReporter_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  A tool for collecting node information such as present vehicle");
@@ -45,8 +44,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pNodeReporter file.moos [OPTIONS]                        ");
@@ -55,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pNodeReporter with the given process               ");
   blk("      name rather than pNodeReporter.                           ");
   mag("  --example, -e                                                 ");
@@ -80,12 +78,11 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("pNodeReporter Example MOOS Configuration                        ");
   blu("=============================================================== ");
-  blu("Blue lines:     ","Default configuration                        ");
+  blu("Blue lines:     ", "Default configuration                        ");
   blk("                                                                ");
   blk("ProcessConfig = pNodeReporter                                   ");
   blk("{                                                               ");
@@ -93,14 +90,14 @@ void showExampleConfigAndExit()
   blu("  CommsTick = 4                                                 ");
   blk("                                                                ");
   blk("  // Configure key aspects of the node                          ");
-  blk("  platform_type      = glider  "," // or {uuv,auv,ship,kayak}   ");
+  blk("  platform_type      = glider  ", " // or {uuv,auv,ship,kayak}   ");
   blk("                                // {glider,wamv,mokai,longship}");
-  blk("  platform_length    = 8       "," // meters.  Range [0,inf)    ");
-  blk("  platform_group     = alpha   "," // Default is no group       ");
-  blk("  platform_color     = green   "," // or any legal color        ");
+  blk("  platform_length    = 8       ", " // meters.  Range [0,inf)    ");
+  blk("  platform_group     = alpha   ", " // Default is no group       ");
+  blk("  platform_color     = green   ", " // or any legal color        ");
   blk("                                                                ");
   blk("  // Configure optional blackout functionality                  ");
-  blu("  blackout_interval  = 0       "," // seconds. Range [0,inf)    ");
+  blu("  blackout_interval  = 0       ", " // seconds. Range [0,inf)    ");
   blk("                                                                ");
   blk("   // Configure the optional platform report summary            ");
   blk("  plat_report_input  = COMPASS_HEADING, gap=1                   ");
@@ -112,7 +109,7 @@ void showExampleConfigAndExit()
   blu("  node_report_output = NODE_REPORT_LOCAL                        ");
   blk("                                                                ");
   blk("  // Threshold for conveying an absense of the helm             ");
-  blu("  nohelm_threshold   = 5       "," // seconds                   ");
+  blu("  nohelm_threshold   = 5       ", " // seconds                   ");
   blk("                                                                ");
   blk("  // Policy for filling in missing lat/lon from x/y or v.versa  ");
   blk("  // Valid policies: [literal], fill-empty, use-latest, global  ");
@@ -123,7 +120,7 @@ void showExampleConfigAndExit()
   blk("  alt_nav_name       = _GT                                      ");
   blk("                                                                ");
   blk("  // Set grace period before posting reports with no NAV info   ");
-  blu("  nav_grace_period = 60       "," // seconds. -1 means infinity ");
+  blu("  nav_grace_period = 60       ", " // seconds. -1 means infinity ");
   blk("                                                                ");
   blk("  // Declare the vehicle to be part of group tango.             ");
   blk("  group = tango                                                 ");
@@ -137,12 +134,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pNodeReporter INTERFACE                                         ");
@@ -194,18 +189,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pNodeReporter", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

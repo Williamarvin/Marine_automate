@@ -24,18 +24,9 @@
 #ifndef IPF_VIEW_UTILS_HEADER
 #define IPF_VIEW_UTILS_HEADER
 
-#include <string>
 #include "IvPFunction.h"
+#include <string>
 
-IvPFunction *expandHdgSpdIPF(IvPFunction*, IvPDomain);  
+IvPFunction *expandHdgSpdIPF(IvPFunction *, IvPDomain);
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

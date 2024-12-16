@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "TS_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "TS_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Allows the user to script a set of pre-configured pokes to a  ");
@@ -46,8 +45,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                               ");
   blu("============================================================== ");
   blu("Usage: uTimerScript file.moos [OPTIONS]                        ");
@@ -56,7 +54,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                               ");
   blk("Options:                                                       ");
-  mag("  --alias","=<ProcessName>                                     ");
+  mag("  --alias", "=<ProcessName>                                     ");
   blk("      Launch uTimerScript with the given process               ");
   blk("      name rather than uTimerScript.                           ");
   mag("  --example, -e                                                ");
@@ -65,11 +63,11 @@ void showHelpAndExit()
   blk("      Display this help message.                               ");
   mag("  --interface, -i                                              ");
   blk("      Display MOOS publications and subscriptions.             ");
-  mag("  --shuffle","=Boolean (true/false)                            ");
+  mag("  --shuffle", "=Boolean (true/false)                            ");
   blk("      If true, script is recalculated on each reset. If event  ");
   blk("      times configured with random range, the ordering may     ");
   blk("      change after a reset. The default is true.               ");
-  mag("  --verbose","=Boolean (true/false)                            ");
+  mag("  --verbose", "=Boolean (true/false)                            ");
   blk("      Display script progress & diagnostics if true.           ");
   blk("      The default is true.                                     ");
   mag("  --version,-v                                                 ");
@@ -77,7 +75,8 @@ void showHelpAndExit()
   mag("  --noterm_appcast                                             ");
   blk("      Do not generate appcasts to the terminal.                ");
   mag("  --web,-w                                                     ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uTimerScript");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uTimerScript");
   blk("                                                               ");
   blk("Note: If argv[2] does not otherwise match a known option,      ");
   blk("      then it will be interpreted as a run alias. This is      ");
@@ -89,13 +88,12 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uTimerScript Example MOOS Configuration                         ");
   blu("=============================================================== ");
-  blu("Blue lines:     ","Default configuration                        ");
+  blu("Blue lines:     ", "Default configuration                        ");
   blk("                                                                ");
   blk("ProcessConfig = uTimerScript                                    ");
   blk("{                                                               ");
@@ -111,37 +109,38 @@ void showExampleConfigAndExit()
   blk("  // Seconds added to each event time, on first pass only       ");
   blu("  delay_start    = 0                                            ");
   blk("  // Event(s) are the key components of the script              ");
-  blu("  event          = var=SBR_RANGE_REQUEST, val=\"name=archie\", time=25:35  ");
+  blu("  event          = var=SBR_RANGE_REQUEST, val=\"name=archie\", "
+      "time=25:35  ");
   blk("  // A MOOS variable for taking cues to forward time            ");
-  blu("  forward_var    = UTS_FORWARD  "," // or other MOOS variable   ");
+  blu("  forward_var    = UTS_FORWARD  ", " // or other MOOS variable   ");
   blk("  // If true script is paused upon launch                       ");
-  blu("  paused         = false   "," // or {true}                     ");
+  blu("  paused         = false   ", " // or {true}                     ");
   blk("  // A MOOS variable for receiving pause state cues             ");
-  blu("  pause_var      = UTS_PAUSE    "," // or other MOOS variable   ");
+  blu("  pause_var      = UTS_PAUSE    ", " // or other MOOS variable   ");
   blk("  // Declaration of random var macro expanded in event values   ");
   blu("  randvar        = varname=ANG, min=0, max=359, key=at_reset    ");
   blk("  // Maximum number of resets allowed                           ");
-  blu("  reset_max      = nolimit "," // or in range [0,inf)           ");
+  blu("  reset_max      = nolimit ", " // or in range [0,inf)           ");
   blk("  // A point when the script is reset                           ");
-  blu("  reset_time     = none    "," // or {all-posted} or range (0,inf) ");
+  blu("  reset_time     = none    ", " // or {all-posted} or range (0,inf) ");
   blk("  // A MOOS variable for receiving reset cues                   ");
-  blu("  reset_var      = UTS_RESET    "," // or other MOOS variable   ");
+  blu("  reset_var      = UTS_RESET    ", " // or other MOOS variable   ");
   blk("  // If true script will complete if conditions suddenly fail   ");
-  blu("  script_atomic  = false   "," // or {true}                     ");
+  blu("  script_atomic  = false   ", " // or {true}                     ");
   blk("  // A hopefully unique name given to the script                ");
   blu("  script_name    = unnamed                                      ");
   blk("  // If true timestamps are recalculated on each script reset   ");
   blu("  shuffle        = true                                         ");
   blk("  // If true progress is generated to the console               ");
-  blu("  verbose        = true    "," // or {false}                    ");
+  blu("  verbose        = true    ", " // or {false}                    ");
   blk("  // Reset or restart script upon conditions being met after failure ");
-  blu("  upon_awake     = n/a     "," // or {reset,resstart}           ");
+  blu("  upon_awake     = n/a     ", " // or {reset,resstart}           ");
   blk("  // A MOOS variable for posting the status summary             ");
-  blu("  status_var     = UTS_STATUS   "," // or other MOOS variable   ");
+  blu("  status_var     = UTS_STATUS   ", " // or other MOOS variable   ");
   blk("  // Rate at which time is accelerated in execuing the script   ");
   blu("  time_warp      = 1                                            ");
   blk("  // Base time upon which script event times are based          ");
-  blu("  time_zero      = db_start "," // Or script_start (default)    ");
+  blu("  time_zero      = db_start ", " // Or script_start (default)    ");
   blk("                                                                ");
   blk("  app_logging = true  // {true or file} By default disabled     ");
   blk("}                                                               ");
@@ -149,12 +148,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uTimerScript INTERFACE                                          ");
@@ -189,18 +186,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uTimerScript", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

@@ -21,32 +21,31 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstring>
-#include <cstdlib>
-#include <iostream>
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
 #include "ScanHandler.h"
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
- // Look for a request for version information
-  if(scanArgs(argc, argv, "-v", "--version", "-version")) {
+int main(int argc, char *argv[]) {
+  // Look for a request for version information
+  if (scanArgs(argc, argv, "-v", "--version", "-version")) {
     showReleaseInfo("alogscan", "gpl");
-    return(0);
+    return (0);
   }
-  if(scanArgs(argc, argv, "-w", "-web", "--web"))
+  if (scanArgs(argc, argv, "-w", "-web", "--web"))
     openURLX("https://oceanai.mit.edu/ivpman/apps/alogscan");
-    
+
   // Look for a request for usage information
-  if(scanArgs(argc, argv, "-h", "--help", "-help")) {
+  if (scanArgs(argc, argv, "-h", "--help", "-help")) {
     cout << "Usage:                                               " << endl;
     cout << "  alogscan file.alog [OPTIONS]                       " << endl;
     cout << "                                                     " << endl;
@@ -76,104 +75,99 @@ int main(int argc, char *argv[])
     cout << "  --noaux       Ignore auxilliary source info        " << endl;
     cout << "                                                     " << endl;
     cout << "  --web,-w   Open browser to:                        " << endl;
-    cout << "             https://oceanai.mit.edu/ivpman/apps/alogscan " << endl;
+    cout << "             https://oceanai.mit.edu/ivpman/apps/alogscan "
+         << endl;
     cout << "                                                     " << endl;
     cout << "See also: aloggrp, alogrm, alogclip, alogview        " << endl;
-    return(0);
+    return (0);
   }
 
-  bool   use_full_source    = true;
-  bool   data_rate_only     = false;
-  bool   reverse_requested  = false;
-  bool   app_stat_requested = false;
-  bool   loglist_requested  = false;
-  string proc_colors        = "true";
-  string sort_style         = "bysrc_ascending";
+  bool use_full_source = true;
+  bool data_rate_only = false;
+  bool reverse_requested = false;
+  bool app_stat_requested = false;
+  bool loglist_requested = false;
+  string proc_colors = "true";
+  string sort_style = "bysrc_ascending";
 
   string alogfile = "";
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string orig = argv[i];
     string sarg = tolower(argv[i]);
     string sort = "";
-    if(!strncmp(sarg.c_str(), "--sort=", 7)) {
+    if (!strncmp(sarg.c_str(), "--sort=", 7)) {
       biteString(sarg, '=');
       sort = sarg;
     }
 
-    //cout << "sarg:[" << sarg << "]" << endl;
+    // cout << "sarg:[" << sarg << "]" << endl;
 
-    if(strContains(sarg, ".alog"))
+    if (strContains(sarg, ".alog"))
       alogfile = orig;
-    else if((sarg == "-c") || (sarg == "--chars") || (sort == "chars"))
+    else if ((sarg == "-c") || (sarg == "--chars") || (sort == "chars"))
       sort_style = "bychars_ascending";
-    else if((sarg == "-l") || (sarg == "--lines") || (sort == "lines"))
+    else if ((sarg == "-l") || (sarg == "--lines") || (sort == "lines"))
       sort_style = "bylines_ascending";
-    else if((sarg == "--start") || (sort == "start"))
+    else if ((sarg == "--start") || (sort == "start"))
       sort_style = "bystarttime_ascending";
-    else if((sarg == "--stop") || (sort == "stop"))
+    else if ((sarg == "--stop") || (sort == "stop"))
       sort_style = "bystoptime_ascending";
-    else if((sarg == "--vars") || (sort == "vars") || (sort == "var"))
+    else if ((sarg == "--vars") || (sort == "vars") || (sort == "var"))
       sort_style = "byvars_ascending";
-    else if((sarg == "--procs") || (sort == "procs") || (sort == "proc"))
+    else if ((sarg == "--procs") || (sort == "procs") || (sort == "proc"))
       sort_style = "bysrc_ascending";
-    else if(sarg == "--appstat")
+    else if (sarg == "--appstat")
       app_stat_requested = true;
-    else if(sarg == "--rate_only")
+    else if (sarg == "--rate_only")
       data_rate_only = true;
-    else if(sarg == "--noaux")
+    else if (sarg == "--noaux")
       use_full_source = false;
-    else if((sarg == "--loglist") || (sarg == "-l"))
+    else if ((sarg == "--loglist") || (sarg == "-l"))
       loglist_requested = true;
-    else if((sarg == "--nocolors") || (sarg == "-n"))
+    else if ((sarg == "--nocolors") || (sarg == "-n"))
       proc_colors = "false";
-    else if((sarg == "-r") || (sarg == "--reverse"))
+    else if ((sarg == "-r") || (sarg == "--reverse"))
       reverse_requested = true;
   }
- 
-  if(reverse_requested) {
-    if(sort_style == "bychars_ascending")
+
+  if (reverse_requested) {
+    if (sort_style == "bychars_ascending")
       sort_style = "bychars_descending";
-    else if(sort_style == "bylines_ascending")
+    else if (sort_style == "bylines_ascending")
       sort_style = "bylines_descending";
-    else if(sort_style == "bystart_ascending")
+    else if (sort_style == "bystart_ascending")
       sort_style = "bystart_descending";
-    else if(sort_style == "bystop_ascending")
+    else if (sort_style == "bystop_ascending")
       sort_style = "bystop_descending";
-    else if(sort_style == "byvars_ascending")
+    else if (sort_style == "byvars_ascending")
       sort_style = "byvars_descending";
-    else if(sort_style == "bysrc_ascending")
+    else if (sort_style == "bysrc_ascending")
       sort_style = "bysrc_descending";
   }
 
-  if(alogfile == "") {
+  if (alogfile == "") {
     cout << "No alog file given - exiting" << endl;
     exit(1);
   }
 
   bool ok = true;
   ScanHandler handler;
-  ok = ok && handler.setParam("sort_style",  sort_style);
+  ok = ok && handler.setParam("sort_style", sort_style);
   ok = ok && handler.setParam("proc_colors", proc_colors);
-  ok = ok && handler.setParam("use_full_source",
-			      boolToString(use_full_source));
+  ok = ok && handler.setParam("use_full_source", boolToString(use_full_source));
 
   ok = ok && handler.handle(alogfile, data_rate_only);
 
-  if(!ok)
-    return(1);
-  
-  if(!data_rate_only)
-    handler.varStatReport();  
-  if(app_stat_requested && !data_rate_only)
+  if (!ok)
+    return (1);
+
+  if (!data_rate_only)
+    handler.varStatReport();
+  if (app_stat_requested && !data_rate_only)
     handler.appStatReport();
   handler.dataRateReport();
-  if(loglist_requested) 
+  if (loglist_requested)
     handler.loglistReport();
 
-  return(0);
+  return (0);
 }
-
-
-
-
-

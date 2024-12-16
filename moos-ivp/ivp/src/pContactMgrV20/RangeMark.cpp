@@ -25,43 +25,35 @@
 
 using namespace std;
 
-
 //--------------------------------------------------------
 // Constructor
 
-RangeMark::RangeMark(string contact, double range)
-{
+RangeMark::RangeMark(string contact, double range) {
   m_contact = contact;
-  m_range   = range;
+  m_range = range;
 }
 
 //--------------------------------------------------------
 // Procedure: setRangeMark()
 
-void RangeMark::setRangeMark(string contact, double range)
-{
+void RangeMark::setRangeMark(string contact, double range) {
   m_contact = contact;
-  m_range   = range;
+  m_range = range;
 }
-
 
 //--------------------------------------------------------
 // Procedure: overloaded less than operator
 
-bool operator< (const RangeMark& one, const RangeMark& two)
-{
-  if(one.getRange() < two.getRange())
-    return(true);
+bool operator<(const RangeMark &one, const RangeMark &two) {
+  if (one.getRange() < two.getRange())
+    return (true);
   else
-    return(false);
+    return (false);
 }
 
 //--------------------------------------------------------
 // Procedure: overload equals operator
 
-bool operator== (const RangeMark& one, const RangeMark& two)
-{
-  return(one.getRange() == two.getRange());
+bool operator==(const RangeMark &one, const RangeMark &two) {
+  return (one.getRange() == two.getRange());
 }
-
-

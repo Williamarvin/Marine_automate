@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_TEST_FAILURE_HEADER
 #define BHV_TEST_FAILURE_HEADER
 
@@ -30,34 +30,14 @@ class BHV_TestFailure : public IvPBehavior {
 public:
   BHV_TestFailure(IvPDomain);
   ~BHV_TestFailure() {}
-  
-  void  onCompleteState();
-  bool  setParam(std::string, std::string);
 
- protected:
-  bool   m_failure_crash;
-  bool   m_failure_burn;
+  void onCompleteState();
+  bool setParam(std::string, std::string);
+
+protected:
+  bool m_failure_crash;
+  bool m_failure_burn;
   double m_failure_burn_time;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

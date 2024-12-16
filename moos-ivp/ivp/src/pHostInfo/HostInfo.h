@@ -24,94 +24,83 @@
 #ifndef P_HOST_INFO_HEADER
 #define P_HOST_INFO_HEADER
 
-#include <string>
-#include <list>
-#include <vector>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include <list>
+#include <string>
+#include <vector>
 
-class HostInfo : public AppCastingMOOSApp
-{
- public:
+class HostInfo : public AppCastingMOOSApp {
+public:
   HostInfo();
   virtual ~HostInfo() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
- protected:
+protected:
   void registerVariables();
-  int  generateIPInfoFiles();
+  int generateIPInfoFiles();
   void gatherIPInfoFromFiles();
   void postIPInfo();
 
- protected: 
+protected:
   std::string readOSXInfoIP(std::string);
   std::string readLinuxInfoIP(std::string);
-  int  clearTempFiles();
+  int clearTempFiles();
   bool handleMailPShareInput(std::string);
   bool handleConfigPreferInterface(std::string);
-  
+
   void addIPInfo(std::string ip, std::string ip_source);
 
- protected: // Config variables
-  std::string   m_tmp_file_dir;
-  std::string   m_default_hostip;
-  bool          m_default_hostip_force;
-  std::string   m_prefer_interface;
-  
- protected: // state variables
+protected: // Config variables
+  std::string m_tmp_file_dir;
+  std::string m_default_hostip;
+  bool m_default_hostip_force;
+  std::string m_prefer_interface;
 
-  std::string   m_ip_osx_wifi;
-  std::string   m_ip_osx_wi_fi;
-  std::string   m_ip_osx_airport;
-  std::string   m_ip_osx_ethernet;
-  std::string   m_ip_osx_usb_1000;  
-  std::string   m_ip_osx_usb_ethernet;
-  std::string   m_ip_osx_ethernet1;
-  std::string   m_ip_osx_ethernet2;
-  std::string   m_ip_osx_bridge100;
+protected: // state variables
+  std::string m_ip_osx_wifi;
+  std::string m_ip_osx_wi_fi;
+  std::string m_ip_osx_airport;
+  std::string m_ip_osx_ethernet;
+  std::string m_ip_osx_usb_1000;
+  std::string m_ip_osx_usb_ethernet;
+  std::string m_ip_osx_ethernet1;
+  std::string m_ip_osx_ethernet2;
+  std::string m_ip_osx_bridge100;
 
-  std::string   m_ip_linux_wifi;
-  std::string   m_ip_linux_ethernet0;
-  std::string   m_ip_linux_ethernet1;
-  std::string   m_ip_linux_usb0;
-  std::string   m_ip_linux_usb1;
-  std::string   m_ip_linux_usb2;
-  std::string   m_ip_linux_hostname;
-  std::string   m_ip_linux_any;
+  std::string m_ip_linux_wifi;
+  std::string m_ip_linux_ethernet0;
+  std::string m_ip_linux_ethernet1;
+  std::string m_ip_linux_usb0;
+  std::string m_ip_linux_usb1;
+  std::string m_ip_linux_usb2;
+  std::string m_ip_linux_hostname;
+  std::string m_ip_linux_any;
 
-  unsigned int  m_pmb_udp_listen_cnt;
+  unsigned int m_pmb_udp_listen_cnt;
 
-  bool          m_ip_info_files_generated;
-  bool          m_ip_info_gathered;
-  bool          m_ip_info_posted;
+  bool m_ip_info_files_generated;
+  bool m_ip_info_gathered;
+  bool m_ip_info_posted;
 
   std::list<std::string> m_event_messages;
 
- protected: // MOOSApp output
-  std::string   m_host_ip;
-  std::string   m_host_port_db;
-  std::string   m_pshare_iroutes;
-  std::string   m_host_ip_verbose;
-  std::string   m_host_ip_all;
-  std::string   m_host_record_all;
-  
+protected: // MOOSApp output
+  std::string m_host_ip;
+  std::string m_host_port_db;
+  std::string m_pshare_iroutes;
+  std::string m_host_ip_verbose;
+  std::string m_host_ip_all;
+  std::string m_host_record_all;
+
   std::vector<std::string> m_bad_configs;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

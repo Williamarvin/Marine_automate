@@ -24,63 +24,60 @@
 #ifndef QUAD_SET_HEADER
 #define QUAD_SET_HEADER
 
-#include <vector>
-#include <string>
-#include "Quad3D.h"
-#include "IvPFunction.h"
-#include "IvPDomain.h"
 #include "FColorMap.h"
+#include "IvPDomain.h"
+#include "IvPFunction.h"
+#include "Quad3D.h"
+#include <string>
+#include <vector>
 
-class QuadSet 
-{
+class QuadSet {
 public:
   QuadSet();
   ~QuadSet() {}
 
   // Building the QuadSet
-  void   addQuad3D(Quad3D quad)         {m_quads.push_back(quad);}
-  void   setIvPDomain(IvPDomain domain) {m_ivp_domain = domain;}
-  void   resetMinMaxVals();
-  //void   markDense(bool v)              {m_dense=v;}
-  
+  void addQuad3D(Quad3D quad) { m_quads.push_back(quad); }
+  void setIvPDomain(IvPDomain domain) { m_ivp_domain = domain; }
+  void resetMinMaxVals();
+  // void   markDense(bool v)              {m_dense=v;}
+
   // Modifying the QuadSet
-  void   applyColorMap(const FColorMap&);
-  void   applyColorMap(const FColorMap&, double low, double hgh);
-  void   addQuadSet(const QuadSet&);
-  void   normalize(double, double);
-  void   interpolate(double xdelta);
-  void   applyColorIntensity(double);
-  void   applyScale(double);
-  void   applyBase(double);
-  void   setBase(double);
-  void   applyTranslation(double x, double y);
-  void   applyTranslation();
-  void   applyPolar(double, int);
-  
+  void applyColorMap(const FColorMap &);
+  void applyColorMap(const FColorMap &, double low, double hgh);
+  void addQuadSet(const QuadSet &);
+  void normalize(double, double);
+  void interpolate(double xdelta);
+  void applyColorIntensity(double);
+  void applyScale(double);
+  void applyBase(double);
+  void setBase(double);
+  void applyTranslation(double x, double y);
+  void applyTranslation();
+  void applyPolar(double, int);
+
   // Geting QuadSet Information
-  unsigned int size() const                  {return(m_quads.size());}
-  Quad3D       getQuad(unsigned int) const;
-  IvPDomain    getDomain() const             {return(m_ivp_domain);}
-  double       getMaxVal() const             {return(m_maxpt_val);}
-  double       getMinVal() const             {return(m_minpt_val);}
-  
-  double       getMaxPoint(std::string) const;
+  unsigned int size() const { return (m_quads.size()); }
+  Quad3D getQuad(unsigned int) const;
+  IvPDomain getDomain() const { return (m_ivp_domain); }
+  double getMaxVal() const { return (m_maxpt_val); }
+  double getMinVal() const { return (m_minpt_val); }
+
+  double getMaxPoint(std::string) const;
   unsigned int getMaxPointQIX(std::string) const;
-  void         print() const;
-  
+  void print() const;
+
 protected:
   std::vector<Quad3D> m_quads;
 
-  IvPDomain    m_ivp_domain;
-  bool         m_dense;
-  
+  IvPDomain m_ivp_domain;
+  bool m_dense;
+
   // Cache Min/Max values. These are evaluated once all the Quads
   // have been calculated and added.
-  double       m_maxpt_val;   // Max utilty all quad vertices
-  double       m_minpt_val;
-  unsigned int m_max_x_qix;   // Index in ivp_domain of max x value
+  double m_maxpt_val; // Max utilty all quad vertices
+  double m_minpt_val;
+  unsigned int m_max_x_qix; // Index in ivp_domain of max x value
   unsigned int m_max_y_qix;
 };
 #endif
-
-

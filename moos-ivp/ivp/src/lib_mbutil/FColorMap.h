@@ -26,39 +26,44 @@
 #ifndef FCOLOR_MAP_HEADER
 #define FCOLOR_MAP_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
-class FColorMap
-{
+class FColorMap {
 public:
-  FColorMap() {setStandardMap();}
+  FColorMap() { setStandardMap(); }
   ~FColorMap() {}
 
-  void setType(const std::string&);
+  void setType(const std::string &);
 
-  double getRVal(unsigned int i) const
-  {return((i<rval.size())?rval[i]:0);}
+  double getRVal(unsigned int i) const {
+    return ((i < rval.size()) ? rval[i] : 0);
+  }
 
-  double getGVal(unsigned int i) const
-  {return((i<gval.size())?gval[i]:0);}
-  
-  double getBVal(unsigned int i) const
-  {return((i<bval.size())?bval[i]:0);}
-  
+  double getGVal(unsigned int i) const {
+    return ((i < gval.size()) ? gval[i] : 0);
+  }
+
+  double getBVal(unsigned int i) const {
+    return ((i < bval.size()) ? bval[i] : 0);
+  }
+
   double getIRVal(double) const;
   double getIGVal(double) const;
   double getIBVal(double) const;
-  int    size() {return(rval.size());}
-    
-  void   addRGB(double r, double g, double b) 
-    {rval.push_back(r); gval.push_back(g); bval.push_back(b);}
+  int size() { return (rval.size()); }
 
-  void   setStandardMap();
-  void   setCopperMap();
-  void   setBoneMap();
+  void addRGB(double r, double g, double b) {
+    rval.push_back(r);
+    gval.push_back(g);
+    bval.push_back(b);
+  }
 
-  void   applyMidWhite(double, double);
+  void setStandardMap();
+  void setCopperMap();
+  void setBoneMap();
+
+  void applyMidWhite(double, double);
 
 protected:
   std::vector<double> rval;
@@ -66,15 +71,3 @@ protected:
   std::vector<double> bval;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

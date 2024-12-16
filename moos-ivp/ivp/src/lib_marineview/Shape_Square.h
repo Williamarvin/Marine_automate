@@ -21,27 +21,11 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-double g_squareBody[]=
-{
-   10.0,   10.0, 
-  -10.0,  10.0, 
-  -10.0,  -10.0, 
-  10.0,  -10.0, 
-  10.0,   10.0, 
+double g_squareBody[] = {
+    10.0, 10.0, -10.0, 10.0, -10.0, -10.0, 10.0, -10.0, 10.0, 10.0,
 };
 
-double       g_squareCtrX     = 0.0;
-double       g_squareCtrY     = 0.0;
+double g_squareCtrX = 0.0;
+double g_squareCtrY = 0.0;
 unsigned int g_squareBodySize = 5;
-double       g_squareWidth    = 20;
-
-
-
-
-
-
-
-
-
-
-
+double g_squareWidth = 20;

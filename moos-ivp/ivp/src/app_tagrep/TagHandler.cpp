@@ -21,24 +21,23 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
-#include "MBUtils.h"
 #include "TagHandler.h"
-#include "LogUtils.h"
 #include "FileBuffer.h"
+#include "LogUtils.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Constructor
 
-TagHandler::TagHandler()
-{
-  m_verbose       = false;
-  m_keep_blanks   = true;
+TagHandler::TagHandler() {
+  m_verbose = false;
+  m_keep_blanks = true;
   m_keep_tag_line = false;
   m_first_line_only = false;
 }
@@ -46,121 +45,113 @@ TagHandler::TagHandler()
 //--------------------------------------------------------
 // Procedure: setInputFile()
 
-bool TagHandler::setInputFile(string filename)
-{
-  if(m_input_file != "") {
-    if(m_verbose)
+bool TagHandler::setInputFile(string filename) {
+  if (m_input_file != "") {
+    if (m_verbose)
       cout << "Input file previously set, cannot set to: " << filename << endl;
-    return(false);
+    return (false);
   }
 
-  if(!okFileToRead(filename)) {
-    if(m_verbose)
+  if (!okFileToRead(filename)) {
+    if (m_verbose)
       cout << "Input file [" << filename << "] is not readable" << endl;
-    return(false);
+    return (false);
   }
-  
+
   m_input_file = filename;
-  return(true);
+  return (true);
 }
 
 //--------------------------------------------------------
 // Procedure: setTag()
 
-bool TagHandler::setTag(string tag_str)
-{
-  if(m_tag != "") {
-    if(m_verbose)
+bool TagHandler::setTag(string tag_str) {
+  if (m_tag != "") {
+    if (m_verbose)
       cout << "Tag was previously set, cannot set to: " << tag_str << endl;
-    return(false);
+    return (false);
   }
 
   tag_str = stripBlankEnds(tag_str);
   tag_str = stripChevrons(tag_str);
-  
-  m_tag = tag_str;
-  return(true);
-}
 
+  m_tag = tag_str;
+  return (true);
+}
 
 //--------------------------------------------------------
 // Procedure: setHeader()
 
-bool TagHandler::setHeader(string hdr_str)
-{
-  if(m_header != "") {
-    if(m_verbose)
+bool TagHandler::setHeader(string hdr_str) {
+  if (m_header != "") {
+    if (m_verbose)
       cout << "Header was previously set, cannot set to: " << hdr_str << endl;
-    return(false);
+    return (false);
   }
 
   m_header = hdr_str;
-  return(true);
+  return (true);
 }
-
 
 //--------------------------------------------------------
 // Procedure: handle
 
-bool TagHandler::handle()
-{
+bool TagHandler::handle() {
   // Sanity check on the tag setting
-  if(m_tag == "") {
-    if(m_verbose)
+  if (m_tag == "") {
+    if (m_verbose)
       cout << "Error: No tag provided" << endl;
-    return(false);
+    return (false);
   }
-  
+
   // Sanity check on the input file
   vector<string> slines = fileBuffer(m_input_file);
-  if(slines.size() == 0) {
-    if(m_verbose)
+  if (slines.size() == 0) {
+    if (m_verbose)
       cout << "Error: Empty or unreadble file: " << m_input_file << endl;
-    return(false);
+    return (false);
   }
 
   // Before processing, check if the header was meant to be the same
   // as the tag.
-  if(m_header == "same_as_tag")
+  if (m_header == "same_as_tag")
     m_header = m_tag;
 
   // Process the file
   bool ever_active = false;
   bool active = false;
-  for(unsigned int i=0; i<slines.size(); i++) {
+  for (unsigned int i = 0; i < slines.size(); i++) {
     string orig = slines[i];
     string line = stripBlankEnds(slines[i]);
-    if(strBegins(line, "<tag>")) {
+    if (strBegins(line, "<tag>")) {
       biteStringX(line, '>');
       string tagname = stripChevrons(line);
-      if(tagname == m_tag) {
-	if(m_keep_tag_line)
-	  cout << orig << endl;
-	active = true;
-	ever_active = true;
-	if(m_header != "")
-	  cout << m_header << "=";
-      }
-      else
-	active = false;
+      if (tagname == m_tag) {
+        if (m_keep_tag_line)
+          cout << orig << endl;
+        active = true;
+        ever_active = true;
+        if (m_header != "")
+          cout << m_header << "=";
+      } else
+        active = false;
       continue;
     }
 
-    if(!active)
+    if (!active)
       continue;
-    if((line.size() == 0) && !m_keep_blanks)
+    if ((line.size() == 0) && !m_keep_blanks)
       continue;
-    if(strBegins(line, "#"))
+    if (strBegins(line, "#"))
       continue;
 
     cout << orig << endl;
-    if(m_first_line_only)
-      return(true);
+    if (m_first_line_only)
+      return (true);
   }
 
-  if(!ever_active)
-    return(false);
-  
-  return(true);
-}
+  if (!ever_active)
+    return (false);
 
+  return (true);
+}

@@ -22,20 +22,15 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef SEGLR_UTILS_HEADER
 #define SEGLR_UTILS_HEADER
 
-#include <string>
 #include "Seglr.h"
+#include <string>
 
 std::string seglrToString(Seglr);
 
 Seglr rotateSeglr(Seglr, double degrees);
 
 #endif
-
-
-
-
-

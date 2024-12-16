@@ -26,12 +26,11 @@
 #ifndef VAR_DATA_PAIR_HEADER
 #define VAR_DATA_PAIR_HEADER
 
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
 
-class VarDataPair
-{
+class VarDataPair {
 public:
   VarDataPair();
 
@@ -39,67 +38,66 @@ public:
 
   VarDataPair(std::string varname, std::string varvalue);
 
-  VarDataPair(std::string varname, std::string varvalue,
-	      std::string typehint);
+  VarDataPair(std::string varname, std::string varvalue, std::string typehint);
 
   virtual ~VarDataPair() {}
-  
-  bool        set_var(std::string);
-  bool        set_key(std::string);
-  bool        set_ptype(std::string);
-  bool        set_sdata(std::string, bool overwrite_ok=false);
-  bool        set_ddata(double, bool overwrite_ok=false);
-  bool        set_smart_data(std::string, bool overwrite_ok=false);
 
-  void        set_post_tag(std::string s) {m_post_tag=s;}
-  void        set_dest_tag(std::string s) {m_dest_tag=s;}
-  void        set_condition(std::string s) {m_condition=s;}
-  
-  std::string get_var()   const {return(m_var);}
-  std::string get_sdata() const {return(m_sdata);}
-  double      get_ddata() const {return(m_ddata);}
-  bool        is_string() const {return(m_is_string);}
-  bool        is_quoted() const {return(m_is_quoted);}
-  std::string get_key()   const {return(m_key);}
-  std::string get_ptype() const {return(m_ptype);}
-  
-  std::string get_post_tag() const {return(m_post_tag);}
-  std::string get_dest_tag() const {return(m_dest_tag);}
-  std::string get_condition() const {return(m_condition);}
+  bool set_var(std::string);
+  bool set_key(std::string);
+  bool set_ptype(std::string);
+  bool set_sdata(std::string, bool overwrite_ok = false);
+  bool set_ddata(double, bool overwrite_ok = false);
+  bool set_smart_data(std::string, bool overwrite_ok = false);
 
-  bool        is_solo_macro() const;
-  
-  bool        valid() const;
-  int         why_invalid() const;
+  void set_post_tag(std::string s) { m_post_tag = s; }
+  void set_dest_tag(std::string s) { m_dest_tag = s; }
+  void set_condition(std::string s) { m_condition = s; }
 
-  bool        get_var_set()   const {return(m_var_set);}
-  bool        get_sdata_set() const {return(m_sdata_set);}
-  bool        get_ddata_set() const {return(m_ddata_set);}
-  bool        get_ptype_set() const {return(m_ptype_set);}
-  bool        get_key_set()   const {return(m_key_set);}
-  
+  std::string get_var() const { return (m_var); }
+  std::string get_sdata() const { return (m_sdata); }
+  double get_ddata() const { return (m_ddata); }
+  bool is_string() const { return (m_is_string); }
+  bool is_quoted() const { return (m_is_quoted); }
+  std::string get_key() const { return (m_key); }
+  std::string get_ptype() const { return (m_ptype); }
+
+  std::string get_post_tag() const { return (m_post_tag); }
+  std::string get_dest_tag() const { return (m_dest_tag); }
+  std::string get_condition() const { return (m_condition); }
+
+  bool is_solo_macro() const;
+
+  bool valid() const;
+  int why_invalid() const;
+
+  bool get_var_set() const { return (m_var_set); }
+  bool get_sdata_set() const { return (m_sdata_set); }
+  bool get_ddata_set() const { return (m_ddata_set); }
+  bool get_ptype_set() const { return (m_ptype_set); }
+  bool get_key_set() const { return (m_key_set); }
+
   std::string getPrintable() const;
 
   std::vector<std::string> getMacroVector() const;
-  std::set<std::string>    getMacroSet() const;
-  
+  std::set<std::string> getMacroSet() const;
+
 protected:
   std::string m_var;
   std::string m_sdata;
-  double      m_ddata;
-  bool        m_is_string;
-  bool        m_is_quoted;
+  double m_ddata;
+  bool m_is_string;
+  bool m_is_quoted;
   std::string m_key;
   std::string m_ptype;
-  
-  bool        m_var_set;
-  bool        m_key_set;
-  bool        m_ptype_set;
-  bool        m_ddata_set;
-  bool        m_sdata_set;
+
+  bool m_var_set;
+  bool m_key_set;
+  bool m_ptype_set;
+  bool m_ddata_set;
+  bool m_sdata_set;
 
   // New in Release 22.X to support range related postings
-  std::string m_post_tag;   
+  std::string m_post_tag;
   // New in Release 22.X to support off node postings
   std::string m_dest_tag;
 
@@ -109,14 +107,4 @@ protected:
 
 VarDataPair stringToVarDataPair(std::string);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

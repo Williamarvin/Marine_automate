@@ -26,28 +26,14 @@
 
 #include <string>
 
-class CommsCatalog
-{
- public:
+class CommsCatalog {
+public:
   CommsCatalog();
   ~CommsCatalog() {}
 
   void addEntry(double, double, double, unsigned int);
-  
- protected:
 
-  
-  
+protected:
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

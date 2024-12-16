@@ -26,17 +26,15 @@
 #ifndef BUNDLE_OUT_HEADER
 #define BUNDLE_OUT_HEADER
 
-#include <string>
 #include <list>
 #include <set>
+#include <string>
 #include <vector>
 
-void bundle_cout(const std::list<std::string>&);
+void bundle_cout(const std::list<std::string> &);
 
-void bundle_cout(const std::set<std::string>&);
+void bundle_cout(const std::set<std::string> &);
 
-void bundle_cout(const std::vector<std::string>&);
+void bundle_cout(const std::vector<std::string> &);
 
 #endif
-
-

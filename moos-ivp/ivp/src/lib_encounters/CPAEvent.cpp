@@ -21,72 +21,69 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "CPAEvent.h"
 #include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-CPAEvent::CPAEvent()
-{
+CPAEvent::CPAEvent() {
   m_cpa = 0;
   m_eff = 0;
-  m_x   = 0;
-  m_y   = 0;
-  m_id  = -1;
+  m_x = 0;
+  m_y = 0;
+  m_id = -1;
 
   m_alpha = -1;
-  m_beta  = -1;
+  m_beta = -1;
 }
 
 //---------------------------------------------------------
 // Constructor
 
-CPAEvent::CPAEvent(string v1, string v2, double cpa)
-{
+CPAEvent::CPAEvent(string v1, string v2, double cpa) {
   m_vname1 = v1;
   m_vname2 = v2;
 
   m_cpa = cpa;
   m_eff = 0;
-  m_x   = 0;
-  m_y   = 0;
-  m_id  = -1;
+  m_x = 0;
+  m_y = 0;
+  m_id = -1;
 
   m_alpha = -1;
-  m_beta  = -1;
+  m_beta = -1;
 }
 
 //---------------------------------------------------------
 // Constructor (deserialize)
 
-CPAEvent::CPAEvent(string spec)
-{
+CPAEvent::CPAEvent(string spec) {
   vector<string> svector = parseString(spec, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
 
-    if(param == "v1")
+    if (param == "v1")
       m_vname1 = value;
-    else if(param == "v2")
+    else if (param == "v2")
       m_vname2 = value;
-    else if(param == "cpa")
+    else if (param == "cpa")
       m_cpa = atof(value.c_str());
-    else if(param == "eff")
+    else if (param == "eff")
       m_eff = atof(value.c_str());
-    else if(param == "x")
+    else if (param == "x")
       m_x = atof(value.c_str());
-    else if(param == "y")
+    else if (param == "y")
       m_y = atof(value.c_str());
-    else if(param == "id")
+    else if (param == "id")
       m_id = atoi(value.c_str());
-    else if(param == "alpha")
+    else if (param == "alpha")
       m_alpha = atof(value.c_str());
-    else if(param == "beta")
+    else if (param == "beta")
       m_beta = atof(value.c_str());
   }
 }
@@ -94,32 +91,25 @@ CPAEvent::CPAEvent(string spec)
 //---------------------------------------------------------
 // Procedure: getSpec()
 
-string CPAEvent::getSpec() const
-{
-  string str = "cpa=" + doubleToStringX(m_cpa,2);
-  if((m_x != 0) || (m_y != 0)) {
-    str += ",x=" + doubleToStringX(m_x,2);
-    str += ",y=" + doubleToStringX(m_y,2);
+string CPAEvent::getSpec() const {
+  string str = "cpa=" + doubleToStringX(m_cpa, 2);
+  if ((m_x != 0) || (m_y != 0)) {
+    str += ",x=" + doubleToStringX(m_x, 2);
+    str += ",y=" + doubleToStringX(m_y, 2);
   }
-  if(m_vname1 != "")
+  if (m_vname1 != "")
     str += ",v1=" + m_vname1;
-  if(m_vname2 != "")
+  if (m_vname2 != "")
     str += ",v2=" + m_vname2;
-  if(m_eff != 0)
-    str += ",eff=" + doubleToStringX(m_eff,2);
-  
-  if(m_id != -1)
+  if (m_eff != 0)
+    str += ",eff=" + doubleToStringX(m_eff, 2);
+
+  if (m_id != -1)
     str += ",id=" + uintToString(m_id);
-  if(m_alpha > 0)
-    str += ",alpha=" + doubleToStringX(m_alpha,3);
-  if(m_alpha > 0)
-    str += ",beta=" + doubleToStringX(m_beta,3);
+  if (m_alpha > 0)
+    str += ",alpha=" + doubleToStringX(m_alpha, 3);
+  if (m_alpha > 0)
+    str += ",beta=" + doubleToStringX(m_beta, 3);
 
-  return(str);
+  return (str);
 }
-
-
-
-
-
-

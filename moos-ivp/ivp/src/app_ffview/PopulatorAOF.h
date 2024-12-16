@@ -24,42 +24,29 @@
 #ifndef POPULATOR_AOF_HEADER
 #define POPULATOR_AOF_HEADER
 
-#include <string>
-#include "IvPDomain.h"
 #include "AOF.h"
+#include "IvPDomain.h"
+#include <string>
 
-class PopulatorAOF
-{
+class PopulatorAOF {
 public:
-  PopulatorAOF()  {define_mode=0; aof=0;}
+  PopulatorAOF() {
+    define_mode = 0;
+    aof = 0;
+  }
   ~PopulatorAOF() {}
 
-  AOF* populate(std::string filename);
+  AOF *populate(std::string filename);
 
 protected:
   bool handleLine(std::string);
   bool handleEntry(std::string, std::string, std::string);
 
   bool buildDomain(std::string);
-  
+
 protected:
-  int        define_mode;
-  AOF*       aof;
-  IvPDomain  domain;
+  int define_mode;
+  AOF *aof;
+  IvPDomain domain;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

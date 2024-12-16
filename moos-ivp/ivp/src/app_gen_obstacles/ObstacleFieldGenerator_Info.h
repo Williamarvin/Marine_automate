@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef OBSTACLE_FIELD_GENERATOR_INFO_HEADER
 #define OBSTACLE_FIELD_GENERATOR_INFO_HEADER
 
@@ -29,4 +29,3 @@ void showHelpAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-

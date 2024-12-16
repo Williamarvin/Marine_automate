@@ -21,25 +21,23 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include "MBUtils.h"
 #include "BehaviorRecord.h"
+#include "MBUtils.h"
 
 using namespace std;
 
 //------------------------------------------------------------
 // Constructor
 
-BehaviorRecord::BehaviorRecord()
-{
-  m_time_stamp     = 0;
+BehaviorRecord::BehaviorRecord() {
+  m_time_stamp = 0;
   m_set_time_stamp = false;
 }
 
 //------------------------------------------------------------
 // Procedure: setTimeStamp
 
-void BehaviorRecord::setTimeStamp(double v)
-{
+void BehaviorRecord::setTimeStamp(double v) {
   m_time_stamp = v;
   m_set_time_stamp = true;
 }
@@ -47,41 +45,29 @@ void BehaviorRecord::setTimeStamp(double v)
 //------------------------------------------------------------
 // Procedure: getSummary()
 
-string BehaviorRecord::getSummary(double tstamp) const
-{
+string BehaviorRecord::getSummary(double tstamp) const {
   string summary = m_bhv_name + " ";
 
-  if(m_set_time_stamp) {
-    if(m_time_stamp <= 0)
+  if (m_set_time_stamp) {
+    if (m_time_stamp <= 0)
       summary += "[always]";
     else {
       double elapsed_time = m_time_stamp;
-      if(tstamp >= m_time_stamp)
-	elapsed_time = (tstamp - m_time_stamp);
+      if (tstamp >= m_time_stamp)
+        elapsed_time = (tstamp - m_time_stamp);
       summary += "[" + doubleToString(elapsed_time, 2) + "] ";
     }
-  }
-  else
+  } else
     summary += "[always]";
-  
-  if(m_priority != "")
+
+  if (m_priority != "")
     summary += "(pwt=" + m_priority + ") ";
-  if(m_pieces != "")
+  if (m_pieces != "")
     summary += "(pcs=" + m_pieces + ") ";
-  if(m_time_cpu != "")
+  if (m_time_cpu != "")
     summary += "(cpu=" + m_time_cpu + ") ";
-  if(m_updates != "")
+  if (m_updates != "")
     summary += "(upd=" + m_updates + ")";
 
-  return(summary);
+  return (summary);
 }
-
-
-
-
-
-
-
-
-
-

@@ -24,42 +24,32 @@
 #ifndef ALOG_SCANNER_HEADER
 #define ALOG_SCANNER_HEADER
 
-#include <vector>
+#include "ScanReport.h"
 #include <map>
 #include <string>
-#include "ScanReport.h"
+#include <vector>
 
-class ALogScanner
-{
- public:
-  ALogScanner() {m_file=0; m_use_full_source=true; m_verbose=true;}
+class ALogScanner {
+public:
+  ALogScanner() {
+    m_file = 0;
+    m_use_full_source = true;
+    m_verbose = true;
+  }
   ~ALogScanner() {}
 
-  bool       openALogFile(std::string);
+  bool openALogFile(std::string);
   ScanReport scan();
   ScanReport scanRateOnly();
 
-  void  setUseFullSource(bool v) {m_use_full_source=v;}
-  void  setVerbose(bool v=true)  {m_verbose=v;}
-  
- private:
-  FILE *m_file;
-  bool  m_use_full_source;
+  void setUseFullSource(bool v) { m_use_full_source = v; }
+  void setVerbose(bool v = true) { m_verbose = v; }
 
-  bool  m_verbose; 
-  
+private:
+  FILE *m_file;
+  bool m_use_full_source;
+
+  bool m_verbose;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
-
+#endif

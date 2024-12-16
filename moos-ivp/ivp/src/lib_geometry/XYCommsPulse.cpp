@@ -23,24 +23,20 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "XYCommsPulse.h"
-#include "GeomUtils.h"
-#include "ColorPack.h"
 #include "AngleUtils.h"
+#include "ColorPack.h"
+#include "GeomUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Constructor
 
-XYCommsPulse::XYCommsPulse()
-{
-  initialize();
-}
+XYCommsPulse::XYCommsPulse() { initialize(); }
 
-XYCommsPulse::XYCommsPulse(double sx, double sy, double tx, double ty)
-{
+XYCommsPulse::XYCommsPulse(double sx, double sy, double tx, double ty) {
   initialize();
   m_sx = sx;
   m_sy = sy;
@@ -56,17 +52,16 @@ XYCommsPulse::XYCommsPulse(double sx, double sy, double tx, double ty)
 //-------------------------------------------------------------
 // Procedure: initialize
 
-void XYCommsPulse::initialize()
-{
+void XYCommsPulse::initialize() {
   // Superclass member variables
   set_edge_size(0);
   set_color("fill", "green");
-  
+
   // Local member variables
-  m_sx    = 0;
-  m_sy    = 0;
-  m_tx    = 0;
-  m_ty    = 0;
+  m_sx = 0;
+  m_sy = 0;
+  m_tx = 0;
+  m_ty = 0;
   m_beam_width = 10;
 
   m_sx_set = false;
@@ -81,15 +76,14 @@ void XYCommsPulse::initialize()
 //-------------------------------------------------------------
 // Procedure: get_triangle()
 
-vector<double> XYCommsPulse::get_triangle(double timestamp) const
-{
+vector<double> XYCommsPulse::get_triangle(double timestamp) const {
   vector<double> vpts;
-  if(!m_sx_set || !m_sy_set || !m_tx_set || !m_ty_set)
-    return(vpts);
+  if (!m_sx_set || !m_sy_set || !m_tx_set || !m_ty_set)
+    return (vpts);
 
   double elapsed_time = timestamp - m_time;
-  if((elapsed_time < 0) || (elapsed_time > m_duration))
-    return(vpts);
+  if ((elapsed_time < 0) || (elapsed_time > m_duration))
+    return (vpts);
 
   // First point is the source
   vpts.push_back(m_sx);
@@ -98,36 +92,34 @@ vector<double> XYCommsPulse::get_triangle(double timestamp) const
   // Calculate the 2nd and 3rd points
   double angle = relAng(m_sx, m_sy, m_tx, m_ty);
   double ax, ay, angle_a = angle360(angle + 90);
-  projectPoint(angle_a, (m_beam_width/2), m_tx, m_ty, ax, ay);
+  projectPoint(angle_a, (m_beam_width / 2), m_tx, m_ty, ax, ay);
   vpts.push_back(ax);
   vpts.push_back(ay);
 
   double bx, by, angle_b = angle360(angle + 270);
-  projectPoint(angle_b, (m_beam_width/2), m_tx, m_ty, bx, by);
+  projectPoint(angle_b, (m_beam_width / 2), m_tx, m_ty, bx, by);
   vpts.push_back(bx);
   vpts.push_back(by);
 
-  return(vpts);
+  return (vpts);
 }
 
 //-------------------------------------------------------------
 // Procedure: set_beam_width()
 
-void XYCommsPulse::set_beam_width(double val)
-{
+void XYCommsPulse::set_beam_width(double val) {
   m_beam_width = val;
-  if(m_beam_width < 0)
+  if (m_beam_width < 0)
     m_beam_width = 0;
 }
 
 //-------------------------------------------------------------
 // Procedure: set_fill()
 
-void XYCommsPulse::set_fill(double val)
-{
-  if(val < 0)
+void XYCommsPulse::set_fill(double val) {
+  if (val < 0)
     val = 0;
-  if(val > 1)
+  if (val > 1)
     val = 1;
 
   m_fill = val;
@@ -136,46 +128,39 @@ void XYCommsPulse::set_fill(double val)
 //-------------------------------------------------------------
 // Procedure: set_pulse_type()
 
-void XYCommsPulse::set_pulse_type(string str)
-{
-  m_pulse_type = str;
-}
+void XYCommsPulse::set_pulse_type(string str) { m_pulse_type = str; }
 
 //-------------------------------------------------------------
 // Procedure: get_fill()
 
-double XYCommsPulse::get_fill(double timestamp) const
-{
+double XYCommsPulse::get_fill(double timestamp) const {
   double elapsed_time = timestamp - m_time;
 
-  if(elapsed_time <= 0)
-    return(m_fill);
-  if(elapsed_time >= m_duration)
-    return(0);
+  if (elapsed_time <= 0)
+    return (m_fill);
+  if (elapsed_time >= m_duration)
+    return (0);
 
   double pct = 1.0;
-  if(m_duration > 0) 
-    pct = (1-(elapsed_time / m_duration));
-  double rval = pct  * m_fill;
-  return(rval);
+  if (m_duration > 0)
+    pct = (1 - (elapsed_time / m_duration));
+  double rval = pct * m_fill;
+  return (rval);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: valid()
 
-bool XYCommsPulse::valid() const
-{
-  return(m_sx_set && m_sy_set && m_tx_set && m_ty_set);
+bool XYCommsPulse::valid() const {
+  return (m_sx_set && m_sy_set && m_tx_set && m_ty_set);
 }
 
 //-------------------------------------------------------------
 // Procedure: get_spec()
 
-string XYCommsPulse::get_spec(string param) const
-{
+string XYCommsPulse::get_spec(string param) const {
   string spec = "sx=";
-  spec += doubleToStringX(m_sx); 
+  spec += doubleToStringX(m_sx);
   spec += ",sy=";
   spec += doubleToStringX(m_sy);
   spec += ",tx=";
@@ -183,27 +168,16 @@ string XYCommsPulse::get_spec(string param) const
   spec += ",ty=";
   spec += doubleToStringX(m_ty);
   spec += ",beam_width=";
-  spec += doubleToStringX(m_beam_width); 
+  spec += doubleToStringX(m_beam_width);
   spec += ",fill=";
-  spec += doubleToStringX(m_fill); 
+  spec += doubleToStringX(m_fill);
 
-  if(m_pulse_type != "")
+  if (m_pulse_type != "")
     spec += ",ptype=" + m_pulse_type;
-  
+
   string obj_spec = XYObject::get_spec(param);
-  if(obj_spec != "")
+  if (obj_spec != "")
     spec += ("," + obj_spec);
-  
-  return(spec);
+
+  return (spec);
 }
-
-
-
-
-
-
-
-
-
-
-

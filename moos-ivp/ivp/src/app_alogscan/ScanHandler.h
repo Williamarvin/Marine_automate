@@ -26,43 +26,31 @@
 
 #include "ScanReport.h"
 
-class ScanHandler
-{
- public:
+class ScanHandler {
+public:
   ScanHandler();
   ~ScanHandler() {}
 
-  bool setParam(const std::string&, const std::string&);
-  bool handle(const std::string& alogfile, bool rate_only=false);
+  bool setParam(const std::string &, const std::string &);
+  bool handle(const std::string &alogfile, bool rate_only = false);
 
   void varStatReport();
   void appStatReport();
   void dataRateReport();
   void loglistReport();
-  
+
   std::string procColor(std::string proc_name);
 
- protected:
-
+protected:
   std::string m_sort_style;
 
-  ScanReport  m_report;
-  bool        m_use_colors;
-  bool        m_use_full_source;
-  
+  ScanReport m_report;
+  bool m_use_colors;
+  bool m_use_full_source;
+
   std::map<std::string, std::string> m_pcolor_map;
-  std::vector<std::string>           m_pcolors;
-  unsigned int                       m_next_color_ix;
+  std::vector<std::string> m_pcolors;
+  unsigned int m_next_color_ix;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

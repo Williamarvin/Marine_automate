@@ -24,51 +24,47 @@
 #ifndef COMMAND_FOLIO_HEADER
 #define COMMAND_FOLIO_HEADER
 
+#include "CommandItem.h"
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
-#include "CommandItem.h"
 
-class CommandFolio
-{
- public:
+class CommandFolio {
+public:
   CommandFolio();
   virtual ~CommandFolio() {}
 
   // Setters
   bool addCmdItem(CommandItem);
   void limitedVNames(std::set<std::string>);
-  
+
   // Getters
   CommandItem getCmdItem(unsigned int) const;
 
   std::vector<CommandItem> getAllCmdItems() const;
-  
-  std::set<std::string> getLimitedVNames() const {return(m_set_limited_vnames);}
 
-  bool hasLimitedVNames() const {return(m_limited_vnames);}
+  std::set<std::string> getLimitedVNames() const {
+    return (m_set_limited_vnames);
+  }
+
+  bool hasLimitedVNames() const { return (m_limited_vnames); }
 
   std::string getCmdColor(std::string label) const;
-  
+
   // Analyzers
-  unsigned int size() const {return(m_cmd_items.size());}
+  unsigned int size() const { return (m_cmd_items.size()); }
 
   std::set<std::string> getAllReceivers() const;
   std::set<std::string> getAllLabels(std::string vname) const;
 
   void print() const;
-  
- private:
-  std::vector<CommandItem>  m_cmd_items;
+
+private:
+  std::vector<CommandItem> m_cmd_items;
 
   std::set<std::string> m_set_limited_vnames;
 
   bool m_limited_vnames;
 };
 
-#endif 
-
-
-
-
-
+#endif

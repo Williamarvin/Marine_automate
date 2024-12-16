@@ -22,24 +22,14 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_CIRCLE_HEADER
 #define XY_FORMAT_UTILS_CIRCLE_HEADER
 
-#include <string>
 #include "XYCircle.h"
+#include <string>
 
-// Create an XYCircle from a string specification. 
+// Create an XYCircle from a string specification.
 XYCircle string2Circle(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

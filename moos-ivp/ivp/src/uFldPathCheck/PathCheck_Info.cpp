@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
+#include "PathCheck_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "PathCheck_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run in a shoreside community. Takes node reports    ");
@@ -45,8 +44,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("==========================================================      ");
   blu("Usage: uFldPathCheck file.moos [OPTIONS]                        ");
@@ -55,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldPathCheck with the given                       ");
   blk("      process name rather than uFldPathCheck.                   ");
   mag("  --example, -e                                                 ");
@@ -75,10 +73,9 @@ void showHelpAndExit()
 }
 
 //----------------------------------------------------------------
-// Procedure: showExampleConfig                                  
+// Procedure: showExampleConfig
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldPathCheck Example MOOS Configuration                        ");
@@ -97,8 +94,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldPathCheck INTERFACE                                         ");
@@ -128,18 +124,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldPathCheck", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

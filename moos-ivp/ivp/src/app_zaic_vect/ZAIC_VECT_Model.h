@@ -24,40 +24,37 @@
 #ifndef ZAIC_VECT_MODEL_HEADER
 #define ZAIC_VECT_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "ZAIC_Model.h"
 #include "ZAIC_Vector.h"
+#include <string>
 
-class ZAIC_VECT_Model : public ZAIC_Model
-{
- public:
-  ZAIC_VECT_Model()  {m_zaic_vect=0; m_tolerance=0;}
-  ~ZAIC_VECT_Model() {};
+class ZAIC_VECT_Model : public ZAIC_Model {
+public:
+  ZAIC_VECT_Model() {
+    m_zaic_vect = 0;
+    m_tolerance = 0;
+  }
+  ~ZAIC_VECT_Model(){};
 
- public: // Virtual function overloaded
+public: // Virtual function overloaded
   IvPFunction *getIvPFunction();
 
   // Seters
-  void setZAIC(ZAIC_Vector*);
+  void setZAIC(ZAIC_Vector *);
   void setTolerance(double);
   void modTolerance(double);
-  
+
   // Getters
   double getMinUtil();
   double getMaxUtil();
   double getTolerance();
 
   unsigned int getTotalPieces();
-  
- protected:
-  ZAIC_Vector* m_zaic_vect;
+
+protected:
+  ZAIC_Vector *m_zaic_vect;
 
   double m_tolerance;
 };
-#endif 
-
-
-
-
-
+#endif

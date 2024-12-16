@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "GenericSensor_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                        ");
   blk("------------------------------------                             ");
   blk("  Typically run in a shoreside community. Configured with a set  ");
@@ -53,8 +52,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelp
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                          ");
   blu("==========================================================");
   blu("Usage: uFldGenericSensor file.moos [OPTIONS]              ");
@@ -63,7 +61,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                          ");
   blk("Options:                                                  ");
-  mag("  --alias","=<ProcessName>                                ");
+  mag("  --alias", "=<ProcessName>                                ");
   blk("      Launch uFldGenericSensor with the given process     ");
   blk("      name rather than uFldGenericSensor.                 ");
   mag("  --example, -e                                           ");
@@ -74,7 +72,7 @@ void showHelpAndExit()
   blk("      Display MOOS publications and subscriptions.        ");
   mag("  --version,-v                                            ");
   blk("      Display release version of uFldGenericSensor.       ");
-  mag("  --verbose","=<setting>                                  ");
+  mag("  --verbose", "=<setting>                                  ");
   blk("      Set verbosity. true or false (default)              ");
   blk("                                                          ");
   blk("Note: If argv[2] does not otherwise match a known option, ");
@@ -84,12 +82,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldGenericSensor Example MOOS Configuration                    ");
   blu("=============================================================== ");
@@ -120,12 +116,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldGenericSensor INTERFACE                                      ");
@@ -166,18 +160,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldGenericSensor", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

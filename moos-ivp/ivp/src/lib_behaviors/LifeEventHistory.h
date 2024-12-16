@@ -26,32 +26,30 @@
 #ifndef LIFE_EVENT_HISTORY_HEADER
 #define LIFE_EVENT_HISTORY_HEADER
 
+#include "LifeEvent.h"
 #include <string>
 #include <vector>
-#include "LifeEvent.h"
 
-class LifeEventHistory
-{
+class LifeEventHistory {
 public:
   LifeEventHistory();
   ~LifeEventHistory() {}
-  
-  void addLifeEvent(const std::string& event);
 
-  bool isStale() {return(m_stale_report);}
+  void addLifeEvent(const std::string &event);
 
-  void setBannerActive(bool v) {m_banner_active=v;}
-  void setColorActive(bool v)  {m_color_active=v;}
-  void setSeedActive(bool v)   {m_seed_active=v;}
+  bool isStale() { return (m_stale_report); }
 
-  std::vector<std::string> getReport(std::string mode="normal");
+  void setBannerActive(bool v) { m_banner_active = v; }
+  void setColorActive(bool v) { m_color_active = v; }
+  void setSeedActive(bool v) { m_seed_active = v; }
 
-protected:
-  void addLifeEvent(const LifeEvent& event);
+  std::vector<std::string> getReport(std::string mode = "normal");
 
 protected:
+  void addLifeEvent(const LifeEvent &event);
 
-  std::vector<LifeEvent>   m_life_events;
+protected:
+  std::vector<LifeEvent> m_life_events;
   std::vector<std::string> m_life_events_raw;
   std::vector<std::string> m_history_report;
 
@@ -69,14 +67,4 @@ protected:
   unsigned int m_max_len_seed;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

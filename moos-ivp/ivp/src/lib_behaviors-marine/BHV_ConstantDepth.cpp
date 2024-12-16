@@ -25,22 +25,20 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_ConstantDepth.h"
 #include "BuildUtils.h"
 #include "MBUtils.h"
 #include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_ConstantDepth::BHV_ConstantDepth(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_ConstantDepth::BHV_ConstantDepth(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "bhv_constantdepth");
 
   m_domain = subDomain(m_domain, "depth");
@@ -48,65 +46,63 @@ BHV_ConstantDepth::BHV_ConstantDepth(IvPDomain gdomain) :
   m_desired_depth = 0;
 
   // Default values changed by HS 110530
-  m_peakwidth     = 3;
-  m_basewidth     = 100;
-  m_summitdelta   = 50;
-  m_osd           = 0;
+  m_peakwidth = 3;
+  m_basewidth = 100;
+  m_summitdelta = 50;
+  m_osd = 0;
 
   // The default duration at the IvPBehavior level is "-1", which
   // indicates no duration applied to the behavior by default. By
   // setting to zero here, we force the user to provide a duration
   // value otherwise it will timeout immediately.
-  m_duration      = 0;
+  m_duration = 0;
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_ConstantDepth::setParam(string param, string val) 
-{
-  if(IvPBehavior::setParam(param, val))
-    return(true);
+bool BHV_ConstantDepth::setParam(string param, string val) {
+  if (IvPBehavior::setParam(param, val))
+    return (true);
 
   double dval = atof(val.c_str());
 
-  if((param == "depth") && isNumber(val)) {
+  if ((param == "depth") && isNumber(val)) {
     m_desired_depth = vclip_min(dval, 0);
-    return(true);
+    return (true);
   }
 
-  else if((param == "peakwidth") && isNumber(val)) {
+  else if ((param == "peakwidth") && isNumber(val)) {
     m_peakwidth = vclip_min(dval, 0);
-    return(true);
-  }
-  
-  else if((param == "summitdelta") && isNumber(val)) {
-    m_summitdelta = vclip(dval, 0, 100);
-    return(true);
-  }
-  
-  else if((param == "basewidth") && isNumber(val)) {
-    m_basewidth = vclip_min(dval, 0);
-    return(true);
+    return (true);
   }
 
-  else if((param == "depth_mismatch_var") && !strContainsWhite(val)) {
-    m_depth_mismatch_var = val;
-    return(true);
+  else if ((param == "summitdelta") && isNumber(val)) {
+    m_summitdelta = vclip(dval, 0, 100);
+    return (true);
   }
-  
-  return(false);
+
+  else if ((param == "basewidth") && isNumber(val)) {
+    m_basewidth = vclip_min(dval, 0);
+    return (true);
+  }
+
+  else if ((param == "depth_mismatch_var") && !strContainsWhite(val)) {
+    m_depth_mismatch_var = val;
+    return (true);
+  }
+
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_ConstantDepth::onRunState() 
-{
+IvPFunction *BHV_ConstantDepth::onRunState() {
   updateInfoIn();
-  if(!m_domain.hasDomain("depth")) {
+  if (!m_domain.hasDomain("depth")) {
     postEMessage("No 'depth' variable in the helm domain");
-    return(0);
+    return (0);
   }
 
   ZAIC_PEAK zaic(m_domain, "depth");
@@ -116,16 +112,16 @@ IvPFunction *BHV_ConstantDepth::onRunState()
   zaic.setSummitDelta(m_summitdelta);
 
   IvPFunction *ipf = zaic.extractIvPFunction();
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
-  else 
+  else
     postEMessage("Unable to generate constant-depth IvP function");
 
   string zaic_warnings = zaic.getWarnings();
-  if(zaic_warnings != "")
+  if (zaic_warnings != "")
     postWMessage(zaic_warnings);
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
@@ -135,32 +131,22 @@ IvPFunction *BHV_ConstantDepth::onRunState()
 //   Returns: true if no relevant info is missing from the info_buffer.
 //            false otherwise.
 
-bool BHV_ConstantDepth::updateInfoIn()
-{
+bool BHV_ConstantDepth::updateInfoIn() {
   bool ok;
   m_osd = getBufferDoubleVal("NAV_DEPTH", ok);
 
   // Should get ownship information from the InfoBuffer
-  if(!ok) {
-    postWMessage("No ownship DEPTH info in info_buffer.");  
-    return(false);
+  if (!ok) {
+    postWMessage("No ownship DEPTH info in info_buffer.");
+    return (false);
   }
-  
+
   double delta = m_osd - m_desired_depth;
-  if(delta < 0)
-    delta *= -1; 
+  if (delta < 0)
+    delta *= -1;
 
-  if(m_depth_mismatch_var != "")
+  if (m_depth_mismatch_var != "")
     postMessage(m_depth_mismatch_var, delta);
-  
-  return(true);
+
+  return (true);
 }
-
-
-
-
-
-
-
-
-

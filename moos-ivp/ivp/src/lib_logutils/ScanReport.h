@@ -24,110 +24,114 @@
 #ifndef ALOG_SCAN_REPORT_HEADER
 #define ALOG_SCAN_REPORT_HEADER
 
-#include <vector>
+#include "ALogEntry.h"
 #include <map>
 #include <string>
-#include "ALogEntry.h"
+#include <vector>
 
-class ScanReport
-{
- public:
-  ScanReport() {m_lines=0; m_total_chars=0; m_time_min=0; m_time_max=0;}
+class ScanReport {
+public:
+  ScanReport() {
+    m_lines = 0;
+    m_total_chars = 0;
+    m_time_min = 0;
+    m_time_max = 0;
+  }
 
   ~ScanReport() {}
-  
-  void addLine(double timestamp, const std::string& varname, 
-	       const std::string& source, const std::string &value);
 
-  void addLineRateOnly(const ALogEntry& entry);
+  void addLine(double timestamp, const std::string &varname,
+               const std::string &source, const std::string &value);
 
-  bool         containsVar(const std::string& varname);
-  int          getVarIndex(const std::string& varname);
-  unsigned int size() {return(m_var_names.size());}
+  void addLineRateOnly(const ALogEntry &entry);
+
+  bool containsVar(const std::string &varname);
+  int getVarIndex(const std::string &varname);
+  unsigned int size() { return (m_var_names.size()); }
 
   std::string getVarName(unsigned int index);
   std::string getVarSources(unsigned int index);
-  std::string getVarSources(const std::string& varname)
-    {return(getVarSources(getVarIndex(varname)));}
+  std::string getVarSources(const std::string &varname) {
+    return (getVarSources(getVarIndex(varname)));
+  }
 
   double getVarFirstTime(unsigned int index);
   double getVarLastTime(unsigned int index);
 
   double getDataRate() const;
-  
-  double getVarFirstTime(const std::string& varname)
-    {return(getVarFirstTime(getVarIndex(varname)));}
-  double getVarLastTime(const std::string& varname)
-    {return(getVarLastTime(getVarIndex(varname)));}
-  
+
+  double getVarFirstTime(const std::string &varname) {
+    return (getVarFirstTime(getVarIndex(varname)));
+  }
+  double getVarLastTime(const std::string &varname) {
+    return (getVarLastTime(getVarIndex(varname)));
+  }
+
   unsigned int getVarCount(unsigned int index);
   unsigned int getVarChars(unsigned int index);
 
-  unsigned int getVarCount(const std::string& varname)
-    {return(getVarCount(getVarIndex(varname)));}
-  unsigned int getVarChars(const std::string& varname)
-    {return(getVarChars(getVarIndex(varname)));}
+  unsigned int getVarCount(const std::string &varname) {
+    return (getVarCount(getVarIndex(varname)));
+  }
+  unsigned int getVarChars(const std::string &varname) {
+    return (getVarChars(getVarIndex(varname)));
+  }
 
   // Max values are useful for making column format decisions
   unsigned int getMaxLines();
   unsigned int getMaxChars();
   unsigned int getVarNameMaxLength();
-  double       getMinStartTime();
-  double       getMaxStartTime();
-  double       getMaxStopTime();
-    
+  double getMinStartTime();
+  double getMaxStartTime();
+  double getMaxStopTime();
+
   // Sorting routines for better user output options
-  void         sort(const std::string& style);
-  void         sortByVarName(bool ascending=true);
-  void         sortBySourceName(bool ascending=true);
-  void         sortByChars(bool ascending=true);
-  void         sortByLines(bool ascending=true);
-  void         sortByStartTime(bool ascending=true);
-  void         sortByStopTime(bool ascending=true);
+  void sort(const std::string &style);
+  void sortByVarName(bool ascending = true);
+  void sortBySourceName(bool ascending = true);
+  void sortByChars(bool ascending = true);
+  void sortByLines(bool ascending = true);
+  void sortByStartTime(bool ascending = true);
+  void sortByStopTime(bool ascending = true);
 
   // Routines for building and retrieving app stat summary info
   void fillAppStats();
-  std::vector<std::string> getAllSources()  {return(m_all_sources);}
-  std::vector<std::string> getAllVarNames() {return(m_var_names);}
-  double getLinesPctBySource(std::string s) {return(m_app_lines_pct[s]);}
-  double getCharsPctBySource(std::string s) {return(m_app_chars_pct[s]);}
+  std::vector<std::string> getAllSources() { return (m_all_sources); }
+  std::vector<std::string> getAllVarNames() { return (m_var_names); }
+  double getLinesPctBySource(std::string s) { return (m_app_lines_pct[s]); }
+  double getCharsPctBySource(std::string s) { return (m_app_chars_pct[s]); }
 
-  unsigned int getLinesBySource(std::string s)  {return(m_app_lines[s]);}
-  unsigned int getCharsBySource(std::string s)  {return(m_app_chars[s]);}
+  unsigned int getLinesBySource(std::string s) { return (m_app_lines[s]); }
+  unsigned int getCharsBySource(std::string s) { return (m_app_chars[s]); }
 
- protected:
+protected:
   void switchItems(unsigned int, unsigned int);
 
- private:
-  std::vector<std::string>  m_var_names;
-  std::vector<std::string>  m_var_sources;
-  std::vector<double>       m_var_first;
-  std::vector<double>       m_var_last;
+private:
+  std::vector<std::string> m_var_names;
+  std::vector<std::string> m_var_sources;
+  std::vector<double> m_var_first;
+  std::vector<double> m_var_last;
   std::vector<unsigned int> m_var_lines;
   std::vector<unsigned int> m_var_chars;
 
   // A convenience map for finding the var index in above vectors
-  std::map<std::string, int>  m_vmap;
+  std::map<std::string, int> m_vmap;
 
   // Application statistics  - Done on optionsl Pass #2A
-  std::map<std::string, unsigned int>  m_app_lines;
-  std::map<std::string, unsigned int>  m_app_chars;
-  std::map<std::string, unsigned int>  m_app_vars;
-  
+  std::map<std::string, unsigned int> m_app_lines;
+  std::map<std::string, unsigned int> m_app_chars;
+  std::map<std::string, unsigned int> m_app_vars;
+
   // Application statistics  - Done on optionsl Pass #2B
-  std::map<std::string, double>  m_app_lines_pct;
-  std::map<std::string, double>  m_app_chars_pct;
-  std::vector<std::string>       m_all_sources;
+  std::map<std::string, double> m_app_lines_pct;
+  std::map<std::string, double> m_app_chars_pct;
+  std::vector<std::string> m_all_sources;
 
   unsigned int m_lines;
-  double       m_total_chars;
-  double       m_time_min;
-  double       m_time_max;
+  double m_total_chars;
+  double m_time_min;
+  double m_time_max;
 };
 
-#endif 
-
-
-
-
-
+#endif

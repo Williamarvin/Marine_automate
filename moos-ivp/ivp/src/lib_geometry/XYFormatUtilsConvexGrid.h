@@ -22,26 +22,16 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_CONVEX_GRID_HEADER
 #define XY_FORMAT_UTILS_CONVEX_GRID_HEADER
 
-#include <string>
 #include "XYConvexGrid.h"
+#include <string>
 
 //---------------------------------------------------------------
-// Create a convex grid from a string specification. 
+// Create a convex grid from a string specification.
 
 XYConvexGrid string2ConvexGrid(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

@@ -29,7 +29,6 @@
 //
 //////////////////////////    END_GPL    //////////////////////////////////
 
-
 // MOOSRemote.h: interface for the CMOOSRemote class.
 //
 //////////////////////////////////////////////////////////////////////
@@ -37,145 +36,126 @@
 #if !defined(iRemoteLiteh)
 #define iRemoteLiteh
 
-
-class CMOOSRemoteLite : public CMOOSApp
-{
+class CMOOSRemoteLite : public CMOOSApp {
 public:
+  class CCustomKey {
+  public:
+    CCustomKey() { bIsNumeric = false; };
+    char m_cChar;
+    std::string m_sKey;
+    std::string m_sVal;
+    bool bIsNumeric;
+    bool bAskToConfirm;
+  };
+  typedef std::map<char, CCustomKey> CUSTOMKEY_MAP;
 
-	class CCustomKey
-	{
-	public:
-		CCustomKey(){bIsNumeric = false;};
-		char m_cChar;
-		std::string m_sKey;
-		std::string m_sVal;
-		bool bIsNumeric;
-		bool bAskToConfirm;
-	};
-	typedef std::map< char ,CCustomKey> CUSTOMKEY_MAP;
-
-	class CJournal
-	{
-	public:
-		CJournal(){};
-		CJournal(const std::string & sName, int nSize,char cKey)
-		{
-			m_nMaxSize=nSize;
-			m_cKey = cKey;
-			m_sName = sName;
-		};
-		STRING_LIST m_Entries;
-		char m_cKey;
-		unsigned int m_nMaxSize;
-		std::string m_sName;
-		void Add(const std::string & sEntry)
-		{
-			m_Entries.push_back(sEntry);
-			while(m_Entries.size()>m_nMaxSize)
-			{
-				m_Entries.pop_front();
-			}
-		}
-	};
-
-	typedef std::map< std::string ,CJournal> CUSTOMJOURNAL_MAP;
-
-
-    class CNavVar
-    {
-    public:
-        CNavVar(){};
-        CNavVar(std::string sName,std::string sPrint ,double dfS)
-        {
-            m_sMessageName = sName;
-            m_sPrintName = sPrint;
-            m_dfScaleBy = dfS;
-            m_dfVal = 0;
-            m_dfTime = -1;
-        }
-    public:
-        std::string m_sMessageName;
-        std::string m_sPrintName;
-        double m_dfScaleBy;
-        double m_dfVal;
-        double m_dfTime;
+  class CJournal {
+  public:
+    CJournal(){};
+    CJournal(const std::string &sName, int nSize, char cKey) {
+      m_nMaxSize = nSize;
+      m_cKey = cKey;
+      m_sName = sName;
     };
-    typedef std::map< std::string ,CNavVar> NAVVAR_MAP;
+    STRING_LIST m_Entries;
+    char m_cKey;
+    unsigned int m_nMaxSize;
+    std::string m_sName;
+    void Add(const std::string &sEntry) {
+      m_Entries.push_back(sEntry);
+      while (m_Entries.size() > m_nMaxSize) {
+        m_Entries.pop_front();
+      }
+    }
+  };
 
+  typedef std::map<std::string, CJournal> CUSTOMJOURNAL_MAP;
 
+  class CNavVar {
+  public:
+    CNavVar(){};
+    CNavVar(std::string sName, std::string sPrint, double dfS) {
+      m_sMessageName = sName;
+      m_sPrintName = sPrint;
+      m_dfScaleBy = dfS;
+      m_dfVal = 0;
+      m_dfTime = -1;
+    }
 
-	bool WDLoop();
-    bool MailLoop();
+  public:
+    std::string m_sMessageName;
+    std::string m_sPrintName;
+    double m_dfScaleBy;
+    double m_dfVal;
+    double m_dfTime;
+  };
+  typedef std::map<std::string, CNavVar> NAVVAR_MAP;
 
-    CMOOSRemoteLite();
-	virtual ~CMOOSRemoteLite();
+  bool WDLoop();
+  bool MailLoop();
 
-	bool Run( const char * sName,const char * sMissionFile);
+  CMOOSRemoteLite();
+  virtual ~CMOOSRemoteLite();
 
-
-
-
+  bool Run(const char *sName, const char *sMissionFile);
 
 protected:
-	bool DoNavSummary(CMOOSMsg & Msg);
-	bool PrintCustomSummary();
-	bool MakeCustomSummary();
-	bool MakeCustomKeys();
-	bool MakeCustomJournals();
+  bool DoNavSummary(CMOOSMsg &Msg);
+  bool PrintCustomSummary();
+  bool MakeCustomSummary();
+  bool MakeCustomKeys();
+  bool MakeCustomJournals();
 
+  bool ReStartAll();
+  bool PrintNavSummary();
+  bool EnableMailLoop(bool bEnable);
+  bool DoCustomKey(char cCmd);
+  bool DoCustomJournal(char cCmd);
+  bool HitInputWD();
+  bool SetManualOveride(bool bOveride);
+  virtual bool OnConnectToServer();
+  bool OnStartUp();
+  bool StopThreads();
+  bool StartThreads();
+  bool FetchDB();
+  bool m_bQuit;
+  double m_dfTimeLastAck;
 
-	bool ReStartAll();
-	bool PrintNavSummary();
-	bool EnableMailLoop(bool bEnable);
-	bool DoCustomKey(char cCmd);
-	bool DoCustomJournal(char cCmd);
-	bool HitInputWD();
-	bool SetManualOveride(bool bOveride);
-	virtual bool OnConnectToServer();
-	bool OnStartUp();
-    bool    StopThreads();
-    bool    StartThreads();
-    bool FetchDB();
-    bool    m_bQuit;
-    double m_dfTimeLastAck;
+  STRING_LIST m_CustomSummaryList;
 
-    STRING_LIST m_CustomSummaryList;
+/** Win32 handle to IO thread */
+#ifdef _WIN32
+  HANDLE m_hWDThread;
+#endif
+  /** ID of IO thread */
+  unsigned long m_nWDThreadID;
 
-    /** Win32 handle to IO thread */
-    #ifdef _WIN32
-	    HANDLE m_hWDThread;
-    #endif
-	/** ID of IO thread */
-	unsigned long		m_nWDThreadID;
+/** Win32 handle to text print thread */
+#ifdef _WIN32
+  HANDLE m_hMailThread;
+#endif
+  /** ID of Mail reading thread */
+  unsigned long m_nMailThreadID;
 
-    /** Win32 handle to text print thread */
-    #ifdef _WIN32
-	    HANDLE m_hMailThread;
-    #endif
-	/** ID of Mail reading thread */
-	unsigned long		m_nMailThreadID;
+  CMOOSLock m_Lock;
+  bool SendDesired();
+  void PrintHelp();
 
-    CMOOSLock m_Lock;
-	bool SendDesired();
-	void PrintHelp( );
+  CUSTOMKEY_MAP m_CustomKeys;
 
-	CUSTOMKEY_MAP m_CustomKeys;
+  // a map of custom journals
+  CUSTOMJOURNAL_MAP m_CustomJournals;
+  // a map of nav vars used to keep a record of where
+  // vehicle is...
+  NAVVAR_MAP m_NavVars;
 
-	// a map of custom journals
-	CUSTOMJOURNAL_MAP m_CustomJournals;
-    //a map of nav vars used to keep a record of where
-    //vehicle is...
-    NAVVAR_MAP m_NavVars;
+  double m_dfCurrentElevator;
+  double m_dfCurrentRudder;
+  double m_dfCurrentThrust;
+  double m_dfTimeLastSent;
+  bool m_bManualOveride;
 
-
-    double m_dfCurrentElevator;
-	double m_dfCurrentRudder;
-	double m_dfCurrentThrust;
-	double m_dfTimeLastSent;
-	bool   m_bManualOveride;
-
-	bool   m_bRunMailLoop;
-
+  bool m_bRunMailLoop;
 };
 
 #endif

@@ -30,8 +30,7 @@ using namespace std;
 //-------------------------------------------------------------
 // Procedure: Constructor
 
-ProxPoint::ProxPoint()
-{
+ProxPoint::ProxPoint() {
   m_cpa = 0;
   m_cpa_dist = 0;
 }
@@ -39,12 +38,9 @@ ProxPoint::ProxPoint()
 //--------------------------------------------------------
 // Procedure: overloaded less than operator
 
-bool operator< (const ProxPoint& pt1, const ProxPoint& pt2)
-{
-  if(pt1.getCPADist() < pt2.getCPADist())
-    return(true);
+bool operator<(const ProxPoint &pt1, const ProxPoint &pt2) {
+  if (pt1.getCPADist() < pt2.getCPADist())
+    return (true);
   else
-    return(false);
+    return (false);
 }
-
-

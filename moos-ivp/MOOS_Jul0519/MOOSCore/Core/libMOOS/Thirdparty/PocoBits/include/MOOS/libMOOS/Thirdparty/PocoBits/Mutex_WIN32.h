@@ -36,78 +36,54 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Mutex_WIN32_INCLUDED
 #define MOOS_POCO_Foundation_Mutex_WIN32_INCLUDED
 
-
-
-#include "MOOS/libMOOS/Thirdparty/PocoBits/UnWindows.h"
-#include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Exception.h"
-
+#include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
+#include "MOOS/libMOOS/Thirdparty/PocoBits/UnWindows.h"
 
 namespace MOOS {
 namespace Poco {
 
-
-class MOOS_POCO_Foundation_API MutexImpl
-{
+class MOOS_POCO_Foundation_API MutexImpl {
 protected:
-	MutexImpl();
-	~MutexImpl();
-	void lockImpl();
-	bool tryLockImpl();
-	bool tryLockImpl(long milliseconds);
-	void unlockImpl();
+  MutexImpl();
+  ~MutexImpl();
+  void lockImpl();
+  bool tryLockImpl();
+  bool tryLockImpl(long milliseconds);
+  void unlockImpl();
 
 private:
-	CRITICAL_SECTION _cs;
+  CRITICAL_SECTION _cs;
 };
 
-
 typedef MutexImpl FastMutexImpl;
-
 
 //
 // inlines
 //
-inline void MutexImpl::lockImpl()
-{
-	try
-	{
-		EnterCriticalSection(&_cs);
-		return;
-	}
-	catch (...)
-	{
-
-	}
-	throw SystemException("cannot lock mutex");
+inline void MutexImpl::lockImpl() {
+  try {
+    EnterCriticalSection(&_cs);
+    return;
+  } catch (...) {
+  }
+  throw SystemException("cannot lock mutex");
 }
 
-
-inline bool MutexImpl::tryLockImpl()
-{
-	try
-	{
-		return TryEnterCriticalSection(&_cs) == TRUE;
-	}
-	catch (...)
-	{
-	}
-	throw SystemException("cannot lock mutex");
+inline bool MutexImpl::tryLockImpl() {
+  try {
+    return TryEnterCriticalSection(&_cs) == TRUE;
+  } catch (...) {
+  }
+  throw SystemException("cannot lock mutex");
 }
 
-
-inline void MutexImpl::unlockImpl()
-{
-	LeaveCriticalSection(&_cs);
-}
-
+inline void MutexImpl::unlockImpl() { LeaveCriticalSection(&_cs); }
 
 } // namespace Poco
 } // namespace MOOS
-
 
 #endif // MOOS_POCO_Foundation_Mutex_WIN32_INCLUDED

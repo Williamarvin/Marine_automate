@@ -25,81 +25,78 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_AVOID_OBSTACLE_V24_HEADER
 #define BHV_AVOID_OBSTACLE_V24_HEADER
 
+#include "HintHolder.h"
 #include "IvPBehavior.h"
 #include "ObShipModelV24.h"
 #include "XYPolygon.h"
-#include "HintHolder.h"
 
 class BHV_AvoidObstacleV24 : public IvPBehavior {
 public:
   BHV_AvoidObstacleV24(IvPDomain);
   ~BHV_AvoidObstacleV24() {}
-  
-  bool         setParam(std::string, std::string);
-  void         onHelmStart();
-  IvPFunction* onRunState();
-  void         onIdleState();
-  void         onCompleteState() {postErasablePolygons();}
-  void         onSetParamComplete();
-  void         onIdleToRunState();
-  void         onInactiveState()  {postErasablePolygons();}
-  void         onEveryState(std::string);
-  void         postConfigStatus();
-  double       getDoubleInfo(std::string);
-  bool         isConstraint() {return(true);}
-  std::string  expandMacros(std::string);
-  
- protected: 
-  bool   handleParamRangeFlag(std::string);
+
+  bool setParam(std::string, std::string);
+  void onHelmStart();
+  IvPFunction *onRunState();
+  void onIdleState();
+  void onCompleteState() { postErasablePolygons(); }
+  void onSetParamComplete();
+  void onIdleToRunState();
+  void onInactiveState() { postErasablePolygons(); }
+  void onEveryState(std::string);
+  void postConfigStatus();
+  double getDoubleInfo(std::string);
+  bool isConstraint() { return (true); }
+  std::string expandMacros(std::string);
+
+protected:
+  bool handleParamRangeFlag(std::string);
 
   double getRelevance();
-  bool   updatePlatformInfo();
-  void   postViewablePolygons();
-  void   postErasablePolygons();
-  void   initVisualHints();
-  
-  bool   applyBuffer();
-  IvPFunction* buildOF();
-  
- protected:
+  bool updatePlatformInfo();
+  void postViewablePolygons();
+  void postErasablePolygons();
+  void initVisualHints();
+
+  bool applyBuffer();
+  IvPFunction *buildOF();
+
+protected:
   ObShipModelV24 m_obship_model;
 
- protected: // Config Params
-  bool        m_use_refinery;
+protected: // Config Params
+  bool m_use_refinery;
   std::string m_pwt_grade;
 
   std::string m_resolved_obstacle_var;
   std::string m_obstacle_id;
 
-  std::vector<double>      m_rng_thresh;
+  std::vector<double> m_rng_thresh;
   std::vector<VarDataPair> m_rng_flags;
   std::vector<VarDataPair> m_cpa_flags;
 
   bool m_draw_buff_min_poly;
   bool m_draw_buff_max_poly;
-  
- protected: // State variables
 
-  double  m_obstacle_relevance;
-  bool    m_resolved_pending;
+protected: // State variables
+  double m_obstacle_relevance;
+  bool m_resolved_pending;
 
-  bool    m_valid_cn_obs_info;
-  
-  bool    m_closing;
-  double  m_cpa_rng_sofar;
-  double  m_fpa_rng_sofar;
-  double  m_cpa_rng_ever;
-  double  m_cpa_reported;
+  bool m_valid_cn_obs_info;
+
+  bool m_closing;
+  double m_cpa_rng_sofar;
+  double m_fpa_rng_sofar;
+  double m_cpa_rng_ever;
+  double m_cpa_reported;
 
   std::string m_side_lock;
 
-  
 protected:
   HintHolder m_hints;
- 
 };
 #endif

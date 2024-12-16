@@ -9,60 +9,45 @@
 
 using namespace std;
 
-NMEA::NMEA(string nmea_sentence)
-{
-  m_raw_sentence = nmea_sentence;
-}
+NMEA::NMEA(string nmea_sentence) { m_raw_sentence = nmea_sentence; }
 
-NMEA::~NMEA() {};
+NMEA::~NMEA(){};
 
-
-vector<nmeaDatum> NMEA::parseNMEA()
-{
+vector<nmeaDatum> NMEA::parseNMEA() {
   // Trim ends off sentence
   m_rx_contents = biteString(m_raw_sentence, '*'); // remove checksum
   m_rx_contents = m_rx_contents.substr(1);         // remove '$'
 
   // Initialize nmeaDatum, parse
   m_fields = parseString(m_rx_contents, ',');
-  m_source = m_fields[0];       // source (e.g. 'GPGGA')
+  m_source = m_fields[0]; // source (e.g. 'GPGGA')
 
   // (1) Direct to appropriate NMEA source format
   // (2) Create nmeaDatum object for each datum in NMEA sentence
   // (3) Push onto m_data vector and return m_data
 
-  if      (MOOSStrCmp(m_source, "GPGGA")){
-    return(formatGPGGA());
+  if (MOOSStrCmp(m_source, "GPGGA")) {
+    return (formatGPGGA());
+  } else if (MOOSStrCmp(m_source, "GPRMC")) {
+    return (formatGPRMC());
+  } else if (MOOSStrCmp(m_source, "GPGSA")) {
+    return (formatGPGSA());
+  } else if (MOOSStrCmp(m_source, "CPNVG")) {
+    return (formatCPNVG());
+  } else if (MOOSStrCmp(m_source, "CPNVR")) {
+    return (formatCPNVR());
+  } else if (MOOSStrCmp(m_source, "CPRCM")) {
+    return (formatCPRCM());
+  } else if (MOOSStrCmp(m_source, "CPRBS")) {
+    return (formatCPRBS());
+  } else if (MOOSStrCmp(m_source, "CPIMU")) {
+    return (formatCPIMU());
+  } else if (MOOSStrCmp(m_source, "PGRME")) {
+    return (formatPGRME());
+  } else {
+    return (m_data);
   }
-  else if (MOOSStrCmp(m_source, "GPRMC")){
-    return(formatGPRMC());
-  }
-  else if (MOOSStrCmp(m_source, "GPGSA")){
-    return(formatGPGSA());
-  }
-  else if (MOOSStrCmp(m_source, "CPNVG")){
-    return(formatCPNVG());
-  }
-  else if (MOOSStrCmp(m_source, "CPNVR")){
-    return(formatCPNVR());
-  }
-  else if (MOOSStrCmp(m_source, "CPRCM")){
-    return(formatCPRCM());
-  }
-  else if (MOOSStrCmp(m_source, "CPRBS")){
-    return(formatCPRBS());
-  }
-  else if (MOOSStrCmp(m_source, "CPIMU")){
-    return(formatCPIMU());
-  }
-  else if (MOOSStrCmp(m_source, "PGRME")){
-    return(formatPGRME());
-  }
-  else{
-    return(m_data);
-  }  
 }
-
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -94,16 +79,15 @@ vector<nmeaDatum> NMEA::parseNMEA()
 //     <14> Differential station ID, 0000 w/o DGPS
 //     *hh  Checksum
 
-vector<nmeaDatum> NMEA::formatGPGGA()
-{
+vector<nmeaDatum> NMEA::formatGPGGA() {
   string sval;
   double dval;
   string time;
-  
-  for (int i=1; i<m_fields.size(); i++){
+
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("UTC_TIME");
       field.setDatatype("STRING");
@@ -219,7 +203,7 @@ vector<nmeaDatum> NMEA::formatGPGGA()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -247,16 +231,15 @@ vector<nmeaDatum> NMEA::formatGPGGA()
 //            N=bad
 //     *hh  Checksum
 
-vector<nmeaDatum> NMEA::formatGPRMC()
-{
+vector<nmeaDatum> NMEA::formatGPRMC() {
   string sval;
   double dval;
   string time;
-  
-  for (int i=1; i<m_fields.size(); i++){
+
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("UTC_TIME");
       field.setDatatype("STRING");
@@ -356,7 +339,7 @@ vector<nmeaDatum> NMEA::formatGPRMC()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -371,21 +354,17 @@ vector<nmeaDatum> NMEA::formatGPRMC()
 //              1=No fix
 //              2=2D fix
 //              3=3D fix
-//     <3-14> IDs of satelites 1-12 used in position fix (unused m_fields = null)
-//     <15>   PDOP
-//     <16>   HDOP
-//     <17>   VDOP
-//     *hh    Checksum
+//     <3-14> IDs of satelites 1-12 used in position fix (unused m_fields =
+//     null) <15>   PDOP <16>   HDOP <17>   VDOP *hh    Checksum
 
-vector<nmeaDatum> NMEA::formatGPGSA()
-{
+vector<nmeaDatum> NMEA::formatGPGSA() {
   string sval;
   double dval;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("SAT_SELECT_MODE");
       field.setDatatype("STRING");
@@ -505,7 +484,7 @@ vector<nmeaDatum> NMEA::formatGPGSA()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -529,16 +508,15 @@ vector<nmeaDatum> NMEA::formatGPGSA()
 //     <12> Timestamp of pose/position calculation. If blank, use <1>.
 //     *hh  Checksum
 
-vector<nmeaDatum> NMEA::formatCPNVG()
-{
+vector<nmeaDatum> NMEA::formatCPNVG() {
   string sval;
   double dval;
   string time;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("TIMESTAMP");
       field.setDatatype("STRING");
@@ -638,7 +616,7 @@ vector<nmeaDatum> NMEA::formatCPNVG()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -654,16 +632,15 @@ vector<nmeaDatum> NMEA::formatCPNVG()
 //     <6>  Roll rate [deg/s]
 //     <7>  Yaw rate [deg/s]
 
-vector<nmeaDatum> NMEA::formatCPNVR()
-{
+vector<nmeaDatum> NMEA::formatCPNVR() {
   string sval;
   double dval;
   string time;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("TIMESTAMP");
       field.setDatatype("STRING");
@@ -723,7 +700,7 @@ vector<nmeaDatum> NMEA::formatCPNVR()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -738,16 +715,15 @@ vector<nmeaDatum> NMEA::formatCPNVR()
 //     <5>  ROLL [degrees]
 //     <6>  Timestamp of compass reading. If blank, use <1>.
 
-vector<nmeaDatum> NMEA::formatCPRCM()
-{
+vector<nmeaDatum> NMEA::formatCPRCM() {
   string sval;
   double dval;
   string time;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("TIMESTAMP");
       field.setDatatype("STRING");
@@ -799,7 +775,7 @@ vector<nmeaDatum> NMEA::formatCPRCM()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -818,16 +794,15 @@ vector<nmeaDatum> NMEA::formatCPRCM()
 //          and a 0 value published for [TEMPERATUREC]
 //          example: $CPRBS,172909.322,15.121597,15.121597,15.121597,0*76
 
-vector<nmeaDatum> NMEA::formatCPRBS()
-{
+vector<nmeaDatum> NMEA::formatCPRBS() {
   string sval;
   double dval;
   string time;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("TIMESTAMP");
       field.setDatatype("STRING");
@@ -836,14 +811,14 @@ vector<nmeaDatum> NMEA::formatCPRBS()
       field.setValue(sval);
       field.setTime(time);
       break;
-    
-    /*
+
+      /*
+      case 2:
+        field.setKey("BATTERY_ID");
+        field.setDatatype("DOUBLE");
+        break;
+      */
     case 2:
-      field.setKey("BATTERY_ID");
-      field.setDatatype("DOUBLE");
-      break;
-    */
-case 2:
       field.setKey("VOLTAGE");
       field.setDatatype("DOUBLE");
       setDoubleOnString(dval, m_fields[i]);
@@ -877,7 +852,7 @@ case 2:
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // ----------------------------------------------------------------------------
@@ -894,16 +869,15 @@ case 2:
 //     <7>  Heave [m/s^2]
 //     <8>  Timestamp of IMU reading. If blank, use <1>.
 
-vector<nmeaDatum> NMEA::formatCPIMU()
-{
+vector<nmeaDatum> NMEA::formatCPIMU() {
   string sval;
   double dval;
   string time;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("TIMESTAMP");
       field.setDatatype("STRING");
@@ -971,7 +945,7 @@ vector<nmeaDatum> NMEA::formatCPIMU()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 
 // -----------------------------------------------------------------------------
@@ -986,15 +960,14 @@ vector<nmeaDatum> NMEA::formatCPIMU()
 //     <5>  Estimated position error [0.0 - 999.99]
 //     <6>  Position error units [M=meters]
 
-vector<nmeaDatum> NMEA::formatPGRME()
-{
+vector<nmeaDatum> NMEA::formatPGRME() {
   string sval;
   double dval;
 
-  for (int i=1; i<m_fields.size(); i++){
+  for (int i = 1; i < m_fields.size(); i++) {
     nmeaDatum field(m_source, i);
 
-    switch(i){
+    switch (i) {
     case 1:
       field.setKey("HORIZONTAL_ERROR");
       field.setDatatype("DOUBLE");
@@ -1039,7 +1012,6 @@ vector<nmeaDatum> NMEA::formatPGRME()
     }
     m_data.push_back(field);
   }
-  return(m_data);
+  return (m_data);
 }
 // ----------------------------------------------------------------------------
-

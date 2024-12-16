@@ -26,9 +26,9 @@
 #ifndef XY_COMMS_PULSE_HEADER
 #define XY_COMMS_PULSE_HEADER
 
+#include "XYObject.h"
 #include <string>
 #include <vector>
-#include "XYObject.h"
 
 class XYCommsPulse : public XYObject {
 public:
@@ -36,57 +36,59 @@ public:
   XYCommsPulse(double sx, double sy, double tx, double ty);
   virtual ~XYCommsPulse() {}
 
-  void   set_sx(double v)          {m_sx=v; m_sx_set=true;}
-  void   set_sy(double v)          {m_sy=v; m_sy_set=true;}
-  void   set_tx(double v)          {m_tx=v; m_tx_set=true;}
-  void   set_ty(double v)          {m_ty=v; m_ty_set=true;}
-  void   set_beam_width(double);
-  void   set_fill(double);
-  void   set_pulse_type(std::string);
-  
-  double get_sx()    const        {return(m_sx);}
-  double get_sy()    const        {return(m_sy);}
-  double get_tx()    const        {return(m_sx);}
-  double get_ty()    const        {return(m_sy);}
-  double get_beam_width()  const  {return(m_beam_width);}
-  double get_fill() const         {return(m_fill);}
+  void set_sx(double v) {
+    m_sx = v;
+    m_sx_set = true;
+  }
+  void set_sy(double v) {
+    m_sy = v;
+    m_sy_set = true;
+  }
+  void set_tx(double v) {
+    m_tx = v;
+    m_tx_set = true;
+  }
+  void set_ty(double v) {
+    m_ty = v;
+    m_ty_set = true;
+  }
+  void set_beam_width(double);
+  void set_fill(double);
+  void set_pulse_type(std::string);
+
+  double get_sx() const { return (m_sx); }
+  double get_sy() const { return (m_sy); }
+  double get_tx() const { return (m_sx); }
+  double get_ty() const { return (m_sy); }
+  double get_beam_width() const { return (m_beam_width); }
+  double get_fill() const { return (m_fill); }
   double get_fill(double tstamp) const;
 
-  bool   valid() const;
+  bool valid() const;
 
-  std::string get_pulse_type() const {return(m_pulse_type);}
+  std::string get_pulse_type() const { return (m_pulse_type); }
 
-  std::string get_spec(std::string s="") const;
+  std::string get_spec(std::string s = "") const;
 
   std::vector<double> get_triangle(double timestamp) const;
 
- protected:
+protected:
   void initialize();
 
 protected:
-  double    m_sx;
-  double    m_sy;
-  double    m_tx;
-  double    m_ty;
-  double    m_beam_width;
+  double m_sx;
+  double m_sy;
+  double m_tx;
+  double m_ty;
+  double m_beam_width;
 
-  bool      m_sx_set;
-  bool      m_sy_set;
-  bool      m_tx_set;
-  bool      m_ty_set;
+  bool m_sx_set;
+  bool m_sy_set;
+  bool m_tx_set;
+  bool m_ty_set;
 
-  double    m_fill;
+  double m_fill;
 
   std::string m_pulse_type;
 };
 #endif
-
-
-
-
-
-
-
-
-
-

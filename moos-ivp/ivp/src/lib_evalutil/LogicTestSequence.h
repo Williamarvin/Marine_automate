@@ -24,44 +24,42 @@
 #ifndef LOGIC_TEST_SEQUENCE_HEADER
 #define LOGIC_TEST_SEQUENCE_HEADER
 
-#include <vector>
 #include "LogicAspect.h"
+#include <vector>
 
-class LogicTestSequence 
-{
- public:
+class LogicTestSequence {
+public:
   LogicTestSequence();
-  ~LogicTestSequence() {};
+  ~LogicTestSequence(){};
 
- public: // Setting up functions
-  void setInfoBuffer(InfoBuffer*);
-  
+public: // Setting up functions
+  void setInfoBuffer(InfoBuffer *);
+
   bool addLeadCondition(std::string);
   bool addPassCondition(std::string);
   bool addFailCondition(std::string);
 
   std::string checkConfig();
 
- public: // Interaction functions
-  
+public: // Interaction functions
   void update();
 
-  std::string getStatus() const {return(m_status);}
+  std::string getStatus() const { return (m_status); }
 
-  bool enabled() const     {return(m_enabled);}
-  bool isEvaluated() const {return(m_evaluated);}
-  bool isSatisfied() const {return(m_satisfied);}
+  bool enabled() const { return (m_enabled); }
+  bool isEvaluated() const { return (m_evaluated); }
+  bool isSatisfied() const { return (m_satisfied); }
 
   std::set<std::string> getLogicVars() const;
 
   std::list<std::string> getReport() const;
 
-  unsigned int size() const      {return(m_aspects.size());}
-  unsigned int currIndex() const {return(m_currix);}
+  unsigned int size() const { return (m_aspects.size()); }
+  unsigned int currIndex() const { return (m_currix); }
 
   std::vector<std::string> getSpec() const;
-  
-private: 
+
+private:
   std::vector<LogicAspect> m_aspects;
 
   InfoBuffer *m_info_buffer;
@@ -72,9 +70,7 @@ private:
   bool m_satisfied;
   bool m_enabled;
 
-  std::string  m_status;
+  std::string m_status;
 };
 
-#endif 
- 
-
+#endif

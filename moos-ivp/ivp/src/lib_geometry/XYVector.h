@@ -22,80 +22,70 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_VECTOR_HEADER
 #define XY_VECTOR_HEADER
 
-#include <string>
 #include "XYObject.h"
+#include <string>
 
 class XYVector : public XYObject {
 public:
   XYVector();
-  XYVector(double x, double y, double mag=0, double ang=0);
+  XYVector(double x, double y, double mag = 0, double ang = 0);
   virtual ~XYVector() {}
 
-  void  setPosition(double x, double y);
+  void setPosition(double x, double y);
 
-  void  setVectorXY(double xdot, double ydot);
-  void  setVectorMA(double magnitude, double angle);
+  void setVectorXY(double xdot, double ydot);
+  void setVectorMA(double magnitude, double angle);
 
-  void  mergeVectorXY(double xdot, double ydot);
-  void  mergeVectorMA(double mag, double ang); 
+  void mergeVectorXY(double xdot, double ydot);
+  void mergeVectorMA(double mag, double ang);
 
-  void  augMagnitude(double val);
-  void  augAngle(double val);
+  void augMagnitude(double val);
+  void augAngle(double val);
 
-  void  clear();
+  void clear();
 
-  void  setHeadSize(double v)  {m_head_size=v;}
-  bool  head_size_set() const  {return(m_head_size >= 0);}
-
-public:
-  void   applySnap(double);
-  void   shift_horz(double val) {m_x += val;}
-  void   shift_vert(double val) {m_y += val;}
+  void setHeadSize(double v) { m_head_size = v; }
+  bool head_size_set() const { return (m_head_size >= 0); }
 
 public:
-  double    xpos() const     {return(m_x);}
-  double    ypos() const     {return(m_y);}
-  double    mag()  const     {return(m_mag);}
-  double    ang()  const     {return(m_ang);}
-  double    xdot() const     {return(m_xdot);}
-  double    ydot() const     {return(m_ydot);}
-  bool      valid() const    {return(m_valid);}
-  double    headsize() const {return(m_head_size);}
+  void applySnap(double);
+  void shift_horz(double val) { m_x += val; }
+  void shift_vert(double val) { m_y += val; }
 
-  std::string get_spec(std::string s="") const;
+public:
+  double xpos() const { return (m_x); }
+  double ypos() const { return (m_y); }
+  double mag() const { return (m_mag); }
+  double ang() const { return (m_ang); }
+  double xdot() const { return (m_xdot); }
+  double ydot() const { return (m_ydot); }
+  bool valid() const { return (m_valid); }
+  double headsize() const { return (m_head_size); }
 
- protected:  // Drawing hint
-  double    m_head_size;
+  std::string get_spec(std::string s = "") const;
+
+protected: // Drawing hint
+  double m_head_size;
 
 protected:
-  double    m_x;
-  double    m_y;
+  double m_x;
+  double m_y;
 
   // Two representations of the vector are kept in sync. The magnitude
-  // of the vector in x,y directions (xdot, ydot), and the direction 
-  // and magnitude of the vector (ang, mag). This is done to avoid 
+  // of the vector in x,y directions (xdot, ydot), and the direction
+  // and magnitude of the vector (ang, mag). This is done to avoid
   // repeated conversions on the same vector instance.
-  double    m_ang;
-  double    m_mag;
-  double    m_xdot;
-  double    m_ydot;
+  double m_ang;
+  double m_mag;
+  double m_xdot;
+  double m_ydot;
 
   // Vector is considered valid once the x,y position is set.
-  bool      m_valid;
+  bool m_valid;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

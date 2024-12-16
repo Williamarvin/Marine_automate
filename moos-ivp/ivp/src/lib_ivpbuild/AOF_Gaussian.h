@@ -22,48 +22,34 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_GAUSSIAN_HEADER
 #define AOF_GAUSSIAN_HEADER
 
-#include <vector>
-#include <string>
 #include "AOF.h"
+#include <string>
+#include <vector>
 
-class AOF_Gaussian: public AOF {
- public:
-  AOF_Gaussian(IvPDomain domain) : AOF(domain) 
-    {m_xcent=0; m_ycent=0; m_sigma=1; m_range=100;}
+class AOF_Gaussian : public AOF {
+public:
+  AOF_Gaussian(IvPDomain domain) : AOF(domain) {
+    m_xcent = 0;
+    m_ycent = 0;
+    m_sigma = 1;
+    m_range = 100;
+  }
   ~AOF_Gaussian() {}
-  
- public:
-  double evalBox(const IvPBox *b) const;  // Virtual Defined
-  double evalPoint(const std::vector<double>& point) const;
-  bool   setParam(const std::string&, double);
+
+public:
+  double evalBox(const IvPBox *b) const; // Virtual Defined
+  double evalPoint(const std::vector<double> &point) const;
+  bool setParam(const std::string &, double);
 
 private:
-  double m_xcent;  
+  double m_xcent;
   double m_ycent;
-  double m_sigma;  
+  double m_sigma;
   double m_range;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

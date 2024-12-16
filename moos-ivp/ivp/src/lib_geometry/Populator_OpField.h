@@ -24,27 +24,27 @@
 #ifndef POPULATOR_OPFIELD_HEADER
 #define POPULATOR_OPFIELD_HEADER
 
+#include "OpField.h"
 #include <string>
 #include <vector>
-#include "OpField.h"
 
 class Populator_OpField {
 public:
-  Populator_OpField() {m_verbose=false;}
+  Populator_OpField() { m_verbose = false; }
   ~Populator_OpField() {}
 
-  bool    addFileOPF(std::string filename);
-  bool    populate();
-  void    setVerbose() {m_verbose = true;}
-  OpField getOpField() {return(m_opfield);}
+  bool addFileOPF(std::string filename);
+  bool populate();
+  void setVerbose() { m_verbose = true; }
+  OpField getOpField() { return (m_opfield); }
 
 protected:
-  bool    populateFromFile(std::string);
-  
+  bool populateFromFile(std::string);
+
 protected:
-  bool    m_verbose;
+  bool m_verbose;
   OpField m_opfield;
 
   std::vector<std::string> m_opf_files;
 };
-#endif 
+#endif

@@ -24,9 +24,9 @@
 #ifndef MARINE_PIDENGINE_HEADER
 #define MARINE_PIDENGINE_HEADER
 
-#include <vector>
-#include <string>
 #include "ScalarPID.h"
+#include <string>
+#include <vector>
 
 class PIDEngine {
 public:
@@ -34,54 +34,57 @@ public:
   ~PIDEngine() {}
 
   void setPID(int, ScalarPID);
-  void setSpeedFactor(double v)     {m_speed_factor = v;}
-  void updateTime(double ctime)     {m_current_time = ctime;}
+  void setSpeedFactor(double v) { m_speed_factor = v; }
+  void updateTime(double ctime) { m_current_time = ctime; }
 
   void setDebugHdg();
   void setDebugSpd();
   void setDebugDep();
 
-  void setHdgIntegralReset(bool zero_error, bool new_desired) 
-        {m_reset_hdg_i_zero_error = zero_error; m_reset_hdg_i_new_desired = new_desired;}
-  void setSpdIntegralReset(bool zero_error, bool new_desired)
-        {m_reset_spd_i_zero_error = zero_error; m_reset_spd_i_new_desired = new_desired;}
-  void setDepIntegralReset(bool zero_error, bool new_desired)
-        {m_reset_dep_i_zero_error = zero_error; m_reset_dep_i_new_desired = new_desired;}
-  void setPchIntegralReset(bool zero_error, bool new_desired)
-        {m_reset_pch_i_zero_error = zero_error; m_reset_pch_i_new_desired = new_desired;}
-  
-  double getDesiredRudder(double desired_heading, 
-			  double current_heading,
-			  double max_rudder);
-  double getDesiredThrust(double desired_speed, 
-			  double current_speed,
-			  double current_thrust,
-			  double max_thrust);
-  double getDesiredElevator(double desired_depth, 
-			    double current_depth,
-			    double current_pitch,
-			    double max_pitch,
-			    double max_elevator);
+  void setHdgIntegralReset(bool zero_error, bool new_desired) {
+    m_reset_hdg_i_zero_error = zero_error;
+    m_reset_hdg_i_new_desired = new_desired;
+  }
+  void setSpdIntegralReset(bool zero_error, bool new_desired) {
+    m_reset_spd_i_zero_error = zero_error;
+    m_reset_spd_i_new_desired = new_desired;
+  }
+  void setDepIntegralReset(bool zero_error, bool new_desired) {
+    m_reset_dep_i_zero_error = zero_error;
+    m_reset_dep_i_new_desired = new_desired;
+  }
+  void setPchIntegralReset(bool zero_error, bool new_desired) {
+    m_reset_pch_i_zero_error = zero_error;
+    m_reset_pch_i_new_desired = new_desired;
+  }
 
-  void clearReport() {m_pid_report.clear();}
-  std::vector<std::string> getPIDReport() {return(m_pid_report);}
+  double getDesiredRudder(double desired_heading, double current_heading,
+                          double max_rudder);
+  double getDesiredThrust(double desired_speed, double current_speed,
+                          double current_thrust, double max_thrust);
+  double getDesiredElevator(double desired_depth, double current_depth,
+                            double current_pitch, double max_pitch,
+                            double max_elevator);
 
-  bool getMaxSatHdg() {return(m_max_sat_hdg);}
-  bool getMaxSatSpd() {return(m_max_sat_spd);}
-  bool getMaxSatDep() {return(m_max_sat_dep);}
-  
-  std::string getMaxSatHdgStr() {return(m_max_sat_hdg_str);}
-  std::string getMaxSatSpdStr() {return(m_max_sat_spd_str);}
-  std::string getMaxSatDepStr() {return(m_max_sat_dep_str);}
-  
+  void clearReport() { m_pid_report.clear(); }
+  std::vector<std::string> getPIDReport() { return (m_pid_report); }
+
+  bool getMaxSatHdg() { return (m_max_sat_hdg); }
+  bool getMaxSatSpd() { return (m_max_sat_spd); }
+  bool getMaxSatDep() { return (m_max_sat_dep); }
+
+  std::string getMaxSatHdgStr() { return (m_max_sat_hdg_str); }
+  std::string getMaxSatSpdStr() { return (m_max_sat_spd_str); }
+  std::string getMaxSatDepStr() { return (m_max_sat_dep_str); }
+
 protected:
   ScalarPID m_heading_pid;
   ScalarPID m_speed_pid;
   ScalarPID m_z_to_pitch_pid;
   ScalarPID m_pitch_pid;
 
-  double  m_current_time;
-  double  m_speed_factor;
+  double m_current_time;
+  double m_speed_factor;
 
   std::vector<std::string> m_pid_report;
 
@@ -104,7 +107,7 @@ protected:
   // in these message strings if debugging had been turned on.
   std::string m_max_sat_hdg_str;
   std::string m_max_sat_spd_str;
-  std::string m_max_sat_dep_str;  
+  std::string m_max_sat_dep_str;
 
   // Added May 2022 to reset integral when crossing desired command
   // and/or when desired command changes.
@@ -117,32 +120,13 @@ protected:
   double m_depth_errorOld;
   double m_pitch_errorOld;
 
-  bool    m_reset_hdg_i_zero_error;
-  bool    m_reset_spd_i_zero_error;
-  bool    m_reset_dep_i_zero_error;
-  bool    m_reset_pch_i_zero_error;
-  bool    m_reset_hdg_i_new_desired;
-  bool    m_reset_spd_i_new_desired;
-  bool    m_reset_dep_i_new_desired;
-  bool    m_reset_pch_i_new_desired;
+  bool m_reset_hdg_i_zero_error;
+  bool m_reset_spd_i_zero_error;
+  bool m_reset_dep_i_zero_error;
+  bool m_reset_pch_i_zero_error;
+  bool m_reset_hdg_i_new_desired;
+  bool m_reset_spd_i_new_desired;
+  bool m_reset_dep_i_new_desired;
+  bool m_reset_pch_i_new_desired;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

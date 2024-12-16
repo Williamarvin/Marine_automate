@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_MAX_SPEED_HEADER
 #define BHV_MAX_SPEED_HEADER
 
@@ -30,22 +30,21 @@ class BHV_MaxSpeed : public IvPBehavior {
 public:
   BHV_MaxSpeed(IvPDomain);
   ~BHV_MaxSpeed() {}
-  
-  void         onIdleState() {updateInfoIn();}
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  bool         isConstraint() {return(true);}
 
- protected:
-  bool         updateInfoIn();
+  void onIdleState() { updateInfoIn(); }
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  bool isConstraint() { return (true); }
 
- protected: // Configuration variables
-  double      m_max_speed;
-  double      m_basewidth;
+protected:
+  bool updateInfoIn();
+
+protected: // Configuration variables
+  double m_max_speed;
+  double m_basewidth;
   std::string m_speed_slack_var;
 
- protected: // State variables
-  double      m_osv;
+protected: // State variables
+  double m_osv;
 };
 #endif
-

@@ -26,28 +26,19 @@
 #ifndef POPULATOR_POLAR_PLOT_HEADER
 #define POPULATOR_POLAR_PLOT_HEADER
 
-#include <string>
 #include "PolarPlot.h"
+#include <string>
 
-class PopulatorPolarPlot
-{
- public:
+class PopulatorPolarPlot {
+public:
   PopulatorPolarPlot();
   ~PopulatorPolarPlot() {}
-  
+
   bool readFile(std::string filename);
-  
-  PolarPlot getPolarPlot() const {return(m_polar_plot);}
 
- protected:
+  PolarPlot getPolarPlot() const { return (m_polar_plot); }
 
+protected:
   PolarPlot m_polar_plot;
-
 };
-#endif 
-
-
-
-
-
-
+#endif

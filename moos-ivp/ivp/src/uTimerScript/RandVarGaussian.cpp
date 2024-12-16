@@ -21,92 +21,75 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "RandVarGaussian.h"
 #include "MBUtils.h"
 #include "MOOS/libMOOS/MOOSLib.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-RandVarGaussian::RandVarGaussian() : RandomVariable()
-{
+RandVarGaussian::RandVarGaussian() : RandomVariable() {
   m_sigma = 1;
-  m_mu    = 0;
+  m_mu = 0;
 }
-
 
 //---------------------------------------------------------
 // Procedure: setParam
 
-bool RandVarGaussian::setParam(string param, double value)
-{
+bool RandVarGaussian::setParam(string param, double value) {
   bool handled = RandomVariable::setParam(param, value);
-  if(handled)
-    return(true);
+  if (handled)
+    return (true);
 
-  if(param == "sigma")
+  if (param == "sigma")
     m_sigma = value;
-  else if(param == "mu") 
+  else if (param == "mu")
     m_mu = value;
   else
-    return(false);
-  
-  return(true);
+    return (false);
+
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: reset
 
-void RandVarGaussian::reset()
-{
+void RandVarGaussian::reset() {
   double noise = MOOSWhiteNoise(m_sigma);
   m_value = m_mu + noise;
   m_value_str = "";
 
   m_value = snapToStep(m_value, m_snap);
-  if(m_value > m_max_val)
+  if (m_value > m_max_val)
     m_value = m_max_val;
-  if(m_value < m_min_val)
+  if (m_value < m_min_val)
     m_value = m_min_val;
 
-  m_value_str = doubleToStringX(m_value,5);
+  m_value_str = doubleToStringX(m_value, 5);
 }
-  
+
 //---------------------------------------------------------
 // Procedure: getStringSummary
 
-string RandVarGaussian::getStringSummary() const
-{
+string RandVarGaussian::getStringSummary() const {
   string str = RandomVariable::getStringSummary();
-  if(str != "")
+  if (str != "")
     str += ",";
 
   str += "sigma=" + doubleToStringX(m_sigma);
   str += ",mu=" + doubleToStringX(m_mu);
   str += ",type=gaussian";
-  return(str);
+  return (str);
 }
-  
+
 //---------------------------------------------------------
 // Procedure: getParams
 
-string RandVarGaussian::getParams() const
-{
+string RandVarGaussian::getParams() const {
   string str = "sigma=" + doubleToStringX(m_sigma);
   str += ", mu=" + doubleToStringX(m_mu);
-  return(str);
+  return (str);
 }
-  
-
-
-
-
-
-
-
-
-
-

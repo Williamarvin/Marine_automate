@@ -23,266 +23,230 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdio>
 #include "IO_GeomUtils.h"
-#include "XYEncoders.h"
-#include "MBUtils.h"
 #include "FileBuffer.h"
+#include "MBUtils.h"
+#include "XYEncoders.h"
 #include "XYFormatUtilsPoly.h"
+#include <cstdio>
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: readPolyStringsFromFile
 
-vector<string> readPolyStringsFromFile(const string& filestr)
-{
+vector<string> readPolyStringsFromFile(const string &filestr) {
   vector<string> poly_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i<lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if((left == "polygon")  || 
-	   (left == "poly")     ||
-	   (left == "points")) {
-	  string right = stripBlankEnds(svector[1]);
-	  poly_vector.push_back(right);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if ((left == "polygon") || (left == "poly") || (left == "points")) {
+          string right = stripBlankEnds(svector[1]);
+          poly_vector.push_back(right);
+        }
       }
     }
   }
-  return(poly_vector);
+  return (poly_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: readPolysFromFile
 
-vector<XYPolygon> readPolysFromFile(const string& filestr)
-{
+vector<XYPolygon> readPolysFromFile(const string &filestr) {
   vector<XYPolygon> poly_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if(left == "gpoly") {
-	  string right = stripBlankEnds(svector[1]);
-	  XYPolygon poly;
-	  poly = string2Poly(right);
-	  if(poly.size() != 0)
-	    poly_vector.push_back(poly);
-	}
-	if((left == "polygon")  || 
-	   (left == "poly")     ||
-	   (left == "points")   ||
-	   (left == "ellipse")  ||
-	   (left == "radial")) {
-	  string right = stripBlankEnds(svector[1]);
-	  XYPolygon poly;
-	  if(left=="ellipse") {
-	    poly = stringEllipse2Poly(right);
-	  }
-	  else if(left=="radial")
-	    poly = stringRadial2Poly(right);
-	  else
-	    poly = string2Poly(right);
-	  if(poly.size() != 0)
-	    poly_vector.push_back(poly);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if (left == "gpoly") {
+          string right = stripBlankEnds(svector[1]);
+          XYPolygon poly;
+          poly = string2Poly(right);
+          if (poly.size() != 0)
+            poly_vector.push_back(poly);
+        }
+        if ((left == "polygon") || (left == "poly") || (left == "points") ||
+            (left == "ellipse") || (left == "radial")) {
+          string right = stripBlankEnds(svector[1]);
+          XYPolygon poly;
+          if (left == "ellipse") {
+            poly = stringEllipse2Poly(right);
+          } else if (left == "radial")
+            poly = stringRadial2Poly(right);
+          else
+            poly = string2Poly(right);
+          if (poly.size() != 0)
+            poly_vector.push_back(poly);
+        }
       }
     }
   }
-  return(poly_vector);
+  return (poly_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: readGridsFromFile
 
-vector<XYGrid> readGridsFromFile(const string& filestr)
-{
+vector<XYGrid> readGridsFromFile(const string &filestr) {
   vector<XYGrid> grid_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if((left == "searchgrid") || (left == "sgrid")) {
-	  string right = stripBlankEnds(svector[1]);
-	  XYGrid sgrid;
-	  bool res = sgrid.initialize(right);
-	  if(res)
-	    grid_vector.push_back(sgrid);
-	}
-	if((left == "fullgrid") || (left == "fgrid")) {
-	  string right = stripBlankEnds(svector[1]);
-	  XYGrid sgrid = StringToXYGrid(right);
-	  grid_vector.push_back(sgrid);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if ((left == "searchgrid") || (left == "sgrid")) {
+          string right = stripBlankEnds(svector[1]);
+          XYGrid sgrid;
+          bool res = sgrid.initialize(right);
+          if (res)
+            grid_vector.push_back(sgrid);
+        }
+        if ((left == "fullgrid") || (left == "fgrid")) {
+          string right = stripBlankEnds(svector[1]);
+          XYGrid sgrid = StringToXYGrid(right);
+          grid_vector.push_back(sgrid);
+        }
       }
     }
   }
-  return(grid_vector);
+  return (grid_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: readCirclesFromFile
 
-vector<XYCircle> readCirclesFromFile(const string& filestr)
-{
+vector<XYCircle> readCirclesFromFile(const string &filestr) {
   vector<XYCircle> circle_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if(left == "circle") {
-	  string right = stripBlankEnds(svector[1]);
-	  XYCircle new_circle;
-	  bool res = new_circle.initialize(right);
-	  if(res)
-	    circle_vector.push_back(new_circle);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if (left == "circle") {
+          string right = stripBlankEnds(svector[1]);
+          XYCircle new_circle;
+          bool res = new_circle.initialize(right);
+          if (res)
+            circle_vector.push_back(new_circle);
+        }
       }
     }
   }
-  return(circle_vector);
+  return (circle_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: readArcsFromFile
 
-vector<XYArc> readArcsFromFile(const string& filestr)
-{
+vector<XYArc> readArcsFromFile(const string &filestr) {
   vector<XYArc> arc_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if(left == "arc") {
-	  string right = stripBlankEnds(svector[1]);
-	  XYArc new_arc;
-	  bool ok = new_arc.initialize(right);
-	  if(ok)
-	    arc_vector.push_back(new_arc);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if (left == "arc") {
+          string right = stripBlankEnds(svector[1]);
+          XYArc new_arc;
+          bool ok = new_arc.initialize(right);
+          if (ok)
+            arc_vector.push_back(new_arc);
+        }
       }
     }
   }
-  return(arc_vector);
+  return (arc_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: readHexagonFromFile
 
-vector<XYHexagon> readHexagonsFromFile(const string& filestr)
-{
+vector<XYHexagon> readHexagonsFromFile(const string &filestr) {
   vector<XYHexagon> hexa_vector;
 
   vector<string> file_vector = fileBuffer(filestr);
   int lineCount = file_vector.size();
-  
-  for(int i=0; i < lineCount; i++) {
+
+  for (int i = 0; i < lineCount; i++) {
     string line = stripBlankEnds(file_vector[i]);
-    
-    if((line.length()!=0) && ((line)[0]!='#')) {
+
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       vector<string> svector = chompString(line, '=');
-      if(svector.size() == 2) {
-	string left = stripBlankEnds(svector[0]);
-	if(left == "hexagon") {
-	  string right = stripBlankEnds(svector[1]);
-	  XYHexagon new_hexagon;
-	  bool ok = new_hexagon.initialize(right);
-	  if(ok)
-	    hexa_vector.push_back(new_hexagon);
-	}
+      if (svector.size() == 2) {
+        string left = stripBlankEnds(svector[0]);
+        if (left == "hexagon") {
+          string right = stripBlankEnds(svector[1]);
+          XYHexagon new_hexagon;
+          bool ok = new_hexagon.initialize(right);
+          if (ok)
+            hexa_vector.push_back(new_hexagon);
+        }
       }
     }
   }
-  return(hexa_vector);
+  return (hexa_vector);
 }
-
 
 //--------------------------------------------------------
 // Procedure: GridToString
 
-string GridToString(const XYGrid& grid)
-{
-  int gsize  = grid.size();
+string GridToString(const XYGrid &grid) {
+  int gsize = grid.size();
   string str = "GSIZE:" + intToString(gsize);
- 
-  for(int i=0; i<gsize; i++) {
+
+  for (int i = 0; i < gsize; i++) {
     str += " # ";
     str += intToString(i);
     str += ",";
-    str += doubleToString(grid.getVal(i),2);
+    str += doubleToString(grid.getVal(i), 2);
     str += ",";
-    str += doubleToString(grid.getUtil(i),2);
+    str += doubleToString(grid.getUtil(i), 2);
   }
-  
-  return(str);
+
+  return (str);
 }
-
-
 
 //--------------------------------------------------------
 // Procedure: printSquare
 
-void printSquare(const XYSquare& square)
-{
-  cout << "xl:" << square.getVal(0,0) << " ";
-  cout << "xh:" << square.getVal(0,1) << " ";
-  cout << "yl:" << square.getVal(1,0) << " ";
-  cout << "yh:" << square.getVal(1,1) << endl;
+void printSquare(const XYSquare &square) {
+  cout << "xl:" << square.getVal(0, 0) << " ";
+  cout << "xh:" << square.getVal(0, 1) << " ";
+  cout << "yl:" << square.getVal(1, 0) << " ";
+  cout << "yh:" << square.getVal(1, 1) << endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

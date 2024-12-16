@@ -26,27 +26,25 @@
 
 #include <string>
 
-class RangeMark
-{
- public:
-  RangeMark() {m_range=0;}
+class RangeMark {
+public:
+  RangeMark() { m_range = 0; }
   RangeMark(std::string, double);
   virtual ~RangeMark() {}
 
- public: // Setters
+public: // Setters
   void setRangeMark(std::string, double);
 
- public: // Getters
-  double      getRange()   const {return(m_range);}
-  std::string getContact() const {return(m_contact);}
+public: // Getters
+  double getRange() const { return (m_range); }
+  std::string getContact() const { return (m_contact); }
 
- private:
-  double      m_range;
+private:
+  double m_range;
   std::string m_contact;
 };
 
-bool operator< (const RangeMark& one, const RangeMark& two);
-bool operator== (const RangeMark& one, const RangeMark& two);
+bool operator<(const RangeMark &one, const RangeMark &two);
+bool operator==(const RangeMark &one, const RangeMark &two);
 
-#endif 
-
+#endif

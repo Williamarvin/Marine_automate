@@ -21,26 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "AppGenerator.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-AppGenerator::AppGenerator()
-{
-  m_appcasting = false;
-}
-
+AppGenerator::AppGenerator() { m_appcasting = false; }
 
 //---------------------------------------------------------
 // Procedure: generate
 
-bool AppGenerator::generate()
-{
-  return(true);
-}
-
+bool AppGenerator::generate() { return (true); }

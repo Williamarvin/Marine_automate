@@ -8,44 +8,43 @@
 #ifndef JOUST_MGR_HEADER
 #define JOUST_MGR_HEADER
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "HintHolder.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class JoustMgr : public AppCastingMOOSApp
-{
- public:
+class JoustMgr : public AppCastingMOOSApp {
+public:
   JoustMgr();
-  ~JoustMgr() {};
-  
- protected: // Standard MOOSApp functions to overload  
+  ~JoustMgr(){};
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
-protected: // Standard AppCastingMOOSApp function to overload 
+
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
-  
- protected:
+
+protected:
   void registerVariables();
   bool handleConfigJoustCircle(std::string sval);
   bool handleConfigJoustFile(std::string sval);
-  bool handleMailNodeReport(std::string str, std::string& whynot);
+  bool handleMailNodeReport(std::string str, std::string &whynot);
 
 protected:
   void makeAssignment(std::string vname);
-  void postJoustCircle(bool active=true);
+  void postJoustCircle(bool active = true);
 
   void postAssignments();
-  
+
 private: // Config vars
   double m_center_x;
   double m_center_y;
   double m_radius;
 
-  HintHolder  m_hints;
+  HintHolder m_hints;
   std::string m_update_var;
-  
+
 private: // State vars
   bool m_circle_posted;
 
@@ -62,7 +61,6 @@ private: // State vars
 
   double m_last_post_circle_utc;
   double m_last_post_assign_utc;
-  
 };
 
-#endif 
+#endif

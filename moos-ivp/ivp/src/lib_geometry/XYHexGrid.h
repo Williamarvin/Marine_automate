@@ -26,52 +26,33 @@
 #ifndef XY_HEXGRID_HEADER
 #define XY_HEXGRID_HEADER
 
+#include "XYHexagon.h"
+#include "XYSquare.h"
 #include <string>
 #include <vector>
-#include "XYSquare.h"
-#include "XYHexagon.h"
 
 class XYHexGrid {
 public:
   XYHexGrid() {}
   virtual ~XYHexGrid() {}
 
-  bool     initialize(std::string);
+  bool initialize(std::string);
 
   XYHexagon getElement(unsigned int index) const;
-  int       size() const      {return(elements.size());}
+  int size() const { return (elements.size()); }
 
-  std::string getConfigString() const {return(config_string);}
-  std::string getLabel() const {return(label);}
+  std::string getConfigString() const { return (config_string); }
+  std::string getLabel() const { return (label); }
 
 protected:
-  bool     initialize(XYPolygon, const XYSquare&);
-  bool     initialize(const XYSquare&, const XYSquare&);
-  void     clear() {}
-    
+  bool initialize(XYPolygon, const XYSquare &);
+  bool initialize(const XYSquare &, const XYSquare &);
+  void clear() {}
+
 protected:
   std::vector<XYHexagon> elements;
-  std::string            config_string;
-  std::string            label;
-  XYSquare               bounding_square;
+  std::string config_string;
+  std::string label;
+  XYSquare bounding_square;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

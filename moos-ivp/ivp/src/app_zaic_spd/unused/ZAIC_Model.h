@@ -14,16 +14,15 @@
 
 #include "IvPFunction.h"
 
-class ZAIC_Model 
-{
- public:
+class ZAIC_Model {
+public:
   ZAIC_Model() {}
-  ~ZAIC_Model() {};
+  ~ZAIC_Model(){};
 
   // Virtual function to be overloaded
-  virtual IvPFunction* getIvPFunction() {return(0);}
+  virtual IvPFunction *getIvPFunction() { return (0); }
 
   // Getters
-  IvPDomain  getIvPDomain();
+  IvPDomain getIvPDomain();
 };
-#endif 
+#endif

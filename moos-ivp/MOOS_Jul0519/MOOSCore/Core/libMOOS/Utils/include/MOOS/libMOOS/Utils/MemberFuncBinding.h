@@ -10,48 +10,36 @@
 
 #include <string>
 
-namespace MOOS
-{
+namespace MOOS {
 /**********************************************************************/
 /** binding for a member function which takes a std::string reference */
-template<typename T>
-struct FunctionStringRef{
-    typedef bool (T::*Function)(std::string & M);
+template <typename T> struct FunctionStringRef {
+  typedef bool (T::*Function)(std::string &M);
 };
 
-class FunctorStringRef
-{
+class FunctorStringRef {
 public:
-    virtual bool operator()(std::string &) = 0;
+  virtual bool operator()(std::string &) = 0;
 };
 
-template <typename T>
-class StringRefMemberFncPtr : public FunctorStringRef
-{
+template <typename T> class StringRefMemberFncPtr : public FunctorStringRef {
 private:
-    T *inst;
-    typename FunctionStringRef<T>::Function pt2FuncMember;
+  T *inst;
+  typename FunctionStringRef<T>::Function pt2FuncMember;
 
 public:
-    StringRefMemberFncPtr(T* who,bool (T::*memfunc)(std::string  &))
-         : inst(who), pt2FuncMember(memfunc){}
+  StringRefMemberFncPtr(T *who, bool (T::*memfunc)(std::string &))
+      : inst(who), pt2FuncMember(memfunc) {}
 
-    StringRefMemberFncPtr():inst(0),pt2FuncMember(0){};
+  StringRefMemberFncPtr() : inst(0), pt2FuncMember(0){};
 
-    bool operator()(std::string & S)
-    {
-        return (inst->*pt2FuncMember)(S);
-    }
-
+  bool operator()(std::string &S) { return (inst->*pt2FuncMember)(S); }
 };
 
 template <typename T>
-FunctorStringRef * BindFunctor(T* who, bool (T::*memfunc)(std::string &))
-{
-    return new StringRefMemberFncPtr<T>(who,memfunc);
+FunctorStringRef *BindFunctor(T *who, bool (T::*memfunc)(std::string &)) {
+  return new StringRefMemberFncPtr<T>(who, memfunc);
 }
-}
-
-
+} // namespace MOOS
 
 #endif /* MEMBERFUNCBINDING_H_ */

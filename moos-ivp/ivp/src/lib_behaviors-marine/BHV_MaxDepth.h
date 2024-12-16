@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_MAX_DEPTH_HEADER
 #define BHV_MAX_DEPTH_HEADER
 
@@ -30,31 +30,21 @@ class BHV_MaxDepth : public IvPBehavior {
 public:
   BHV_MaxDepth(IvPDomain);
   ~BHV_MaxDepth() {}
-  
-  void         onIdleState() {updateInfoIn();}
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  bool         isConstraint() {return(true);}
 
- protected:
-  bool         updateInfoIn();
+  void onIdleState() { updateInfoIn(); }
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  bool isConstraint() { return (true); }
 
- protected: // Configuration variables
-  double      m_max_depth;
-  double      m_basewidth;
+protected:
+  bool updateInfoIn();
+
+protected: // Configuration variables
+  double m_max_depth;
+  double m_basewidth;
   std::string m_depth_slack_var;
 
- protected: // State variables
-  double      m_osd;
+protected: // State variables
+  double m_osd;
 };
 #endif
-
-
-
-
-
-
-
-
-
-

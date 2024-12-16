@@ -24,26 +24,25 @@
 #ifndef FFV_GUI_HEADER
 #define FFV_GUI_HEADER
 
+#include "Common_IPF_GUI.h"
+#include "FFV_Viewer.h"
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Output.H>
-#include "FFV_Viewer.h"
-#include "Common_IPF_GUI.h"
+#include <FL/Fl_Window.H>
 
 class FFV_GUI : public Common_IPF_GUI {
 public:
-  FFV_GUI(int w, int h, const char *label=0);
-  virtual ~FFV_GUI() {};
-  
-  int  handle(int);
-  void setAOF(AOF* aof)           
-    {m_ffv_viewer->setAOF(aof);}
+  FFV_GUI(int w, int h, const char *label = 0);
+  virtual ~FFV_GUI(){};
+
+  int handle(int);
+  void setAOF(AOF *aof) { m_ffv_viewer->setAOF(aof); }
 
   bool setViewerParam(std::string, std::string);
   bool setViewerParam(std::string, double);
-    
- protected:
+
+protected:
   void augmentMenu();
 
   void resize(int, int, int, int);
@@ -51,86 +50,86 @@ public:
   void resizeWidgetsShape();
   void resizeWidgetsText();
   void updateXY();
-  
- protected:
-  FFV_Viewer  *m_ffv_viewer;
 
-  Fl_Output   *m_fld_samp_count;
-  Fl_Output   *m_fld_worst_err;
-  Fl_Output   *m_fld_piece_count;
+protected:
+  FFV_Viewer *m_ffv_viewer;
 
-  Fl_Output   *m_fld_avg_err;
-  Fl_Output   *m_fld_square_err;
-  Fl_Output   *m_fld_unif_aug_size;
+  Fl_Output *m_fld_samp_count;
+  Fl_Output *m_fld_worst_err;
+  Fl_Output *m_fld_piece_count;
 
-  Fl_Output   *m_fld_samp_high;
-  Fl_Output   *m_fld_samp_low;
-  Fl_Output   *m_fld_create_time;
+  Fl_Output *m_fld_avg_err;
+  Fl_Output *m_fld_square_err;
+  Fl_Output *m_fld_unif_aug_size;
 
-  Fl_Output   *m_fld_uniform_str;
-  Fl_Output   *m_fld_refine_reg_str;
-  Fl_Output   *m_fld_reflector_errors;
+  Fl_Output *m_fld_samp_high;
+  Fl_Output *m_fld_samp_low;
+  Fl_Output *m_fld_create_time;
 
-  Fl_Output   *m_fld_auto_peak;
-  Fl_Output   *m_fld_refine_pce_str;
+  Fl_Output *m_fld_uniform_str;
+  Fl_Output *m_fld_refine_reg_str;
+  Fl_Output *m_fld_reflector_errors;
+
+  Fl_Output *m_fld_auto_peak;
+  Fl_Output *m_fld_refine_pce_str;
 
 private:
   inline void cb_ModBaseAOF_i(int);
-  static void cb_ModBaseAOF(Fl_Widget*, int);
+  static void cb_ModBaseAOF(Fl_Widget *, int);
 
   inline void cb_ToggleAOF_i();
-  static void cb_ToggleAOF(Fl_Widget*);
+  static void cb_ToggleAOF(Fl_Widget *);
 
   inline void cb_ToggleIPF_i();
-  static void cb_ToggleIPF(Fl_Widget*);
+  static void cb_ToggleIPF(Fl_Widget *);
 
   inline void cb_ToggleDirectedRefine_i();
-  static void cb_ToggleDirectedRefine(Fl_Widget*);
+  static void cb_ToggleDirectedRefine(Fl_Widget *);
 
   inline void cb_ToggleSmartAug_i();
-  static void cb_ToggleSmartAug(Fl_Widget*);
+  static void cb_ToggleSmartAug(Fl_Widget *);
 
   inline void cb_ToggleAutoPeak_i();
-  static void cb_ToggleAutoPeak(Fl_Widget*);
+  static void cb_ToggleAutoPeak(Fl_Widget *);
 
   inline void cb_SmartAugAmt_i(int);
-  static void cb_SmartAugAmt(Fl_Widget*, int);
+  static void cb_SmartAugAmt(Fl_Widget *, int);
 
   inline void cb_SmartAugPct_i(int);
-  static void cb_SmartAugPct(Fl_Widget*, int);
+  static void cb_SmartAugPct(Fl_Widget *, int);
 
   inline void cb_ToggleFrame_i();
-  static void cb_ToggleFrame(Fl_Widget*);
+  static void cb_ToggleFrame(Fl_Widget *);
 
   inline void cb_FrameHeight_i(int);
-  static void cb_FrameHeight(Fl_Widget*, int);
+  static void cb_FrameHeight(Fl_Widget *, int);
 
   inline void cb_ToggleStrict_i();
-  static void cb_ToggleStrict(Fl_Widget*);
+  static void cb_ToggleStrict(Fl_Widget *);
 
   inline void cb_ModPatchAOF_i(int);
-  static void cb_ModPatchAOF(Fl_Widget*, int);
+  static void cb_ModPatchAOF(Fl_Widget *, int);
 
   inline void cb_ModUniformAug_i(int);
-  static void cb_ModUniformAug(Fl_Widget*, int);
+  static void cb_ModUniformAug(Fl_Widget *, int);
 
   inline void cb_Sample_i(int);
-  static void cb_Sample(Fl_Widget*, int);
+  static void cb_Sample(Fl_Widget *, int);
 
   inline void cb_Rebuild_i(int);
-  static void cb_Rebuild(Fl_Widget*, int);
+  static void cb_Rebuild(Fl_Widget *, int);
 
   inline void cb_MakeUniform_i(int);
-  static void cb_MakeUniform(Fl_Widget*, int);
+  static void cb_MakeUniform(Fl_Widget *, int);
 
   inline void cb_MakePieces_i(int);
-  static void cb_MakePieces(Fl_Widget*, int);
+  static void cb_MakePieces(Fl_Widget *, int);
 
   inline void cb_PrintParams_i();
-  static void cb_PrintParams(Fl_Widget*);
+  static void cb_PrintParams(Fl_Widget *);
 
   inline void cb_ModPolar_i(int);
-  static void cb_ModPolar(Fl_Widget*, int);
+  static void cb_ModPolar(Fl_Widget *, int);
 
 #if 0
   inline void cb_set_uniform_str_i();
@@ -145,13 +144,3 @@ private:
   static void cb_Quit();
 };
 #endif
-
-
-
-
-
-
-
-
-
-

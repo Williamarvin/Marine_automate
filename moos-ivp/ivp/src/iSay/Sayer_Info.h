@@ -31,10 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-

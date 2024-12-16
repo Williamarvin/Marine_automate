@@ -24,15 +24,15 @@
 /*****************************************************************/
 
 #ifndef _WIN32
+#include "TermUtils.h"
+#include <cstdio>
 #include <string>
 #include <termios.h>
-#include <cstdio>
-#include "TermUtils.h"
 #endif
 
 #ifdef _WIN32
-#include "windows.h"
 #include "winbase.h"
+#include "windows.h"
 #include "winnt.h"
 #include <conio.h>
 #endif
@@ -42,22 +42,21 @@
 //--------------------------------------------------------
 // Procedure: getCharNoWait()
 //      Note: Even though this function implies "no-wait", an optional
-//            sleep is available for callers who wish to utilize it. 
+//            sleep is available for callers who wish to utilize it.
 //            The default sleep time is 1/10 second if an argument is
 //            not provided.
 
 #ifndef _WIN32
-char getCharNoWait(useconds_t usecs) 
-{
-  char c, fd=0;
+char getCharNoWait(useconds_t usecs) {
+  char c, fd = 0;
   struct termios term, oterm;
-  
+
   /* get the terminal settings */
   tcgetattr(fd, &oterm);
-  
+
   /* get a copy of the settings, which we modify */
   memcpy(&term, &oterm, sizeof(term));
-  
+
   /* put the terminal in non-canonical mode, any
      reads will wait until a character has been
      pressed. This function will not time out */
@@ -65,13 +64,13 @@ char getCharNoWait(useconds_t usecs)
   term.c_cc[VMIN] = 1;
   term.c_cc[VTIME] = 0;
   tcsetattr(fd, TCSANOW, &term);
-  
+
   /* get a character. c is the character */
-  c=getchar();
-  
+  c = getchar();
+
   /* reset the terminal to its original state */
   tcsetattr(fd, TCSANOW, &oterm);
-  
+
   /* return the charcter */
   usleep(usecs);
   return c;
@@ -79,27 +78,5 @@ char getCharNoWait(useconds_t usecs)
 #endif
 
 #ifdef _WIN32
-char getCharNoWait() 
-{
-  return _getch() ;
-}
+char getCharNoWait() { return _getch(); }
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

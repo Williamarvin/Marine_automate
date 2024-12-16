@@ -22,19 +22,14 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_WEDGE_HEADER
 #define XY_FORMAT_UTILS_WEDGE_HEADER
 
-#include <string>
 #include "XYWedge.h"
+#include <string>
 
-// Create an XYWedge from a string specification. 
+// Create an XYWedge from a string specification.
 XYWedge string2Wedge(std::string);
 
 #endif
-
-
-
-
-

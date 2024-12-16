@@ -26,33 +26,50 @@
 
 #include <vector>
 
-class ExpEntry
-{
- public:
+class ExpEntry {
+public:
   ExpEntry();
   ~ExpEntry() {}
 
-  void setXVal(double x) {m_xval=x;}
+  void setXVal(double x) { m_xval = x; }
   void addYVal(double y);
 
-  double getXVal() {return(m_xval);}
-  double getYAvg() {process(); return(m_yavg);}
-  double getYMin() {process(); return(m_ymin);}
-  double getYMax() {process(); return(m_ymax);}
-  double getYStd() {process(); return(m_ystd);}
-  double getYNeg() {process(); return(m_yavg-m_ymin);}
-  double getYPos() {process(); return(m_ymax-m_yavg);}
-  
-  unsigned int size() const {return(m_yvals.size());}
-  
- protected: 
+  double getXVal() { return (m_xval); }
+  double getYAvg() {
+    process();
+    return (m_yavg);
+  }
+  double getYMin() {
+    process();
+    return (m_ymin);
+  }
+  double getYMax() {
+    process();
+    return (m_ymax);
+  }
+  double getYStd() {
+    process();
+    return (m_ystd);
+  }
+  double getYNeg() {
+    process();
+    return (m_yavg - m_ymin);
+  }
+  double getYPos() {
+    process();
+    return (m_ymax - m_yavg);
+  }
+
+  unsigned int size() const { return (m_yvals.size()); }
+
+protected:
   void process();
   void setYAvg();
   void setYMin();
   void setYMax();
   void setYStd();
 
- protected:
+protected:
   double m_xval;
   std::vector<double> m_yvals;
 
@@ -60,8 +77,7 @@ class ExpEntry
   double m_ymin;
   double m_ymax;
   double m_ystd;
-  bool   m_processed;
+  bool m_processed;
 };
 
 #endif
-

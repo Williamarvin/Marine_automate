@@ -5,19 +5,18 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "DynamLearning_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pDynamLearning application is used for estimating the     ");
@@ -30,8 +29,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pDynamLearning file.moos [OPTIONS]                       ");
@@ -40,7 +38,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pDynamLearning with the given process name         ");
   blk("      rather than pDynamLearning.                               ");
   mag("  --example, -e                                                 ");
@@ -62,8 +60,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pDynamLearning Example MOOS Configuration                       ");
@@ -91,7 +88,7 @@ void showExampleConfigAndExit()
   blk("  //////// RNN Parameters ///////                               ");
   blu("  NumberNeurons = 8                                             ");
   blu("  NumberInputs  = 4                                             ");
-  blk("                                                                ");  
+  blk("                                                                ");
   blk("  // These values are used to scale the inputs to the range 0-1.");
   blk("  // It is better to over estimate the max values than to       ");
   blk("  // underestimate.  The units are the same as the inputs.      ");
@@ -102,7 +99,7 @@ void showExampleConfigAndExit()
   blk("                                                                ");
   blk("  // These values are used for the Adams back-propagation       ");
   blk("  // algorithm                                                  ");
-  blu("  Alpha   = 0.0005                                              "); 
+  blu("  Alpha   = 0.0005                                              ");
   blu("  Beta1   = 0.9                                                 ");
   blu("  Beta2   = 0.999                                               ");
   blu("  Epsilon = 0.00000001                                          ");
@@ -117,7 +114,7 @@ void showExampleConfigAndExit()
   blu("  AIDParamInit4 = -0.0025                                       ");
   blk("                                                                ");
   blk("  // Adaptation gains                                           ");
-  blu("  GainParam1 = 0.0000000000001  // Tiny since thruster commands "); 
+  blu("  GainParam1 = 0.0000000000001  // Tiny since thruster commands ");
   blu("  GainParam2 = 0.0000000000001  //      are 0 to 100            ");
   blu("  GainParam3 = 0.00001                                          ");
   blu("  GainParam4 = 0.000001                                         ");
@@ -136,18 +133,16 @@ void showExampleConfigAndExit()
   blu("  RLSParamInit6   = 0.0000079938                                ");
   blu("  RLSParamInit7   = 0.0                                         ");
   blu("  RLSParamInit8   = 0.0                                         ");
-  blk("                                                                ");  
+  blk("                                                                ");
   blk("}                                                               ");
   blk("                                                                ");
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pDynamLearning INTERFACE                                        ");
@@ -176,9 +171,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pDynamLearning", "gpl");
   exit(0);
 }
-

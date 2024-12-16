@@ -24,45 +24,44 @@
 #ifndef USM_MOOSAPP_HEADER
 #define USM_MOOSAPP_HEADER
 
-#include <string>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "USM_Model.h"
+#include <string>
 
-class USM_MOOSApp : public AppCastingMOOSApp
-{
+class USM_MOOSApp : public AppCastingMOOSApp {
 public:
   USM_MOOSApp();
   virtual ~USM_MOOSApp() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool OnStartUp();
   bool Iterate();
   bool OnConnectToServer();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
-  bool deprecated() {return(true);}
+  bool deprecated() { return (true); }
 
- protected:
+protected:
   void registerVariables();
-  void postNodeRecordUpdate(std::string, const NodeRecord&);
+  void postNodeRecordUpdate(std::string, const NodeRecord &);
   bool handleThrustMapping(std::string);
   void cacheStartingInfo();
-  
+
   std::string handleConfigDeprecations(std::string);
 
 protected:
-  std::string  m_sim_prefix;
-  USM_Model    m_model;
+  std::string m_sim_prefix;
+  USM_Model m_model;
   unsigned int m_reset_count;
-  bool         m_enabled;
-  
+  bool m_enabled;
+
   CMOOSGeodesy m_geodesy;
-  bool         m_geo_ok;
-  bool         m_thrust_mode_reverse;
-  bool         m_thrust_mode_differential;
+  bool m_geo_ok;
+  bool m_thrust_mode_reverse;
+  bool m_thrust_mode_differential;
 
   // A cache of starting info to facilitate generation of reports.
   std::string m_start_nav_x;
@@ -83,8 +82,8 @@ protected:
   std::set<std::string> m_srcs_buoyrate;
   std::set<std::string> m_srcs_drift;
 
-  bool   buoyancy_requested;
-  bool   trim_requested;
+  bool buoyancy_requested;
+  bool trim_requested;
   double buoyancy_request_time;
   double trim_request_time;
   double buoyancy_delay;
@@ -92,12 +91,8 @@ protected:
   double last_report;
   double report_interval;
   double pitch_tolerance;
-  
-  bool   m_obstacle_hit;
+
+  bool m_obstacle_hit;
 };
 
 #endif
-
-
-
-

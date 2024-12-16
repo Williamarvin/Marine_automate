@@ -22,93 +22,75 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <cmath>
-#include "BHV_BearingLine.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
+#include "BHV_BearingLine.h"
 #include "GeomUtils.h"
-#include "XYSegList.h"
+#include "MBUtils.h"
 #include "XYFormatUtilsPoint.h"
+#include "XYSegList.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_RangePulse::BHV_RangePulse(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
-  m_descriptor = "bhv_bngline";  // variable at superclass level
+BHV_RangePulse::BHV_RangePulse(IvPDomain gdomain) : IvPBehavior(gdomain) {
+  m_descriptor = "bhv_bngline"; // variable at superclass level
 
   // configuration parameters
   m_bearing_pt.set_vertex(0, 0);
-  m_line_pct = 50;   // Percentage [0,100]
-  m_show_pt  = true;
+  m_line_pct = 50; // Percentage [0,100]
+  m_show_pt = true;
 
   setParam("descriptor", "bhv_rngpulse");
   addInfoVars("NAV_X, NAV_Y");
-  addInfoVars("RANGE_PULSE"+m_us_name);
+  addInfoVars("RANGE_PULSE" + m_us_name);
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_RangePulse::setParam(string param, string val) 
-{
-  return(true);
-}
+bool BHV_RangePulse::setParam(string param, string val) { return (true); }
 
 //-----------------------------------------------------------
 // Procedure: setParamComplete
 
-void BHV_RangePulse::onSetParamComplete()
-{
-  addInfoVars("RANGE_PULSE"+m_us_name);
+void BHV_RangePulse::onSetParamComplete() {
+  addInfoVars("RANGE_PULSE" + m_us_name);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_RangePulse::onRunState() 
-{
+IvPFunction *BHV_RangePulse::onRunState() {
   bool okr;
   string varname = "RANGE_REPORT" + m_us_name;
   vector<string> rpts = getBufferStringVector(varname, okr);
 
   unsigned int i, vsize = rpts.size();
-  if(vsize == 0)
-    return(0);
+  if (vsize == 0)
+    return (0);
 
   bool okx, oky;
   double nav_x, nav_y;
- 
+
   nav_x = getBufferDoubleVal("NAV_X", okx);
   nav_y = getBufferDoubleVal("NAV_Y", oky);
 
-  if(!okx)
+  if (!okx)
     postWMessage("No NAV_X info in the info_buffer");
-  if(!oky)
+  if (!oky)
     postWMessage("No NAV_Y info in the info_buffer");
 
-  for(i=0; i<vsize; i++) {
-    string pulse = "x=" + doubleToString(nav_x,0);
-    pulse += ",y=" + doubleToString(nav_y,0);
+  for (i = 0; i < vsize; i++) {
+    string pulse = "x=" + doubleToString(nav_x, 0);
+    pulse += ",y=" + doubleToString(nav_y, 0);
     pulse += ",radius=25,duration=20,label=one";
     postMessage("VIEW_RANGE_PULSE", pulse);
   }
-  
-  return(0);
+
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-
-

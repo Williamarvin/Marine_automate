@@ -21,31 +21,29 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_MinAltitudeX.h"
-#include "MBUtils.h"
 #include "BuildUtils.h"
+#include "MBUtils.h"
 #include "ZAIC_LEQ.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_MinAltitudeX::BHV_MinAltitudeX(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_MinAltitudeX::BHV_MinAltitudeX(IvPDomain gdomain) : IvPBehavior(gdomain) {
   m_descriptor = "min_altitude";
-  m_domain     = subDomain(m_domain, "depth");
+  m_domain = subDomain(m_domain, "depth");
 
   // Behavior Parameter Default Values:
-  m_min_altitude  = 0;  // meters
+  m_min_altitude = 0; // meters
   m_missing_altitude_critical = true;
 
   // Behavior State Variable Initial Values:
-  m_curr_depth    = 0;  // meters
-  m_curr_altitude = 0;  // meters
+  m_curr_depth = 0;    // meters
+  m_curr_altitude = 0; // meters
 
   // Declare the variables we will need from the info_buffer
   addInfoVars("NAV_DEPTH");
@@ -55,109 +53,92 @@ BHV_MinAltitudeX::BHV_MinAltitudeX(IvPDomain gdomain) :
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_MinAltitudeX::setParam(string param, string param_val) 
-{
-  if(IvPBehavior::setParamCommon(param, param_val))
-    return(true);
+bool BHV_MinAltitudeX::setParam(string param, string param_val) {
+  if (IvPBehavior::setParamCommon(param, param_val))
+    return (true);
 
   param = tolower(param);
 
-  if(param == "min_altitude") {
+  if (param == "min_altitude") {
     double dval = atof(param_val.c_str());
-    if((dval < 0) || (!isNumber(param_val)))
-      return(false);
+    if ((dval < 0) || (!isNumber(param_val)))
+      return (false);
     m_min_altitude = dval;
-    return(true);
-  }
-  else if(param == "missing_altitude_critical")
-    return(setBooleanOnString(m_missing_altitude_critical, param_val));
-  return(false);
+    return (true);
+  } else if (param == "missing_altitude_critical")
+    return (setBooleanOnString(m_missing_altitude_critical, param_val));
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_MinAltitudeX::onRunState() 
-{
-  if(!updateInfoIn())
-    return(0);
+IvPFunction *BHV_MinAltitudeX::onRunState() {
+  if (!updateInfoIn())
+    return (0);
 
-  if(m_curr_altitude > 0) {
+  if (m_curr_altitude > 0) {
 
     // check here for bottom altitude and change max depth if necessary
     double curr_water_depth = m_curr_depth + m_curr_altitude;
-    m_curr_max_depth  = curr_water_depth - m_min_altitude;
+    m_curr_max_depth = curr_water_depth - m_min_altitude;
 
-    if(m_curr_max_depth < 0)
+    if (m_curr_max_depth < 0)
       m_curr_max_depth = 0;
 
     ZAIC_LEQ zaic_depth(m_domain, "depth");
     zaic_depth.setSummit(m_curr_max_depth);
     zaic_depth.setBaseWidth(0);
-      
+
     IvPFunction *ipf_depth = zaic_depth.extractOF();
-    
-    if(ipf_depth)
+
+    if (ipf_depth)
       ipf_depth->setPWT(m_priority_wt);
-      
-    return(ipf_depth);
+
+    return (ipf_depth);
   }
-  return(0);
+  return (0);
 }
 
 //-----------------------------------------------------------
 // Procedure: updateInfoIn
 
-bool BHV_MinAltitudeX::updateInfoIn() 
-{
-  bool   ok1, ok2;
+bool BHV_MinAltitudeX::updateInfoIn() {
+  bool ok1, ok2;
 
-  m_curr_depth    = getBufferDoubleVal("NAV_DEPTH", ok1);
+  m_curr_depth = getBufferDoubleVal("NAV_DEPTH", ok1);
   m_curr_altitude = getBufferDoubleVal("NAV_ALTITUDE", ok2);
-  
-  if(!ok1) {
+
+  if (!ok1) {
     postEMessage("No ownship NAV_DEPTH info in the helm info_buffer");
     postMessage("MIN_ALT_STATUS", "Missing NAV_DEPTH info");
-    return(false);
+    return (false);
   }
 
-  if(!ok2) {
-    if(m_missing_altitude_critical)
+  if (!ok2) {
+    if (m_missing_altitude_critical)
       postEMessage("No ownship NAV_ALTITUDE info in the helm info_buffer");
     else {
       postEMessage("No ownship NAV_ALTITUDE info in the helm info_buffer");
       m_curr_altitude = 0;
     }
     postMessage("MIN_ALT_STATUS", "Missing NAV_ALTITUDE info");
-    return(false);
+    return (false);
   }
 
-  return(true);
+  return (true);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: postStatusReport
 
-void BHV_MinAltitudeX::postStatusReport() 
-{
-  if(m_curr_max_depth == 0) 
+void BHV_MinAltitudeX::postStatusReport() {
+  if (m_curr_max_depth == 0)
     postWMessage("Min_Altitude allowed is zero");
-  
+
   string info = doubleToString(m_curr_max_depth, 0);
-  if(m_curr_max_depth < 10)
+  if (m_curr_max_depth < 10)
     info = doubleToString(m_curr_max_depth, 1);
 
   postMessage("MIN_ALT_STATUS", info);
 }
-
-
-
-
-
-
-
-
-
-
-

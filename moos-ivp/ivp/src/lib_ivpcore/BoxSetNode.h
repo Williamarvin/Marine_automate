@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BOXSETNODE_HEADER
 #define BOXSETNODE_HEADER
 
@@ -30,76 +30,29 @@
 
 class IvPBox;
 class BoxSetNode {
-friend class BoxSet;
+  friend class BoxSet;
+
 public:
-  BoxSetNode()            {m_prev=0; m_next=0; m_box=0;}
-  BoxSetNode(IvPBox *b)   {m_prev=0; m_next=0; m_box=b;}
+  BoxSetNode() {
+    m_prev = 0;
+    m_next = 0;
+    m_box = 0;
+  }
+  BoxSetNode(IvPBox *b) {
+    m_prev = 0;
+    m_next = 0;
+    m_box = b;
+  }
   ~BoxSetNode() {}
 
-  BoxSetNode *getNext()   {return(m_next);}
-  BoxSetNode *getPrev()   {return(m_prev);}
-  IvPBox     *getBox()    {return(m_box);}
+  BoxSetNode *getNext() { return (m_next); }
+  BoxSetNode *getPrev() { return (m_prev); }
+  IvPBox *getBox() { return (m_box); }
 
 private:
-  BoxSetNode  *m_prev;
-  BoxSetNode  *m_next;
-  IvPBox      *m_box;
+  BoxSetNode *m_prev;
+  BoxSetNode *m_next;
+  IvPBox *m_box;
 };
 
-
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

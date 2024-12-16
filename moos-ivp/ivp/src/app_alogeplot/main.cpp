@@ -21,12 +21,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "EPlotEngine.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
-#include "EPlotEngine.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -35,44 +35,42 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   EPlotEngine eplot_engine;
-  
+
   bool handled = true;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="--version") || (argi=="-version")) {
+    else if ((argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogeplot", "gpl");
-      return(0);
-    }
-    else if(strEnds(argi, ".alog")) 
+      return (0);
+    } else if (strEnds(argi, ".alog"))
       handled = eplot_engine.addALogFile(argi);
-    else if(strEnds(argi, ".scn")) 
+    else if (strEnds(argi, ".scn"))
       handled = eplot_engine.setSceneFile(argi);
-    else if(strBegins(argi, "--pcolor="))
+    else if (strBegins(argi, "--pcolor="))
       handled = eplot_engine.setPointColor(argi.substr(9));
-    else if(strBegins(argi, "--psize="))
+    else if (strBegins(argi, "--psize="))
       handled = eplot_engine.setPointSize(argi.substr(8));
 
-    else if(strBegins(argi, "--pwid=")) 
+    else if (strBegins(argi, "--pwid="))
       handled = eplot_engine.setPlotWidCM(argi.substr(7));
-    else if(strBegins(argi, "--phgt=")) 
+    else if (strBegins(argi, "--phgt="))
       handled = eplot_engine.setPlotHgtCM(argi.substr(7));
 
-    else if(strBegins(argi, "--gwid=")) 
+    else if (strBegins(argi, "--gwid="))
       handled = eplot_engine.setGridWidCM(argi.substr(7));
-    else if(strBegins(argi, "--ghgt=")) 
+    else if (strBegins(argi, "--ghgt="))
       handled = eplot_engine.setGridHgtCM(argi.substr(7));
 
-    else if((argi == "--verbose") || (argi == "-v"))
+    else if ((argi == "--verbose") || (argi == "-v"))
       eplot_engine.setVerbose(true);
-    else 
+    else
       handled = false;
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -80,15 +78,13 @@ int main(int argc, char *argv[])
   }
 
   eplot_engine.generate();
-  return(0);
+  return (0);
 }
-
 
 //------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogeplot file.alog [file.scn] [file.png] [OPTIONS] " << endl;
   cout << "                                                      " << endl;
@@ -131,9 +127,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-

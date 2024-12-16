@@ -30,51 +30,51 @@
 #ifndef OF_ZAIC_PEAK_HEADER
 #define OF_ZAIC_PEAK_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "IvPFunction.h"
+#include <string>
 
 class PDMap;
 
 class ZAIC_PEAK {
 public:
-  ZAIC_PEAK(IvPDomain g_domain, const std::string& g_varname);
+  ZAIC_PEAK(IvPDomain g_domain, const std::string &g_varname);
   virtual ~ZAIC_PEAK() {}
 
-  bool setParams(double summit, double pwidth,  double bwidth, 
-		 double delta,  double minutil, double maxutil, 
-		 unsigned int index=0);
+  bool setParams(double summit, double pwidth, double bwidth, double delta,
+                 double minutil, double maxutil, unsigned int index = 0);
 
-  bool   setSummit(double, unsigned int index=0);
-  bool   setBaseWidth(double, unsigned int index=0);
-  bool   setPeakWidth(double, unsigned int index=0);
-  bool   setSummitDelta(double, unsigned int index=0);
-  bool   setMinMaxUtil(double, double, unsigned int index=0);
-  void   setSummitInsist(bool v)      {m_summit_insist=v;}
-  void   setValueWrap(bool v)         {m_value_wrap=v;}
+  bool setSummit(double, unsigned int index = 0);
+  bool setBaseWidth(double, unsigned int index = 0);
+  bool setPeakWidth(double, unsigned int index = 0);
+  bool setSummitDelta(double, unsigned int index = 0);
+  bool setMinMaxUtil(double, double, unsigned int index = 0);
+  void setSummitInsist(bool v) { m_summit_insist = v; }
+  void setValueWrap(bool v) { m_value_wrap = v; }
 
-  int    addComponent();
+  int addComponent();
 
-  double getParam(std::string, unsigned int index=0);
-  bool   getValueWrap()     {return(m_value_wrap);}
-  bool   getSummitInsist()  {return(m_summit_insist);}
-  int    getSummitCount()   {return(v_summit.size());}
+  double getParam(std::string, unsigned int index = 0);
+  bool getValueWrap() { return (m_value_wrap); }
+  bool getSummitInsist() { return (m_summit_insist); }
+  int getSummitCount() { return (v_summit.size()); }
 
-  bool         stateOK()     {return(m_state_ok);}
-  std::string  getWarnings() {return(m_warning);}
-  IvPFunction* extractOF(bool maxval=true);
-  IvPFunction* extractIvPFunction(bool maxval=true) 
-  {return(extractOF(maxval));}
-  
-  IvPDomain getIvPDomain() const {return(m_ivp_domain);}
+  bool stateOK() { return (m_state_ok); }
+  std::string getWarnings() { return (m_warning); }
+  IvPFunction *extractOF(bool maxval = true);
+  IvPFunction *extractIvPFunction(bool maxval = true) {
+    return (extractOF(maxval));
+  }
+
+  IvPDomain getIvPDomain() const { return (m_ivp_domain); }
 
 protected:
-  double evalPoint(unsigned int pt_ix, bool maxval=true);
+  double evalPoint(unsigned int pt_ix, bool maxval = true);
   double evalPoint(unsigned int summit_ix, unsigned int pt_ix);
 
-  void   insistSummit(unsigned int summit_ix);
-  PDMap* setPDMap(double tolerance = 0.001);
-  
+  void insistSummit(unsigned int summit_ix);
+  PDMap *setPDMap(double tolerance = 0.001);
+
 protected:
   std::vector<double> v_summit;
   std::vector<double> v_basewidth;
@@ -83,42 +83,21 @@ protected:
   std::vector<double> v_minutil;
   std::vector<double> v_maxutil;
 
-  bool   m_summit_insist;
-  bool   m_value_wrap;
+  bool m_summit_insist;
+  bool m_value_wrap;
 
 private:
   unsigned int m_domain_pts;
 
-  int    m_domain_ix;
+  int m_domain_ix;
   double m_domain_high;
   double m_domain_low;
   double m_domain_delta;
 
-  bool   m_state_ok;
+  bool m_state_ok;
 
-  std::string         m_warning;
+  std::string m_warning;
   std::vector<double> m_ptvals;
-  IvPDomain           m_ivp_domain;
+  IvPDomain m_ivp_domain;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

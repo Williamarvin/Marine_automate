@@ -4,36 +4,41 @@
 /*    DATE: Sep 6th, 2019                                        */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
 #include "XYFormatUtilsPoly.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
-int cmdLineErr(string msg) {cout << msg << endl; return(1);}
+int cmdLineErr(string msg) {
+  cout << msg << endl;
+  return (1);
+}
 
-int main(int argc, char** argv) 
-{
-  double px = 0;    bool px_set=false;
-  double py = 0;    bool py_set=false;
-  XYPolygon poly;   bool poly_set = false;
-  
-  for(int i=1; i<argc; i++) {
+int main(int argc, char **argv) {
+  double px = 0;
+  bool px_set = false;
+  double py = 0;
+  bool py_set = false;
+  XYPolygon poly;
+  bool poly_set = false;
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if(strBegins(argi, "px="))
+    if (strBegins(argi, "px="))
       px_set = setDoubleOnString(px, argi.substr(3));
-    else if(strBegins(argi, "py="))
+    else if (strBegins(argi, "py="))
       py_set = setDoubleOnString(py, argi.substr(3));
 
-    else if(strBegins(argi, "poly=")) {
+    else if (strBegins(argi, "poly=")) {
       poly = string2Poly(argi.substr(5));
-      if(poly.is_convex())
-	poly_set = true;
+      if (poly.is_convex())
+        poly_set = true;
     }
-      
-    else if((argi=="-h") || (argi=="--help")) {
+
+    else if ((argi == "-h") || (argi == "--help")) {
       cout << "Usage:                                     " << endl;
       cout << "  testBearingMinMaxToPoly                  " << endl;
       cout << "Synopsis:                                  " << endl;
@@ -42,29 +47,27 @@ int main(int argc, char** argv)
       cout << "  $ testBearingMinMaxToPoly px=15 py=-40 \\" << endl;
       cout << "    poly=250,-50:275,-50:275,-25:250,-25   " << endl;
       cout << "bmin=96.58,bmax=97.28                      " << endl;
-      return(0);
-    }
-    else if(strBegins(argi, "id="))
+      return (0);
+    } else if (strBegins(argi, "id="))
       argi = "just ignore id fields";
     else {
       cout << "Error: arg[" << argi << "] Exiting." << endl;
-      return(1);
-    }  
-  }  
-     
-  if(!px_set)
-    return(cmdLineErr("px is not set. Exiting."));
-  if(!py_set)
-    return(cmdLineErr("py is not set. Exiting."));
-  if(!poly_set)
-    return(cmdLineErr("poly is not set. Exiting."));
+      return (1);
+    }
+  }
 
-  double bmin=-1;
-  double bmax=-1;
-  bearingMinMaxToPoly(px,py, poly, bmin,bmax);
+  if (!px_set)
+    return (cmdLineErr("px is not set. Exiting."));
+  if (!py_set)
+    return (cmdLineErr("py is not set. Exiting."));
+  if (!poly_set)
+    return (cmdLineErr("poly is not set. Exiting."));
 
-  cout << "bmin="  << doubleToStringX(bmin,2);
-  cout << ",bmax=" << doubleToStringX(bmax,2);
-  return(0);
+  double bmin = -1;
+  double bmax = -1;
+  bearingMinMaxToPoly(px, py, poly, bmin, bmax);
+
+  cout << "bmin=" << doubleToStringX(bmin, 2);
+  cout << ",bmax=" << doubleToStringX(bmax, 2);
+  return (0);
 }
- 

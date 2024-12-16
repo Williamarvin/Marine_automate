@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
+#include "UFS_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "UFS_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run in a shoreside community. Takes information from");
@@ -45,8 +44,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                           ");
   blu("========================================================== ");
   blu("Usage: uFldScope file.moos [OPTIONS]                       ");
@@ -55,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                           ");
   blk("Options:                                                   ");
-  mag("  --alias","=<ProcessName>                                 ");
+  mag("  --alias", "=<ProcessName>                                 ");
   blk("      Launch uFldCommsRegister with the given              ");
   blk("      process name rather than uFldCommsRegister.          ");
   mag("  --example, -e                                            ");
@@ -75,10 +73,9 @@ void showHelpAndExit()
 }
 
 //----------------------------------------------------------------
-// Procedure: showExampleConfigAndExit                                  
+// Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldScope Example MOOS Configuration                            ");
@@ -105,8 +102,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldScope INTERFACE                                             ");
@@ -128,18 +124,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldScope", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

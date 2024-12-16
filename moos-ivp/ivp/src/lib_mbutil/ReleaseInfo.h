@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef RELEASE_INFO_HEADER_EX
 #define RELEASE_INFO_HEADER_EX
 
@@ -32,12 +32,3 @@ void showReleaseInfo(std::string app_name, std::string license_info);
 void showReleaseInfoAndExit(std::string app_name, std::string license_info);
 
 #endif
-
-
-
-
-
-
-
-
-

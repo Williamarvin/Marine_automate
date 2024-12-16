@@ -12,40 +12,35 @@
 #ifndef LOG_EVAL_HANDLER_HEADER
 #define LOG_EVAL_HANDLER_HEADER
 
-#include <string>
-#include <map>
 #include "EvalConvoyEngine.h"
+#include <map>
+#include <string>
 
-class LogEvalHandler
-{
- public:
+class LogEvalHandler {
+public:
   LogEvalHandler();
   ~LogEvalHandler() {}
 
   bool handle();
   void makeReports();
-  
+
   bool setALogFile(std::string);
   bool setParam(std::string, std::string);
   bool addReportType(std::string);
-  
- protected: 
+
+protected:
   void makeReport(std::string report_type);
 
 protected: // Config vars
-
   FILE *m_file_in;
-  bool   m_verbose;
+  bool m_verbose;
 
   std::vector<std::string> m_reports;
-  
- protected: // State vars
 
+protected: // State vars
   unsigned int m_unhandled_lines;
-  
+
   EvalConvoyEngine m_engine;
 };
 
 #endif
-
-

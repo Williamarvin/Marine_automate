@@ -24,61 +24,50 @@
 #ifndef PATH_CHECK_MOOS_APP_HEADER
 #define PATH_CHECK_MOOS_APP_HEADER
 
-#include <map>
-#include <list>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "NodeRecord.h"
+#include <list>
+#include <map>
 
-class PathCheck_MOOSApp : public AppCastingMOOSApp
-{
- public:
+class PathCheck_MOOSApp : public AppCastingMOOSApp {
+public:
   PathCheck_MOOSApp();
   virtual ~PathCheck_MOOSApp() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
- protected:
-  bool addNodeRecord(const NodeRecord&);
-  
+protected:
+  bool addNodeRecord(const NodeRecord &);
+
   void registerVariables();
   void computeAndPostSpeeds();
   void detectAndPostOdometry();
   bool handleTripReset(std::string);
 
   // All below maps are VehicleName-->DATA
-  
-  std::map<std::string, std::list<NodeRecord> > m_map_records;
+
+  std::map<std::string, std::list<NodeRecord>> m_map_records;
 
   // Odometry: Overall total distance travelled - never reset
-  std::map<std::string, double>   m_map_total_dist;
+  std::map<std::string, double> m_map_total_dist;
   // Odometry: Recent tripometer distance travelled - may be reset
-  std::map<std::string, double>   m_map_trip_dist;
+  std::map<std::string, double> m_map_trip_dist;
   // Odometry: true if distance updated since last publication
-  std::map<std::string, bool>     m_map_changed_dist;
+  std::map<std::string, bool> m_map_changed_dist;
   // Timestamp of last nodereport received
-  std::map<std::string, double>   m_map_noderep_tstamp;
+  std::map<std::string, double> m_map_noderep_tstamp;
 
-  
   unsigned int m_history_size;
 
   unsigned int m_node_reports_recd_good;
   unsigned int m_node_reports_recd_bad;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

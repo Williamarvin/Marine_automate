@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "AppGenerator_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "AppGenerator_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  moos_gen_app is a utility for generating ");
@@ -42,8 +41,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "=======================================================" << endl;
   cout << "Usage: moos_gen_app [OPTIONS]                           " << endl;
   cout << "=======================================================" << endl;
@@ -60,22 +58,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("moos_gen_app", "gpl");
   exit(0);
 }
-  
-
-
-
-
-
-
-
-
-

@@ -13,11 +13,11 @@
  */
 class ShareHelp {
 public:
-	ShareHelp();
-	virtual ~ShareHelp();
-	static void PrintHelp();
-	static void PrintInterface();
-	static void PrintConfigurationExample();
+  ShareHelp();
+  virtual ~ShareHelp();
+  static void PrintHelp();
+  static void PrintInterface();
+  static void PrintConfigurationExample();
 };
 
 #endif /* SHAREHELP_H_ */

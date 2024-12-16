@@ -27,47 +27,39 @@
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "VarDataPair.h"
 
-class DeadManPost : public AppCastingMOOSApp
-{
- public:
+class DeadManPost : public AppCastingMOOSApp {
+public:
   DeadManPost();
   ~DeadManPost() {}
-  
- protected: // Standard MOOSApp functions to overload  
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
- protected:
+
+protected:
   void registerVariables();
   bool addPostingIfComplete();
   bool possiblyMakePostings();
 
- protected: // Standard AppCastingMOOSApp function to overload 
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
-  
- private: // Configuration variables
-  
-  std::string   m_heart_var;
-  std::string   m_post_policy;
-  double        m_max_noheart;
-  bool          m_active_at_start;
-  
+private: // Configuration variables
+  std::string m_heart_var;
+  std::string m_post_policy;
+  double m_max_noheart;
+  bool m_active_at_start;
+
   std::vector<VarDataPair> m_deadflags;
 
- private: // State variables
-  double        m_last_heartbeat;
-  unsigned int  m_total_heartbeats;
-  double        m_delta_time;
-  unsigned int  m_total_postings;
-  bool          m_postings_done;
+private: // State variables
+  double m_last_heartbeat;
+  unsigned int m_total_heartbeats;
+  double m_delta_time;
+  unsigned int m_total_postings;
+  bool m_postings_done;
 };
 
-#endif 
-
-
-
-
-
+#endif

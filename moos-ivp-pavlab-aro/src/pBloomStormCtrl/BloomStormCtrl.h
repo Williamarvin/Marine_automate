@@ -11,164 +11,148 @@
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "NodeRecord.h"
 #include "NodeRecordUtils.h"
-#include "XYPoint.h"  // for bloom record
 #include "XYFormatUtilsPoint.h" // for string2Point
-#include "XYPolygon.h"  // for region check
 #include "XYFormatUtilsPoly.h"  // for region check
+#include "XYPoint.h"            // for bloom record
+#include "XYPolygon.h"          // for region check
 
+#include "NodeMessage.h" // In the lib_ufield library
 
-#include "NodeMessage.h"  // In the lib_ufield library
+class BloomStormCtrl : public AppCastingMOOSApp {
+public:
+  BloomStormCtrl();
+  ~BloomStormCtrl();
 
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
-class BloomStormCtrl : public AppCastingMOOSApp
-{
- public:
-   BloomStormCtrl();
-   ~BloomStormCtrl();
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected:
+  void registerVariables();
+  bool handleMailNodeReport(const std::string &node_report_str);
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+  bool handleOptionMsg(const std::string &msg);
+  bool handleBloomMsg(const std::string &msg);
 
- protected:
-   void registerVariables();
-   bool handleMailNodeReport(const std::string& node_report_str);
+  void postDiscovery();
+  void updateSamplePoint();
+  void clearSamplePoints();
+  bool calculateInputs(double time);
+  bool publishInputs();
+  void updateOdometry();
 
-   bool handleOptionMsg(const std::string& msg);
-   bool handleBloomMsg(const std::string& msg);
-   
-   void postDiscovery(); 
-   void updateSamplePoint();
-   void clearSamplePoints(); 
-   bool calculateInputs(double time);
-   bool publishInputs();
-   void updateOdometry();
+  bool publishIgnoreLists();
 
-   bool publishIgnoreLists();
+private: // Configuration variables
+  std::string m_region_1_spec;
+  std::string m_region_2_spec;
+  XYPolygon m_region_1_poly;
+  XYPolygon m_region_2_poly;
+  double m_sample_radius;
+  double m_sample_time;
+  double m_sample_capture_radius;
+  bool m_fixed_coalitions;
 
- private: // Configuration variables
+  // Control input calcs
+  // Explore
+  double m_no_sample_available_weight;
 
-   std::string m_region_1_spec;
-   std::string m_region_2_spec;
-   XYPolygon m_region_1_poly;
-   XYPolygon m_region_2_poly; 
-   double m_sample_radius;
-   double m_sample_time;
-   double m_sample_capture_radius;
-   bool m_fixed_coalitions; 
+  // Exploit
+  double m_dist_to_next_sample_max_input_value;
+  double m_dist_to_next_sample_max_input_range;
+  double m_dist_to_next_sample_min_input_range;
 
+  // Migrate
+  double m_storm_detected_input_val;
+  double m_finish_migration_val;
+  double m_time_since_last_migration_thresh;
+  double m_time_since_last_migration_resistance_val;
+  double m_time_since_no_samples_thresh; // change the input after this point
+  double m_time_since_no_samples_encouragement_slope;
 
-   // Control input calcs
-   // Explore
-   double m_no_sample_available_weight; 
+private: // State variables
+  ////////////////////////////////////////////////////////////
+  // General bookkeeping of the states of ownship and group
 
-   // Exploit
-   double m_dist_to_next_sample_max_input_value;
-   double m_dist_to_next_sample_max_input_range;
-   double m_dist_to_next_sample_min_input_range;
+  //--- Ownship
 
-   // Migrate
-   double m_storm_detected_input_val;
-   double m_finish_migration_val;
-   double m_time_since_last_migration_thresh; 
-   double m_time_since_last_migration_resistance_val;
-   double m_time_since_no_samples_thresh;  // change the input after this point
-   double m_time_since_no_samples_encouragement_slope;
+  // own name, position and odometry related
+  std::string m_vname;
+  double m_nav_x;
+  double m_nav_y;
+  double m_odometry;
+  std::vector<double> m_nav_x_vec;
+  std::vector<double> m_nav_y_vec;
 
- private: // State variables
+  // which of the options am I pursuing?
+  std::string m_last_option;
+  std::string m_curr_option;
 
-   ////////////////////////////////////////////////////////////
-   // General bookkeeping of the states of ownship and group
+  // Current opinion input values for each option
+  // Key is the variable name
+  std::map<std::string, double> m_opinion_inputs;
 
-   //--- Ownship
+  // Battery voltage simulator (or actual voltage is used
+  // if detected)
+  double m_min_batt;
+  double m_max_batt;
+  bool m_got_real_batt_voltage;
+  double m_m300_batt_voltage;
+  double m_current_batt_voltage;
+  double m_battery_exhausted;
+  double m_time_const_batt;
+  double m_time_last_got_batt;
+  double m_batt_input_gain;
 
-   // own name, position and odometry related
-   std::string m_vname; 
-   double m_nav_x;
-   double m_nav_y;
-   double m_odometry; 
-   std::vector<double> m_nav_x_vec;
-   std::vector<double> m_nav_y_vec;
-   
-   // which of the options am I pursuing?
-   std::string m_last_option; 
-   std::string m_curr_option;  
+  //--- Group
 
-   // Current opinion input values for each option
-   // Key is the variable name
-   std::map<std::string, double> m_opinion_inputs;
+  // Key for each map below is the vehicle name.
+  std::map<std::string, NodeRecord> m_map_node_records;
 
-   // Battery voltage simulator (or actual voltage is used
-   // if detected)
-   double m_min_batt;
-   double m_max_batt;
-   bool m_got_real_batt_voltage; 
-   double m_m300_batt_voltage;
-   double m_current_batt_voltage;
-   double m_battery_exhausted;
-   double m_time_const_batt;
-   double m_time_last_got_batt;
-   double m_batt_input_gain; 
+  // Contact and ignore set related
+  // I.e. sets contain names of agents who are pursuing that
+  // option
+  bool m_send_new_ignore_set;
+  std::set<std::string> m_contacts;       // all
+  std::set<std::string> m_voronoi_active; // exploring
+  std::set<std::string> m_sample_active;  // exploiting
 
+  ////////////////////////////////////////////////////////////
+  // Related to option inputs
 
-   //--- Group
-   
-   // Key for each map below is the vehicle name. 
-   std::map<std::string, NodeRecord>   m_map_node_records;
+  // --- Explore (search) related
 
-   // Contact and ignore set related
-   // I.e. sets contain names of agents who are pursuing that
-   // option
-   bool m_send_new_ignore_set; 
-   std::set<std::string> m_contacts;        // all
-   std::set<std::string> m_voronoi_active;  // exploring
-   std::set<std::string> m_sample_active;   // exploiting
+  // Bloom related
+  bool m_bloom_detected;
+  bool m_new_bloom_detected;
+  unsigned int m_bloom_found_counter;
+  bool m_no_waypoints_available_to_sample;
 
+  // --- Exploit (sample) related
+  // bool m_sampling_now;
+  std::list<XYPoint> m_bloom_records;
 
-   ////////////////////////////////////////////////////////////
-   // Related to option inputs
+  // Record of which agents are currently stopped and sampling
+  // The second value is the time the sampling started
+  std::map<std::string, double> m_map_sampling_agents;
 
+  double m_dist_to_closest_sample;
+  double m_currently_sampling_weight;
+  unsigned int m_number_sampled;
 
-   // --- Explore (search) related
-
-   // Bloom related
-   bool m_bloom_detected;
-   bool m_new_bloom_detected;
-   unsigned int m_bloom_found_counter;
-   bool m_no_waypoints_available_to_sample; 
-
-
-   
-   // --- Exploit (sample) related
-   //bool m_sampling_now; 
-   std::list<XYPoint> m_bloom_records;
-   
-   // Record of which agents are currently stopped and sampling
-   // The second value is the time the sampling started
-   std::map<std::string, double>  m_map_sampling_agents;
-
-   double m_dist_to_closest_sample;
-   double m_currently_sampling_weight; 
-   unsigned int m_number_sampled; 
-
-   
-   // --- Migrate related
-   bool m_next_region;         // 0=region1, 1=region2
-   bool m_migration_done; 
-   bool m_storm_detected;
-   double m_time_of_last_migration_started; 
-   double m_time_of_last_migration_completion;
-   double m_time_of_last_sample_available;
-   double m_time_of_sample_available; 
-
-
-
-
+  // --- Migrate related
+  bool m_next_region; // 0=region1, 1=region2
+  bool m_migration_done;
+  bool m_storm_detected;
+  double m_time_of_last_migration_started;
+  double m_time_of_last_migration_completion;
+  double m_time_of_last_sample_available;
+  double m_time_of_sample_available;
 };
 
-#endif 
+#endif

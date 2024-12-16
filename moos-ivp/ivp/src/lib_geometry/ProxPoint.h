@@ -33,39 +33,20 @@ public:
   ProxPoint();
   virtual ~ProxPoint() {}
 
-  void setCPA(double v)     {m_cpa=v;}
-  void setCPADist(double v) {m_cpa_dist=v;}
-  void setType(int v)       {m_type=v;}
-  
-  double getCPA() const     {return(m_cpa);}
-  double getCPADist() const {return(m_cpa_dist);}
-  int    getType() const    {return(m_type);}
+  void setCPA(double v) { m_cpa = v; }
+  void setCPADist(double v) { m_cpa_dist = v; }
+  void setType(int v) { m_type = v; }
+
+  double getCPA() const { return (m_cpa); }
+  double getCPADist() const { return (m_cpa_dist); }
+  int getType() const { return (m_type); }
 
 private:
   double m_cpa;
   double m_cpa_dist;
-  int    m_type;
+  int m_type;
 };
 
-bool operator< (const ProxPoint& pt1, const ProxPoint& pt2);
-bool operator> (const ProxPoint& pt1, const ProxPoint& pt2);
+bool operator<(const ProxPoint &pt1, const ProxPoint &pt2);
+bool operator>(const ProxPoint &pt1, const ProxPoint &pt2);
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,32 +24,31 @@
 #ifndef ZAIC_SPD_MODEL_HEADER
 #define ZAIC_SPD_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "ZAIC_Model.h"
 #include "ZAIC_SPD.h"
+#include <string>
 
-class ZAIC_SPD_Model : public ZAIC_Model
-{
- public:
+class ZAIC_SPD_Model : public ZAIC_Model {
+public:
   ZAIC_SPD_Model();
-  ~ZAIC_SPD_Model() {};
+  ~ZAIC_SPD_Model(){};
 
- public: // Virtual functions overloaded
+public: // Virtual functions overloaded
   IvPFunction *getIvPFunction();
-  void  setDomain(unsigned int) {};
-  bool  setParam(std::string, std::string);
-  void  moveX(double amt);
-  void  disableLowSpeed();
-  void  disableHighSpeed();
-  void  currMode(int);
+  void setDomain(unsigned int){};
+  bool setParam(std::string, std::string);
+  void moveX(double amt);
+  void disableLowSpeed();
+  void disableHighSpeed();
+  void currMode(int);
 
- public:
-  void  setDomain(std::string);
-  int   getCurrMode() const {return(m_curr_mode);}
+public:
+  void setDomain(std::string);
+  int getCurrMode() const { return (m_curr_mode); }
 
-  void  print() const;
-  
+  void print() const;
+
   // Getters
   double getMedVal();
   double getLowVal();
@@ -61,15 +60,10 @@ class ZAIC_SPD_Model : public ZAIC_Model
   double getHighMinUtil();
   double getMaxUtil();
 
- protected:
-  ZAIC_SPD*  m_zaic_spd;
-  int        m_curr_mode;
+protected:
+  ZAIC_SPD *m_zaic_spd;
+  int m_curr_mode;
 
   unsigned int m_ipf_pieces;
 };
-#endif 
-
-
-
-
-
+#endif

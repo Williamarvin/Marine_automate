@@ -24,108 +24,107 @@
 #ifndef TIMER_SCRIPT_MOOS_APP_HEADER
 #define TIMER_SCRIPT_MOOS_APP_HEADER
 
-#include <vector>
+#include "InfoBuffer.h"
+#include "LogicCondition.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "RandomPairSet.h"
+#include "RandomVariableSet.h"
+#include "VarDataPair.h"
 #include <set>
 #include <string>
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "VarDataPair.h"
-#include "LogicCondition.h"
-#include "InfoBuffer.h"
-#include "RandomVariableSet.h"
-#include "RandomPairSet.h"
+#include <vector>
 
-class TS_MOOSApp : public AppCastingMOOSApp
-{
- public:
+class TS_MOOSApp : public AppCastingMOOSApp {
+public:
   TS_MOOSApp();
   virtual ~TS_MOOSApp() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
-  bool   buildReport();
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- public: // Public configuration functions
-  void setVerbose(bool val) {m_verbose = val;}
-  void setShuffle(bool val) {m_shuffle = val;}
+public: // Public configuration functions
+  void setVerbose(bool val) { m_verbose = val; }
+  void setShuffle(bool val) { m_shuffle = val; }
 
- protected: // Locally defined and locally used functions
-  void   registerVariables();
-  void   addNewEvent(const std::string&);
-  void   scheduleEvents(bool shuffle=true);
-  void   printRawScript();
-  bool   checkForReadyPostings();
-  void   executePosting(VarDataPair);
-  void   jumpToNextPostingTime();
-  void   handleReset();
-  void   handleRestart();
-  void   postStatus();
-  void   seedRandom();
-  bool   handleMathExpr(std::string&);
-  void   addLogEvent(std::string, std::string, double);
-  bool   addBlockApps(std::string);
-  void   checkBlockApps(std::string);
+protected: // Locally defined and locally used functions
+  void registerVariables();
+  void addNewEvent(const std::string &);
+  void scheduleEvents(bool shuffle = true);
+  void printRawScript();
+  bool checkForReadyPostings();
+  void executePosting(VarDataPair);
+  void jumpToNextPostingTime();
+  void handleReset();
+  void handleRestart();
+  void postStatus();
+  void seedRandom();
+  bool handleMathExpr(std::string &);
+  void addLogEvent(std::string, std::string, double);
+  bool addBlockApps(std::string);
+  void checkBlockApps(std::string);
 
- protected: // Functions in support of logic conditions
-  bool updateInfoBuffer(CMOOSMsg&);
+protected: // Functions in support of logic conditions
+  bool updateInfoBuffer(CMOOSMsg &);
   bool checkConditions();
 
- protected: // Functions in support of random variables
+protected: // Functions in support of random variables
   std::string randomNumString(unsigned int);
 
- protected: // Configuration parameters
-  std::vector<VarDataPair>  m_pairs;
-  std::vector<double>       m_ptime;
-  std::vector<double>       m_ptime_min;
-  std::vector<double>       m_ptime_max;
-  std::vector<bool>         m_poked;
+protected: // Configuration parameters
+  std::vector<VarDataPair> m_pairs;
+  std::vector<double> m_ptime;
+  std::vector<double> m_ptime_min;
+  std::vector<double> m_ptime_max;
+  std::vector<bool> m_poked;
 
-  std::string               m_script_name;
-  bool                      m_time_zero_connect;
-  bool                      m_verbose;
-  bool                      m_shuffle;
-  bool                      m_atomic;
-  std::string               m_upon_awake;
-  RandVarUniform            m_uts_time_warp;
-  RandVarUniform            m_delay_start;   
-  RandVarUniform            m_delay_reset;  
-  RandomVariableSet         m_rand_vars;
-  RandomPairSet             m_rand_pairs;
+  std::string m_script_name;
+  bool m_time_zero_connect;
+  bool m_verbose;
+  bool m_shuffle;
+  bool m_atomic;
+  std::string m_upon_awake;
+  RandVarUniform m_uts_time_warp;
+  RandVarUniform m_delay_start;
+  RandVarUniform m_delay_reset;
+  RandomVariableSet m_rand_vars;
+  RandomPairSet m_rand_pairs;
 
   // Set of logic conditions pertaining to entire script
   std::vector<LogicCondition> m_logic_conditions;
-  
+
   // MOOS variables configurable by the user
   std::string m_var_forward;
   std::string m_var_pause;
   std::string m_var_status;
   std::string m_var_reset;
 
-  bool          m_reset_forever;
-  unsigned int  m_reset_max;
-  double        m_reset_time;  // -1:none, 0:after-last, NUM:atNUM
+  bool m_reset_forever;
+  unsigned int m_reset_max;
+  double m_reset_time; // -1:none, 0:after-last, NUM:atNUM
 
- protected: // State variables
-  double   m_previous_time;
-  double   m_elapsed_time;
-  double   m_script_start_time;
-  double   m_connect_tstamp;
-  double   m_status_tstamp;
-  bool     m_status_needed;
-  double   m_skip_time;
-  double   m_pause_time;
-  bool     m_paused;
-  bool     m_conditions_ok;
-  bool     m_exit_ready;
-  bool     m_exit_confirmed;
+protected: // State variables
+  double m_previous_time;
+  double m_elapsed_time;
+  double m_script_start_time;
+  double m_connect_tstamp;
+  double m_status_tstamp;
+  bool m_status_needed;
+  double m_skip_time;
+  double m_pause_time;
+  bool m_paused;
+  bool m_conditions_ok;
+  bool m_exit_ready;
+  bool m_exit_confirmed;
 
-  unsigned int  m_posted_count_local;
-  unsigned int  m_posted_count_total;
-  unsigned int  m_reset_count;
+  unsigned int m_posted_count_local;
+  unsigned int m_posted_count_total;
+  unsigned int m_reset_count;
 
   InfoBuffer *m_info_buffer;
 
@@ -134,18 +133,8 @@ class TS_MOOSApp : public AppCastingMOOSApp
   double m_nav_y;
   double m_nav_y_set;
 
-  std::list<std::string>   m_event_log;
-  std::set<std::string>    m_block_apps;
+  std::list<std::string> m_event_log;
+  std::set<std::string> m_block_apps;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

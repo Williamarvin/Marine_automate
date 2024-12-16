@@ -21,13 +21,13 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
 #include "MBUtils.h"
 #include "OpenURL.h"
-#include "ReleaseInfo.h"
 #include "PickHandler.h"
+#include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -36,38 +36,36 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   PickHandler handler;
 
   // Must have at least a file name and one field
-  if(argc < 3)
+  if (argc < 3)
     showHelpAndExit();
-  
+
   bool handled = true;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogpick", "gpl");
-      return(0);
-    }
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web")) {
+      return (0);
+    } else if ((argi == "-w") || (argi == "--web") || (argi == "-web")) {
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogpick");
-      return(0);
+      return (0);
     }
 
-    if(i==1)
+    if (i == 1)
       handled = handler.setLogFile(argi);
-    else if(argi=="--verbose")
+    else if (argi == "--verbose")
       handler.setVerbose();
-    else if(argi=="--noformat")
+    else if (argi == "--noformat")
       handler.setFormatAligned(false);
     else
       handled = handler.addField(argi);
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -75,17 +73,16 @@ int main(int argc, char *argv[])
   }
 
   bool ok = handler.handle();
-  if(ok)
-    return(0);
+  if (ok)
+    return (0);
   else
-    return(1);
+    return (1);
 }
-  
+
 //------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogpick file.log [OPTIONS]                              " << endl;
   cout << "                                                           " << endl;
@@ -131,4 +128,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-

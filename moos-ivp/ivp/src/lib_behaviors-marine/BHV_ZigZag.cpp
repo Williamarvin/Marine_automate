@@ -21,34 +21,33 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath>
-#include <cstdlib>
-#include "AngleUtils.h"
-#include "GeomUtils.h"
-#include "VarDataPairUtils.h"
 #include "BHV_ZigZag.h"
-#include "MBUtils.h"
+#include "AngleUtils.h"
 #include "BuildUtils.h"
-#include "ZAIC_PEAK.h"
-#include "ZAIC_SPD.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include "MacroUtils.h"
 #include "OF_Coupler.h"
+#include "VarDataPairUtils.h"
+#include "ZAIC_PEAK.h"
+#include "ZAIC_SPD.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor()
 
-BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) : IvPBehavior(gdomain)
-{
+BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "zig");
-  
+
   m_domain = subDomain(m_domain, "course,speed");
-  
+
   //====================================================
   // Init State Vars
   //====================================================
-  m_state   = "stem";
+  m_state = "stem";
   m_req_hdg = 0;
   m_set_hdg = 0;
   m_zig_cnt = 0;
@@ -58,17 +57,17 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) : IvPBehavior(gdomain)
   m_stem_x2 = 0;
   m_stem_y2 = 0;
   m_stem_dist = 0;
-  m_stem_odo  = 0;
+  m_stem_odo = 0;
 
   m_zig_spd_start = 0;
-  m_zig_spd_min   = -1;
+  m_zig_spd_min = -1;
   m_zig_spd_delta = 0;
-  
+
   //====================================================
   // Init Config Vars
   //====================================================
   m_hdg_thresh = 0;
-  m_zig_angle  = 0;
+  m_zig_angle = 0;
   m_zig_angle_fierce = -1;
 
   m_stem_hdg = 0;
@@ -83,98 +82,94 @@ BHV_ZigZag::BHV_ZigZag(IvPDomain gdomain) : IvPBehavior(gdomain)
 
   m_draw_set_hdg = true;
   m_draw_req_hdg = true;
-  
-  m_max_zig_legs  = 2;
-  m_max_stem_odo  = -1;
+
+  m_max_zig_legs = 2;
+  m_max_stem_odo = -1;
 
   m_zig_first = "port";
 
   m_hint_set_hdg_color = "white";
   m_hint_req_hdg_color = "yellow";
-  
+
   addInfoVars("NAV_X, NAV_Y, NAV_SPEED, NAV_HEADING");
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam()
 
-bool BHV_ZigZag::setParam(string param, string value) 
-{
-  if(IvPBehavior::setParam(param, value))
-    return(true);
-  
+bool BHV_ZigZag::setParam(string param, string value) {
+  if (IvPBehavior::setParam(param, value))
+    return (true);
+
   bool handled = true;
-  if(param == "speed")
+  if (param == "speed")
     handled = setNonNegDoubleOnString(m_speed, value);
-  else if(param == "mod_speed")
-    handled = handleConfigModSpeed(value);    
-  else if((param == "spd_on_active") || (param == "speed_on_active"))
+  else if (param == "mod_speed")
+    handled = handleConfigModSpeed(value);
+  else if ((param == "spd_on_active") || (param == "speed_on_active"))
     handled = setBooleanOnString(m_speed_on_active, value);
-  else if(param == "stem_hdg") {
+  else if (param == "stem_hdg") {
     handled = setDoubleOnString(m_stem_hdg, value);
-    if(handled)
+    if (handled)
       m_stem_hdg = angle360(m_stem_hdg);
-  }  
-  else if(param == "stem_on_active")
+  } else if (param == "stem_on_active")
     handled = setBooleanOnString(m_stem_on_active, value);
-  else if(param == "hdg_thresh")
+  else if (param == "hdg_thresh")
     handled = setNonNegDoubleOnString(m_hdg_thresh, value);
-  else if(param == "fierce_zigging")
+  else if (param == "fierce_zigging")
     handled = setBooleanOnString(m_fierce_zigging, value);
-  else if(param == "zig_angle")
+  else if (param == "zig_angle")
     handled = handleConfigZigAngle(value);
-  else if(param == "zig_first")
+  else if (param == "zig_first")
     handled = handleConfigZigFirst(value);
-  else if(param == "max_zig_legs")
+  else if (param == "max_zig_legs")
     handled = setUIntOnString(m_max_zig_legs, value);
-  else if(param == "max_stem_odo")
+  else if (param == "max_stem_odo")
     handled = setPosDoubleOnString(m_max_stem_odo, value);
-  else if(param == "max_zig_zags")
+  else if (param == "max_zig_zags")
     handled = handleConfigZigZags(value);
-  else if(param == "delta_heading" || (param == "zig_angle_fierce"))
+  else if (param == "delta_heading" || (param == "zig_angle_fierce"))
     handled = handleConfigZigAngleFierce(value);
 
-  else if(param == "zigflag")
+  else if (param == "zigflag")
     handled = addFlagOnString(m_zig_flags, value);
-  else if(param == "zagflag")
+  else if (param == "zagflag")
     handled = addFlagOnString(m_zag_flags, value);
-  else if(param == "portflag")
+  else if (param == "portflag")
     handled = addFlagOnString(m_port_flags, value);
-  else if(param == "starflag")
+  else if (param == "starflag")
     handled = addFlagOnString(m_star_flags, value);
-  else if(param == "portflagx")
+  else if (param == "portflagx")
     handled = addFlagOnString(m_portx_flags, value);
-  else if(param == "starflagx")
+  else if (param == "starflagx")
     handled = addFlagOnString(m_starx_flags, value);
 
-  else if(param == "visual_hints")  {
+  else if (param == "visual_hints") {
     vector<string> svector = parseStringQ(value, ',');
-    for(unsigned int i=0; i<svector.size(); i++) 
+    for (unsigned int i = 0; i < svector.size(); i++)
       handled = handled && handleConfigVisualHint(svector[i]);
-  }
-  else
+  } else
     handled = false;
 
-  return(handled);
+  return (handled);
 }
 
 //-----------------------------------------------------------
 // Procedure: handleConfigZigZags()
 
-bool BHV_ZigZag::handleConfigZigZags(string str)
-{
-  if(!isNumber(str))
-    return(false);
+bool BHV_ZigZag::handleConfigZigZags(string str) {
+  if (!isNumber(str))
+    return (false);
 
   double dval = atof(str.c_str());
-  if(dval < 1)
-    return(false);
+  if (dval < 1)
+    return (false);
 
   unsigned int max_zig_zags = (unsigned int)(dval);
 
   m_max_zig_legs = 2 * max_zig_zags;
 
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
@@ -183,112 +178,105 @@ bool BHV_ZigZag::handleConfigZigZags(string str)
 //      Note: Posssble given values:
 //            port, star, left, right, starboar
 
-bool BHV_ZigZag::handleConfigZigFirst(string str)
-{
+bool BHV_ZigZag::handleConfigZigFirst(string str) {
   str = tolower(str);
 
-  if(str == "starboard")
+  if (str == "starboard")
     str = "star";
-  else if(str == "right")
+  else if (str == "right")
     str = "star";
-  else if(str == "left")
+  else if (str == "left")
     str = "port";
 
-  if((str == "port") || (str == "star"))
+  if ((str == "port") || (str == "star"))
     m_zig_first = str;
-  else 
-    return(false);
-  
-  return(true);
+  else
+    return (false);
+
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: handleConfigZigAngle()
 
-bool BHV_ZigZag::handleConfigZigAngle(string str)
-{
-  if(!isNumber(str))
-    return(false);
+bool BHV_ZigZag::handleConfigZigAngle(string str) {
+  if (!isNumber(str))
+    return (false);
 
   double dval = atof(str.c_str());
-  if((dval < 1) || (dval > 75))
-    return(false);
-  
+  if ((dval < 1) || (dval > 75))
+    return (false);
+
   m_zig_angle = dval;
-  
-  return(true);
+
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: handleConfigZigAngleFierce()
 
-bool BHV_ZigZag::handleConfigZigAngleFierce(string str)
-{
-  if(!isNumber(str))
-    return(false);
+bool BHV_ZigZag::handleConfigZigAngleFierce(string str) {
+  if (!isNumber(str))
+    return (false);
 
   double dval = atof(str.c_str());
-  if((dval < 1) || (dval > 75))
-    return(false);
-  
+  if ((dval < 1) || (dval > 75))
+    return (false);
+
   m_zig_angle_fierce = dval;
-  
-  return(true);
+
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: handleConfigSpeed()
 
-bool BHV_ZigZag::handleConfigSpeed(string str)
-{
-  if(!isNumber(str))
-    return(false);
+bool BHV_ZigZag::handleConfigSpeed(string str) {
+  if (!isNumber(str))
+    return (false);
 
   double spd_max = m_domain.getVarHigh("speed");
   double spd_req = atof(str.c_str());
-  if(spd_req < 0)
-    return(false);
-  
+  if (spd_req < 0)
+    return (false);
+
   m_speed = vclip(spd_req, 0, spd_max);
   m_speed_orig = m_speed;
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: handleConfigModSpeed()
 
-bool BHV_ZigZag::handleConfigModSpeed(string str)
-{
-  if(tolower(str) == "reset") {
+bool BHV_ZigZag::handleConfigModSpeed(string str) {
+  if (tolower(str) == "reset") {
     m_speed = m_speed_orig;
-    return(true);
+    return (true);
   }
-    
-  if(!isNumber(str))
-    return(false);
+
+  if (!isNumber(str))
+    return (false);
 
   double spd_max = m_domain.getVarHigh("speed");
   double spd_mod = atof(str.c_str());
   double new_spd = m_speed + spd_mod;
 
   m_speed = vclip(new_spd, 0, spd_max);
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: updateSetHdg()
 
-void BHV_ZigZag::updateSetHdg()
-{
+void BHV_ZigZag::updateSetHdg() {
   // ========================================================
-  // Part 1: If in stem state, pick a side and set a heading 
+  // Part 1: If in stem state, pick a side and set a heading
   // ========================================================
-  if(m_state == "stem") {
-    if(m_zig_first == "port") {
+  if (m_state == "stem") {
+    if (m_zig_first == "port") {
       setState("port");
       m_set_hdg = angle360(m_stem_hdg - m_zig_angle);
-    }
-    else {
+    } else {
       setState("star");
       m_set_hdg = angle360(m_stem_hdg + m_zig_angle);
     }
@@ -300,26 +288,25 @@ void BHV_ZigZag::updateSetHdg()
   // ========================================================
   double diff = angleDiff(m_osh, m_set_hdg);
   bool turn_complete = false;
-  if(m_state == "port") {
-    if(diff < m_hdg_thresh)
+  if (m_state == "port") {
+    if (diff < m_hdg_thresh)
       turn_complete = true;
-    else if(!containsAngle(m_osh, m_osh-170, m_set_hdg))
+    else if (!containsAngle(m_osh, m_osh - 170, m_set_hdg))
       turn_complete = true;
-  }
-  else {
-    if(diff < m_hdg_thresh)
+  } else {
+    if (diff < m_hdg_thresh)
       turn_complete = true;
-    else if(!containsAngle(m_osh, m_osh+170, m_set_hdg))
+    else if (!containsAngle(m_osh, m_osh + 170, m_set_hdg))
       turn_complete = true;
   }
 
-  if((m_zig_spd_min < 0) || (m_osv < m_zig_spd_min))
+  if ((m_zig_spd_min < 0) || (m_osv < m_zig_spd_min))
     m_zig_spd_min = m_osv;
   m_zig_spd_delta = m_zig_spd_start - m_zig_spd_min;
-  
-  if(!turn_complete)
+
+  if (!turn_complete)
     return;
-  
+
   // ========================================================
   // Part 3: Achieved set_hdg so change state
   // ========================================================
@@ -327,24 +314,23 @@ void BHV_ZigZag::updateSetHdg()
   m_zig_cnt_ever++;
 
   postFlags(m_zig_flags);
-  if((m_zig_cnt % 2) == 0)
+  if ((m_zig_cnt % 2) == 0)
     postFlags(m_zag_flags);
 
   // Switch port/star modes and post appropriate flags
-  if(m_state == "port") {
+  if (m_state == "port") {
     postFlags(m_portx_flags); // finishing port leg
     setState("star");
     m_set_hdg = angle360(m_stem_hdg + m_zig_angle);
-  }
-  else if(m_state == "star") {
-    postFlags(m_starx_flags);  // finishing star let
+  } else if (m_state == "star") {
+    postFlags(m_starx_flags); // finishing star let
     setState("port");
     m_set_hdg = angle360(m_stem_hdg - m_zig_angle);
   }
 
   // Reset the odometry only after all/any flags posted
   m_zig_odo.reset();
-  if((m_zig_cnt % 2) == 0) 
+  if ((m_zig_cnt % 2) == 0)
     m_zag_odo.reset();
 
   m_zig_spd_start = m_osh;
@@ -355,21 +341,20 @@ void BHV_ZigZag::updateSetHdg()
 //-----------------------------------------------------------
 // Procedure: updateReqHdg()
 
-void BHV_ZigZag::updateReqHdg()
-{
-  if(!m_fierce_zigging)
+void BHV_ZigZag::updateReqHdg() {
+  if (!m_fierce_zigging)
     m_req_hdg = m_set_hdg;
 
   else {
     double delta_hdg = m_zig_angle;
-    if(m_zig_angle_fierce > 0)
+    if (m_zig_angle_fierce > 0)
       delta_hdg = m_zig_angle_fierce;
-    
-    if(m_state == "port") 
+
+    if (m_state == "port")
       m_req_hdg = m_osh - delta_hdg;
-    else if(m_state == "star") 
+    else if (m_state == "star")
       m_req_hdg = m_osh + delta_hdg;
-    else if(m_state == "stem") 
+    else if (m_state == "stem")
       m_req_hdg = m_stem_hdg;
   }
 
@@ -379,23 +364,22 @@ void BHV_ZigZag::updateReqHdg()
 //-----------------------------------------------------------
 // Procedure: buildOF()
 
-IvPFunction *BHV_ZigZag::buildOF() 
-{
-  IvPFunction *ipf = 0;  
+IvPFunction *BHV_ZigZag::buildOF() {
+  IvPFunction *ipf = 0;
   // Sanity Check
-  if(m_state == "off")
-    return(0);
-  
+  if (m_state == "off")
+    return (0);
+
   //===================================================
   // Part 1: Build the Speed ZAIC
   //===================================================
-  IvPFunction *spd_ipf = 0;  
+  IvPFunction *spd_ipf = 0;
 
   ZAIC_SPD spd_zaic(m_domain, "speed");
-  spd_zaic.setParams(m_speed, 0.1, m_speed+0.4, 85, 20);  
+  spd_zaic.setParams(m_speed, 0.1, m_speed + 0.4, 85, 20);
 
   spd_ipf = spd_zaic.extractIvPFunction();
-  if(!spd_ipf)
+  if (!spd_ipf)
     postWMessage("Failure on the SPD ZAIC component");
 
   //===================================================
@@ -405,29 +389,28 @@ IvPFunction *BHV_ZigZag::buildOF()
   crs_zaic.setSummit(m_req_hdg);
   crs_zaic.setBaseWidth(180);
   crs_zaic.setValueWrap(true);
-  
-  IvPFunction *crs_ipf = crs_zaic.extractIvPFunction(false);  
-  if(!crs_ipf) 
+
+  IvPFunction *crs_ipf = crs_zaic.extractIvPFunction(false);
+  if (!crs_ipf)
     postWMessage("Failure on the CRS ZAIC");
 
   OF_Coupler coupler;
   ipf = coupler.couple(crs_ipf, spd_ipf, 50, 50);
-  if(!ipf)
+  if (!ipf)
     postWMessage("Failure on the CRS_SPD COUPLER");
 
-  ipf->getPDMap()->normalize(0,100);
+  ipf->getPDMap()->normalize(0, 100);
   ipf->setPWT(m_priority_wt);
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState()
 
-IvPFunction *BHV_ZigZag::onRunState() 
-{
-  if(!updateOSPos() || !updateOSHdg() || !updateOSSpd())
-    return(0);
+IvPFunction *BHV_ZigZag::onRunState() {
+  if (!updateOSPos() || !updateOSHdg() || !updateOSSpd())
+    return (0);
 
   updateOdometry();
   updateSetHdg();
@@ -437,35 +420,34 @@ IvPFunction *BHV_ZigZag::onRunState()
   postReqHdgLine();
 
   bool stem_odo_reached = false;
-  if((m_max_stem_odo > 0) && (m_stem_odo >= m_max_stem_odo))
+  if ((m_max_stem_odo > 0) && (m_stem_odo >= m_max_stem_odo))
     stem_odo_reached = true;
-  
-  if(legsComplete() || stem_odo_reached) {
+
+  if (legsComplete() || stem_odo_reached) {
     setComplete();
     //    if(m_perpetual) {
     //  m_zig_cnt = 0;
     //  m_state = "stem";
     // }
-    return(0);
+    return (0);
   }
-  
-  // Part 2: Generate the IvP function 
+
+  // Part 2: Generate the IvP function
   IvPFunction *ipf = buildOF();
 
   // Part 3: Apply the relevance and priority weight
-  if(ipf) 
+  if (ipf)
     ipf->setPWT(m_priority_wt);
-  else 
-    postMessage("ZIG_DEBUG", "Unable to build IvP Function");    
+  else
+    postMessage("ZIG_DEBUG", "Unable to build IvP Function");
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunToIdleState()
 
-void BHV_ZigZag::onRunToIdleState()
-{
+void BHV_ZigZag::onRunToIdleState() {
   eraseSetHdgLine();
   eraseReqHdgLine();
 
@@ -477,17 +459,16 @@ void BHV_ZigZag::onRunToIdleState()
 //-----------------------------------------------------------
 // Procedure: onIdleToRunState()
 
-void BHV_ZigZag::onIdleToRunState()
-{
-  if(m_stem_on_active && updateOSHdg())
+void BHV_ZigZag::onIdleToRunState() {
+  if (m_stem_on_active && updateOSHdg())
     m_stem_hdg = m_osh;
 
-  if(m_speed_on_active && updateOSSpd()) {
+  if (m_speed_on_active && updateOSSpd()) {
     m_speed = m_osv;
     m_speed_orig = m_osv;
   }
   updateOSPos();
-  
+
   // Reset the stuff that gets reset upon entering the run state.
   m_zig_cnt = 0;
   resetOdometry();
@@ -506,33 +487,31 @@ void BHV_ZigZag::onIdleToRunState()
 //   Returns: true if NAV_X/Y info is found and not stale
 //            false otherwise
 
-bool BHV_ZigZag::updateOSPos(string fail_action) 
-{
-  bool   ok_osx = true;
-  bool   ok_osy = true;
+bool BHV_ZigZag::updateOSPos(string fail_action) {
+  bool ok_osx = true;
+  bool ok_osy = true;
   double new_osx = getBufferDoubleVal("NAV_X", ok_osx);
   double new_osy = getBufferDoubleVal("NAV_Y", ok_osy);
   double age_osx = getBufferTimeVal("NAV_X");
   double age_osy = getBufferTimeVal("NAV_Y");
 
   bool all_ok = true;
-  if(!ok_osy || !ok_osy)
+  if (!ok_osy || !ok_osy)
     all_ok = false;
-  if((age_osx > m_stale_nav_thresh) ||
-     (age_osy > m_stale_nav_thresh))
+  if ((age_osx > m_stale_nav_thresh) || (age_osy > m_stale_nav_thresh))
     all_ok = false;
 
-  if(!all_ok) {
-    if(fail_action == "err")
+  if (!all_ok) {
+    if (fail_action == "err")
       postEMessage("ownship NAV_X/Y not found or stale.");
-    else if(fail_action == "warn")
+    else if (fail_action == "warn")
       postWMessage("ownship NAV_X/Y not found or stale.");
-    return(false);
+    return (false);
   }
 
   m_osx = new_osx;
   m_osy = new_osy;
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
@@ -540,22 +519,21 @@ bool BHV_ZigZag::updateOSPos(string fail_action)
 //   Returns: true if NAV_HEADING info is found and not stale
 //            false otherwise
 
-bool BHV_ZigZag::updateOSHdg(string fail_action) 
-{
-  bool   ok_osh = true;
+bool BHV_ZigZag::updateOSHdg(string fail_action) {
+  bool ok_osh = true;
   double new_osh = getBufferDoubleVal("NAV_HEADING", ok_osh);
   double age_osh = getBufferTimeVal("NAV_HEADING");
 
-  if(!ok_osh || (age_osh > m_stale_nav_thresh)) {
-    if(fail_action == "err")
+  if (!ok_osh || (age_osh > m_stale_nav_thresh)) {
+    if (fail_action == "err")
       postEMessage("ownship NAV_HEADING not found or stale.");
-    else if(fail_action == "warn")
+    else if (fail_action == "warn")
       postWMessage("ownship NAV_HEADING not found or stale.");
-    return(false);
+    return (false);
   }
 
   m_osh = new_osh;
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
@@ -563,29 +541,27 @@ bool BHV_ZigZag::updateOSHdg(string fail_action)
 //   Returns: true: if NAV_SPEED info is found and not stale
 //            false: otherwise
 
-bool BHV_ZigZag::updateOSSpd(string fail_action) 
-{
-  bool   ok_osv  = true;
+bool BHV_ZigZag::updateOSSpd(string fail_action) {
+  bool ok_osv = true;
   double new_osv = getBufferDoubleVal("NAV_SPEED", ok_osv);
   double age_osv = getBufferTimeVal("NAV_SPEED");
-  
-  if(!ok_osv || (age_osv > m_stale_nav_thresh)) {
-    if(fail_action == "err")
+
+  if (!ok_osv || (age_osv > m_stale_nav_thresh)) {
+    if (fail_action == "err")
       postEMessage("ownship NAV_SPEED not found or stale.");
-    else if(fail_action == "warn")
+    else if (fail_action == "warn")
       postWMessage("ownship NAV_SPEED not found or stale.");
-    return(false);
+    return (false);
   }
 
   m_osv = new_osv;
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: updateOdometry()
 
-void BHV_ZigZag::updateOdometry()
-{
+void BHV_ZigZag::updateOdometry() {
   m_odometer.setXY(m_osx, m_osy);
   m_zig_odo.setXY(m_osx, m_osy);
   m_zag_odo.setXY(m_osx, m_osy);
@@ -595,25 +571,24 @@ void BHV_ZigZag::updateOdometry()
   m_zag_odo.updateDistance();
 
   // Sanity check stem line has been set
-  if((m_stem_x1==0) && (m_stem_y1==0) && (m_stem_x2==0) && (m_stem_y2==0))
+  if ((m_stem_x1 == 0) && (m_stem_y1 == 0) && (m_stem_x2 == 0) &&
+      (m_stem_y2 == 0))
     return;
-  
-  m_stem_dist = distPointToLine(m_osx, m_osy, m_stem_x1, m_stem_y1,
-				m_stem_x2, m_stem_y2);
 
+  m_stem_dist =
+      distPointToLine(m_osx, m_osy, m_stem_x1, m_stem_y1, m_stem_x2, m_stem_y2);
 
   double ix, iy;
-  perpSegIntPt(m_stem_x1, m_stem_y1, m_stem_x2, m_stem_y2,
-	       m_osx, m_osy, ix, iy);
+  perpSegIntPt(m_stem_x1, m_stem_y1, m_stem_x2, m_stem_y2, m_osx, m_osy, ix,
+               iy);
 
-  m_stem_odo = hypot(m_stem_x1-ix, m_stem_y1-iy);
+  m_stem_odo = hypot(m_stem_x1 - ix, m_stem_y1 - iy);
 }
 
 //-----------------------------------------------------------
 // Procedure: resetOdometry()
 
-void BHV_ZigZag::resetOdometry()
-{
+void BHV_ZigZag::resetOdometry() {
   m_odometer.reset();
   m_zig_odo.reset();
   m_zag_odo.reset();
@@ -625,36 +600,33 @@ void BHV_ZigZag::resetOdometry()
 //-----------------------------------------------------------
 // Procedure: setState()
 
-void BHV_ZigZag::setState(std::string new_state)
-{
+void BHV_ZigZag::setState(std::string new_state) {
   new_state = tolower(new_state);
-  if((new_state != "stem") && (new_state != "port") && (new_state != "star"))
+  if ((new_state != "stem") && (new_state != "port") && (new_state != "star"))
     return;
-  if(m_state == new_state)
+  if (m_state == new_state)
     return;
 
   // post flags for new leg
-  if((new_state == "star") && !legsComplete())
+  if ((new_state == "star") && !legsComplete())
     postFlags(m_star_flags);
-  if((new_state == "port") && !legsComplete())
+  if ((new_state == "port") && !legsComplete())
     postFlags(m_port_flags);
-  
-  m_state = new_state;
 
+  m_state = new_state;
 }
 
 //------------------------------------------------------------
 // Procedure: postSetHdgLine()
 //   Purpose: Draw the heading of the desired zig leg
 
-void BHV_ZigZag::postSetHdgLine()
-{
-  if(!m_draw_set_hdg)
+void BHV_ZigZag::postSetHdgLine() {
+  if (!m_draw_set_hdg)
     return;
 
-  double x2,y2;
+  double x2, y2;
   projectPoint(m_set_hdg, 20, m_osx, m_osy, x2, y2);
-  
+
   XYSegList segl;
   segl.add_vertex(m_osx, m_osy);
   segl.add_vertex(x2, y2);
@@ -674,14 +646,13 @@ void BHV_ZigZag::postSetHdgLine()
 // Procedure: postReqHdgLine()
 //   Purpose: Draw the heading of the desired zig leg
 
-void BHV_ZigZag::postReqHdgLine()
-{
-  if(!m_draw_req_hdg)
+void BHV_ZigZag::postReqHdgLine() {
+  if (!m_draw_req_hdg)
     return;
 
-  double x2,y2;
+  double x2, y2;
   projectPoint(m_req_hdg, 20, m_osx, m_osy, x2, y2);
-  
+
   XYSegList segl;
   segl.add_vertex(m_osx, m_osy);
   segl.add_vertex(x2, y2);
@@ -701,8 +672,7 @@ void BHV_ZigZag::postReqHdgLine()
 // Procedure: eraseSetHdgLine()
 //   Purpose: Erase the heading of the desired zig leg
 
-void BHV_ZigZag::eraseSetHdgLine()
-{
+void BHV_ZigZag::eraseSetHdgLine() {
   XYSegList segl;
   segl.set_label("zig_set_" + m_us_name);
   postMessage("VIEW_SEGLIST", segl.get_spec_inactive());
@@ -712,8 +682,7 @@ void BHV_ZigZag::eraseSetHdgLine()
 // Procedure: eraseReqHdgLine()
 //   Purpose: Erase the heading of the desired zig leg
 
-void BHV_ZigZag::eraseReqHdgLine()
-{
+void BHV_ZigZag::eraseReqHdgLine() {
   XYSegList segl;
   segl.set_label("zig_req_" + m_us_name);
   postMessage("VIEW_SEGLIST", segl.get_spec_inactive());
@@ -722,44 +691,41 @@ void BHV_ZigZag::eraseReqHdgLine()
 //-----------------------------------------------------------
 // Procedure: handleConfigVisualHint()
 
-bool BHV_ZigZag::handleConfigVisualHint(string hint)
-{
+bool BHV_ZigZag::handleConfigVisualHint(string hint) {
   string param = tolower(biteStringX(hint, '='));
   string value = hint;
 
   bool handled = false;
-  if(param == "draw_set_hdg")
+  if (param == "draw_set_hdg")
     handled = setBooleanOnString(m_draw_set_hdg, value);
-  else if(param == "draw_req_hdg")
+  else if (param == "draw_req_hdg")
     handled = setBooleanOnString(m_draw_req_hdg, value);
-  else if(param == "set_hdg_color")
+  else if (param == "set_hdg_color")
     handled = setColorOnString(m_hint_set_hdg_color, value);
-  else if((param == "req_hdg_color") && isColor(value))
+  else if ((param == "req_hdg_color") && isColor(value))
     handled = setColorOnString(m_hint_req_hdg_color, value);
 
-  return(handled);  
+  return (handled);
 }
 
-
 //-----------------------------------------------------------
-// Procedure: expandMacros() 
+// Procedure: expandMacros()
 
-string BHV_ZigZag::expandMacros(string sdata)
-{
+string BHV_ZigZag::expandMacros(string sdata) {
   sdata = IvPBehavior::expandMacros(sdata);
 
   sdata = macroExpand(sdata, "ODO", m_odometer.getTotalDist());
   sdata = macroExpand(sdata, "ZIG_ODO", m_zig_odo.getTotalDist());
   sdata = macroExpand(sdata, "ZAG_ODO", m_zag_odo.getTotalDist());
 
-  sdata = macroExpand(sdata, "STEM_DIST", doubleToStringX(m_stem_dist,2));
-  sdata = macroExpand(sdata, "STEM_ODO", doubleToStringX(m_stem_odo,2));
+  sdata = macroExpand(sdata, "STEM_DIST", doubleToStringX(m_stem_dist, 2));
+  sdata = macroExpand(sdata, "STEM_ODO", doubleToStringX(m_stem_odo, 2));
 
   sdata = macroExpand(sdata, "ZIGS", m_zig_cnt);
-  sdata = macroExpand(sdata, "ZAGS", (int)(m_zig_cnt/2));
+  sdata = macroExpand(sdata, "ZAGS", (int)(m_zig_cnt / 2));
   sdata = macroExpand(sdata, "ZIGS_EVER", m_zig_cnt_ever);
-  sdata = macroExpand(sdata, "ZAGS_EVER", (int)(m_zig_cnt_ever/2));
-  
+  sdata = macroExpand(sdata, "ZAGS_EVER", (int)(m_zig_cnt_ever / 2));
+
   sdata = macroExpand(sdata, "STEM_HDG", m_stem_hdg);
   sdata = macroExpand(sdata, "STEM_SPD", m_speed_orig);
   sdata = macroExpand(sdata, "ZIG_START_SPD", m_zig_spd_start);
@@ -768,9 +734,9 @@ string BHV_ZigZag::expandMacros(string sdata)
 
   unsigned int zigs_togo = 0;
   unsigned int zags_togo = 0;
-  if(m_max_zig_legs > m_zig_cnt) {
+  if (m_max_zig_legs > m_zig_cnt) {
     zigs_togo = m_max_zig_legs - m_zig_cnt;
-    zags_togo = (int)(zigs_togo+1 / 2);
+    zags_togo = (int)(zigs_togo + 1 / 2);
   }
 
   sdata = macroExpand(sdata, "ZIGS_TOGO", zigs_togo);
@@ -782,6 +748,5 @@ string BHV_ZigZag::expandMacros(string sdata)
   sdata = macroExpand(sdata, "ZIG_STAR", star);
   sdata = macroExpand(sdata, "ZIG_SIDE", m_state);
 
-  return(sdata);
+  return (sdata);
 }
-

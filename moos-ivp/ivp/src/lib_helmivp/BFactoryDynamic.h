@@ -24,37 +24,37 @@
 #ifndef BFACTORY_DYNAMIC_HEADER
 #define BFACTORY_DYNAMIC_HEADER
 
-#include <string>
 #include <map>
 #include <set>
+#include <string>
 #include <vector>
 
-#include "IvPDomain.h"
 #include "IvPBehavior.h"
+#include "IvPDomain.h"
 
 class BFactoryDynamic {
- public:
+public:
   BFactoryDynamic() {}
   virtual ~BFactoryDynamic();
-  
+
   // Configuring the domain and loading directories for search.
-  bool   loadDirectory(std::string dirname);
-  void   loadEnvVarDirectories(std::string envVar);
-  void   setDomain(IvPDomain domain) {m_domain = domain;}
+  bool loadDirectory(std::string dirname);
+  void loadEnvVarDirectories(std::string envVar);
+  void setDomain(IvPDomain domain) { m_domain = domain; }
 
   // Building Behaviors
-  bool         isKnownBehavior(std::string bhv_name) const;
-  IvPBehavior* newBehavior(std::string name);
-  
- private:
+  bool isKnownBehavior(std::string bhv_name) const;
+  IvPBehavior *newBehavior(std::string name);
+
+private:
   // These describe the signature of the function that creates an IPF
-  // object. Each shared library that implements a behavior must have one 
+  // object. Each shared library that implements a behavior must have one
   // of each of these functions, and it must be named "createBehavior".
-  typedef IvPBehavior* (*TFuncPtrCreateBehavior) (std::string, IvPDomain);
+  typedef IvPBehavior *(*TFuncPtrCreateBehavior)(std::string, IvPDomain);
 
   std::map<std::string, TFuncPtrCreateBehavior> m_creation_funcs_map;
-  
-  std::vector<void*> m_open_library_handles;
+
+  std::vector<void *> m_open_library_handles;
 
   // A map from bhv_name to directory. Two behaviors of the same name
   // should not be loaded dynamically. Dangerously ambiguous.
@@ -66,14 +66,3 @@ class BFactoryDynamic {
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

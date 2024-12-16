@@ -26,14 +26,13 @@
 #ifndef VAR_DATA_PAIR_UTILS_HEADER
 #define VAR_DATA_PAIR_UTILS_HEADER
 
-#include <string> 
-#include <vector> 
-#include "VarDataPair.h" 
+#include "VarDataPair.h"
+#include <string>
+#include <vector>
 
-bool  setVarDataPairOnString(VarDataPair&, std::string);
-bool  addVarDataPairOnString(std::vector<VarDataPair>&, std::string);
+bool setVarDataPairOnString(VarDataPair &, std::string);
+bool addVarDataPairOnString(std::vector<VarDataPair> &, std::string);
 
-unsigned int longestField(const std::vector<VarDataPair>&);
+unsigned int longestField(const std::vector<VarDataPair> &);
 
-#endif 
-
+#endif

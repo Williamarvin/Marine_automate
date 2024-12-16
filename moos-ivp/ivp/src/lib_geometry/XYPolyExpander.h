@@ -22,14 +22,14 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_POLYGON_EXPANDER_HEADER
 #define XY_POLYGON_EXPANDER_HEADER
 
-#include <vector>
-#include <string>
 #include "XYPolygon.h"
 #include "XYSegList.h"
+#include <string>
+#include <vector>
 
 class XYPolyExpander {
 public:
@@ -37,46 +37,42 @@ public:
   ~XYPolyExpander() {}
 
 public: // Config setting
-  bool      setPoly(XYPolygon poly);
-  void      setDegreeDelta(double);
-  void      setVertexProximityThresh(double);
-  void      disableSettling() {m_settling_enabled=false;}
- 
-public: // Primary function  
+  bool setPoly(XYPolygon poly);
+  void setDegreeDelta(double);
+  void setVertexProximityThresh(double);
+  void disableSettling() { m_settling_enabled = false; }
+
+public: // Primary function
   XYPolygon getBufferPoly(double buff);
 
 protected: // helper functions
-  bool      expandSegments();
-  bool      buildCorners();
-  bool      buildNewPoly();
-  void      clear();
+  bool expandSegments();
+  bool buildCorners();
+  bool buildNewPoly();
+  void clear();
 
 private: // Config variables
-  
   XYPolygon m_poly_orig;
   XYPolygon m_poly_buff;
 
-  double    m_buff;
-  double    m_deg_delta;
-  double    m_vertex_proximity_thresh;
+  double m_buff;
+  double m_deg_delta;
+  double m_vertex_proximity_thresh;
 
-  bool      m_settling_enabled;
-  
+  bool m_settling_enabled;
+
 private: // State variables
-
   // Variables for holding the temporary edge vertices
   // Index aligns with indices of poly_orig
   std::vector<double> m_px1;
   std::vector<double> m_py1;
   std::vector<double> m_px2;
   std::vector<double> m_py2;
-  
+
   // Variables for holding the temporary corner vertices
   // Outer Index aligns with indices of poly_orig
-  std::vector<std::vector<double> > m_ipx;
-  std::vector<std::vector<double> > m_ipy;
+  std::vector<std::vector<double>> m_ipx;
+  std::vector<std::vector<double>> m_ipy;
 };
 
 #endif
-
-

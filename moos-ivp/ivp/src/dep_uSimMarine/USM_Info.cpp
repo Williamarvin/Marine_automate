@@ -20,19 +20,18 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "USM_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uSimMarine application is a simple 3D vehicle simulator   ");
@@ -42,12 +41,10 @@ void showSynopsis()
   blk("  with each simulated vehicle.                                  ");
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uSimMarine file.moos [OPTIONS]                           ");
@@ -56,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uSimMarine with the given process name rather      ");
   blk("      than uSimMarine.                                          ");
   mag("  --example, -e                                                 ");
@@ -80,8 +77,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uSimMarine Example MOOS Configuration                           ");
@@ -102,22 +98,22 @@ void showExampleConfigAndExit()
   blk("  drift_x       = 0                                             ");
   blk("  drift_y       = 0                                             ");
   blk("  rotate_speed  = 0                                             ");
-  blk("  drift_vector  = 0,0     "," // heading, magnitude             ");
-  blk("                                                                ");  
-  blk("  buoyancy_rate        = 0.025 ","// meters/sec                 ");
-  blk("  max_acceleration     = 0     ","// meters/sec^2               ");
-  blk("  max_deceleration     = 0.5   ","// meters/sec^2               ");
-  blk("  max_depth_rate       = 0.5   ","// meters/sec                 ");
-  blk("  max_depth_rate_speed = 2.0   ","// meters/sec                 ");
+  blk("  drift_vector  = 0,0     ", " // heading, magnitude             ");
   blk("                                                                ");
-  blk("  sim_pause            = false ","// or {true}                  ");
-  blk("  dual_state           = false ","// or {true}                  ");
-  blk("  thrust_reflect       = false ","// or {true}                  ");
-  blk("  thrust_factor        = 20    ","// range [0,inf)              ");
-  blk("  turn_rate            = 70    ","// range [0,100]              ");
+  blk("  buoyancy_rate        = 0.025 ", "// meters/sec                 ");
+  blk("  max_acceleration     = 0     ", "// meters/sec^2               ");
+  blk("  max_deceleration     = 0.5   ", "// meters/sec^2               ");
+  blk("  max_depth_rate       = 0.5   ", "// meters/sec                 ");
+  blk("  max_depth_rate_speed = 2.0   ", "// meters/sec                 ");
+  blk("                                                                ");
+  blk("  sim_pause            = false ", "// or {true}                  ");
+  blk("  dual_state           = false ", "// or {true}                  ");
+  blk("  thrust_reflect       = false ", "// or {true}                  ");
+  blk("  thrust_factor        = 20    ", "// range [0,inf)              ");
+  blk("  turn_rate            = 70    ", "// range [0,100]              ");
   blk("  thrust_map           = 0:0, 20:1, 40:2, 60:3, 80:5, 100:5     ");
   blk("                                                                ");
-  blk("  prefix               = NAV_  ","// default is USM_            ");
+  blk("  prefix               = NAV_  ", "// default is USM_            ");
   blk("                                                                ");
   blk("  app_logging = true  // {true or file} By default disabled     ");
   blk("}                                                               ");
@@ -125,12 +121,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uSimMarine INTERFACE                                            ");
@@ -191,17 +185,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uSimMarine   ", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

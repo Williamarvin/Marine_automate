@@ -36,85 +36,64 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_ScopedLock_INCLUDED
 #define MOOS_POCO_Foundation_ScopedLock_INCLUDED
 
-
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
-
 
 namespace MOOS {
 namespace Poco {
 
-
 template <class M>
 class ScopedLock
-	/// A class that simplifies thread synchronization
-	/// with a mutex.
-	/// The constructor accepts a Mutex and locks it.
-	/// The destructor unlocks the mutex.
+/// A class that simplifies thread synchronization
+/// with a mutex.
+/// The constructor accepts a Mutex and locks it.
+/// The destructor unlocks the mutex.
 {
 public:
-	ScopedLock(M& mutex): _mutex(mutex)
-	{
-		_mutex.lock();
-	}
+  ScopedLock(M &mutex) : _mutex(mutex) { _mutex.lock(); }
 
-	~ScopedLock()
-	{
-		_mutex.unlock();
-	}
+  ~ScopedLock() { _mutex.unlock(); }
 
 private:
-	M& _mutex;
+  M &_mutex;
 
-	ScopedLock();
-	ScopedLock(const ScopedLock&);
-	ScopedLock& operator = (const ScopedLock&);
+  ScopedLock();
+  ScopedLock(const ScopedLock &);
+  ScopedLock &operator=(const ScopedLock &);
 };
-
 
 template <class M>
 class ScopedLockWithUnlock
-	/// A class that simplifies thread synchronization
-	/// with a mutex.
-	/// The constructor accepts a Mutex and locks it.
-	/// The destructor unlocks the mutex.
-	/// The unlock() member function allows for manual
-	/// unlocking of the mutex.
+/// A class that simplifies thread synchronization
+/// with a mutex.
+/// The constructor accepts a Mutex and locks it.
+/// The destructor unlocks the mutex.
+/// The unlock() member function allows for manual
+/// unlocking of the mutex.
 {
 public:
-	ScopedLockWithUnlock(M& mutex): _pMutex(&mutex)
-	{
-		_pMutex->lock();
-	}
+  ScopedLockWithUnlock(M &mutex) : _pMutex(&mutex) { _pMutex->lock(); }
 
-	~ScopedLockWithUnlock()
-	{
-		unlock();
-	}
+  ~ScopedLockWithUnlock() { unlock(); }
 
-	void unlock()
-	{
-		if (_pMutex)
-		{
-			_pMutex->unlock();
-			_pMutex = 0;
-		}
-	}
+  void unlock() {
+    if (_pMutex) {
+      _pMutex->unlock();
+      _pMutex = 0;
+    }
+  }
 
 private:
-	M* _pMutex;
+  M *_pMutex;
 
-	ScopedLockWithUnlock();
-	ScopedLockWithUnlock(const ScopedLockWithUnlock&);
-	ScopedLockWithUnlock& operator = (const ScopedLockWithUnlock&);
+  ScopedLockWithUnlock();
+  ScopedLockWithUnlock(const ScopedLockWithUnlock &);
+  ScopedLockWithUnlock &operator=(const ScopedLockWithUnlock &);
 };
-
 
 } // namespace Poco
 } // namespace MOOS
-
 
 #endif // MOOS_POCO_Foundation_ScopedLock_INCLUDED

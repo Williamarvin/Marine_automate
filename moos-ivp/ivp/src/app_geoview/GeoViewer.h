@@ -27,64 +27,52 @@
 // Defined to silence GL deprecation warnings in OSX 10.14+
 #define GL_SILENCE_DEPRECATION
 
-#include <string>
 #include "FL/Fl.H"
 #include "FL/Fl_Gl_Window.H"
-#include "FL/gl.h"
 #include "FL/fl_draw.H"
+#include "FL/gl.h"
 #include "MarineViewer.h"
 #include "VPlug_GeoShapes.h"
+#include <string>
 
-class GeoViewer : public MarineViewer
-{
- public:
-  GeoViewer(int x,int y,int w,int h,const char *l=0);
-  
+class GeoViewer : public MarineViewer {
+public:
+  GeoViewer(int x, int y, int w, int h, const char *l = 0);
+
   // Pure virtual that need to be defined
-  void  modColorScheme() {};
+  void modColorScheme(){};
 
   // Virtual defined
-  void  draw();
-  int   handle(int);
-  void  handle_left_mouse(int, int);
-  void  handle_right_mouse(int, int);
-  bool  setParam(std::string param, std::string value);
-  bool  setParam(std::string param, double value);
+  void draw();
+  int handle(int);
+  void handle_left_mouse(int, int);
+  void handle_right_mouse(int, int);
+  bool setParam(std::string param, std::string value);
+  bool setParam(std::string param, double value);
 
 public:
   std::string getPolySpec();
 
-  void   adjustActive(int);
-  void   createNew(); 
-  void   shiftHorzPoly(double);
-  void   shiftVertPoly(double);
-  void   rotatePoly(int);
-  void   growPoly(int);
-  void   reversePoly();
-  void   duplicateActive();
-  void   clearActivePoly();
-  int    getMode()                 {return(m_drop_mode);}
-  double getSnap()                 {return(m_snap_val);}
-  void   reApplySnapToCurrent();   
+  void adjustActive(int);
+  void createNew();
+  void shiftHorzPoly(double);
+  void shiftVertPoly(double);
+  void rotatePoly(int);
+  void growPoly(int);
+  void reversePoly();
+  void duplicateActive();
+  void clearActivePoly();
+  int getMode() { return (m_drop_mode); }
+  double getSnap() { return (m_snap_val); }
+  void reApplySnapToCurrent();
 
- private:
-  unsigned int  m_active_poly;
+private:
+  unsigned int m_active_poly;
 
-  double  m_snap_val;
-  int     m_drop_mode;
+  double m_snap_val;
+  int m_drop_mode;
 
-  VPlug_GeoShapes  m_geoshapes;
+  VPlug_GeoShapes m_geoshapes;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
+#endif

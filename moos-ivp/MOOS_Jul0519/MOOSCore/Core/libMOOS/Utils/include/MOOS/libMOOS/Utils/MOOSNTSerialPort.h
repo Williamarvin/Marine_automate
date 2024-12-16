@@ -26,43 +26,38 @@
 #define _CMOOSNTSerialPort_H_
 
 #ifdef _WIN32
-    #include <winsock2.h>
-    #include "windows.h"
-    #include "winbase.h"
-    #include "winnt.h"
+#include "winbase.h"
+#include "windows.h"
+#include "winnt.h"
+#include <winsock2.h>
 #endif
 
 #include "MOOS/libMOOS/Utils/NTSerial.h"
 
 //! Implements windows specialisations of MOOSSerialPort
-class CMOOSNTSerialPort :  public CNTSerial
-{
-
+class CMOOSNTSerialPort : public CNTSerial {
 
 public:
+  CMOOSNTSerialPort();
 
-    CMOOSNTSerialPort();
+  ~CMOOSNTSerialPort(){/*Close();*/};
 
-    ~CMOOSNTSerialPort() { /*Close();*/ };
+  /** Send break signal */
+  virtual void Break();
 
-    /** Send break signal */
-    virtual void Break();
+  /** Create an open port */
+  virtual bool Create(const char *pPortNum = DEFAULT_PORT,
+                      int nBaudRate = DEFAULT_BAUDRATE);
 
-    /** Create an open port */
-    virtual bool Create(const char * pPortNum=DEFAULT_PORT, int nBaudRate=DEFAULT_BAUDRATE);
+  /** Close Port */
+  bool Close(void);
 
-    /** Close Port */
-    bool    Close(void);
-
-    /** Write nLen bytes out */
-    int        Write(const char *pData, int nLen,double* pTime=NULL);
+  /** Write nLen bytes out */
+  int Write(const char *pData, int nLen, double *pTime = NULL);
 
 protected:
-
-    /** Grab N chars NOW */
-    virtual int GrabN(char * pBuffer,int nRequired);
-
+  /** Grab N chars NOW */
+  virtual int GrabN(char *pBuffer, int nRequired);
 };
-
 
 #endif // _CMOOSNTSerialPort_H_

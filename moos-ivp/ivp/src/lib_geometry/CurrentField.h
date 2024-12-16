@@ -26,20 +26,19 @@
 #ifndef CURRENT_FIELD_HEADER
 #define CURRENT_FIELD_HEADER
 
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "XYVector.h"
 #include <string>
 #include <vector>
-#include "XYVector.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
-class CurrentField
-{
+class CurrentField {
 public:
   CurrentField();
   ~CurrentField() {}
 
   bool populate(std::string filename);
-  void addVector(const XYVector&, bool marked=false);
-  void getLocalForce(double x, double y, double& fx, double& fy) const;
+  void addVector(const XYVector &, bool marked = false);
+  void getLocalForce(double x, double y, double &fx, double &fy) const;
   void setRadius(double radius);
   bool initGeodesy(double datum_lat, double datum_lon);
   void print();
@@ -59,19 +58,19 @@ public:
   void applySnap(double);
 
   XYVector getVector(unsigned int) const;
-  bool     getVMarked(unsigned int) const;
-  double   getXPos(unsigned int) const;
-  double   getYPos(unsigned int) const;
-  double   getForce(unsigned int) const;
-  double   getDirection(unsigned int) const;
-  bool     hasActiveVertex() const;
+  bool getVMarked(unsigned int) const;
+  double getXPos(unsigned int) const;
+  double getYPos(unsigned int) const;
+  double getForce(unsigned int) const;
+  double getDirection(unsigned int) const;
+  bool hasActiveVertex() const;
 
-  unsigned int selectVector(double x, double y, double& dist);
+  unsigned int selectVector(double x, double y, double &dist);
 
-  unsigned int getActiveIX() {return(m_active_ix);}
-  unsigned int size()        {return(m_vectors.size());}
-  std::string getName()      {return(m_field_name);}
-  double getRadius()         {return(m_radius);}
+  unsigned int getActiveIX() { return (m_active_ix); }
+  unsigned int size() { return (m_vectors.size()); }
+  std::string getName() { return (m_field_name); }
+  double getRadius() { return (m_radius); }
 
   std::vector<XYVector> getVectors();
   std::vector<XYVector> getVectorsMarked();
@@ -79,32 +78,21 @@ public:
 
   std::vector<std::string> getListing();
 
- protected:
-  bool   handleLine(std::string);
-  void   applyRenderHints();
-  void   applyRenderHint(std::string, std::string);
+protected:
+  bool handleLine(std::string);
+  void applyRenderHints();
+  void applyRenderHint(std::string, std::string);
 
 protected:
   std::vector<XYVector> m_vectors;
-  std::vector<bool>     m_vmarked;
-  std::string           m_field_name;
-  double                m_radius;
-  bool                  m_active_vertex;
-  unsigned int          m_active_ix;
-  CMOOSGeodesy          m_geodesy;
+  std::vector<bool> m_vmarked;
+  std::string m_field_name;
+  double m_radius;
+  bool m_active_vertex;
+  unsigned int m_active_ix;
+  CMOOSGeodesy m_geodesy;
 
   std::vector<std::string> m_render_hints;
-
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif
