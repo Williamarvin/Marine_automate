@@ -36,43 +36,40 @@ using namespace std;
 //            Each uniform piece will have the same size as the
 //            given box.
 
-PDMap* RT_Uniform::create(const IvPBox* unifbox, const IvPBox* gelbox)
-{
-  if(!unifbox)
-    return(0);
+PDMap *RT_Uniform::create(const IvPBox *unifbox, const IvPBox *gelbox) {
+  if (!unifbox)
+    return (0);
 
   IvPDomain domain = m_regressor->getAOF()->getDomain();
 
   IvPBox universe = domainToBox(domain);
 
   int degree = m_regressor->getDegree();
-  
+
   BoxSet *boxset = makeUniformDistro(universe, *unifbox, degree);
   int vsize = boxset->size();
-  if(vsize == 0)
-    return(0);
-  
+  if (vsize == 0)
+    return (0);
+
   PDMap *pdmap = new PDMap(vsize, domain, degree);
   BoxSetNode *bsn = boxset->retBSN(FIRST);
   int index = 0;
-  while(bsn) {
+  while (bsn) {
     pdmap->bx(index) = bsn->getBox();
     index++;
     bsn = bsn->getNext();
   }
-  delete(boxset);
+  delete (boxset);
 
   bool gridset = false;
-  if(gelbox)
+  if (gelbox)
     gridset = pdmap->setGelBox(*gelbox);
-  
-  if(!gridset)
+
+  if (!gridset)
     pdmap->setGelBox(*unifbox);
-  
 
   // Do later, after directed refinement done?
   // pdmap->updateGrid(1,1);
-  
-  return(pdmap);
-}
 
+  return (pdmap);
+}

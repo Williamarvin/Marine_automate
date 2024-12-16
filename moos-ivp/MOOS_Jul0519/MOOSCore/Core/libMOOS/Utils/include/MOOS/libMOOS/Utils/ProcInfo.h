@@ -40,32 +40,30 @@ namespace MOOS {
 
 class ProcInfo {
 public:
-	ProcInfo();
-	virtual ~ProcInfo();
+  ProcInfo();
+  virtual ~ProcInfo();
 
-	/**
-	 * estimate the percentage CPU load of this process
-	 * @param cpu_load
-	 * @return true on success
-	 */
-	bool GetPercentageCPULoad(double &cpu_load);
+  /**
+   * estimate the percentage CPU load of this process
+   * @param cpu_load
+   * @return true on success
+   */
+  bool GetPercentageCPULoad(double &cpu_load);
 
-	/**
-	 * estimate current memory usage of process
-	 * @param current  the current size in bytes
-	 * @param maximum the maximum recorded footprint
-	 */
-	bool GetMemoryUsage(size_t & current,size_t & maximum);
+  /**
+   * estimate current memory usage of process
+   * @param current  the current size in bytes
+   * @param maximum the maximum recorded footprint
+   */
+  bool GetMemoryUsage(size_t &current, size_t &maximum);
 
-	static int GetPid();
-
-
+  static int GetPid();
 
 private:
-	class Impl;
-	MOOS::ScopedPtr<Impl> Impl_;
+  class Impl;
+  MOOS::ScopedPtr<Impl> Impl_;
 };
 
-}
+} // namespace MOOS
 
 #endif /* PROCINFO_H_ */

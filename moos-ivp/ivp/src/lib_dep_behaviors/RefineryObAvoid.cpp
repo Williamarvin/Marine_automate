@@ -23,18 +23,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "BuildUtils.h"
-#include "AngleUtils.h"
 #include "RefineryObAvoid.h"
+#include "AngleUtils.h"
+#include "BuildUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor
 
-RefineryObAvoid::RefineryObAvoid(IvPDomain domain)
-{
+RefineryObAvoid::RefineryObAvoid(IvPDomain domain) {
   // Initialize configuration variables
   m_verbose = false;
   m_initialized_domain = false;
@@ -43,11 +42,11 @@ RefineryObAvoid::RefineryObAvoid(IvPDomain domain)
   // domain. (index is -1 if not found in domain)
   m_crs_ix = domain.getIndex("course");
   m_spd_ix = domain.getIndex("speed");
-  if(m_crs_ix == m_spd_ix)
+  if (m_crs_ix == m_spd_ix)
     return;
-  if(domain.getVarPoints(m_crs_ix) == 0)
+  if (domain.getVarPoints(m_crs_ix) == 0)
     return;
-  if(domain.getVarPoints(m_spd_ix) == 0)
+  if (domain.getVarPoints(m_spd_ix) == 0)
     return;
 
   m_domain = domain;
@@ -57,9 +56,8 @@ RefineryObAvoid::RefineryObAvoid(IvPDomain domain)
 //-----------------------------------------------------------
 // Procedure: setRefineRegions()
 
-void RefineryObAvoid::setRefineRegions(ObShipModel obship_model)
-{
-  if(!m_initialized_domain)
+void RefineryObAvoid::setRefineRegions(ObShipModel obship_model) {
+  if (!m_initialized_domain)
     return;
 
   m_obship_model = obship_model;
@@ -68,12 +66,10 @@ void RefineryObAvoid::setRefineRegions(ObShipModel obship_model)
   setRefineRegionsAll();
 }
 
-
 //-----------------------------------------------------------
 // Procedure: setRefineRegionsAll()
 
-void RefineryObAvoid::setRefineRegionsAll()
-{
+void RefineryObAvoid::setRefineRegionsAll() {
   // Part 1: Set the original refine regions
   setRefineRegionsMajor();
   setRefineRegionsMinor();
@@ -81,16 +77,16 @@ void RefineryObAvoid::setRefineRegionsAll()
   // Part 2: Process the plateaus and basins and make sure that
   // none of them overlap.
   vector<IvPBox> boxes = m_plat_regions;
-  for(unsigned int i=0; i<m_basin_regions.size(); i++)
+  for (unsigned int i = 0; i < m_basin_regions.size(); i++)
     boxes.push_back(m_basin_regions[i]);
   boxes = makeRegionsApart(boxes);
-  
+
   // Part 3: Now that we are sure we have non-overlapping regions,
   //         sort them again into basins and plateaus
   m_plat_regions.clear();
   m_basin_regions.clear();
-  for(unsigned int i=0; i<boxes.size(); i++) {
-    if(boxes[i].getPlat() < 0)
+  for (unsigned int i = 0; i < boxes.size(); i++) {
+    if (boxes[i].getPlat() < 0)
       m_basin_regions.push_back(boxes[i]);
     else
       m_plat_regions.push_back(boxes[i]);
@@ -103,10 +99,9 @@ void RefineryObAvoid::setRefineRegionsAll()
 //            BuildUtils utility that may split a piece that
 //            wraps around through zero degrees, into two pcs.
 
-void RefineryObAvoid::setRefineRegionsMajor()
-{
-  if(m_verbose)
-    cout << "RefineryObAvoid::setRefineRegionsMajor()" << endl; 
+void RefineryObAvoid::setRefineRegionsMajor() {
+  if (m_verbose)
+    cout << "RefineryObAvoid::setRefineRegionsMajor()" << endl;
 
   // Part 1: Make the major plateau region(s). This is the piece
   // that essentially points away from the obstacle. But the
@@ -116,10 +111,10 @@ void RefineryObAvoid::setRefineRegionsMajor()
   double bmax = m_obship_model.getCPABngMinToPoly();
   bmin = getHdgSnappedHigh(bmin);
   bmax = getHdgSnappedLow(bmax);
-  if(m_verbose) {
-    cout << "Major Plateau:" << endl; 
-    cout << "bmin:" << bmin << endl; 
-    cout << "bmax:" << bmax << endl; 
+  if (m_verbose) {
+    cout << "Major Plateau:" << endl;
+    cout << "bmin:" << bmin << endl;
+    cout << "bmax:" << bmax << endl;
   }
 
   vector<IvPBox> plat_regions;
@@ -133,13 +128,12 @@ void RefineryObAvoid::setRefineRegionsMajor()
   // only up to the bearing between ownship and the center point
   // of the object.
   string passing_side = m_obship_model.getPassingSide();
-  if(passing_side == "port") {
+  if (passing_side == "port") {
     bmin = m_obship_model.getThetaB();
     bmax = m_obship_model.getObcentBng();
     bmin = getHdgSnappedLow(bmin);
     bmax = getHdgSnappedHigh(bmax);
-  }
-  else if(passing_side == "star") {
+  } else if (passing_side == "star") {
     bmin = m_obship_model.getObcentBng();
     bmax = m_obship_model.getThetaB();
     bmin = getHdgSnappedHigh(bmin);
@@ -147,20 +141,20 @@ void RefineryObAvoid::setRefineRegionsMajor()
   }
   // If we are not passing toward either side, then we skip the
   // creation of this basin piece.
-  else 
+  else
     return;
-  
-  if(m_verbose) {
-    cout << "Major Basin:" << endl; 
-    cout << "Passing Side:" << passing_side << endl; 
-    cout << "bmin:" << bmin << endl; 
-    cout << "bmax:" << bmax << endl; 
+
+  if (m_verbose) {
+    cout << "Major Basin:" << endl;
+    cout << "Passing Side:" << passing_side << endl;
+    cout << "bmin:" << bmin << endl;
+    cout << "bmax:" << bmax << endl;
   }
 
   vector<IvPBox> basin_regions;
   basin_regions = buildBoxesSpdAll(m_domain, bmin, bmax);
-  if(m_verbose)
-    cout << "Done RefineryObAvoid::setRefineRegionsMajor()" << endl; 
+  if (m_verbose)
+    cout << "Done RefineryObAvoid::setRefineRegionsMajor()" << endl;
 
   addBasinRegions(basin_regions, -5);
 }
@@ -171,10 +165,9 @@ void RefineryObAvoid::setRefineRegionsMajor()
 //            BuildUtils utility that may split a piece that
 //            wraps around through zero degrees, into two pcs.
 
-void RefineryObAvoid::setRefineRegionsMinor()
-{
-  if(m_verbose)
-    cout << "RefineryObAvoid::setRefineRegionsMinor()" << endl; 
+void RefineryObAvoid::setRefineRegionsMinor() {
+  if (m_verbose)
+    cout << "RefineryObAvoid::setRefineRegionsMinor()" << endl;
 
   // ================================================================
   // Part 1: Make the minor plateau region(s). This is the piece that
@@ -187,19 +180,19 @@ void RefineryObAvoid::setRefineRegionsMinor()
   double osx = m_obship_model.getOSX();
   double osy = m_obship_model.getOSY();
   double ttc = m_obship_model.getAllowableTTC();
-  if(ttc <= 0)
+  if (ttc <= 0)
     return;
-  
-  double bdist  = obstacle_buff_max.dist_to_point(osx, osy);
+
+  double bdist = obstacle_buff_max.dist_to_point(osx, osy);
   double minspd = bdist / ttc;
-  
+
   double smin = m_domain.getVarLow(m_spd_ix);
   double smax = getSpdSnappedLow(minspd);
 
   IvPBox plat_region;
   plat_region = buildBoxHdgAll(m_domain, smin, smax);
   addPlatRegion(plat_region, 2);
-  
+
   // ================================================================
   // Part 2: Make the minor basin region(s). This is the piece that
   // results in a collision with the core obstacle for a certain range
@@ -213,121 +206,114 @@ void RefineryObAvoid::setRefineRegionsMinor()
   XYPolygon obstacle = m_obship_model.getObstacle();
   double bng_min_to_poly = m_obship_model.getBngMinToPoly();
   double bng_max_to_poly = m_obship_model.getBngMaxToPoly();
-  
+
   double hmin = getHdgSnappedProx(bng_min_to_poly);
   double hmax = getHdgSnappedProx(bng_max_to_poly);
-  
+
   double dist1 = m_obship_model.getBngMinDistToPoly();
   double dist2 = m_obship_model.getBngMaxDistToPoly();
   double range = dist1;
-  if(dist2 > dist1)
+  if (dist2 > dist1)
     range = dist2;
   smin = range / ttc;
   smin = getSpdSnappedHigh(smin);
   smax = m_domain.getVarHigh(m_spd_ix);
 
-  vector<IvPBox> basin_regions = buildBoxesHdgSpd(m_domain, hmin, hmax,
-						  smin, smax);
+  vector<IvPBox> basin_regions =
+      buildBoxesHdgSpd(m_domain, hmin, hmax, smin, smax);
   addBasinRegions(basin_regions, -4);
 }
 
 //----------------------------------------------------------------
 // Procedure: getHdgSnappedLow()
 
-double RefineryObAvoid::getHdgSnappedLow(double hdg) const
-{
+double RefineryObAvoid::getHdgSnappedLow(double hdg) const {
   // Sanity checks
-  if((hdg < 0) || (hdg >= 360))
+  if ((hdg < 0) || (hdg >= 360))
     hdg = angle360(hdg);
 
   unsigned int uint_val = m_domain.getDiscreteVal(m_crs_ix, hdg, 0);
   double new_hdg = m_domain.getVal(m_crs_ix, uint_val);
 
-  return(new_hdg);
+  return (new_hdg);
 }
 
 //----------------------------------------------------------------
 // Procedure: getHdgSnappedHigh()
 
-double RefineryObAvoid::getHdgSnappedHigh(double hdg) const
-{
+double RefineryObAvoid::getHdgSnappedHigh(double hdg) const {
   // Sanity checks
-  if((hdg < 0) || (hdg >= 360))
+  if ((hdg < 0) || (hdg >= 360))
     hdg = angle360(hdg);
 
   // Edge case
-  if(hdg > m_domain.getVarHigh(m_crs_ix))
-    return(0);
-  
+  if (hdg > m_domain.getVarHigh(m_crs_ix))
+    return (0);
+
   unsigned int uint_val = m_domain.getDiscreteVal(m_crs_ix, hdg, 1);
   double new_hdg = m_domain.getVal(m_crs_ix, uint_val);
 
-  return(new_hdg);
+  return (new_hdg);
 }
 
 //----------------------------------------------------------------
 // Procedure: getHdgSnappedProx()
 
-double RefineryObAvoid::getHdgSnappedProx(double hdg) const
-{
+double RefineryObAvoid::getHdgSnappedProx(double hdg) const {
   // Sanity check
-  if((hdg < 0) || (hdg >= 360))
+  if ((hdg < 0) || (hdg >= 360))
     hdg = angle360(hdg);
 
   // Edge case
   double domain_hdg_high = m_domain.getVarHigh(m_crs_ix);
-  if(hdg > domain_hdg_high) {
+  if (hdg > domain_hdg_high) {
     double domain_hdg_delta = m_domain.getVarDelta(m_crs_ix);
-    if((hdg - domain_hdg_high) > (domain_hdg_delta/2))
-      return(0);
+    if ((hdg - domain_hdg_high) > (domain_hdg_delta / 2))
+      return (0);
     else
-      return(domain_hdg_high);
+      return (domain_hdg_high);
   }
-  
+
   unsigned int uint_val = m_domain.getDiscreteVal(m_crs_ix, hdg, 1);
   double new_hdg = m_domain.getVal(m_crs_ix, uint_val);
 
-  return(new_hdg);
+  return (new_hdg);
 }
 
 //----------------------------------------------------------------
 // Procedure: getSpdSnappedLow()
 
-double RefineryObAvoid::getSpdSnappedLow(double spd) const
-{
+double RefineryObAvoid::getSpdSnappedLow(double spd) const {
   unsigned int uint_val = m_domain.getDiscreteVal(m_spd_ix, spd, 0);
   double new_spd = m_domain.getVal(m_spd_ix, uint_val);
 
-  return(new_spd);
+  return (new_spd);
 }
 
 //----------------------------------------------------------------
 // Procedure: getSpdSnappedHigh()
 
-double RefineryObAvoid::getSpdSnappedHigh(double spd) const
-{
+double RefineryObAvoid::getSpdSnappedHigh(double spd) const {
   unsigned int uint_val = m_domain.getDiscreteVal(m_spd_ix, spd, 1);
   double new_spd = m_domain.getVal(m_spd_ix, uint_val);
 
-  return(new_spd);
+  return (new_spd);
 }
 
 //----------------------------------------------------------------
 // Procedure: getSpdSnappedProx()
 
-double RefineryObAvoid::getSpdSnappedProx(double spd) const
-{
+double RefineryObAvoid::getSpdSnappedProx(double spd) const {
   unsigned int uint_val = m_domain.getDiscreteVal(m_spd_ix, spd, 2);
   double new_spd = m_domain.getVal(m_spd_ix, uint_val);
 
-  return(new_spd);
+  return (new_spd);
 }
 
 //----------------------------------------------------------------
 // Procedure: addPlatRegion
 
-void RefineryObAvoid::addPlatRegion(IvPBox region, double platval)
-{
+void RefineryObAvoid::addPlatRegion(IvPBox region, double platval) {
   region.setPlat(platval);
   m_plat_regions.push_back(region);
 }
@@ -335,10 +321,8 @@ void RefineryObAvoid::addPlatRegion(IvPBox region, double platval)
 //----------------------------------------------------------------
 // Procedure: addPlatRegions
 
-void RefineryObAvoid::addPlatRegions(vector<IvPBox> regions,
-				     double platval)
-{
-  for(unsigned int i=0; i<regions.size(); i++) {
+void RefineryObAvoid::addPlatRegions(vector<IvPBox> regions, double platval) {
+  for (unsigned int i = 0; i < regions.size(); i++) {
     regions[i].setPlat(platval);
     m_plat_regions.push_back(regions[i]);
   }
@@ -347,12 +331,9 @@ void RefineryObAvoid::addPlatRegions(vector<IvPBox> regions,
 //----------------------------------------------------------------
 // Procedure: addBasinRegions
 
-void RefineryObAvoid::addBasinRegions(vector<IvPBox> regions,
-				      double platval)
-{
-  for(unsigned int i=0; i<regions.size(); i++) {
+void RefineryObAvoid::addBasinRegions(vector<IvPBox> regions, double platval) {
+  for (unsigned int i = 0; i < regions.size(); i++) {
     regions[i].setPlat(platval);
     m_basin_regions.push_back(regions[i]);
   }
 }
-

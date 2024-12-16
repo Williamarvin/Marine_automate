@@ -23,107 +23,86 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <algorithm>
-#include <iostream>
 #include "StringNode.h"
 #include "MBUtils.h"
-
+#include <algorithm>
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Procedure: print
 
-void StringNode::print(unsigned int indent)
-{
+void StringNode::print(unsigned int indent) {
   unsigned int i, vsize = m_children.size();
-  for(i=0; i<indent; i++)
+  for (i = 0; i < indent; i++)
     cout << " ";
- 
+
   cout << m_value << endl;
-  for(i=0; i<vsize; i++)
+  for (i = 0; i < vsize; i++)
     m_children[i].print(indent + 2);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: writeGraphviz
 
-void StringNode::writeGraphviz(ostream& os)
-{
+void StringNode::writeGraphviz(ostream &os) {
   unsigned int i, vsize = m_children.size();
-  
-  std::string clean_label=m_value;
+
+  std::string clean_label = m_value;
   std::replace(clean_label.begin(), clean_label.end(), '-', '_');
-  
-  
+
   // branch node
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     os << clean_label << "--";
     m_children[i].writeGraphviz(os);
   }
-  
+
   // leaf node
-  if(!vsize)
+  if (!vsize)
     os << clean_label << "\n  ";
 }
-
 
 //-------------------------------------------------------------
 // Procedure: getPrintableSet
 
-vector<string> StringNode::getPrintableSet(unsigned int indent)
-{
+vector<string> StringNode::getPrintableSet(unsigned int indent) {
   vector<string> rvector;
   string this_nodes_str;
 
   unsigned int i, vsize = m_children.size();
-  for(i=0; i<indent; i++)
+  for (i = 0; i < indent; i++)
     this_nodes_str += "  ";
- 
+
   this_nodes_str += m_value;
   rvector.push_back(this_nodes_str);
 
-  for(i=0; i<vsize; i++) {
-    vector<string> ivector = m_children[i].getPrintableSet(indent+2);
+  for (i = 0; i < vsize; i++) {
+    vector<string> ivector = m_children[i].getPrintableSet(indent + 2);
     rvector = mergeVectors(rvector, ivector);
   }
-  return(rvector);
+  return (rvector);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: addParChild
 
-bool StringNode::addParChild(const string& parent, 
-			     const string& child)
-{
-  if(parent == child)
-    return(false);
+bool StringNode::addParChild(const string &parent, const string &child) {
+  if (parent == child)
+    return (false);
 
-  if(parent == m_value) {
+  if (parent == m_value) {
     StringNode new_node(child);
     m_children.push_back(new_node);
-    return(true);
+    return (true);
   }
 
   unsigned int i, vsize = m_children.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     bool result = m_children[i].addParChild(parent, child);
-    if(result == true)
-      return(true);
+    if (result == true)
+      return (true);
   }
 
-  return(false);
+  return (false);
 }
-
-
-
-
-
-
-
-
-
-
-

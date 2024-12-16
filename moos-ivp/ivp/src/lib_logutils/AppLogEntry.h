@@ -24,45 +24,46 @@
 #ifndef APP_LOG_ENTRY_HEADER
 #define APP_LOG_ENTRY_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
-class AppLogEntry
-{
- public:
-  AppLogEntry(double tstamp=0)  {m_tstamp=tstamp; m_iteration=0;}
+class AppLogEntry {
+public:
+  AppLogEntry(double tstamp = 0) {
+    m_tstamp = tstamp;
+    m_iteration = 0;
+  }
   virtual ~AppLogEntry() {}
 
   // Setters
-  void setIteration(unsigned int ival)                {m_iteration=ival;}
-  void setAppLogLines(std::vector<std::string> lines) {m_lines=lines;}
-  
+  void setIteration(unsigned int ival) { m_iteration = ival; }
+  void setAppLogLines(std::vector<std::string> lines) { m_lines = lines; }
+
   // Getters
-  unsigned int size() const {return(m_lines.size());}
+  unsigned int size() const { return (m_lines.size()); }
 
-  double       getTStamp() const    {return(m_tstamp);}
-  std::string  getAppName() const   {return(m_appname);}
-  unsigned int getIteration() const {return(m_iteration);}
-  std::string  getLine(unsigned int) const;
-  std::string  getTruncLine(unsigned int) const;
+  double getTStamp() const { return (m_tstamp); }
+  std::string getAppName() const { return (m_appname); }
+  unsigned int getIteration() const { return (m_iteration); }
+  std::string getLine(unsigned int) const;
+  std::string getTruncLine(unsigned int) const;
 
-  std::vector<std::string> getLines(bool tag=false) const;
+  std::vector<std::string> getLines(bool tag = false) const;
   std::vector<std::string> getTruncLines();
   std::vector<std::string> getWrapLines();
 
-  //bool valid() const {return(m_lines.size() != 0);}
-  bool valid() const {return(true);}
-  
-private:
-  double       m_tstamp;
+  // bool valid() const {return(m_lines.size() != 0);}
+  bool valid() const { return (true); }
 
-  std::string  m_appname;
+private:
+  double m_tstamp;
+
+  std::string m_appname;
   unsigned int m_iteration;
 
   std::vector<std::string> m_lines;
 };
 
-AppLogEntry stringToAppLogEntry(std::string, bool verbose=false);
+AppLogEntry stringToAppLogEntry(std::string, bool verbose = false);
 
 #endif
-

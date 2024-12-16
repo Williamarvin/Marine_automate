@@ -21,12 +21,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "PopulatorVZAIC.h"
-#include "ZAIC_VECT_GUI.h"
 #include "MBUtils.h"
+#include "PopulatorVZAIC.h"
 #include "ReleaseInfo.h"
+#include "ZAIC_VECT_GUI.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -37,8 +37,7 @@ void idleProc(void *);
 //--------------------------------------------------------
 // Procedure: idleProc
 
-void idleProc(void *)
-{
+void idleProc(void *) {
   Fl::flush();
   millipause(10);
 }
@@ -46,41 +45,39 @@ void idleProc(void *)
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   bool verbose = false;
   ZAIC_Vector *zaic = 0;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help"))
+    if ((argi == "-h") || (argi == "--help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi == "--version"))
+    else if ((argi == "-v") || (argi == "--version"))
       showReleaseInfoAndExit("zaic_vect", "gpl");
-    else if(strEnds(argi, ".zaic")) {
+    else if (strEnds(argi, ".zaic")) {
       PopulatorVZAIC populator;
       populator.readFile(argi);
       zaic = populator.buildZAIC();
-      if(!zaic) {
-	cout << "Unable to find or build ZAIC from file[" << argi << endl;
-	exit(1);
+      if (!zaic) {
+        cout << "Unable to find or build ZAIC from file[" << argi << endl;
+        exit(1);
       }
-    }
-    else if(argi == "--verbose")
+    } else if (argi == "--verbose")
       verbose = true;
     else {
       cout << "Exiting due to Unhandled arg: " << argi << endl;
       exit(1);
-    }      
+    }
   }
 
-  if(!zaic) {
+  if (!zaic) {
     cout << "No ZAIC_Vector file provided. Exiting now." << endl;
     exit(1);
   }
-      
+
   Fl::add_idle(idleProc);
-  ZAIC_VECT_GUI* gui = new ZAIC_VECT_GUI(700, 460, "ZAIC_VECT-Viewer");
+  ZAIC_VECT_GUI *gui = new ZAIC_VECT_GUI(700, 460, "ZAIC_VECT-Viewer");
 
   gui->setZAIC(zaic);
   gui->setVerbose(verbose);
@@ -92,8 +89,7 @@ int main(int argc, char *argv[])
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << endl;
   cout << "Usage: zaic_vect [OPTIONS]                          " << endl;
   cout << "Options:                                            " << endl;
@@ -106,4 +102,3 @@ void showHelpAndExit()
   cout << " $ zaic_vect --domain=500 --verbose                 " << endl;
   exit(0);
 }
-

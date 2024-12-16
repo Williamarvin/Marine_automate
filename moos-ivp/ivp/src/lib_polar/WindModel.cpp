@@ -23,20 +23,19 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath>
-#include <iostream>
 #include "WindModel.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
 #include "GeomUtils.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Constructor
 
-WindModel::WindModel()
-{
+WindModel::WindModel() {
   m_set = false;
 
   m_wind_dir = 0;
@@ -54,31 +53,29 @@ WindModel::WindModel()
 //      Note: Eventually will generalize to models where wind speed
 //            varies between locations. For now, it is universal.
 
-bool WindModel::setConditions(string str)
-{ 
+bool WindModel::setConditions(string str) {
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
     double dval = atof(value.c_str());
 
-    if((param == "spd") && isNumber(value))
+    if ((param == "spd") && isNumber(value))
       setWindSpd(dval);
-    else if((param == "dir") && isNumber(value) && (dval >= 0))
+    else if ((param == "dir") && isNumber(value) && (dval >= 0))
       setWindDir(dval);
     else
-      return(false);
+      return (false);
   }
 
   m_set = true;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: setWindDir()
 
-bool WindModel::setWindDir(double dval)
-{ 
+bool WindModel::setWindDir(double dval) {
   m_wind_dir = angle360(dval);
 
   // NOTE: The wind direction is the direction it is coming FROM.
@@ -87,28 +84,26 @@ bool WindModel::setWindDir(double dval)
   m_arrow.setAngle(arrow_angle);
 
   m_set = true;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: setWindSpd()
 
-bool WindModel::setWindSpd(double dval)
-{ 
-  if(dval < 0)
-    return(false);
+bool WindModel::setWindSpd(double dval) {
+  if (dval < 0)
+    return (false);
 
   m_wind_spd = dval;
 
   m_set = true;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: modWindDir()
 
-bool WindModel::modWindDir(double dval)
-{ 
+bool WindModel::modWindDir(double dval) {
   m_wind_dir = angle360(m_wind_dir + dval);
 
   // NOTE: The wind direction is the direction it is coming FROM.
@@ -117,97 +112,80 @@ bool WindModel::modWindDir(double dval)
   m_arrow.setAngle(arrow_angle);
 
   m_set = true;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: modWindSpd()
 
-bool WindModel::modWindSpd(double dval)
-{ 
+bool WindModel::modWindSpd(double dval) {
   m_wind_spd += dval;
-  if(m_wind_spd < 0)
+  if (m_wind_spd < 0)
     m_wind_spd = 0;
-  
+
   m_set = true;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: getWindDir(x,y)
 //   Purpose: A placeholder for when wind direction is not uniform
 
-double WindModel::getWindDir(double x, double y) const
-{
-  return(m_wind_dir);
-}
-
+double WindModel::getWindDir(double x, double y) const { return (m_wind_dir); }
 
 //----------------------------------------------------------------
 // Procedure: getWindSpd(x,y)
 //   Purpose: A placeholder for when wind speed is not uniform
 
-double WindModel::getWindSpd(double x, double y) const
-{
-  return(m_wind_spd);
-}
-
+double WindModel::getWindSpd(double x, double y) const { return (m_wind_spd); }
 
 //----------------------------------------------------------------
 // Procedure: getArrowSpec()
 
-string WindModel::getArrowSpec() const
-{
-  return(m_arrow.get_spec());
-}
-
+string WindModel::getArrowSpec() const { return (m_arrow.get_spec()); }
 
 //----------------------------------------------------------------
 // Procedure: getArrowSpec()
 
-string WindModel::getArrowSpec(double x, double y) const
-{
+string WindModel::getArrowSpec(double x, double y) const {
   XYArrow arrow = m_arrow;
-  arrow.setBaseCenter(x,y);
-  
-  return(arrow.get_spec());
+  arrow.setBaseCenter(x, y);
+
+  return (arrow.get_spec());
 }
 
 //----------------------------------------------------------------
 // Procedure: getMaxSpeed()
 
-double WindModel::getMaxSpeed(PolarPlot pplot, double hdg) const
-{
+double WindModel::getMaxSpeed(PolarPlot pplot, double hdg) const {
   double polar_pct = pplot.getPolarPct(hdg);
 
   double max_spd = polar_pct * getWindSpd();
 
-  return(max_spd);
+  return (max_spd);
 }
 
 //----------------------------------------------------------------
 // Procedure: getArrowSpec()
 
-string WindModel::getArrowSpec(string params) const
-{
+string WindModel::getArrowSpec(string params) const {
   // Start with a copy of the arrow
   XYArrow arrow = m_arrow;
 
   // Apply all specs to the copy, but just return the specs of the
   // original arrow if any one of the given param/value pairs fail.
   vector<string> svector = parseString(params, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = tolower(biteStringX(svector[i], '='));
     string value = svector[i];
 
     bool ok = arrow.set_param(param, value);
-    if(!ok)
-      return(m_arrow.get_spec());
+    if (!ok)
+      return (m_arrow.get_spec());
   }
-  
-  return(arrow.get_spec());
-}
 
+  return (arrow.get_spec());
+}
 
 //----------------------------------------------------------------
 // Procedure: getModelSpec()
@@ -216,34 +194,30 @@ string WindModel::getArrowSpec(string params) const
 //      Note: Eventually will generalize to models where wind speed
 //            varies between locations. For now, it is universal.
 
-string WindModel::getModelSpec() const
-{
-  string spec = "spd=" + doubleToStringX(m_wind_spd,3);
+string WindModel::getModelSpec() const {
+  string spec = "spd=" + doubleToStringX(m_wind_spd, 3);
   spec += ", dir=" + doubleToStringX(m_wind_dir);
 
-  return(spec);
+  return (spec);
 }
 
 //----------------------------------------------------------------
 // Procedure: stringToWindModel()
 
-WindModel stringToWindModel(string str)
-{
+WindModel stringToWindModel(string str) {
   WindModel model;
-  
+
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
-    double dval  = atof(value.c_str());
-    
-    if((param == "spd") && isNumber(value))
+    double dval = atof(value.c_str());
+
+    if ((param == "spd") && isNumber(value))
       model.setWindSpd(dval);
-    else if((param == "dir") && isNumber(value))
+    else if ((param == "dir") && isNumber(value))
       model.setWindDir(dval);
   }
 
-  return(model);
+  return (model);
 }
-
-

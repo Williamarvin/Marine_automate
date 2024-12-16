@@ -5,20 +5,17 @@
 
 #include "recordTypes.h"
 
-class indexWriter
-{
-    public:
-        indexWriter() {}
+class indexWriter {
+public:
+  indexWriter() {}
 
-        aloglib::idxHeader m_alogHeader;
-        aloglib::idxMsgList m_alogMsgList;
-        aloglib::idxSrcList m_alogSrcList;
-        std::vector<aloglib::idxRec> m_alogRecords;
+  aloglib::idxHeader m_alogHeader;
+  aloglib::idxMsgList m_alogMsgList;
+  aloglib::idxSrcList m_alogSrcList;
+  std::vector<aloglib::idxRec> m_alogRecords;
 
-
-        void parseAlogFile( std::string alogFileName );
-        void writeIndexFile( std::string alogIndexName );
+  void parseAlogFile(std::string alogFileName);
+  void writeIndexFile(std::string alogIndexName);
 };
 
 #endif // _indexWriter_h_
-

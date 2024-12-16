@@ -24,15 +24,14 @@
 #ifndef PLATFORM_ALERT_RECORD_HEADER
 #define PLATFORM_ALERT_RECORD_HEADER
 
+#include "VarDataPair.h"
 #include <map>
 #include <set>
 #include <string>
 #include <vector>
-#include "VarDataPair.h"
 
-class PlatformAlertRecord
-{
- public:
+class PlatformAlertRecord {
+public:
   PlatformAlertRecord() {}
   ~PlatformAlertRecord() {}
 
@@ -40,7 +39,7 @@ class PlatformAlertRecord
   void addVehicle(std::string str);
 
   bool removeVehicle(std::string str);
-  
+
   bool containsVehicle(std::string contact) const;
   bool containsAlertID(std::string alertid) const;
 
@@ -49,20 +48,20 @@ class PlatformAlertRecord
 
   unsigned int getAlertsTotal(std::string contact) const;
   unsigned int getAlertsActive(std::string contact) const;
-  
- public:
-  std::string  getAlertedGroup(bool alerted) const;
+
+public:
+  std::string getAlertedGroup(bool alerted) const;
   unsigned int getAlertedGroupCount(bool alerted) const;
 
   bool alertsPending() const;
 
   std::vector<VarDataPair> getReports() const;
-  
+
   void print() const;
 
- protected: 
+protected:
   //  map<vehicle, map<alertid, bool>>
-  //  
+  //
   //  vname   id=aa   id=bb
   //  -----   -----   -----
   //  gilda | true    false     "the gilda map"
@@ -70,10 +69,9 @@ class PlatformAlertRecord
   //  ike   | true    false
   //  jake  | false   true
 
-
   // The first Matix indicates whether a vehicle has been alerted,
   // for all defined alert-ids.
-  std::map<std::string, std::map<std::string, bool> > m_par_alerted;
+  std::map<std::string, std::map<std::string, bool>> m_par_alerted;
 
   // Additional info keyed on [contact]
   std::map<std::string, unsigned int> m_map_alerts_total;
@@ -82,5 +80,4 @@ class PlatformAlertRecord
   std::set<std::string> m_alertids;
 };
 
-#endif 
-
+#endif

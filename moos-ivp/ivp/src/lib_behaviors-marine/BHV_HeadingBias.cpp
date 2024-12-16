@@ -21,22 +21,20 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_HeadingBias.h"
 #include "BuildUtils.h"
-#include "ZAIC_PEAK.h"
 #include "MBUtils.h"
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_HeadingBias::BHV_HeadingBias(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_HeadingBias::BHV_HeadingBias(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "bhv_headingbias");
 
   m_domain = subDomain(m_domain, "course");
@@ -48,37 +46,35 @@ BHV_HeadingBias::BHV_HeadingBias(IvPDomain gdomain) :
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_HeadingBias::setParam(string param, string value) 
-{
+bool BHV_HeadingBias::setParam(string param, string value) {
   param = tolower(param);
   value = tolower(value);
-  
-  if(param == "bias") {
-    if((value == "right") || (value == "left")) {
+
+  if (param == "bias") {
+    if ((value == "right") || (value == "left")) {
       m_bias_right = (value == "right");
-      return(true);
+      return (true);
     }
   }
 
-  return(false);
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 //
 
-IvPFunction *BHV_HeadingBias::onRunState() 
-{
-  if(!m_domain.hasDomain("course")) {
+IvPFunction *BHV_HeadingBias::onRunState() {
+  if (!m_domain.hasDomain("course")) {
     postWMessage("No 'heading/course' variable in the helm domain");
-    return(0);
+    return (0);
   }
   bool ok = updateInfoIn();
-  if(!ok) 
-    return(0);
+  if (!ok)
+    return (0);
 
   double curr_heading_plus = m_os_heading + 90;
-  if(curr_heading_plus >= 360)
+  if (curr_heading_plus >= 360)
     curr_heading_plus -= 360;
 
   ZAIC_PEAK zaic(m_domain, "course");
@@ -86,12 +82,12 @@ IvPFunction *BHV_HeadingBias::onRunState()
   zaic.setPeakWidth(180);
   zaic.setBaseWidth(0);
   zaic.setValueWrap(true);
-  
+
   IvPFunction *ipf = zaic.extractIvPFunction();
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
@@ -104,28 +100,15 @@ IvPFunction *BHV_HeadingBias::onRunState()
 //            variable to false which will communicate the gravity
 //            of the situation to the helm.
 
-bool BHV_HeadingBias::updateInfoIn()
-{
+bool BHV_HeadingBias::updateInfoIn() {
   bool ok;
   m_os_heading = getBufferDoubleVal("NAV_HEADING", ok);
-  
+
   // Must get ownship heading from InfoBuffer
-  if(!ok) {
+  if (!ok) {
     postWMessage("No ownship HEADING info in info_buffer.");
-    return(false);
+    return (false);
   }
 
-  return(true);
+  return (true);
 }
-
-
-
-
-
-
-
-
-
-
-
-

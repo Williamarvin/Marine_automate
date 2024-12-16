@@ -5,7 +5,7 @@
 //   MOOS : Mission Oriented Operating Suite A suit of
 //   Applications and Libraries for Mobile Robotics Research
 //   Copyright (C) Paul Newman
-//    
+//
 //   This software was written by Paul Newman at MIT 2001-2002 and
 //   the University of Oxford 2003-2013
 //
@@ -15,17 +15,15 @@
 //   are made available under the terms of the GNU Lesser Public License v2.1
 //   which accompanies this distribution, and is available at
 //   http://www.gnu.org/licenses/lgpl.txt
-//          
-//   This program is distributed in the hope that it will be useful, 
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of 
+//
+//   This program is distributed in the hope that it will be useful,
+//   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 ////////////////////////////////////////////////////////////////////////////
-//   The XPC classes in MOOS are modified versions of the source provided 
-//   in "Making UNIX and Windows NT Talk" by Mark Nadelson and Thomas Haga 
+//   The XPC classes in MOOS are modified versions of the source provided
+//   in "Making UNIX and Windows NT Talk" by Mark Nadelson and Thomas Haga
 //
-
-
 
 #ifndef _XPCTcpSocket
 #define _XPCTcpSocket
@@ -38,47 +36,44 @@
 #endif
 #endif
 
-class XPCTcpSocket : public XPCSocket
-{
+class XPCTcpSocket : public XPCSocket {
 private:
 #ifdef WINDOWS_NT
-    // Windows NT version of the MSG_WAITALL option
-    int iRecieveMessageAll(void *_vMessage, int _iMessageSize);
+  // Windows NT version of the MSG_WAITALL option
+  int iRecieveMessageAll(void *_vMessage, int _iMessageSize);
 #endif
 public:
+  // Constructor.  Used to create a new TCP socket given a port
+  XPCTcpSocket(long int _iPort) : XPCSocket("tcp", _iPort){};
 
+  // Constructor.  Called when a client connects and a new file descriptor has
+  // be created as a result.
+  XPCTcpSocket(short int _iSocketFd) : XPCSocket(_iSocketFd){};
 
-    // Constructor.  Used to create a new TCP socket given a port
-    XPCTcpSocket(long int _iPort) : XPCSocket("tcp", _iPort) { };
+  // Sends a message to a connected host. The number of bytes sent is returned
+  int iSendMessage(const void *_vMessage, int _iMessageSize);
 
-    // Constructor.  Called when a client connects and a new file descriptor has
-    // be created as a result.    
-    XPCTcpSocket(short int _iSocketFd) : XPCSocket(_iSocketFd) { };
+  // Receives a TCP message
+  int iRecieveMessage(void *_vMessage, int _iMessageSize, int _iOption = 0);
 
-    // Sends a message to a connected host. The number of bytes sent is returned
-    int iSendMessage(const void *_vMessage, int _iMessageSize);
+  // Binds the socket to an address and port number
+  void vBindSocket();
 
-    // Receives a TCP message 
-    int iRecieveMessage(void *_vMessage, int _iMessageSize, int _iOption = 0);
+  // Accepts a connecting client.  The address of the connected client is stored
+  // in the parameter
+  XPCTcpSocket *Accept(char *_sHost = NULL);
 
-    // Binds the socket to an address and port number
-    void vBindSocket();
+  // Listens to connecting clients
+  void vListen(int _iNumPorts = -1);
 
-    // Accepts a connecting client.  The address of the connected client is stored in the
-    // parameter
-    XPCTcpSocket *Accept(char *_sHost = NULL);
+  // Connects to a client specified by a supplied host name
+  virtual void vConnect(const char *_sHost);
 
-    // Listens to connecting clients
-    void vListen(int _iNumPorts = -1);
+  // allows a read with a timeout to prevent from blocking indefinitely
+  int iReadMessageWithTimeOut(void *_vMessage, int _iMessageSize,
+                              double dfTimeOut, int _iOption = 0);
 
-    // Connects to a client specified by a supplied host name
-    virtual void vConnect(const char *_sHost);
-
-    // allows a read with a timeout to prevent from blocking indefinitely
-    int iReadMessageWithTimeOut(void *_vMessage, int _iMessageSize, double dfTimeOut,int _iOption=0);
-
-    void vSetNoDelay(int _iToggle);
-
+  void vSetNoDelay(int _iToggle);
 };
 
 #endif

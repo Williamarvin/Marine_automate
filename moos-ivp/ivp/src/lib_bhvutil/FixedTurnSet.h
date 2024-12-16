@@ -24,9 +24,9 @@
 #ifndef FIXED_TURN_SET_HEADER
 #define FIXED_TURN_SET_HEADER
 
+#include "FixedTurn.h"
 #include <string>
 #include <vector>
-#include "FixedTurn.h"
 
 class FixedTurnSet {
 public:
@@ -34,21 +34,24 @@ public:
   ~FixedTurnSet() {}
 
   bool addFixedTurn(FixedTurn);
-  
+
   bool setTurnParams(std::string);
   bool setRepeats(std::string);
 
   void increment();
-  void clear() {m_turns.clear(); m_curr_ix=0;}
+  void clear() {
+    m_turns.clear();
+    m_curr_ix = 0;
+  }
 
   FixedTurn getFixedTurn() const;
 
-  unsigned int size() const {return(m_turns.size());}
+  unsigned int size() const { return (m_turns.size()); }
 
   bool completed() const;
 
   void print() const;
-  
+
 private:
   std::vector<FixedTurn> m_turns;
 
@@ -58,8 +61,6 @@ private:
   // If true the schedule repeats when completed. The curr
   // index is reset to zero.
   bool m_repeats;
-
 };
 
 #endif
-

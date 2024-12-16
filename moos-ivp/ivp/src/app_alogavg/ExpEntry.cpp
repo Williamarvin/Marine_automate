@@ -21,18 +21,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath>
-#include "MBUtils.h"
 #include "ExpEntry.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Constructor()
 
-ExpEntry::ExpEntry()
-{
+ExpEntry::ExpEntry() {
   m_xval = 0;
   m_yavg = 0;
   m_ymin = 0;
@@ -44,8 +43,7 @@ ExpEntry::ExpEntry()
 //--------------------------------------------------------
 // Procedure: addYVal()
 
-void ExpEntry::addYVal(double y)
-{
+void ExpEntry::addYVal(double y) {
   m_yvals.push_back(y);
   m_processed = false;
 }
@@ -53,9 +51,8 @@ void ExpEntry::addYVal(double y)
 //--------------------------------------------------------
 // Procedure: process()
 
-void ExpEntry::process()
-{
-  if((m_processed) || (m_yvals.size() == 0))
+void ExpEntry::process() {
+  if ((m_processed) || (m_yvals.size() == 0))
     return;
   setYAvg();
   setYMin();
@@ -67,10 +64,9 @@ void ExpEntry::process()
 //--------------------------------------------------------
 // Procedure: setYAvg()
 
-void ExpEntry::setYAvg()
-{
+void ExpEntry::setYAvg() {
   double total = 0;
-  for(unsigned int i=0; i<m_yvals.size(); i++)
+  for (unsigned int i = 0; i < m_yvals.size(); i++)
     total += m_yvals[i];
   m_yavg = total / ((double)(m_yvals.size()));
 }
@@ -78,10 +74,9 @@ void ExpEntry::setYAvg()
 //--------------------------------------------------------
 // Procedure: setYMin()
 
-void ExpEntry::setYMin()
-{
-  for(unsigned int i=0; i<m_yvals.size(); i++) {
-    if((i==0) || (m_yvals[i] < m_ymin))
+void ExpEntry::setYMin() {
+  for (unsigned int i = 0; i < m_yvals.size(); i++) {
+    if ((i == 0) || (m_yvals[i] < m_ymin))
       m_ymin = m_yvals[i];
   }
 }
@@ -89,10 +84,9 @@ void ExpEntry::setYMin()
 //--------------------------------------------------------
 // Procedure: setYMax()
 
-void ExpEntry::setYMax()
-{
-  for(unsigned int i=0; i<m_yvals.size(); i++) {
-    if((i==0) || (m_yvals[i] > m_ymax))
+void ExpEntry::setYMax() {
+  for (unsigned int i = 0; i < m_yvals.size(); i++) {
+    if ((i == 0) || (m_yvals[i] > m_ymax))
       m_ymax = m_yvals[i];
   }
 }
@@ -100,11 +94,10 @@ void ExpEntry::setYMax()
 //--------------------------------------------------------
 // Procedure: setYStd()
 
-void ExpEntry::setYStd()
-{
+void ExpEntry::setYStd() {
   double avg = m_yavg;
   double total = 0;
-  for(unsigned int i=0; i<m_yvals.size(); i++) {
+  for (unsigned int i = 0; i < m_yvals.size(); i++) {
     double delta = avg - m_yvals[i];
     total += (delta * delta);
   }
@@ -114,4 +107,3 @@ void ExpEntry::setYStd()
 
   m_ystd = std_deviation;
 }
-

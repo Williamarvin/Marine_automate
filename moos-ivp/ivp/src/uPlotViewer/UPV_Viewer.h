@@ -27,81 +27,68 @@
 // Defined to silence GL deprecation warnings in OSX 10.14+
 #define GL_SILENCE_DEPRECATION
 
-#include <string>
-#include <map>
 #include "FL/Fl.H"
 #include "FL/Fl_Gl_Window.H"
-#include "FL/gl.h"
 #include "FL/fl_draw.H"
+#include "FL/gl.h"
 #include "IvPDomain.h"
 #include "PartitionRecord.h"
+#include <map>
+#include <string>
 
-class UPV_Viewer : public Fl_Gl_Window
-{
- public:
-  UPV_Viewer(int x,int y,int w,int h,const char *l=0);
+class UPV_Viewer : public Fl_Gl_Window {
+public:
+  UPV_Viewer(int x, int y, int w, int h, const char *l = 0);
   ~UPV_Viewer() {}
-  
+
   // Pure virtuals that need to be defined
-  void  draw();
-  int   handle(int);
-  void  resize(int, int, int, int);
+  void draw();
+  int handle(int);
+  void resize(int, int, int, int);
 
- public:
-  void  addPartition(std::string, double min, double max, unsigned int bars,
-		     std::string color="blue");
-  void  addValue(std::string varname, double value);
+public:
+  void addPartition(std::string, double min, double max, unsigned int bars,
+                    std::string color = "blue");
+  void addValue(std::string varname, double value);
 
-  void  setParam(std::string, std::string);
-  
-  void  setHotVar(std::string varname);
-  bool  hideVar(std::string varname);
-  void  showVar(std::string varname);
+  void setParam(std::string, std::string);
 
-  std::string getHotVar()    const {return(m_hotvar);}
-  double      getHotVarAvg() const;
+  void setHotVar(std::string varname);
+  bool hideVar(std::string varname);
+  void showVar(std::string varname);
 
-  void  printPartitions() const;
+  std::string getHotVar() const { return (m_hotvar); }
+  double getHotVarAvg() const;
 
- protected:
-  void  drawAxes();
-  void  drawGrids();
-  void  drawLabels();
-  void  drawText(int, int, std::string);
-  void  drawPartitions() const;
-  void  drawPartition(const PartitionRecord&) const;
-  void  drawBar(double, double, double, double, 
-		double, double, double, double, ColorPack) const;
+  void printPartitions() const;
 
- protected:
-  int    m_color_scheme;
-  int    m_curr_mode;
-  int    m_grid_block_size;
+protected:
+  void drawAxes();
+  void drawGrids();
+  void drawLabels();
+  void drawText(int, int, std::string);
+  void drawPartitions() const;
+  void drawPartition(const PartitionRecord &) const;
+  void drawBar(double, double, double, double, double, double, double, double,
+               ColorPack) const;
+
+protected:
+  int m_color_scheme;
+  int m_curr_mode;
+  int m_grid_block_size;
   double m_back_shade;
   double m_grid_shade;
   double m_line_shade;
 
-  int    m_x_offset;
-  int    m_y_offset;
-  int    m_y_grid_height;
-  int    m_x_grid_width;
+  int m_x_offset;
+  int m_y_offset;
+  int m_y_grid_height;
+  int m_x_grid_width;
 
   std::string m_hotvar;
 
-  std::map<std::string, bool>            m_map_render;
+  std::map<std::string, bool> m_map_render;
   std::map<std::string, PartitionRecord> m_map_partitions;
-
-
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
+#include "FldNodeComms_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "FldNodeComms_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  A shoreside tool for managing communications between vehicles.");
@@ -46,8 +45,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blk("Usage: uFldNodeComms file.moos [OPTIONS]                        ");
@@ -56,7 +54,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldNodeComms with the given process               ");
   blk("      name rather than uFldNodeComms.                           ");
   mag("  --example, -e                                                 ");
@@ -68,7 +66,8 @@ void showHelpAndExit()
   mag("  --version,-v                                                  ");
   blk("      Display the release version of uFldNodeComms.             ");
   mag("  --web,-w                                                      ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uFldNodeComms ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uFldNodeComms ");
   blk("                                                                ");
   blk("Note: If argv[2] does not otherwise match a known option,       ");
   blk("      then it will be interpreted as a run alias. This is       ");
@@ -79,8 +78,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldNodeComms Example MOOS Configuration                        ");
   blu("=============================================================== ");
@@ -105,7 +103,7 @@ void showExampleConfigAndExit()
   blk("  stealth  = vname=alpha, stealth=0.8                           ");
   blk("  earange  = vname=alpha, earange=4.5                           ");
   blk("                                                                ");
-  blk("  shared_node_reports = false  // default                       "); 
+  blk("  shared_node_reports = false  // default                       ");
   blk("                                                                ");
   blk("  pulse_duration = 10          // default (in seconds)          ");
   blk("  view_node_rpt_pulses = true  // default                       ");
@@ -123,8 +121,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("uFldNodeComms INTERFACE                                         ");
   blu("=============================================================== ");
@@ -168,18 +165,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldNodeComms", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

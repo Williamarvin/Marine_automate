@@ -21,73 +21,69 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "WormHoleSet.h"
 #include "XYFormatUtilsPoly.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Constructor()
 
-WormHoleSet::WormHoleSet()
-{
+WormHoleSet::WormHoleSet() {
   // Init config vars
-  m_tunnel_time = 10;  // seconds
+  m_tunnel_time = 10; // seconds
 
   // Init state vars
-  m_worm_hole_state  = "normal";    // or fading, emerging
-  m_worm_hole_tstamp = 0;           
-  m_transparency     = 1;           // Range [0,1]
+  m_worm_hole_state = "normal"; // or fading, emerging
+  m_worm_hole_tstamp = 0;
+  m_transparency = 1; // Range [0,1]
 
-  m_inx = 0;   // Observed wormhole entry point
+  m_inx = 0; // Observed wormhole entry point
   m_iny = 0;
 }
 
 //----------------------------------------------------------------
 // Procedure: setTunnelTime()
 
-void WormHoleSet::setTunnelTime(double tunnel_time)
-{
-  if(tunnel_time < 0)
+void WormHoleSet::setTunnelTime(double tunnel_time) {
+  if (tunnel_time < 0)
     tunnel_time = 0;
 
-  m_tunnel_time = tunnel_time;  
+  m_tunnel_time = tunnel_time;
 }
 
 //----------------------------------------------------------------
 // Procedure: setTransparency()
 
-void WormHoleSet::setTransparency(double transp)
-{
-  if(transp < 0)
+void WormHoleSet::setTransparency(double transp) {
+  if (transp < 0)
     transp = 0;
-  else if(transp > 1)
+  else if (transp > 1)
     transp = 1;
-  
+
   m_transparency = transp;
 }
 
 //----------------------------------------------------------------
 // Procedure: addWormHoleConfig()
 
-bool WormHoleSet::addWormHoleConfig(std::string str)
-{
+bool WormHoleSet::addWormHoleConfig(std::string str) {
   string tag = tokStringParse(str, "tag", ',', '=');
-  if(tag == "")
-    return(false);
+  if (tag == "")
+    return (false);
   tag = tolower(tag);
 
   unsigned int whix = 0;
   bool new_worm_hole = true;
-  for(unsigned int i=0; i<m_worm_hole_tags.size(); i++) {
-    if(tag == m_worm_hole_tags[i]) {
+  for (unsigned int i = 0; i < m_worm_hole_tags.size(); i++) {
+    if (tag == m_worm_hole_tags[i]) {
       whix = i;
       new_worm_hole = false;
     }
   }
-  if(new_worm_hole) {
+  if (new_worm_hole) {
     WormHole new_worm_hole(tag);
     m_worm_holes.push_back(new_worm_hole);
     m_worm_hole_tags.push_back(tag);
@@ -97,18 +93,18 @@ bool WormHoleSet::addWormHoleConfig(std::string str)
   WormHole worm_hole = m_worm_holes[whix];
 
   vector<string> svector = parseStringZ(str, ',', "{");
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
 
     cout << "param:[" << param << "], value:[" << value << "]" << endl;
-    
-    if(param == "madrid_poly") {
-      if(isBraced(value))
-	value = stripBraces(value);
-      else if(!strBegins(value, "pts="))
-	value = "pts={" + value + "}";
-      cout << "  value:[" << value << "]" << endl; 
+
+    if (param == "madrid_poly") {
+      if (isBraced(value))
+        value = stripBraces(value);
+      else if (!strBegins(value, "pts="))
+        value = "pts={" + value + "}";
+      cout << "  value:[" << value << "]" << endl;
 
       XYPolygon poly = string2Poly(value);
       poly.set_label(tag + "_madrid");
@@ -119,16 +115,15 @@ bool WormHoleSet::addWormHoleConfig(std::string str)
       poly.set_color("edge", "invisible");
       poly.set_color("vertex", "invisible");
 
-      if(!poly.is_convex())
-	return(false);
+      if (!poly.is_convex())
+        return (false);
       worm_hole.setMadridPoly(poly);
-    }
-    else if(param == "weber_poly") {
-      if(isBraced(value))
-	value = stripBraces(value);
-      else if(!strBegins(value, "pts="))
-	value = "pts={" + value + "}";
-      cout << "  value:[" << value << "]" << endl; 
+    } else if (param == "weber_poly") {
+      if (isBraced(value))
+        value = stripBraces(value);
+      else if (!strBegins(value, "pts="))
+        value = "pts={" + value + "}";
+      cout << "  value:[" << value << "]" << endl;
 
       XYPolygon poly = string2Poly(value);
 
@@ -140,197 +135,175 @@ bool WormHoleSet::addWormHoleConfig(std::string str)
       poly.set_color("edge", "invisible");
       poly.set_color("vertex", "invisible");
 
-      if(!poly.is_convex())
-	return(false);
+      if (!poly.is_convex())
+        return (false);
       worm_hole.setWeberPoly(poly);
-    }
-    else if(param == "connection") {
+    } else if (param == "connection") {
       value = tolower(value);
-      if((value != "both") && (value != "from_madrid")
-	 && (value != "from_weber"))
-	return(false);
+      if ((value != "both") && (value != "from_madrid") &&
+          (value != "from_weber"))
+        return (false);
       worm_hole.setConnectionType(value);
-    }
-    else if(param == "delay") {
-      if(!isNumber(value))
-	return(false);
+    } else if (param == "delay") {
+      if (!isNumber(value))
+        return (false);
       double dval = atof(value.c_str());
-      if(dval < 0)
-	return(false);
+      if (dval < 0)
+        return (false);
       worm_hole.setDelay(dval);
-    }
-    else if(param == "id_change") {
+    } else if (param == "id_change") {
       value = tolower(value);
-      if(!isBoolean(value))
-	return(false);
+      if (!isBoolean(value))
+        return (false);
       bool bval = (value == "true");
       worm_hole.setIDChange(bval);
-    }
-    else if(param != "tag")
-      return(false);
+    } else if (param != "tag")
+      return (false);
   }
 
   m_worm_holes[whix] = worm_hole;
-  
-  cout << "returning true!" << endl;
-  return(true);
-}
 
+  cout << "returning true!" << endl;
+  return (true);
+}
 
 //----------------------------------------------------------------
 // Procedure: getConfigSummary()
 
-vector<string> WormHoleSet::getConfigSummary() const
-{
+vector<string> WormHoleSet::getConfigSummary() const {
   vector<string> set_summary;
   string str = "Total WormHoles: " + uintToString(m_worm_holes.size());
   set_summary.push_back(str);
-  
-  for(unsigned int i=0; i< m_worm_holes.size(); i++) {
+
+  for (unsigned int i = 0; i < m_worm_holes.size(); i++) {
     WormHole worm_hole = m_worm_holes[i];
     vector<string> wh_summary = worm_hole.getConfigSummary();
-    for(unsigned int j=0; j<wh_summary.size(); j++)
+    for (unsigned int j = 0; j < wh_summary.size(); j++)
       set_summary.push_back(wh_summary[j]);
   }
-  
-  return(set_summary);
-}
 
+  return (set_summary);
+}
 
 //----------------------------------------------------------------
 // Procedure: getWormHole()
 
-WormHole WormHoleSet::getWormHole(unsigned int ix)
-{
+WormHole WormHoleSet::getWormHole(unsigned int ix) {
   WormHole null_worm_hole;
-  if(ix >= m_worm_holes.size())
-    return(null_worm_hole);
-  
-  return(m_worm_holes[ix]);
-}
+  if (ix >= m_worm_holes.size())
+    return (null_worm_hole);
 
+  return (m_worm_holes[ix]);
+}
 
 //----------------------------------------------------------------
 // Procedure: getWormHole()
 
-WormHole WormHoleSet::getWormHole(string tag)
-{
+WormHole WormHoleSet::getWormHole(string tag) {
   WormHole null_worm_hole;
 
   // Sanity Check
-  if(m_worm_holes.size() != m_worm_hole_tags.size())
-    return(null_worm_hole);
+  if (m_worm_holes.size() != m_worm_hole_tags.size())
+    return (null_worm_hole);
 
-  for(unsigned int i=0; i<m_worm_hole_tags.size(); i++) {
-    if(tag == m_worm_hole_tags[i])
-      return(m_worm_holes[i]);
+  for (unsigned int i = 0; i < m_worm_hole_tags.size(); i++) {
+    if (tag == m_worm_hole_tags[i])
+      return (m_worm_holes[i]);
   }
 
-  return(null_worm_hole);
+  return (null_worm_hole);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: apply()
 //   Returns: true if ownship position was transported
 
-bool WormHoleSet::apply(double curr_time, double osx, double osy,
-			double& newx, double& newy)
-{ 
+bool WormHoleSet::apply(double curr_time, double osx, double osy, double &newx,
+                        double &newy) {
   // Case 1: First handle where ownship is emerging from a wormhole
   // In this case the only task is to adjust the transparency
-  if(m_worm_hole_state == "emerging") {
+  if (m_worm_hole_state == "emerging") {
     double delta_time = curr_time - m_worm_hole_tstamp;
 
-    if(delta_time > (m_tunnel_time/2)) {
-      m_worm_hole_state  = "normal";
+    if (delta_time > (m_tunnel_time / 2)) {
+      m_worm_hole_state = "normal";
       m_worm_hole_tstamp = curr_time;
       m_transparency = 1;
-    }
-    else {
-      double pct = delta_time / (m_tunnel_time/2);
+    } else {
+      double pct = delta_time / (m_tunnel_time / 2);
       m_transparency = pct;
     }
-    return(false);
+    return (false);
   }
 
   // Case 2: First encounter with a wormhole
-  if(m_worm_hole_state == "normal") {
+  if (m_worm_hole_state == "normal") {
     string worm_hole_tag = findWormHoleEntry(osx, osy);
-    if(worm_hole_tag == "")
-      return(false);
+    if (worm_hole_tag == "")
+      return (false);
     else {
-      m_worm_hole_state  = "fading";
+      m_worm_hole_state = "fading";
       m_worm_hole_tstamp = curr_time;
-      m_worm_hole_tag    = worm_hole_tag;
+      m_worm_hole_tag = worm_hole_tag;
       m_inx = osx;
       m_iny = osy;
     }
   }
 
   // Case 3: Ownship is fading into a wormhole
-  if(m_worm_hole_state == "fading") {
+  if (m_worm_hole_state == "fading") {
     double delta_time = curr_time - m_worm_hole_tstamp;
-    if(delta_time >= (m_tunnel_time/2)) {
-      m_worm_hole_state  = "emerging";
+    if (delta_time >= (m_tunnel_time / 2)) {
+      m_worm_hole_state = "emerging";
       m_worm_hole_tstamp = curr_time;
       m_transparency = 0;
 
       WormHole worm_hole = getWormHole(m_worm_hole_tag);
       string connection_type = worm_hole.getConnectionType();
-      if(connection_type == "from_weber") {
-	worm_hole.crossPositionWeberToMadrid(m_inx,m_iny, newx,newy);
-	return(true);
+      if (connection_type == "from_weber") {
+        worm_hole.crossPositionWeberToMadrid(m_inx, m_iny, newx, newy);
+        return (true);
       }
-      if(connection_type == "from_madrid") {
-	worm_hole.crossPositionMadridToWeber(m_inx,m_iny, newx,newy);
-	return(true);
-      }	
-    }
-    else {
-      double pct = delta_time / (m_tunnel_time/2);
-      m_transparency = 1- pct;
-      return(false);
+      if (connection_type == "from_madrid") {
+        worm_hole.crossPositionMadridToWeber(m_inx, m_iny, newx, newy);
+        return (true);
+      }
+    } else {
+      double pct = delta_time / (m_tunnel_time / 2);
+      m_transparency = 1 - pct;
+      return (false);
     }
   }
 
-  return(false);
+  return (false);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: findWormHoleEntry()
 
-string WormHoleSet::findWormHoleEntry(double osx, double osy)
-{
+string WormHoleSet::findWormHoleEntry(double osx, double osy) {
   // Sanity Check
-  if(m_worm_holes.size() != m_worm_hole_tags.size())
-    return("");
+  if (m_worm_holes.size() != m_worm_hole_tags.size())
+    return ("");
 
   // Check each worm_hole, and if ownship is in entry polygon
   // then return the tag of that worm_hole
-  for(unsigned int i=0; i<m_worm_holes.size(); i++) {
+  for (unsigned int i = 0; i < m_worm_holes.size(); i++) {
 
     WormHole worm_hole = m_worm_holes[i];
-    
+
     string connection_type = worm_hole.getConnectionType();
-    if(connection_type == "from_weber") {
+    if (connection_type == "from_weber") {
       XYPolygon weber_poly = worm_hole.getWeberPoly();
-      if(weber_poly.contains(osx, osy))
-	return(m_worm_hole_tags[i]);
+      if (weber_poly.contains(osx, osy))
+        return (m_worm_hole_tags[i]);
     }
-    if(connection_type == "from_madrid") {
+    if (connection_type == "from_madrid") {
       XYPolygon madrid_poly = worm_hole.getMadridPoly();
-      if(madrid_poly.contains(osx, osy)) 
-	return(m_worm_hole_tags[i]);
+      if (madrid_poly.contains(osx, osy))
+        return (m_worm_hole_tags[i]);
     }
-  }    
-  
-  return("");
+  }
+
+  return ("");
 }
-
-
-
-
-
-

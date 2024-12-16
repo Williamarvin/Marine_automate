@@ -21,42 +21,41 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "FV_MOOSApp.h"
 #include "FV_GUI.h"
 #include "FV_Info.h"
+#include "FV_MOOSApp.h"
 #include "MBUtils.h"
 #include "MOOSAppRunnerThread.h"
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
-  
-  if(mission_file == "")
+
+  if (mission_file == "")
     showHelpAndExit();
 
   cout << termColor("green");
@@ -64,14 +63,14 @@ int main(int argc, char *argv[])
   cout << termColor() << endl;
 
   FV_MOOSApp thePort;
-  MOOSAppRunnerThread runner(&thePort, run_command.c_str(), 
-			     mission_file.c_str(), argc, argv);
-  
-  FV_GUI* gui = new FV_GUI(850,550, "IvPFunction-Viewer");
-  if(gui)
+  MOOSAppRunnerThread runner(&thePort, run_command.c_str(),
+                             mission_file.c_str(), argc, argv);
+
+  FV_GUI *gui = new FV_GUI(850, 550, "IvPFunction-Viewer");
+  if (gui)
     thePort.setViewer(gui->getViewer());
 
-  FV_Model* model = new FV_Model();
+  FV_Model *model = new FV_Model();
   gui->setModel(model);
   thePort.setModel(model);
   thePort.setGUI(gui);
@@ -83,18 +82,9 @@ int main(int argc, char *argv[])
     thePort.process_demuxer_content();
   }
 
-//   thePort.return_from_Run();
+  //   thePort.return_from_Run();
   runner.quit();
-//   runner.join();
+  //   runner.join();
 
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-

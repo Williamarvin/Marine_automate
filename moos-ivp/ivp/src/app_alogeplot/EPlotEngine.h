@@ -24,49 +24,48 @@
 #ifndef EPLOT_ENGINE_HEADER
 #define EPLOT_ENGINE_HEADER
 
+#include "CPAEvent.h"
 #include <cstdio>
 #include <string>
 #include <vector>
-#include "CPAEvent.h"
 
-class EPlotEngine
-{
- public:
+class EPlotEngine {
+public:
   EPlotEngine();
   ~EPlotEngine() {}
 
   bool addALogFile(std::string);
   bool setSceneFile(std::string);
 
-  void setVerbose(bool v)           {m_verbose=v;}
+  void setVerbose(bool v) { m_verbose = v; }
   bool setPlotWidCM(std::string);
   bool setPlotHgtCM(std::string);
   bool setGridWidCM(std::string);
   bool setGridHgtCM(std::string);
   bool setPointColor(std::string);
   bool setPointSize(std::string);
-  
+
   void generate();
 
- protected:
+protected:
   void handleALogFiles();
   bool handleALogFile(std::string);
-  void writeLine(FILE*, const std::string&) const;
+  void writeLine(FILE *, const std::string &) const;
 
-  void writeBaseGridFrame(FILE*) const;
-  void writeBaseZones(FILE*) const;
-  void writeBaseLabels(FILE*) const;
-  void writeEncounters(FILE*) const;
-  
- protected:
+  void writeBaseGridFrame(FILE *) const;
+  void writeBaseZones(FILE *) const;
+  void writeBaseLabels(FILE *) const;
+  void writeEncounters(FILE *) const;
+
+protected:
   std::vector<std::string> m_alog_files;
-  std::vector<CPAEvent>    m_cpa_events;
+  std::vector<CPAEvent> m_cpa_events;
 
   std::string m_community_name;
   std::string m_scene_file;
   std::string m_point_size;
   std::string m_point_color;
-  
+
   std::string m_grid_wid_cm_str;
   std::string m_grid_hgt_cm_str;
   std::string m_plot_wid_cm_str;
@@ -77,15 +76,10 @@ class EPlotEngine
   double m_plot_wid_cm;
   double m_plot_hgt_cm;
 
-  bool   m_verbose;
-  double m_collision_range;  // meters
-  double m_near_miss_range;  // meters
-  double m_encounter_range;  // meters
+  bool m_verbose;
+  double m_collision_range; // meters
+  double m_near_miss_range; // meters
+  double m_encounter_range; // meters
 };
 
 #endif
-
-
-
-
-

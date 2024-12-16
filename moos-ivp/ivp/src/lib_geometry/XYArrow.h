@@ -26,9 +26,9 @@
 #ifndef ARROW_XY_HEADER
 #define ARROW_XY_HEADER
 
+#include "XYObject.h"
 #include <string>
 #include <vector>
-#include "XYObject.h"
 
 class XYArrow : public XYObject {
 public:
@@ -36,28 +36,28 @@ public:
   XYArrow(double x, double y);
   virtual ~XYArrow() {}
 
-  bool   initialize(const std::string&);
+  bool initialize(const std::string &);
 
-  bool   setSuperLength(double super_len);
-  void   setBaseCenter(double ctr_x, double ctr_y);
-  void   setBaseCenterX(double ctr_x);
-  void   setBaseCenterY(double ctr_y);
-  bool   setBase(double base_wid, double base_len);
-  bool   setBaseWid(double base_wid);
-  bool   setBaseLen(double base_len);
-  bool   setHead(double head_wid, double head_len);
-  bool   setHeadWid(double head_wid);
-  bool   setHeadLen(double head_len);
-  void   setAngle(double angle);
+  bool setSuperLength(double super_len);
+  void setBaseCenter(double ctr_x, double ctr_y);
+  void setBaseCenterX(double ctr_x);
+  void setBaseCenterY(double ctr_y);
+  bool setBase(double base_wid, double base_len);
+  bool setBaseWid(double base_wid);
+  bool setBaseLen(double base_len);
+  bool setHead(double head_wid, double head_len);
+  bool setHeadWid(double head_wid);
+  bool setHeadLen(double head_len);
+  void setAngle(double angle);
 
-  bool   resize(double);
-  void   modCenterX(double);
-  void   modCenterY(double);
-  
-  void   setPointCache();
+  bool resize(double);
+  void modCenterX(double);
+  void modCenterY(double);
 
-  double getCenterX() {return(m_ctr_x);}
-  double getCenterY() {return(m_ctr_y);}
+  void setPointCache();
+
+  double getCenterX() { return (m_ctr_x); }
+  double getCenterY() { return (m_ctr_y); }
 
   double getHeadCtrX();
   double getHeadCtrY();
@@ -66,17 +66,17 @@ public:
   double getMaxX();
   double getMinY();
   double getMaxY();
-  
+
   std::vector<double> getBaseVertices();
   std::vector<double> getHeadVertices();
 
-  std::string get_spec(unsigned int vertex_prec=1) const;
+  std::string get_spec(unsigned int vertex_prec = 1) const;
 
   bool set_param(std::string param, std::string value);
-  
+
 protected:
-  void   init();
-  
+  void init();
+
 protected: // Specs
   double m_ctr_x;
   double m_ctr_y;
@@ -86,8 +86,8 @@ protected: // Specs
   double m_head_len;
   double m_angle;
 
- protected: // Cache of drawable points  
-  bool   m_cache_set;
+protected: // Cache of drawable points
+  bool m_cache_set;
 
   double m_bx1;
   double m_by1;
@@ -114,22 +114,3 @@ protected: // Specs
 XYArrow stringToArrow(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

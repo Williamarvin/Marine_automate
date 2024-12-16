@@ -21,17 +21,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "FixedTurnSet.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor()
 
-FixedTurnSet::FixedTurnSet()
-{
+FixedTurnSet::FixedTurnSet() {
   m_curr_ix = 0;
   m_repeats = false;
 }
@@ -39,136 +38,124 @@ FixedTurnSet::FixedTurnSet()
 //-----------------------------------------------------------
 // Procedure: addFixedTurn()
 
-bool FixedTurnSet::addFixedTurn(FixedTurn turn)
-{
+bool FixedTurnSet::addFixedTurn(FixedTurn turn) {
   string key = turn.getTurnKey();
 
-  if(key != "") {
-    for(unsigned int i=0; i<m_turns.size(); i++) {
-      if(key == m_turns[i].getTurnKey())
-	return(false);
+  if (key != "") {
+    for (unsigned int i = 0; i < m_turns.size(); i++) {
+      if (key == m_turns[i].getTurnKey())
+        return (false);
     }
   }
 
   m_turns.push_back(turn);
 
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: setRepeats()
 
-bool FixedTurnSet::setRepeats(string str)
-{
-  return(setBooleanOnString(m_repeats, str));
+bool FixedTurnSet::setRepeats(string str) {
+  return (setBooleanOnString(m_repeats, str));
 }
-
 
 //-----------------------------------------------------------
 // Procedure: increment()
 
-void FixedTurnSet::increment()
-{
+void FixedTurnSet::increment() {
   m_curr_ix++;
 
-  if(m_repeats && (m_curr_ix >= m_turns.size()))
+  if (m_repeats && (m_curr_ix >= m_turns.size()))
     m_curr_ix = 0;
 }
-
 
 //-----------------------------------------------------------
 // Procedure: setTurnParams()
 
-bool FixedTurnSet::setTurnParams(string str)
-{
+bool FixedTurnSet::setTurnParams(string str) {
   string lstr = tolower(str);
   // ==============================================
-  // Part 1A: If just clearing, then clear and done 
+  // Part 1A: If just clearing, then clear and done
   // ==============================================
-  if((lstr == "clear") || (lstr == "clearall")) {
+  if ((lstr == "clear") || (lstr == "clearall")) {
     clear();
-    return(true);
+    return (true);
   }
 
   // ==============================================
   // Part 1B: If clear to start, then clear and cont
   // ==============================================
-  if(strBegins(lstr, "clear,") ||
-     strBegins(lstr, "clearall,")) {
+  if (strBegins(lstr, "clear,") || strBegins(lstr, "clearall,")) {
     clear();
     biteStringX(str, ',');
   }
-  
+
   FixedTurn turn;
   // ==============================================
   // Part 2: If not valid specs, return false
   // ==============================================
   bool ok = turn.setTurnParams(str);
-  if(!ok)
-    return(false);
+  if (!ok)
+    return (false);
 
   // ==============================================
   // Part 3: If specs has no key, this is new turn
   // ==============================================
-  if(turn.getTurnKey() == "") {
+  if (turn.getTurnKey() == "") {
     m_turns.push_back(turn);
-    return(true);
+    return (true);
   }
 
   // ==============================================
   // Part 4: If specs has key, apply to proper turn
   // ==============================================
-  for(unsigned int i=0; i<m_turns.size(); i++) {
+  for (unsigned int i = 0; i < m_turns.size(); i++) {
     bool ok = m_turns[i].setTurnParams(str);
-    if(ok)
-      return(true);
+    if (ok)
+      return (true);
   }
 
   // ==============================================
   // Part 5: If specs key unique, must be new turn
   // ==============================================
   m_turns.push_back(turn);
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: getFixedTurn()
 //      Note: A Null FixedTurn has default values that all
-//            essentially indicate no preference. 
+//            essentially indicate no preference.
 
-FixedTurn FixedTurnSet::getFixedTurn() const
-{
+FixedTurn FixedTurnSet::getFixedTurn() const {
   FixedTurn null_fixed_turn;
-  
-  if(m_curr_ix >= m_turns.size())
-    return(null_fixed_turn);
 
-  return(m_turns[m_curr_ix]);
+  if (m_curr_ix >= m_turns.size())
+    return (null_fixed_turn);
+
+  return (m_turns[m_curr_ix]);
 }
 
 //-----------------------------------------------------------
 // Procedure: completed()
 
-bool FixedTurnSet::completed() const
-{
-  if(m_repeats)
-    return(false);
+bool FixedTurnSet::completed() const {
+  if (m_repeats)
+    return (false);
 
-  if(m_curr_ix >= m_turns.size())
-    return(true);
+  if (m_curr_ix >= m_turns.size())
+    return (true);
 
-  return(false);  
+  return (false);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: print()
 
-void FixedTurnSet::print() const
-{
-  for(unsigned int i=0; i<m_turns.size(); i++) {
+void FixedTurnSet::print() const {
+  for (unsigned int i = 0; i < m_turns.size(); i++) {
     cout << "Turn [" << i << "]:" << endl;
     m_turns[i].print();
   }
 }
-

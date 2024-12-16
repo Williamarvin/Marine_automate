@@ -26,49 +26,47 @@
 #pragma warning(disable : 4503)
 #endif
 
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_AbortToPoint.h"
-#include "OF_Reflector.h"
 #include "AOF_Waypoint.h"
-#include "ZAIC_PEAK.h"
-#include "OF_Coupler.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
-#include "GeomUtils.h"
 #include "BuildUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include "OF_Coupler.h"
+#include "OF_Reflector.h"
 #include "XYFormatUtilsPoint.h"
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_AbortToPoint::BHV_AbortToPoint(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_AbortToPoint::BHV_AbortToPoint(IvPDomain gdomain) : IvPBehavior(gdomain) {
   // First set variables at the superclass level
-  m_descriptor = "bhv_abort2point";  
-  m_domain     = subDomain(m_domain, "course,speed");
+  m_descriptor = "bhv_abort2point";
+  m_domain = subDomain(m_domain, "course,speed");
 
-  m_cruise_speed  = 0;  // Meters/second
-  m_ipf_type      = "zaic";
+  m_cruise_speed = 0; // Meters/second
+  m_ipf_type = "zaic";
 
   // The completed param is initialized in superclass
   // but we initialize here just to be safe and clear.
-  m_completed = false; 
+  m_completed = false;
 
-  m_osx     = -1;
-  m_osy     = -1;
-  m_osv     = -1;
+  m_osx = -1;
+  m_osy = -1;
+  m_osv = -1;
   m_abort_x = -1;
   m_abort_y = -1;
 
   m_capture_radius = 25;
-  m_nm_radius      = 200;
+  m_nm_radius = 200;
 
-  m_state              = "inactive";
-  m_sent_msg_inactive  = false;
+  m_state = "inactive";
+  m_sent_msg_inactive = false;
   m_sent_msg_completed = false;
   m_sent_msg_abandoned = false;
 
@@ -82,74 +80,63 @@ BHV_AbortToPoint::BHV_AbortToPoint(IvPDomain gdomain) :
 //            The "radius" parameter indicates what it means to have
 //            arrived at the waypoint.
 
-bool BHV_AbortToPoint::setParam(string param, string val) 
-{
-  if(param == "point") {
+bool BHV_AbortToPoint::setParam(string param, string val) {
+  if (param == "point") {
     XYPoint apt = string2Point(val);
-    if(!apt.valid())
-      return(false);
+    if (!apt.valid())
+      return (false);
     m_abort_x = apt.get_vx();
     m_abort_y = apt.get_vy();
-    return(true);
-  }
-  else if(param == "speed") {
+    return (true);
+  } else if (param == "speed") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     m_cruise_speed = dval;
-    return(true);
-  }
-  else if(param == "ipf-type") {
+    return (true);
+  } else if (param == "ipf-type") {
     val = tolower(val);
-    if((val=="zaic") || (val=="roc") || (val=="rate_of_closure"))
+    if ((val == "zaic") || (val == "roc") || (val == "rate_of_closure"))
       m_ipf_type = val;
-    return(true);
-  }
-  else if(param == "radius") {
+    return (true);
+  } else if (param == "radius") {
     double dval = atof(val.c_str());
-    if(dval <= 0)
-      return(false);
+    if (dval <= 0)
+      return (false);
     m_capture_radius = dval;
-    return(true);
-  }
-  else if(param == "nm_radius")  {
+    return (true);
+  } else if (param == "nm_radius") {
     double dval = atof(val.c_str());
-    if(dval <= 0) 
-      return(false);
+    if (dval <= 0)
+      return (false);
     m_nm_radius = dval;
-    return(true);
+    return (true);
   }
-  return(false);
+  return (false);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: onIdleState
 
-void BHV_AbortToPoint::onIdleState() 
-{
-  updateInfoOut();
-}
-
+void BHV_AbortToPoint::onIdleState() { updateInfoOut(); }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_AbortToPoint::onRunState() 
-{
+IvPFunction *BHV_AbortToPoint::onRunState() {
   // Set m_osx, m_osy, m_osv
-  if(!updateInfoIn()) {
+  if (!updateInfoIn()) {
     updateInfoOut();
-    return(0);
+    return (0);
   }
-  
+
   IvPFunction *ipf = buildOF(m_ipf_type);
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
 
   updateInfoOut();
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
@@ -162,37 +149,35 @@ IvPFunction *BHV_AbortToPoint::onRunState()
 //            variable to false which will communicate the gravity
 //            of the situation to the helm.
 
-bool BHV_AbortToPoint::updateInfoIn()
-{
+bool BHV_AbortToPoint::updateInfoIn() {
   bool ok1, ok2, ok3;
-  m_osx = getBufferDoubleVal("NAV_X",     ok1);
-  m_osy = getBufferDoubleVal("NAV_Y",     ok2);
+  m_osx = getBufferDoubleVal("NAV_X", ok1);
+  m_osy = getBufferDoubleVal("NAV_Y", ok2);
   m_osv = getBufferDoubleVal("NAV_SPEED", ok3);
 
   // Must get ownship position from InfoBuffer
-  if(!ok1 || !ok2) {
+  if (!ok1 || !ok2) {
     postEMessage("No ownship X/Y info in info_buffer.");
-    return(false);
+    return (false);
   }
 
   // If NAV_SPEED info is not found in the info_buffer, its
   // not a show-stopper. A warning will be posted.
-  if(!ok3) {
+  if (!ok3) {
     postWMessage("No ownship NAV_SPEED in info_buffer.");
-    return(false);
+    return (false);
   }
 
-  return(true);
+  return (true);
 }
 
 //-----------------------------------------------------------
 // Procedure: buildOF
 
-IvPFunction *BHV_AbortToPoint::buildOF(string method) 
-{
+IvPFunction *BHV_AbortToPoint::buildOF(string method) {
   IvPFunction *ipf = 0;
 
-  if((method == "roc") || (method == "rate_of_closure")) {
+  if ((method == "roc") || (method == "rate_of_closure")) {
     bool ok = true;
     AOF_Waypoint aof_wpt(m_domain);
     ok = ok && aof_wpt.setParam("desired_speed", m_cruise_speed);
@@ -201,19 +186,18 @@ IvPFunction *BHV_AbortToPoint::buildOF(string method)
     ok = ok && aof_wpt.setParam("ptx", m_abort_x);
     ok = ok && aof_wpt.setParam("pty", m_abort_y);
     ok = ok && aof_wpt.initialize();
-    
-    if(ok) {
+
+    if (ok) {
       OF_Reflector reflector(&aof_wpt);
       reflector.create(600, 500);
-      //string info = reflector.getUniformPieceStr();
+      // string info = reflector.getUniformPieceStr();
       ipf = reflector.extractIvPFunction();
     }
-  }    
-  else { // if (method == "zaic")
+  } else { // if (method == "zaic")
     ZAIC_PEAK spd_zaic(m_domain, "speed");
     spd_zaic.setParams(m_cruise_speed, 0, 2.6, 0, 0, 100);
     IvPFunction *spd_of = spd_zaic.extractIvPFunction();
-    
+
     double rel_ang_to_wpt = relAng(m_osx, m_osy, m_abort_x, m_abort_y);
     ZAIC_PEAK crs_zaic(m_domain, "course");
     crs_zaic.setValueWrap(true);
@@ -222,39 +206,24 @@ IvPFunction *BHV_AbortToPoint::buildOF(string method)
 
     OF_Coupler coupler;
     ipf = coupler.couple(crs_of, spd_of);
-  }    
-  return(ipf);
+  }
+  return (ipf);
 }
 
 //-----------------------------------------------------------
 // Procedure: updateInfoOut()
 
-void BHV_AbortToPoint::updateInfoOut()
-{
-  if((m_state == "inactive") && (!m_sent_msg_inactive)) {
+void BHV_AbortToPoint::updateInfoOut() {
+  if ((m_state == "inactive") && (!m_sent_msg_inactive)) {
     m_sent_msg_inactive = true;
     postMessage(m_status_var, "INACTIVE");
-  }
-  else if(m_state == "in_progress")
+  } else if (m_state == "in_progress")
     postMessage(m_status_var, "IN-PROGRESS");
-  else if((m_state == "completed") && (!m_sent_msg_completed)) {
+  else if ((m_state == "completed") && (!m_sent_msg_completed)) {
     m_sent_msg_completed = true;
     postMessage(m_status_var, "COMPLETED");
-  }
-  else if((m_state == "abandoned") && (!m_sent_msg_abandoned)) {
+  } else if ((m_state == "abandoned") && (!m_sent_msg_abandoned)) {
     m_sent_msg_abandoned = true;
     postMessage(m_status_var, "ABANDONED");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-

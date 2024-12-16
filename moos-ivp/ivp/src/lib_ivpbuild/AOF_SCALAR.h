@@ -22,49 +22,29 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_SCALAR_HEADER
 #define AOF_SCALAR_HEADER
 
 #include "AOF.h"
 
-class AOF_SCALAR: public AOF {
+class AOF_SCALAR : public AOF {
 public:
-  AOF_SCALAR(IvPDomain g_domain) : AOF(g_domain) 
-    {m_scalar_val = 0;}
+  AOF_SCALAR(IvPDomain g_domain) : AOF(g_domain) { m_scalar_val = 0; }
   ~AOF_SCALAR() {}
 
-public:    
-  double evalBox(const IvPBox*) const {return(m_scalar_val);}
-  bool   setParam(const std::string& param, double val) 
-    {
-      if(param == "scalar") {
-	m_scalar_val = val;
-	return(true);
-      }
-      return(false);
+public:
+  double evalBox(const IvPBox *) const { return (m_scalar_val); }
+  bool setParam(const std::string &param, double val) {
+    if (param == "scalar") {
+      m_scalar_val = val;
+      return (true);
     }
+    return (false);
+  }
 
 private:
   double m_scalar_val;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

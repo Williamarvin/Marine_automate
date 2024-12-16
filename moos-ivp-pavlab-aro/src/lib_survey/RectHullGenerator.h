@@ -26,36 +26,35 @@
 #ifndef RECT_HULL_GENERATOR_HEADER
 #define RECT_HULL_GENERATOR_HEADER
 
-#include <list>
-#include <vector>
 #include "XYPoint.h"
 #include "XYPolygon.h"
+#include <list>
+#include <vector>
 
-class RectHullGenerator
-{
- public:
+class RectHullGenerator {
+public:
   RectHullGenerator();
   ~RectHullGenerator() {}
 
   void addPoint(XYPoint);
   void addPoint(double, double);
-  void setRotationAngle(double); 
-  
+  void setRotationAngle(double);
+
   XYPolygon generateRectHull();
 
-  double getPolyHeight() const  {return(m_hgt);}
-  double getPolyWidth() const   {return(m_wid);}
-  XYPolygon getRectPoly() const {return(m_rpoly);}
+  double getPolyHeight() const { return (m_hgt); }
+  double getPolyWidth() const { return (m_wid); }
+  XYPolygon getRectPoly() const { return (m_rpoly); }
 
 private: // Configuration variables
-  std::vector<XYPoint>  m_original_pts;
+  std::vector<XYPoint> m_original_pts;
 
   double m_rotation_angle;
-  
- private: // State variables, calculated results
-  double    m_wid;
-  double    m_hgt;
+
+private: // State variables, calculated results
+  double m_wid;
+  double m_hgt;
   XYPolygon m_rpoly;
 };
 
-#endif 
+#endif

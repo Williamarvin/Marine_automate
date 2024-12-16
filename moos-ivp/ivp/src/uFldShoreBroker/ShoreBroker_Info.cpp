@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "ShoreBroker_Info.h"
+#include "ColorParse.h"
+#include "ReleaseInfo.h"
 #include <cstdlib>
 #include <iostream>
-#include "ReleaseInfo.h"
-#include "ColorParse.h"
-#include "ShoreBroker_Info.h"
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run in a shoreside community. Takes reports from    ");
@@ -47,8 +46,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                          ");
   blu("==========================================================");
   blu("Usage: uFldShoreBroker file.moos [OPTIONS]                ");
@@ -57,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                          ");
   blk("Options:                                                  ");
-  mag("  --alias","=<ProcessName>                                ");
+  mag("  --alias", "=<ProcessName>                                ");
   blk("      Launch uFldShoreBroker with the given               ");
   blk("      process name rather than uFldShoreBroker.           ");
   mag("  --example, -e                                           ");
@@ -69,7 +67,8 @@ void showHelpAndExit()
   mag("  --version,-v                                            ");
   blk("      Display release version of uFldShoreBroker.         ");
   mag("  --web,-w                                                ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uFldShoreBroker ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uFldShoreBroker ");
   blk("                                                          ");
   blk("Note: If argv[2] does not otherwise match a known option, ");
   blk("      then it will be interpreted as a run alias. This is ");
@@ -78,12 +77,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldShoreBroker Example MOOS Configuration                      ");
@@ -123,8 +120,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldShoreBroker INTERFACE                                       ");
@@ -160,18 +156,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldShoreBroker", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

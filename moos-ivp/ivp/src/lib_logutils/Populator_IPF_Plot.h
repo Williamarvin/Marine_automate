@@ -24,43 +24,37 @@
 #ifndef POPULATOR_IPF_PLOT_HEADER
 #define POPULATOR_IPF_PLOT_HEADER
 
-#include <string>
-#include "IPF_Plot.h"
-#include "Demuxer.h"
 #include "ALogEntry.h"
+#include "Demuxer.h"
+#include "IPF_Plot.h"
+#include <string>
 
-class Populator_IPF_Plot 
-{
+class Populator_IPF_Plot {
 public:
   Populator_IPF_Plot() {}
   ~Populator_IPF_Plot() {}
 
-  bool  populateFromEntries(const std::vector<ALogEntry>&);
-  bool  setIvPDomain(const std::string&);
+  bool populateFromEntries(const std::vector<ALogEntry> &);
+  bool setIvPDomain(const std::string &);
 
-  void  setVName(std::string s)   {m_vname = s;}
-  int   size()                    {return(m_ipf_plots.size());}
+  void setVName(std::string s) { m_vname = s; }
+  int size() { return (m_ipf_plots.size()); }
 
-  IPF_Plot    getPlotIPF(unsigned int ix=0);
-  std::string getTagIPF(unsigned int ix=0);
-  
-  void  print();
+  IPF_Plot getPlotIPF(unsigned int ix = 0);
+  std::string getTagIPF(unsigned int ix = 0);
 
-protected:
-  void handleEntry(double, const std::string&);
+  void print();
 
 protected:
-  std::string              m_vname;
+  void handleEntry(double, const std::string &);
+
+protected:
+  std::string m_vname;
   std::vector<std::string> m_ipf_tags;
-  std::vector<IPF_Plot>    m_ipf_plots;
-  Demuxer                  m_demuxer;
+  std::vector<IPF_Plot> m_ipf_plots;
+  Demuxer m_demuxer;
 
-  IvPDomain                m_ivp_domain;
+  IvPDomain m_ivp_domain;
 };
 
-#endif 
-
-
-
-
-
+#endif

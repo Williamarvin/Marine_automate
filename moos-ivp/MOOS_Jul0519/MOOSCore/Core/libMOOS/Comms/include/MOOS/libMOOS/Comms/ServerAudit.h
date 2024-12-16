@@ -14,9 +14,9 @@
 //   This source code and the accompanying materials
 //   are made available under the terms of the GNU Lesser Public License v2.1
 //   which accompanies this distribution, and is available at
-//   http://www.gnu.org/licenses/lgpl.txtgram is distributed in the hope that it will be useful,
-//   but WITHOUT ANY WARRANTY; without even the implied warranty of
-//   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+//   http://www.gnu.org/licenses/lgpl.txtgram is distributed in the hope that it
+//   will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+//   of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
 ////////////////////////////////////////////////////////////////////////////
 /*
@@ -33,39 +33,39 @@
  *
  */
 
-#include <string>
 #include <map>
+#include <string>
 namespace MOOS {
 #define DEFAULT_AUDIT_PORT 9090
 class ServerAudit {
 public:
-	ServerAudit();
-	virtual ~ServerAudit();
-  bool AddStatistic(const std::string & sClient, unsigned int nBytes, unsigned int nMessages, double dfTime, bool bIncoming);
-	bool Run(const std::string & destination_host = "localhost", unsigned int port = DEFAULT_AUDIT_PORT);
-	bool Remove(const std::string & sClient);
-	bool SetQuiet(bool bQuiet);
-	bool AddTimingStatistic(const std::string & sClient,
-                           double dfTransmitTime,
-                           double dfReceiveTime);
+  ServerAudit();
+  virtual ~ServerAudit();
+  bool AddStatistic(const std::string &sClient, unsigned int nBytes,
+                    unsigned int nMessages, double dfTime, bool bIncoming);
+  bool Run(const std::string &destination_host = "localhost",
+           unsigned int port = DEFAULT_AUDIT_PORT);
+  bool Remove(const std::string &sClient);
+  bool SetQuiet(bool bQuiet);
+  bool AddTimingStatistic(const std::string &sClient, double dfTransmitTime,
+                          double dfReceiveTime);
 
-    /**fill in a string which tells us all about client timing statistics.
-     * @param sSummary has format clientname=a:b:c:d,.....
-     * @param a recent latency in ms
-     * @param b max latency in ms
-     * @param c min latency in ms
-     * @param d moving average latency
-     */
+  /**fill in a string which tells us all about client timing statistics.
+   * @param sSummary has format clientname=a:b:c:d,.....
+   * @param a recent latency in ms
+   * @param b max latency in ms
+   * @param c min latency in ms
+   * @param d moving average latency
+   */
 
-	bool GetTimingStatisticSummary(std::string & sSummary);
+  bool GetTimingStatisticSummary(std::string &sSummary);
 
+  class Impl;
 
-
-	class Impl;
 protected:
-	Impl* Impl_;
+  Impl *Impl_;
 };
 
-}
+} // namespace MOOS
 
 #endif /* SERVERAUDIT_H_ */

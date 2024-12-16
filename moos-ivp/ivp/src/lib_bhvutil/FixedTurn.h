@@ -24,9 +24,9 @@
 #ifndef FIXED_TURN_HEADER
 #define FIXED_TURN_HEADER
 
+#include "VarDataPair.h"
 #include <string>
 #include <vector>
-#include "VarDataPair.h"
 
 class FixedTurn {
 public:
@@ -34,33 +34,32 @@ public:
   ~FixedTurn() {}
 
   bool setTurnParams(std::string);
-  
-  void setTurnSpd(double v)      {m_turn_spd=v;}
-  void setTurnModHdg(double v)   {m_turn_mod_hdg=v;}
-  void setTurnFixHdg(double v)   {m_turn_fix_hdg=v;}
-  void setTurnTimeOut(double v)  {m_turn_timeout=v;}
-  void setTurnKey(std::string s) {m_turn_key=s;}
+
+  void setTurnSpd(double v) { m_turn_spd = v; }
+  void setTurnModHdg(double v) { m_turn_mod_hdg = v; }
+  void setTurnFixHdg(double v) { m_turn_fix_hdg = v; }
+  void setTurnTimeOut(double v) { m_turn_timeout = v; }
+  void setTurnKey(std::string s) { m_turn_key = s; }
   bool setTurnDir(std::string);
   bool addVarDataPair(VarDataPair);
 
-  double getTurnSpd() const     {return(m_turn_spd);}
-  double getTurnModHdg() const  {return(m_turn_mod_hdg);}
-  double getTurnFixHdg() const  {return(m_turn_fix_hdg);}
-  double getTurnTimeOut() const {return(m_turn_timeout);}
-  std::string getTurnKey() const {return(m_turn_key);}
-  std::string getTurnDir() const {return(m_turn_dir);}
+  double getTurnSpd() const { return (m_turn_spd); }
+  double getTurnModHdg() const { return (m_turn_mod_hdg); }
+  double getTurnFixHdg() const { return (m_turn_fix_hdg); }
+  double getTurnTimeOut() const { return (m_turn_timeout); }
+  std::string getTurnKey() const { return (m_turn_key); }
+  std::string getTurnDir() const { return (m_turn_dir); }
 
-  std::vector<VarDataPair> getFlags() const {return(m_flags);}
+  std::vector<VarDataPair> getFlags() const { return (m_flags); }
 
   void print() const;
-  
+
 private:
-  
   double m_turn_spd;
   double m_turn_mod_hdg;
   double m_turn_fix_hdg;
   double m_turn_timeout;
-  
+
   std::string m_turn_key;
   std::string m_turn_dir;
 
@@ -68,4 +67,3 @@ private:
 };
 
 #endif
-

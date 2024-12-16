@@ -22,30 +22,30 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_RINGS_HEADER
 #define AOF_RINGS_HEADER
 
-#include <vector>
-#include <string>
-#include <cstdio>
 #include "AOF_Ring.h"
 #include "IvPDomain.h"
+#include <cstdio>
+#include <string>
+#include <vector>
 
-class AOF_Rings: public AOF {
+class AOF_Rings : public AOF {
 public:
   AOF_Rings(IvPDomain);
   virtual ~AOF_Rings() {}
 
-public:  
-  double evalBox(const IvPBox *b) const;  // Virtual Defined
-  bool   setParam(const std::string&, double);
-  bool   setParam(const std::string&, const std::string&);
+public:
+  double evalBox(const IvPBox *b) const; // Virtual Defined
+  bool setParam(const std::string &, double);
+  bool setParam(const std::string &, const std::string &);
 
 public:
-  int         size() {return(m_rings.size());}
-  void        print() const;
-  std::string latexSTR(int full=1) const;   
+  int size() { return (m_rings.size()); }
+  void print() const;
+  std::string latexSTR(int full = 1) const;
 
 private:
   double m_snapval;
@@ -54,21 +54,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -27,32 +27,26 @@
 #include "CommandItem.h"
 #include <string>
 
-class CommandPost
-{
- public:
-  CommandPost() {m_cmd_test=false;}
+class CommandPost {
+public:
+  CommandPost() { m_cmd_test = false; }
   virtual ~CommandPost() {}
 
-  void setCommandItem(CommandItem item) {m_cmd_item=item;}
-  void setCommandTarg(std::string targ) {m_cmd_targ=targ;}
-  void setCommandTest(bool test)        {m_cmd_test=test;}
-  void setCommandPID(std::string pid)   {m_cmd_pid=pid;}
-  
-  CommandItem getCommandItem() {return(m_cmd_item);}
-  std::string getCommandTarg() {return(m_cmd_targ);}
-  bool        getCommandTest() {return(m_cmd_test);}
-  std::string getCommandPID()  {return(m_cmd_pid);}
-  
- protected: 
-  CommandItem  m_cmd_item; 
-  std::string  m_cmd_targ; 
-  bool         m_cmd_test; 
-  std::string  m_cmd_pid; 
+  void setCommandItem(CommandItem item) { m_cmd_item = item; }
+  void setCommandTarg(std::string targ) { m_cmd_targ = targ; }
+  void setCommandTest(bool test) { m_cmd_test = test; }
+  void setCommandPID(std::string pid) { m_cmd_pid = pid; }
+
+  CommandItem getCommandItem() { return (m_cmd_item); }
+  std::string getCommandTarg() { return (m_cmd_targ); }
+  bool getCommandTest() { return (m_cmd_test); }
+  std::string getCommandPID() { return (m_cmd_pid); }
+
+protected:
+  CommandItem m_cmd_item;
+  std::string m_cmd_targ;
+  bool m_cmd_test;
+  std::string m_cmd_pid;
 };
 
-#endif 
-
-
-
-
-
+#endif

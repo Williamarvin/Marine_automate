@@ -21,13 +21,13 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "CollisionReporter.h"
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
-#include "CollisionReporter.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -36,57 +36,53 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   CollisionReporter collision_reporter;
 
   bool handled = false;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogcd", "gpl");
-      return(0);
-    }
-    else if((argi=="-t") || (argi=="--terse")) 
+      return (0);
+    } else if ((argi == "-t") || (argi == "--terse"))
       collision_reporter.setTerse();
-    else if(strEnds(argi, ".alog"))
+    else if (strEnds(argi, ".alog"))
       handled = collision_reporter.setALogFile(argi);
-    else if(strBegins(argi, "--tfile="))
+    else if (strBegins(argi, "--tfile="))
       handled = collision_reporter.setTimeStampFile(argi.substr(8));
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web")) {
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web")) {
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogcd");
       exit(0);
     }
 
-    if(!handled) {
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
     }
   }
-    
+
   bool ok = collision_reporter.handle();
 
-  if(!ok)
-    return(1);
+  if (!ok)
+    return (1);
 
   collision_reporter.printReport();
-  if(collision_reporter.hadCollisions())
-    return(2);
-  if(!collision_reporter.hadEncounters())
-    return(3);
+  if (collision_reporter.hadCollisions())
+    return (2);
+  if (!collision_reporter.hadEncounters())
+    return (3);
 
-  return(0);
+  return (0);
 }
-
 
 //------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogcd file.alog [OPTIONS]                          " << endl;
   cout << "                                                      " << endl;
@@ -124,4 +120,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-

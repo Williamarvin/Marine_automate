@@ -21,41 +21,40 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <string>
+#include "LogTester.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
-#include "LogTester.h"
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 void showHelpAndExit();
 
-int main(int argc, char** argv) 
-{
+int main(int argc, char **argv) {
   LogTester tester;
-  
+
   bool handled = false;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogtest", "gpl");
-      return(0);
+      return (0);
     }
-    if((argi=="-f") || (argi == "--force") || (argi=="-force"))
+    if ((argi == "-f") || (argi == "--force") || (argi == "-force"))
       tester.setOverWrite();
-    if((argi == "--verbose") || (argi=="-verbose"))
+    if ((argi == "--verbose") || (argi == "-verbose"))
       tester.setVerbose();
-    else if(strEnds(argi, ".alog"))
+    else if (strEnds(argi, ".alog"))
       handled = tester.setALogFile(argi);
-    else if(strBegins(argi, "--tfile="))
+    else if (strBegins(argi, "--tfile="))
       handled = tester.addTestFile(argi.substr(8));
-    else if(strBegins(argi, "--ofile="))
+    else if (strBegins(argi, "--ofile="))
       handled = tester.setMarkFile(argi.substr(8));
 
-    if(!handled) {
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -63,15 +62,13 @@ int main(int argc, char** argv)
   }
 
   bool result = tester.test();
-  return(result);
+  return (result);
 }
 
+//------------------------------------------------------------
+// Procedure: showHelpAndExit()
 
-//------------------------------------------------------------  
-// Procedure: showHelpAndExit()                                               
-
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogtest file.alog [OPTIONS]                      " << endl;
   cout << "                                                    " << endl;
@@ -94,11 +91,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-
-
-

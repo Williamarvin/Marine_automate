@@ -25,107 +25,98 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_ConstantHeading.h"
-#include "BuildUtils.h"
-#include "ZAIC_PEAK.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
+#include "BuildUtils.h"
+#include "MBUtils.h"
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor()
 
-BHV_ConstantHeading::BHV_ConstantHeading(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_ConstantHeading::BHV_ConstantHeading(IvPDomain gdomain)
+    : IvPBehavior(gdomain) {
   this->setParam("descriptor", "bhv_constantHeading");
 
   m_domain = subDomain(m_domain, "course");
 
   m_desired_heading = 0;
-  m_peakwidth       = 10;
-  m_basewidth       = 170;
-  m_summitdelta     = 25;
-  m_os_heading      = 0;
+  m_peakwidth = 10;
+  m_basewidth = 170;
+  m_summitdelta = 25;
+  m_os_heading = 0;
 
-  // The complete threshold represents an absolute discrepancy between 
-  // the desired and actual heading, below which the behavior will 
+  // The complete threshold represents an absolute discrepancy between
+  // the desired and actual heading, below which the behavior will
   // complete and post an endflag. By default, by setting to -1, it will
   // not factor in to the performance of the behavior.
-  m_complete_thresh = -1;  
+  m_complete_thresh = -1;
 
   // The default duration at the IvPBehavior level is "-1", which
   // indicates no duration applied to the behavior by default. By
   // setting to zero here, we force the user to provide a duration
   // value otherwise it will timeout immediately.
-  m_duration        = 0;
+  m_duration = 0;
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam()
 
-bool BHV_ConstantHeading::setParam(string param, string val) 
-{
-  if(IvPBehavior::setParam(param, val))
-    return(true);
-  
+bool BHV_ConstantHeading::setParam(string param, string val) {
+  if (IvPBehavior::setParam(param, val))
+    return (true);
+
   double dval = atof(val.c_str());
 
-  if((param == "heading") && isNumber(val)) {
-   double   angle_360 = angle360(dval);
-   unsigned int index = m_domain.getDiscreteVal(0, angle_360, 2);
+  if ((param == "heading") && isNumber(val)) {
+    double angle_360 = angle360(dval);
+    unsigned int index = m_domain.getDiscreteVal(0, angle_360, 2);
 
-   double new_desired_heading = 0;
-   bool ok = m_domain.getVal(0, index, new_desired_heading);
-   if(ok) {
-     m_desired_heading = new_desired_heading;
-     return(true);
-   }
-  }
-  else if((param == "peakwidth") && isNumber(val)) {
+    double new_desired_heading = 0;
+    bool ok = m_domain.getVal(0, index, new_desired_heading);
+    if (ok) {
+      m_desired_heading = new_desired_heading;
+      return (true);
+    }
+  } else if ((param == "peakwidth") && isNumber(val)) {
     m_peakwidth = vclip_min(dval, 0);
-    return(true);
-  }
-  else if((param == "basewidth") && isNumber(val)) {
+    return (true);
+  } else if ((param == "basewidth") && isNumber(val)) {
     m_basewidth = vclip_min(dval, 0);
-    return(true);
-  }
-  else if((param == "summitdelta") && isNumber(val)) {
+    return (true);
+  } else if ((param == "summitdelta") && isNumber(val)) {
     m_summitdelta = vclip(dval, 0, 100);
-    return(true);
-  }
-  else if((param == "complete_thresh") && isNumber(val)) {
+    return (true);
+  } else if ((param == "complete_thresh") && isNumber(val)) {
     m_complete_thresh = dval;
-    return(true);
-  }
-  else if((param == "heading_mismatch_var") && !strContainsWhite(val)) {
+    return (true);
+  } else if ((param == "heading_mismatch_var") && !strContainsWhite(val)) {
     m_heading_mismatch_var = val;
-    return(true);
+    return (true);
   }
 
-  return(false);
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState()
 
-IvPFunction *BHV_ConstantHeading::onRunState() 
-{
+IvPFunction *BHV_ConstantHeading::onRunState() {
   updateInfoIn();
-  if(!m_domain.hasDomain("course")) {
+  if (!m_domain.hasDomain("course")) {
     postEMessage("No 'heading/course' variable in the helm domain");
-    return(0);
+    return (0);
   }
 
-  if(m_heading_delta < m_complete_thresh) {
+  if (m_heading_delta < m_complete_thresh) {
     setComplete();
-    return(0);
+    return (0);
   }
-
 
   ZAIC_PEAK zaic(m_domain, "course");
   zaic.setSummit(m_desired_heading);
@@ -133,18 +124,18 @@ IvPFunction *BHV_ConstantHeading::onRunState()
   zaic.setPeakWidth(m_peakwidth);
   zaic.setSummitDelta(m_summitdelta);
   zaic.setValueWrap(true);
-  
+
   IvPFunction *ipf = zaic.extractIvPFunction();
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
-  else 
+  else
     postEMessage("Unable to generate constant-heading IvP function");
 
   string zaic_warnings = zaic.getWarnings();
-  if(zaic_warnings != "")
+  if (zaic_warnings != "")
     postWMessage(zaic_warnings);
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
@@ -154,32 +145,22 @@ IvPFunction *BHV_ConstantHeading::onRunState()
 //   Returns: true if no relevant info is missing from the info_buffer.
 //            false otherwise.
 
-bool BHV_ConstantHeading::updateInfoIn()
-{
+bool BHV_ConstantHeading::updateInfoIn() {
   bool ok;
   m_os_heading = getBufferDoubleVal("NAV_HEADING", ok);
 
   // Should get ownship information from the InfoBuffer
-  if(!ok) {
-    postWMessage("No ownship HEADING info in info_buffer.");  
-    return(false);
+  if (!ok) {
+    postWMessage("No ownship HEADING info in info_buffer.");
+    return (false);
   }
-  
+
   m_heading_delta = angle180(m_os_heading - m_desired_heading);
-  if(m_heading_delta < 0)
-    m_heading_delta *= -1; 
+  if (m_heading_delta < 0)
+    m_heading_delta *= -1;
 
-  if(m_heading_mismatch_var != "")
+  if (m_heading_mismatch_var != "")
     postMessage(m_heading_mismatch_var, m_heading_delta);
-  
-  return(true);
+
+  return (true);
 }
-
-
-
-
-
-
-
-
-

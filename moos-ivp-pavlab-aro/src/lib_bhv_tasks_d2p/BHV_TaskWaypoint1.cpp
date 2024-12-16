@@ -9,20 +9,19 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <cmath>
 #include "BHV_TaskWaypoint1.h"
 #include "MBUtils.h"
 #include "MacroUtils.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_TaskWaypoint1::BHV_TaskWaypoint1(IvPDomain domain) :
-  IvPTaskBehavior(domain)
-{
+BHV_TaskWaypoint1::BHV_TaskWaypoint1(IvPDomain domain)
+    : IvPTaskBehavior(domain) {
   // Initialize state variables
   m_ptx = 0;
   m_pty = 0;
@@ -33,14 +32,12 @@ BHV_TaskWaypoint1::BHV_TaskWaypoint1(IvPDomain domain) :
   m_consider_contacts = false;
 }
 
-
 //-----------------------------------------------------------
 // Procedure: onHelmStart()
 
-void BHV_TaskWaypoint1::onHelmStart()
-{
-  //if(m_update_var == "")
-  //  return;
+void BHV_TaskWaypoint1::onHelmStart() {
+  // if(m_update_var == "")
+  //   return;
 
   string alert_request = "type=" + m_task_type;
   alert_request += ", var=" + m_update_var;
@@ -50,44 +47,39 @@ void BHV_TaskWaypoint1::onHelmStart()
 //-----------------------------------------------------------
 // Procedure: setParam()
 
-bool BHV_TaskWaypoint1::setParam(string param, string value) 
-{
-  if(IvPTaskBehavior::setParam(param, value))
-    return(true);
-  
+bool BHV_TaskWaypoint1::setParam(string param, string value) {
+  if (IvPTaskBehavior::setParam(param, value))
+    return (true);
+
   param = tolower(param);
-  if((param == "waypt_x") && isNumber(value)) {
+  if ((param == "waypt_x") && isNumber(value)) {
     m_ptx = atof(value.c_str());
     m_ptx_set = true;
-    return(true);
-  }
-  else if((param == "waypt_y") && isNumber(value)) {
+    return (true);
+  } else if ((param == "waypt_y") && isNumber(value)) {
     m_pty = atof(value.c_str());
     m_pty_set = true;
-    return(true);
-  }
-  else if(param == "waypt") {
+    return (true);
+  } else if (param == "waypt") {
     string xstr = biteStringX(value, ',');
     string ystr = value;
-    if(isNumber(xstr) && isNumber(ystr)) {
+    if (isNumber(xstr) && isNumber(ystr)) {
       m_ptx = atof(xstr.c_str());
       m_ptx_set = true;
       m_pty = atof(ystr.c_str());
       m_pty_set = true;
-      return(true);
+      return (true);
     }
-  }
-  else if(param == "consider_contacts")
-    return(setBooleanOnString(m_consider_contacts, value));
-  
-  return(false);
+  } else if (param == "consider_contacts")
+    return (setBooleanOnString(m_consider_contacts, value));
+
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onIdleState()
 
-void BHV_TaskWaypoint1::onIdleState()
-{
+void BHV_TaskWaypoint1::onIdleState() {
   IvPTaskBehavior::onGeneralIdleState();
   return;
 }
@@ -97,43 +89,36 @@ void BHV_TaskWaypoint1::onIdleState()
 //    States: alerted : noroster : roster : bidding :
 //            bidwon : bidlost : abstain
 
-IvPFunction *BHV_TaskWaypoint1::onRunState()
-{
+IvPFunction *BHV_TaskWaypoint1::onRunState() {
   IvPTaskBehavior::onGeneralRunState();
-  return(0);
+  return (0);
 }
 
 //-----------------------------------------------------------
 // Procedure: getTaskBid()
 
-double BHV_TaskWaypoint1::getTaskBid()
-{
-  //TODO: Place feedforward odometry here
+double BHV_TaskWaypoint1::getTaskBid() {
+  // TODO: Place feedforward odometry here
   double dist = hypot(m_osx - m_ptx, m_osy - m_pty);
-  return(dist);
+  return (dist);
 }
 
 //-----------------------------------------------------------
 // Procedure: applyFlagMacros()
 
-vector<VarDataPair> BHV_TaskWaypoint1::applyFlagMacros(vector<VarDataPair> flags)
-{
+vector<VarDataPair>
+BHV_TaskWaypoint1::applyFlagMacros(vector<VarDataPair> flags) {
   string ptx_str = doubleToStringX(m_ptx, 2);
   string pty_str = doubleToStringX(m_pty, 2);
 
-  for(unsigned int i=0; i<flags.size(); i++) {
-    if(flags[i].is_string()) {
+  for (unsigned int i = 0; i < flags.size(); i++) {
+    if (flags[i].is_string()) {
       string sdata = flags[i].get_sdata();
       sdata = macroExpand(sdata, "PTX", ptx_str);
-      sdata = macroExpand(sdata, "PTY", pty_str);      
+      sdata = macroExpand(sdata, "PTY", pty_str);
       flags[i].set_sdata(sdata, true);
     }
   }
 
-  return(flags);
+  return (flags);
 }
-
-
-
-
-

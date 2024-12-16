@@ -40,36 +40,34 @@ namespace MOOS {
 //! class for representing and working with IP4 addresses
 class IPV4Address {
 public:
-	IPV4Address();
-	virtual ~IPV4Address();
+  IPV4Address();
+  virtual ~IPV4Address();
 
-    IPV4Address(const std::string & ip, uint16_t p);
-	IPV4Address(const std::string & ip_and_port);
-	bool operator==(const IPV4Address & a) const;
+  IPV4Address(const std::string &ip, uint16_t p);
+  IPV4Address(const std::string &ip_and_port);
+  bool operator==(const IPV4Address &a) const;
 
-	static std::string GetNumericAddress(const std::string & address);
-	static std::string GetIPAddress();
+  static std::string GetNumericAddress(const std::string &address);
+  static std::string GetIPAddress();
 
-	bool ConvertHostToNumeric();
+  bool ConvertHostToNumeric();
 
-	/** support for simple lexical sort*/
-	bool operator<(const IPV4Address & P) const;
+  /** support for simple lexical sort*/
+  bool operator<(const IPV4Address &P) const;
 
-	std::string to_string() const;
+  std::string to_string() const;
 
-	std::string host() const;
-	void set_host(const std::string & host);
+  std::string host() const;
+  void set_host(const std::string &host);
 
-    uint16_t port() const;
-    void set_port(uint16_t port);
-
+  uint16_t port() const;
+  void set_port(uint16_t port);
 
 protected:
-	std::string host_;
-    uint16_t port_;
-
+  std::string host_;
+  uint16_t port_;
 };
 
-}
+} // namespace MOOS
 
 #endif /* IPV4ADDRESS_H_ */

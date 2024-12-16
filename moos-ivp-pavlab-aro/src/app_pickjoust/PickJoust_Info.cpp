@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "PickJoust_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "PickJoust_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  pickjoust is a utility for generating starting points for     ");
@@ -46,8 +45,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "=====================================================" << endl;
   cout << "Usage: pickjoust [OPTIONS]                           " << endl;
   cout << "=====================================================" << endl;
@@ -126,16 +124,14 @@ void showHelpAndExit()
   cout << "  pickjoust --amt=5 --circle=x=1,y=2,rad=50        \\" << endl;
   cout << "            --hdg=rand,-45,45 --spd=1,5            \\" << endl;
   cout << "            --ang_min_diff=10 --ang_max_diff=40      " << endl;
-  
+
   exit(0);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pickjoust", "gpl");
   exit(0);
 }

@@ -23,76 +23,64 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <vector>
-#include <cstdlib>
 #include "XYFormatUtilsRangePulse.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <vector>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: string2RangePulse (Method #0)
-//   Example: Create a point from a string representation. 
+//   Example: Create a point from a string representation.
 
-XYRangePulse string2RangePulse(string str)
-{
-  return(stringStandard2RangePulse(str));
+XYRangePulse string2RangePulse(string str) {
+  return (stringStandard2RangePulse(str));
 }
 
 //---------------------------------------------------------------
 // Procedure: stringStandard2RangePulse  (Method #1)
-//      Note: This function is standard because it processes the 
-//            string format used when a string is created from an 
+//      Note: This function is standard because it processes the
+//            string format used when a string is created from an
 //            existing XYRangePulse instance.
 //   Example: label=one,x=4,y=2,radius=50,duration=5,fill=0.3,
 //            fill_color=yellow,edge_color=green
-// 
+//
 
-XYRangePulse stringStandard2RangePulse(string str)
-{
+XYRangePulse stringStandard2RangePulse(string str) {
   XYRangePulse null_pulse;
   XYRangePulse new_pulse;
 
   str = stripBlankEnds(str);
   vector<string> mvector = parseString(str, ',');
   unsigned int i, vsize = mvector.size();
-  
-  for(i=0; i<vsize; i++) {
+
+  for (i = 0; i < vsize; i++) {
     mvector[i] = stripBlankEnds(mvector[i]);
     string param = tolower(biteStringX(mvector[i], '='));
     string value = mvector[i];
-    double dval  = atof(value.c_str());
-    
-    if((param == "x") && isNumber(value))
+    double dval = atof(value.c_str());
+
+    if ((param == "x") && isNumber(value))
       new_pulse.set_x(dval);
-    else if((param == "y") && isNumber(value))
+    else if ((param == "y") && isNumber(value))
       new_pulse.set_y(dval);
-    else if((param == "radius") && isNumber(value))
+    else if ((param == "radius") && isNumber(value))
       new_pulse.set_rad(dval);
-    else if((param == "duration") && isNumber(value))
+    else if ((param == "duration") && isNumber(value))
       new_pulse.set_duration(dval);
-    else if((param == "linger") && isNumber(value))
+    else if ((param == "linger") && isNumber(value))
       new_pulse.set_linger(dval);
-    else if((param == "fill") && isNumber(value))
+    else if ((param == "fill") && isNumber(value))
       new_pulse.set_fill(dval);
-    else if((param == "fill_invariant") && isBoolean(value))
-      new_pulse.set_fill_invariant(tolower(value)=="true");
+    else if ((param == "fill_invariant") && isBoolean(value))
+      new_pulse.set_fill_invariant(tolower(value) == "true");
     else
       new_pulse.set_param(param, value);
   }
-  
-  if(!new_pulse.valid())
-    return(null_pulse);
-  
-  return(new_pulse);
+
+  if (!new_pulse.valid())
+    return (null_pulse);
+
+  return (new_pulse);
 }
-
-
-
-
-
-
-
-
-
-

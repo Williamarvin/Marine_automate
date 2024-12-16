@@ -27,43 +27,33 @@
 #define IVP_FUNCTION_HEADER
 
 #include "IvPBox.h"
-#include "PDMap.h"
 #include "IvPDomain.h"
+#include "PDMap.h"
 
 class IvPFunction {
 public:
-  IvPFunction(PDMap*);
+  IvPFunction(PDMap *);
   virtual ~IvPFunction();
 
-  void   setPWT(double);
-  void   setContextStr(const std::string& s) {m_context_string=s;}
-  bool   transDomain(IvPDomain);
+  void setPWT(double);
+  void setContextStr(const std::string &s) { m_context_string = s; }
+  bool transDomain(IvPDomain);
 
-  double      getPWT()         {return(m_pwt);}
-  PDMap*      getPDMap()       {return(m_pdmap);}
-  bool        freeOfNan()      {return(m_pdmap->freeOfNan());}
-  bool        valid() const    {return(m_pdmap->valid());}
-  int         size()           {return(m_pdmap->size());}
-  int         getDim()         {return(m_pdmap->getDim());}
-  std::string getContextStr()  {return(m_context_string);}
-  std::string getVarName(int); 
+  double getPWT() { return (m_pwt); }
+  PDMap *getPDMap() { return (m_pdmap); }
+  bool freeOfNan() { return (m_pdmap->freeOfNan()); }
+  bool valid() const { return (m_pdmap->valid()); }
+  int size() { return (m_pdmap->size()); }
+  int getDim() { return (m_pdmap->getDim()); }
+  std::string getContextStr() { return (m_context_string); }
+  std::string getVarName(int);
   std::string getGridConfig() const;
-  
+
   IvPFunction *copy() const;
 
 protected:
-  PDMap*      m_pdmap;
-  double      m_pwt;
+  PDMap *m_pdmap;
+  double m_pwt;
   std::string m_context_string;
 };
 #endif
-
-
-
-
-
-
-
-
-
-

@@ -23,7 +23,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_AVOID_OBSTACLE_V24_HEADER
 #define AOF_AVOID_OBSTACLE_V24_HEADER
 
@@ -32,29 +32,30 @@
 #include "XYPolygon.h"
 
 class IvPDomain;
-class AOF_AvoidObstacleV24: public AOF {
+class AOF_AvoidObstacleV24 : public AOF {
 public:
   AOF_AvoidObstacleV24(IvPDomain);
   ~AOF_AvoidObstacleV24() {}
 
- public: // virtual functions
-  double evalBox(const IvPBox*) const; 
-  bool   setParam(const std::string&, double);
-  bool   setParam(const std::string&, const std::string&);
- public: // More virtuals defined Declare a known min/max eval range
-  bool   minMaxKnown() const {return(true);}
-  double getKnownMin() const {return(0);}
-  double getKnownMax() const {return(100);}
+public: // virtual functions
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool setParam(const std::string &, const std::string &);
 
-  void   setObShipModel(ObShipModelV24 obm) {m_obship_model=obm;}
-  bool   initialize();
+public: // More virtuals defined Declare a known min/max eval range
+  bool minMaxKnown() const { return (true); }
+  double getKnownMin() const { return (0); }
+  double getKnownMax() const { return (100); }
 
- private: // Config variables
+  void setObShipModel(ObShipModelV24 obm) { m_obship_model = obm; }
+  bool initialize();
+
+private: // Config variables
   ObShipModelV24 m_obship_model;
 
- private: // State variables
-  int    m_crs_ix;  // Index of "course" variable in IvPDomain
-  int    m_spd_ix;  // Index of "speed"  variable in IvPDomain
+private:        // State variables
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed"  variable in IvPDomain
 };
 
 #endif

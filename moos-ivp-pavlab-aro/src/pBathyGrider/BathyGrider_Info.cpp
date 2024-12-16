@@ -5,19 +5,18 @@
 /*   DATE: Spring 2022                                          */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "BathyGrider_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The pBathyGrider application is used for building a model     ");
@@ -32,8 +31,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pBathyGrider file.moos [OPTIONS]                   ");
@@ -42,7 +40,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pBathyGrider with the given process name         ");
   blk("      rather than pBathyGrider.                           ");
   mag("  --example, -e                                                 ");
@@ -64,8 +62,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pBathyGrider Example MOOS Configuration                         ");
@@ -78,8 +75,9 @@ void showExampleConfigAndExit()
   blk("                                                                ");
   blk("  THESE SETTINGS WORK FOR THE MIT SAILING PAVILION              ");
   blk("                                                                ");
-  blk(" GRID_CONFIG = pts={$(X_1),$(Y_1): $(X_2),$(Y_2): $(X_3),$(Y_3): $(X_4),$(Y_4)} ");
-  blk(" GRID_CONFIG = cell_size=$(CELLSIZE)                            ");  
+  blk(" GRID_CONFIG = pts={$(X_1),$(Y_1): $(X_2),$(Y_2): $(X_3),$(Y_3): "
+      "$(X_4),$(Y_4)} ");
+  blk(" GRID_CONFIG = cell_size=$(CELLSIZE)                            ");
   blk(" GRID_CONFIG = cell_vars=depth:0:var:1000                       ");
   blk(" GRID_CONFIG = cell_min=depth:0                                 ");
   blk(" #ifdef XMODE SIM                                               ");
@@ -99,7 +97,7 @@ void showExampleConfigAndExit()
   blk(" appticks_to_skip = 4                                           ");
   blk("                                                                ");
   blk(" gpr_period = 5                   // default                    ");
-  blk(" sensor_variance = 0.1            // default                    "); 
+  blk(" sensor_variance = 0.1            // default                    ");
   blk(" kernel_length_scale = 0.005                                    ");
   blk(" variance_threshold = 0.015       // default                    ");
   blk(" omit_list_dist_thresh = 5                                      ");
@@ -124,15 +122,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
-
-
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pBathyGrider INTERFACE                                    ");
@@ -172,9 +165,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pBathyGrider", "gpl");
   exit(0);
 }
-

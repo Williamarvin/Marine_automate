@@ -23,9 +23,9 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "VarDataPairUtils.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
@@ -41,34 +41,31 @@ using namespace std;
 
 //      Example: @cpa #group RETURN_HOME=true [if] MTYPE=survey
 
-
-
-bool setVarDataPairOnString(VarDataPair& pair, string str)
-{
+bool setVarDataPairOnString(VarDataPair &pair, string str) {
   // Part 1: Sanity check
   str = stripBlankEnds(str);
-  if(str == "")
-    return(false);
+  if (str == "")
+    return (false);
 
   // Part 2: Check if this posting has a post_tag. This supports
   // VarData Pairs tied to inter-vehicle ranges in the
   // IvPContactBehavior and contact behaviors.
   string post_tag;
-  if((str.at(0) == '@') || (str.at(0) == '<') || (str.at(0) == '>'))
+  if ((str.at(0) == '@') || (str.at(0) == '<') || (str.at(0) == '>'))
     post_tag = tolower(biteStringX(str, ' '));
 
   // Part 3: Check for Destination tag
   string dest_tag;
-  if(str.at(0) == '#') {
+  if (str.at(0) == '#') {
     biteStringX(str, '#');
     dest_tag = tolower(biteStringX(str, ' '));
   }
-  
+
   // Part 4: Check for conditional
   // Example: RETURN_HOME=true [if] MTYPE=survey
   // Isolate the condition_str and chop from original
   string condition_str;
-  if(strContains(str, "[if]")) {
+  if (strContains(str, "[if]")) {
     char gsep = 29; // ASCII 29 group separator
     str = findReplace(str, "[if]", gsep);
     condition_str = rbiteStringX(str, gsep);
@@ -77,52 +74,48 @@ bool setVarDataPairOnString(VarDataPair& pair, string str)
   // Part 5: Handle the normal parts
   string var = biteStringX(str, '=');
   string val = str;
-  if((var=="") || (val==""))
-    return(false);
+  if ((var == "") || (val == ""))
+    return (false);
   VarDataPair new_pair(var, val, "auto");
   new_pair.set_post_tag(post_tag);
   new_pair.set_dest_tag(dest_tag);
 
-  if(condition_str != "")
+  if (condition_str != "")
     new_pair.set_condition(condition_str);
 
   pair = new_pair;
 
-  return(true);
+  return (true);
 }
 
 //------------------------------------------------------------------
 // Procedure: addVarDataPairOnString()
 
-bool addVarDataPairOnString(vector<VarDataPair>& flags, string str)
-{
-  if(str == "clearall") {
+bool addVarDataPairOnString(vector<VarDataPair> &flags, string str) {
+  if (str == "clearall") {
     flags.clear();
-    return(true);
+    return (true);
   }
-  
+
   VarDataPair pair;
-  if(!setVarDataPairOnString(pair, str))
-    return(false);
+  if (!setVarDataPairOnString(pair, str))
+    return (false);
 
   flags.push_back(pair);
-  return(true);
+  return (true);
 }
-
 
 //------------------------------------------------------------------
 // Procedure: longestField()
 
-unsigned int longestField(const vector<VarDataPair>& pairs)
-{
+unsigned int longestField(const vector<VarDataPair> &pairs) {
   unsigned int longest = 0;
 
-  for(unsigned int i=0; i<pairs.size(); i++) {
+  for (unsigned int i = 0; i < pairs.size(); i++) {
     unsigned int psize = pairs[i].get_sdata().length();
-    if(psize > longest)
+    if (psize > longest)
       longest = psize;
   }
-  
-  return(longest);
-}
 
+  return (longest);
+}

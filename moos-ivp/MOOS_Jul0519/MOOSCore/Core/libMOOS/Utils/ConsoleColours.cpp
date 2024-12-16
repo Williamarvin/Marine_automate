@@ -7,7 +7,6 @@
 
 #include "MOOS/libMOOS/Utils/ConsoleColours.h"
 
-namespace MOOS
-{
-	bool ConsoleColours::disable_color_=false;
+namespace MOOS {
+bool ConsoleColours::disable_color_ = false;
 };

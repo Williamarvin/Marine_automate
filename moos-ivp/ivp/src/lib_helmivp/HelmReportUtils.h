@@ -24,21 +24,10 @@
 #ifndef HELM_REPORT_UTILS_HEADER
 #define HELM_REPORT_UTILS_HEADER
 
-#include <string>
 #include "HelmReport.h"
+#include <string>
 
-HelmReport string2HelmReport(const std::string&);
-HelmReport string2HelmReport(const std::string&, const HelmReport&);
+HelmReport string2HelmReport(const std::string &);
+HelmReport string2HelmReport(const std::string &, const HelmReport &);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

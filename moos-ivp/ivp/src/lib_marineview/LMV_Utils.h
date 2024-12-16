@@ -27,17 +27,7 @@
 #include <string>
 #include <vector>
 
-std::vector<std::string> readEntriesFromFile(const std::string&, 
-					     const std::string&);
+std::vector<std::string> readEntriesFromFile(const std::string &,
+                                             const std::string &);
 
 #endif
-
-
-
-
-
-
-
-
-
-

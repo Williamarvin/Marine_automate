@@ -24,29 +24,28 @@
 #ifndef ZAIC_PEAK_MODEL_HEADER
 #define ZAIC_PEAK_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "ZAIC_Model.h"
 #include "ZAIC_PEAK.h"
+#include <string>
 
-class ZAIC_PEAK_Model : public ZAIC_Model
-{
- public:
+class ZAIC_PEAK_Model : public ZAIC_Model {
+public:
   ZAIC_PEAK_Model();
-  ~ZAIC_PEAK_Model() {};
+  ~ZAIC_PEAK_Model(){};
 
- public: // Virtual functions overloaded
+public: // Virtual functions overloaded
   IvPFunction *getIvPFunction();
-  void  setDomain(unsigned int);
-  void  moveX(double);
-  void  currMode(int);
-  
- public: // Editing functions
-  void  drawMode(int);
-  void  setValueWrap(bool);
-  void  toggleValueWrap()    {setValueWrap(!m_value_wrap);}
+  void setDomain(unsigned int);
+  void moveX(double);
+  void currMode(int);
 
-  int   getCurrMode() const  {return(m_curr_mode);}
+public: // Editing functions
+  void drawMode(int);
+  void setValueWrap(bool);
+  void toggleValueWrap() { setValueWrap(!m_value_wrap); }
+
+  int getCurrMode() const { return (m_curr_mode); }
 
   // Getters
   double getSummit1();
@@ -62,17 +61,12 @@ class ZAIC_PEAK_Model : public ZAIC_Model
   double getMinUtil();
   double getMaxUtil();
 
- protected:
-  ZAIC_PEAK* m_zaic_peak1;
-  ZAIC_PEAK* m_zaic_peak2;
+protected:
+  ZAIC_PEAK *m_zaic_peak1;
+  ZAIC_PEAK *m_zaic_peak2;
 
-  int        m_curr_mode;
-  int        m_draw_mode;
-  bool       m_value_wrap;
+  int m_curr_mode;
+  int m_draw_mode;
+  bool m_value_wrap;
 };
-#endif 
-
-
-
-
-
+#endif

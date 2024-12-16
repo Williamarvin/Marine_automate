@@ -21,72 +21,66 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <vector>
-#include <string>
-#include "MBUtils.h"
-#include "OpenURL.h"
 #include "HelmIvP.h"
 #include "HelmIvP_Info.h"
+#include "MBUtils.h"
+#include "OpenURL.h"
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
   string verbose_setting;
-  
-  vector<string>  bhv_files;
 
-  for(int i=1; i<argc; i++) {
+  vector<string> bhv_files;
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if(strBegins(argi, "--verbose=")) 
+    else if (strBegins(argi, "--verbose="))
       verbose_setting = argi.substr(10);
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/pHelmIvP");
-    else if(strEnds(argi, ".bhv"))
+    else if (strEnds(argi, ".bhv"))
       bhv_files.push_back(argv[i]);
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
 
-  if(mission_file == "")
+  if (mission_file == "")
     showHelpAndExit();
-  
+
   HelmIvP helmIvP;
 
-  if(verbose_setting != "") {
+  if (verbose_setting != "") {
     bool ok = helmIvP.setVerbosity(verbose_setting);
-    if(!ok) {
+    if (!ok) {
       cout << "Illegal verbose setting. Exiting now.";
-      return(0);
+      return (0);
     }
   }
 
   unsigned int k, ksize = bhv_files.size();
-  for(k=0; k<ksize; k++)
+  for (k = 0; k < ksize; k++)
     helmIvP.addBehaviorFile(bhv_files[k]);
 
   //  helmIvP.Run(run_command.c_str(), mission_file.c_str(), argc, argv);
   helmIvP.Run(run_command.c_str(), mission_file.c_str());
-  
-  return(0);
+
+  return (0);
 }
-
-
-
-
-

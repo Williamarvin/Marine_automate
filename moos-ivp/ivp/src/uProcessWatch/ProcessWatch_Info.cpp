@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "ProcessWatch_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "ProcessWatch_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uProcessWatch application monitors the presence of MOOS   ");
@@ -50,8 +49,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uProcessWatch file.moos [OPTIONS]                        ");
@@ -60,7 +58,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uProcessWatch with the given process name rather   ");
   blk("      than uProcessWatch.                                       ");
   mag("  --example, -e                                                 ");
@@ -72,7 +70,8 @@ void showHelpAndExit()
   mag("  --version,-v                                                  ");
   blk("      Display the release version of uProcessWatch.             ");
   mag("  --web,-w                                                      ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uProcessWatch ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uProcessWatch ");
   blk("                                                                ");
   blk("Note: If argv[2] does not otherwise match a known option,       ");
   blk("      then it will be interpreted as a run alias. This is       ");
@@ -84,8 +83,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uProcessWatch Example MOOS Configuration                        ");
   blu("=============================================================== ");
@@ -119,8 +117,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uProcessWatch INTERFACE                                         ");
@@ -154,18 +151,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uProcessWatch", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

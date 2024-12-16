@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "PMV_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "PMV_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  pMarineViewer is a GUI tool for rendering events in an area of");
@@ -47,8 +46,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: pMarineViewer file.moos [OPTIONS]                        ");
@@ -57,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pMarineViewer with the given process name rather   ");
   blk("      than pMarineViewer.                                       ");
   mag("  --example, -e                                                 ");
@@ -81,8 +79,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMarineViewer Example MOOS Configuration                        ");
@@ -149,11 +146,15 @@ void showExampleConfigAndExit()
   blk("  infocast_viewable    = true     // {TRUE, false}              ");
   blk("  content_mode         = appcast  // {APPCAST, realmcast        ");
   blk("  refresh_mode         = events   // {paused, streaming}        ");
-  blk("  nodes_font_size      = large    // {xlarge, large, medium, small, xsmall}");
-  blk("  procs_font_size      = large    // {xlarge, large, medium, small, xsmall}");
-  blk("  infocast_font_size   = medium   // {xlarge, large, medium, small, xsmall}");
+  blk("  nodes_font_size      = large    // {xlarge, large, medium, small, "
+      "xsmall}");
+  blk("  procs_font_size      = large    // {xlarge, large, medium, small, "
+      "xsmall}");
+  blk("  infocast_font_size   = medium   // {xlarge, large, medium, small, "
+      "xsmall}");
   blk("  appcast_color_scheme = indigo   // {default, indigo, beige, white} ");
-  blk("  realmcast_color_scheme = hillside // {default, indigo, beige, white, hillside}");
+  blk("  realmcast_color_scheme = hillside // {default, indigo, beige, white, "
+      "hillside}");
   blk("  realmcast_channel    = abe:pHelmIvP // node:channel           ");
   blk("  infocast_width        = 40      // {20, 25, 30, ..., 65, 70}  ");
   blk("  infocast_height       = 70      // {30, 35, 40, ..., 85, 90}  ");
@@ -218,12 +219,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMarineViewer INTERFACE                                         ");
@@ -286,18 +285,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pMarineViewer", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

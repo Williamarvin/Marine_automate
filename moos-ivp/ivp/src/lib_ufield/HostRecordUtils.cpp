@@ -21,9 +21,9 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "HostRecordUtils.h"
 #include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
@@ -32,54 +32,44 @@ using namespace std;
 //   Example: community=henry,hostip=192.168.1.112,port_db=9000
 //            port_udp=9200,keyword=lemon,key=1
 
-HostRecord string2HostRecord(const string& host_record_string)
-{
+HostRecord string2HostRecord(const string &host_record_string) {
   HostRecord empty_record;
   HostRecord new_record;
 
   vector<string> svector = parseString(host_record_string, ',');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string param = tolower(biteStringX(svector[i], '='));
     string value = svector[i];
-    
-    if(param == "community")
+
+    if (param == "community")
       new_record.setCommunity(value);
-    else if(param == "vname")
+    else if (param == "vname")
       new_record.setCommunity(value);
-    else if(param == "hostip")
+    else if (param == "hostip")
       new_record.setHostIP(value);
-    else if(param == "port_db")
+    else if (param == "port_db")
       new_record.setPortDB(value);
-    else if(param == "port_udp")
+    else if (param == "port_udp")
       new_record.setPortUDP(value);
-    else if(param == "pshare_iroutes")
+    else if (param == "pshare_iroutes")
       new_record.setPShareIRoutes(value);
-    else if(param == "keyword")
+    else if (param == "keyword")
       new_record.setKeyword(value);
-    else if(param == "key")
+    else if (param == "key")
       new_record.setKey(value);
-    else if(param == "hostip_alts")
+    else if (param == "hostip_alts")
       new_record.setHostIPAlts(value);
-    else if(param == "timewarp")
+    else if (param == "timewarp")
       new_record.setTimeWarp(value);
-    else if(param == "status")
+    else if (param == "status")
       new_record.setStatus(value);
-    else if(param == "time")
+    else if (param == "time")
       new_record.setTimeStamp(value);
   }
-  
-  if(!new_record.valid())
-    return(empty_record);
 
-  return(new_record);
+  if (!new_record.valid())
+    return (empty_record);
+
+  return (new_record);
 }
-
-
-
-
-
-
-
-
-

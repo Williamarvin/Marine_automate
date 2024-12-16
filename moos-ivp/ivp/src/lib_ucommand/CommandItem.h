@@ -28,14 +28,13 @@
 #include <string>
 #include <vector>
 
-class CommandItem
-{
- public:
+class CommandItem {
+public:
   CommandItem();
   virtual ~CommandItem() {}
 
   // Setters
-  void setCmdLabel(std::string s)  {m_label=s;}
+  void setCmdLabel(std::string s) { m_label = s; }
 
   bool setCmdPostStr(std::string var, std::string sval);
   bool setCmdPostDbl(std::string var, double dval);
@@ -43,42 +42,36 @@ class CommandItem
   bool addCmdPostReceiver(std::string);
   void limitedVNames(std::set<std::string>);
 
-  void setCmdColor(std::string s) {m_bcolor=s;}
-  
-  // Getters
-  std::string getCmdLabel() const {return(m_label);}
+  void setCmdColor(std::string s) { m_bcolor = s; }
 
-  std::string getCmdPostVar() const {return(m_moosvar);}
-  std::string getCmdPostStr() const {return(m_valstr);}
-  double      getCmdPostDbl() const {return(m_valdbl);}
-  std::string getCmdPostType() const {return(m_valtype);}
-  std::string getCmdColor() const   {return(m_bcolor);}
+  // Getters
+  std::string getCmdLabel() const { return (m_label); }
+
+  std::string getCmdPostVar() const { return (m_moosvar); }
+  std::string getCmdPostStr() const { return (m_valstr); }
+  double getCmdPostDbl() const { return (m_valdbl); }
+  std::string getCmdPostType() const { return (m_valtype); }
+  std::string getCmdColor() const { return (m_bcolor); }
 
   std::string getCmdReceiver(unsigned int) const;
   std::vector<std::string> getAllReceivers() const;
 
   // Analyzers
-  unsigned int totalReceivers() const {return(m_receivers.size());}
+  unsigned int totalReceivers() const { return (m_receivers.size()); }
 
   bool hasReceiver(std::string) const;
-  
+
   void print() const;
-  
- private:
 
-  std::string  m_label;
-  std::string  m_moosvar;
-  std::string  m_valstr;
-  double       m_valdbl;
-  std::string  m_valtype;
-  std::string  m_bcolor;  
+private:
+  std::string m_label;
+  std::string m_moosvar;
+  std::string m_valstr;
+  double m_valdbl;
+  std::string m_valtype;
+  std::string m_bcolor;
 
-  std::vector<std::string>  m_receivers;
+  std::vector<std::string> m_receivers;
 };
 
-#endif 
-
-
-
-
-
+#endif

@@ -23,25 +23,24 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "XYSegment.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include <cmath>
 #include <cstdlib>
 #include <cstring>
-#include "XYSegment.h"
-#include "MBUtils.h"
-#include "GeomUtils.h"
-#include "AngleUtils.h"
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor()
 
-XYSegment::XYSegment()
-{
+XYSegment::XYSegment() {
   m_x1 = 0;
   m_y1 = 0;
   m_x2 = 0;
-  m_y2 = 0; 
+  m_y2 = 0;
   m_length = 0;
   m_rang12 = 0;
   m_rang21 = 0;
@@ -50,22 +49,20 @@ XYSegment::XYSegment()
 //---------------------------------------------------------------
 // Constructor()
 
-XYSegment::XYSegment(double x1, double y1, double x2, double y2)
-{
-  set(x1,y1,x2,y2);
+XYSegment::XYSegment(double x1, double y1, double x2, double y2) {
+  set(x1, y1, x2, y2);
 }
 
 //---------------------------------------------------------------
 // Procedure: set()
 
-void XYSegment::set(double x1, double y1, double x2, double y2)
-{
+void XYSegment::set(double x1, double y1, double x2, double y2) {
   m_x1 = x1;
   m_y1 = y1;
   m_x2 = x2;
-  m_y2 = y2; 
+  m_y2 = y2;
 
-  m_length = hypot((m_x1-m_x2), (m_y1-m_y2));
+  m_length = hypot((m_x1 - m_x2), (m_y1 - m_y2));
   m_rang12 = relAng(m_x1, m_y1, m_x2, m_y2);
   m_rang21 = relAng(m_x2, m_y2, m_x1, m_y1);
 }
@@ -73,14 +70,13 @@ void XYSegment::set(double x1, double y1, double x2, double y2)
 //---------------------------------------------------------------
 // Procedure: set()
 
-void XYSegment::set(const XYPoint& pt1, const XYPoint pt2)
-{
+void XYSegment::set(const XYPoint &pt1, const XYPoint pt2) {
   m_x1 = pt1.get_vx();
   m_y1 = pt1.get_vy();
   m_x2 = pt2.get_vx();
-  m_y2 = pt2.get_vy(); 
+  m_y2 = pt2.get_vy();
 
-  m_length = hypot((m_x1-m_x2), (m_y1-m_y2));
+  m_length = hypot((m_x1 - m_x2), (m_y1 - m_y2));
   m_rang12 = relAng(m_x1, m_y1, m_x2, m_y2);
   m_rang21 = relAng(m_x2, m_y2, m_x1, m_y1);
 }
@@ -88,23 +84,20 @@ void XYSegment::set(const XYPoint& pt1, const XYPoint pt2)
 //---------------------------------------------------------------
 // Procedure: clear()
 
-void XYSegment::clear()
-{
+void XYSegment::clear() {
   m_x1 = 0;
   m_y1 = 0;
   m_x2 = 0;
-  m_y2 = 0; 
+  m_y2 = 0;
   m_length = 0;
   m_rang12 = 0;
   m_rang21 = 0;
 }
 
-
 //---------------------------------------------------------------
 // Procedure: shift_horz()
 
-void XYSegment::shift_horz(double shift_val)
-{
+void XYSegment::shift_horz(double shift_val) {
   m_x1 += shift_val;
   m_x2 += shift_val;
 }
@@ -112,29 +105,27 @@ void XYSegment::shift_horz(double shift_val)
 //---------------------------------------------------------------
 // Procedure: shift_vert()
 
-void XYSegment::shift_vert(double shift_val)
-{
+void XYSegment::shift_vert(double shift_val) {
   m_y1 += shift_val;
   m_y2 += shift_val;
 }
 
 //---------------------------------------------------------------
 // Procedure: get_spec()
-//   Purpose: Get a string specification of the seglist. We set 
+//   Purpose: Get a string specification of the seglist. We set
 //            the vertex precision to be at the integer by default.
 
-string XYSegment::get_spec(int precision) const
-{
+string XYSegment::get_spec(int precision) const {
   string spec;
 
   // Clip the precision to be between 0 and 6
-  if(precision < 0)
+  if (precision < 0)
     precision = 0;
-  else if(precision > 6)
+  else if (precision > 6)
     precision = 6;
-  
-  if(m_label != "")
-    spec += "label=" + m_label + "#"; 
+
+  if (m_label != "")
+    spec += "label=" + m_label + "#";
 
   spec += "pts=";
   spec += doubleToStringX(m_x1, precision) + ",";
@@ -142,15 +133,14 @@ string XYSegment::get_spec(int precision) const
   spec += doubleToStringX(m_x2, precision) + ",";
   spec += doubleToStringX(m_y2, precision);
 
-  return(spec);
+  return (spec);
 }
 
 //---------------------------------------------------------------
 // Procedure: reverse()
 //   Purpose: Swap the two endpoints
 
-void XYSegment::reverse()
-{
+void XYSegment::reverse() {
   double tmpx = m_x1;
   double tmpy = m_y1;
 
@@ -160,27 +150,14 @@ void XYSegment::reverse()
   m_y2 = tmpy;
 }
 
-
 //---------------------------------------------------------------
 // Procedure: intersects()
 
-bool XYSegment::intersects(XYSegment seg)
-{
+bool XYSegment::intersects(XYSegment seg) {
   double x3 = seg.get_x1();
   double y3 = seg.get_y1();
   double x4 = seg.get_x2();
   double y4 = seg.get_y2();
-  
-  return(segmentsCross(m_x1,m_y1,m_x2,m_y2, x3,y3,x4,y4));
+
+  return (segmentsCross(m_x1, m_y1, m_x2, m_y2, x3, y3, x4, y4));
 }
-
-
-
-
-
-
-
-
-
-
-

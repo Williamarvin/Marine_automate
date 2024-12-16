@@ -21,64 +21,52 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
 #include "Populator_AppLogPlot.h"
 #include "AppLogEntry.h"
 #include "MBUtils.h"
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: populateFromEntries()
 
-bool Populator_AppLogPlot::populateFromEntries(const vector<ALogEntry>& entries)
-{
-  if(entries.size() == 0)
-    return(false);
+bool Populator_AppLogPlot::populateFromEntries(
+    const vector<ALogEntry> &entries) {
+  if (entries.size() == 0)
+    return (false);
 
   AppLogPlot alplot;
-  
-  for(unsigned int i=0; i<entries.size(); i++) {
-    string var = entries[i].getVarName();
-    if(var == "APP_LOG") {
-      double time = entries[i].getTimeStamp();
-      string src  = entries[i].getSource();
 
-      
-      if(alplot.getAppName() == "")
-	alplot.setAppName(src);
-      else if(alplot.getAppName() != src) {
-	cout << "APP_LOG appname mismatch!!" << endl;
-	cout << "alplot.getAppName():[" << alplot.getAppName() << "]" << endl;
-	cout << "src:[" << src << "]" << endl;
-	return(false);
+  for (unsigned int i = 0; i < entries.size(); i++) {
+    string var = entries[i].getVarName();
+    if (var == "APP_LOG") {
+      double time = entries[i].getTimeStamp();
+      string src = entries[i].getSource();
+
+      if (alplot.getAppName() == "")
+        alplot.setAppName(src);
+      else if (alplot.getAppName() != src) {
+        cout << "APP_LOG appname mismatch!!" << endl;
+        cout << "alplot.getAppName():[" << alplot.getAppName() << "]" << endl;
+        cout << "src:[" << src << "]" << endl;
+        return (false);
       }
 
       string sval = entries[i].getStringVal();
       AppLogEntry entry = stringToAppLogEntry(sval);
-      if(entry.valid())
-	alplot.addAppLogEntry(time, entry);
+      if (entry.valid())
+        alplot.addAppLogEntry(time, entry);
       else {
-	cout << "Populator_AppLogPlot warning: invalid entry!" << endl;
-	cout << "Entry:[" << sval << "]" << endl;
-	entry =  stringToAppLogEntry(sval, true);
+        cout << "Populator_AppLogPlot warning: invalid entry!" << endl;
+        cout << "Entry:[" << sval << "]" << endl;
+        entry = stringToAppLogEntry(sval, true);
       }
     }
   }
 
   m_alplot = alplot;
-  return(true);
+  return (true);
 }
-
-
-
-
-
-
-
-
-
-
-

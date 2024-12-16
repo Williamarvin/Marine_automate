@@ -30,86 +30,77 @@ using namespace std;
 // Constructor
 
 FV_Viewer::FV_Viewer(int x, int y, int wid, int hgt, const char *l)
-  : Common_IPFViewer(x, y, wid, hgt, l)
-{
+    : Common_IPFViewer(x, y, wid, hgt, l) {
   m_model = 0;
 
   m_polar = 1;
   m_draw_pclines = false;
-  
+
   m_clear_color.setColor("macbeige");
 }
 
 //-------------------------------------------------------------
 // Procedure: resetQuadSet
 
-void FV_Viewer::resetQuadSet()
-{
-  if(!m_model)
+void FV_Viewer::resetQuadSet() {
+  if (!m_model)
     return;
 
   bool dense = false;
-  if(!m_show_pieces)
+  if (!m_show_pieces)
     dense = true;
   m_quadset_ipf = m_model->getQuadSet(dense);
 
   resetRadVisuals();
 
-  //m_draw_pclines = true;
+  // m_draw_pclines = true;
   m_quadset_ipf.normalize(0, 100);
-  m_quadset_ipf.applyColorMap(m_color_map);	
+  m_quadset_ipf.applyColorMap(m_color_map);
   m_quadset_ipf.applyColorIntensity(m_intensity);
   m_quadset_ipf.interpolate(1);
-  
-  if(m_polar == 0)
+
+  if (m_polar == 0)
     m_quadset_ipf.applyTranslation(-250, -250);
-  else if(m_polar == 1)
+  else if (m_polar == 1)
     m_quadset_ipf.applyPolar(m_rad_ratio, 1);
-  else if(m_polar == 2)
+  else if (m_polar == 2)
     m_quadset_ipf.applyPolar(m_rad_ratio, 2);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: draw
 
-void FV_Viewer::draw()
-{
+void FV_Viewer::draw() {
   Common_IPFViewer::draw();
   glPushMatrix();
   glRotatef(m_xRot, 1.0f, 0.0f, 0.0f);
   glRotatef(m_zRot, 0.0f, 0.0f, 1.0f);
-  
-  if(m_draw_ipf) {
+
+  if (m_draw_ipf) {
     bool result = Common_IPFViewer::drawQuadSet(m_quadset_ipf);
-    if(result) {
+    if (result) {
       drawOwnPoint();
-      
-      if(m_draw_pin) {
-	unsigned int max_crs_qix = m_quadset_ipf.getMaxPointQIX("course");
-	unsigned int max_spd_qix = m_quadset_ipf.getMaxPointQIX("speed");
-	drawMaxPoint(max_crs_qix, max_spd_qix);
+
+      if (m_draw_pin) {
+        unsigned int max_crs_qix = m_quadset_ipf.getMaxPointQIX("course");
+        unsigned int max_spd_qix = m_quadset_ipf.getMaxPointQIX("speed");
+        drawMaxPoint(max_crs_qix, max_spd_qix);
       }
     }
   }
 
-  if(m_draw_frame && (m_polar==0))
+  if (m_draw_frame && (m_polar == 0))
     drawFrame();
-  if(m_draw_frame && (m_polar==1)) 
+  if (m_draw_frame && (m_polar == 1))
     drawPolarFrame();
 
   double heading = 0;
-  if(m_model)
+  if (m_model)
     heading = m_model->getNavHeading();
-  
-  if(m_draw_ship && (m_polar==1)) 
+
+  if (m_draw_ship && (m_polar == 1))
     drawCenteredShip(heading);
 
-  glPopMatrix();  
-  glFlush();  
+  glPopMatrix();
+  glFlush();
 }
-
-
-
-
-

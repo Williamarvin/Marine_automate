@@ -12,16 +12,15 @@
 #ifndef M300_HEADER
 #define M300_HEADER
 
-#include <string>
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "SockNinja.h"
 #include "Thruster.h"
 #include "VehRotController.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "XYRangePulse.h"  // for send pulse
+#include "XYRangePulse.h" // for send pulse
+#include <string>
 
-class M300 : public AppCastingMOOSApp
-{
+class M300 : public AppCastingMOOSApp {
 public:
   M300();
   ~M300();
@@ -53,79 +52,77 @@ protected: // App Specific functions
   bool handleMsgCPRCM(std::string);
   bool handleMsgCPNVR(std::string);
 
-  bool reportBadMessage(std::string msg, std::string reason="");
+  bool reportBadMessage(std::string msg, std::string reason = "");
   bool GeodesySetup();
   void checkForStalenessOrAllStop();
   void sendPulse();
 
-private: // Config variables
-  double       m_max_rudder;       // MAX_RUDDER
-  double       m_max_thrust;       // MAX_THRUST
-  std::string  m_drive_mode;       // DRIVE_MODE
-  std::string  m_vname;            // Vehicle name
-  
+private:                    // Config variables
+  double m_max_rudder;      // MAX_RUDDER
+  double m_max_thrust;      // MAX_THRUST
+  std::string m_drive_mode; // DRIVE_MODE
+  std::string m_vname;      // Vehicle name
+
   // heading source variables
-  std::string  m_heading_source;   // gps, imu, or auto;
-  double       m_stale_gps_msg_thresh;
-  double       m_last_gps_msg_time;
-  bool         m_ignore_checksum;
+  std::string m_heading_source; // gps, imu, or auto;
+  double m_stale_gps_msg_thresh;
+  double m_last_gps_msg_time;
+  bool m_ignore_checksum;
 
   std::set<std::string> m_ignore_msgs;
 
-  // Requred mods for HydroMAN integration 
-  std::string  m_nav_prefix;
-  std::string  m_gps_prefix;
-  std::string  m_compass_prefix;
-  
+  // Requred mods for HydroMAN integration
+  std::string m_nav_prefix;
+  std::string m_gps_prefix;
+  std::string m_compass_prefix;
+
 private: // State variables
   CMOOSGeodesy m_geodesy;
-  SockNinja    m_ninja;
-  Thruster     m_thrust;
+  SockNinja m_ninja;
+  Thruster m_thrust;
   VehRotController m_rot_ctrl;
 
-  bool         m_ivp_allstop;
-  bool         m_moos_manual_override;
+  bool m_ivp_allstop;
+  bool m_moos_manual_override;
 
   // Stale Message Detection
-  bool         m_stale_check_enabled;
-  bool         m_stale_mode;
-  double       m_stale_threshold;
+  bool m_stale_check_enabled;
+  bool m_stale_mode;
+  double m_stale_threshold;
   unsigned int m_count_stale;
-  double       m_tstamp_des_rudder;
-  double       m_tstamp_des_thrust;
-  double       m_tstamp_compass_msg;
+  double m_tstamp_des_rudder;
+  double m_tstamp_des_thrust;
+  double m_tstamp_compass_msg;
 
   unsigned int m_num_satellites;
-  double       m_batt_voltage;
-  double       m_nav_x;
-  double       m_nav_y;
-  double       m_nav_hdg;
-  double       m_nav_spd;
-  double       m_compass_hdg;
+  double m_batt_voltage;
+  double m_nav_x;
+  double m_nav_y;
+  double m_nav_hdg;
+  double m_nav_spd;
+  double m_compass_hdg;
 
   unsigned int m_bad_nmea_semantic;
 
   // GPS denied navigation related
-  bool         m_gps_blocked;
+  bool m_gps_blocked;
 
   // Adaptive control related
-  bool         m_publish_body_vel;
-  bool         m_use_nvg_msg_for_nav_x_nav_y;
-  double       m_stale_compass_thresh;
-  double       m_declination;  // used for processing
-                               // raw compass
-  bool         m_add_thruster_fault; 
-  double       m_fault_factor_thr_L;
-  double       m_fault_factor_thr_R;
+  bool m_publish_body_vel;
+  bool m_use_nvg_msg_for_nav_x_nav_y;
+  double m_stale_compass_thresh;
+  double m_declination; // used for processing
+                        // raw compass
+  bool m_add_thruster_fault;
+  double m_fault_factor_thr_L;
+  double m_fault_factor_thr_R;
 
   // Filters for use of reverse thrust
-  bool    m_prev_thrustL_pos;
-  bool    m_prev_thrustR_pos;
-  double  m_last_thrustL_dchange;
-  double  m_last_thrustR_dchange;
-  double  m_min_change_dir_gap;  
+  bool m_prev_thrustL_pos;
+  bool m_prev_thrustR_pos;
+  double m_last_thrustL_dchange;
+  double m_last_thrustR_dchange;
+  double m_min_change_dir_gap;
 };
 
-#endif 
-
-
+#endif

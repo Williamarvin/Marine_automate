@@ -340,7 +340,7 @@ void EsriBathyGrid::generateEdges() {
 
         bool in_vector = false;
 
-        for (vector<pair<size_t, size_t> >::reverse_iterator p = m_E.rbegin();
+        for (vector<pair<size_t, size_t>>::reverse_iterator p = m_E.rbegin();
              p != m_E.rend(); ++p) {
           if (*p == pair_a || *p == pair_b)
             in_vector = true;

@@ -21,125 +21,114 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "AppLogEntry.h"
-#include "MBUtils.h"
 #include "ColorParse.h"
+#include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: getLines()
 
-vector<string> AppLogEntry::getLines(bool tag) const
-{
+vector<string> AppLogEntry::getLines(bool tag) const {
   // If no request for a tag, then just return the lines as-is
-  if(!tag)
-    return(m_lines);
-  
+  if (!tag)
+    return (m_lines);
+
   vector<string> lines;
-  for(unsigned int i=0; i<m_lines.size(); i++) {
+  for (unsigned int i = 0; i < m_lines.size(); i++) {
     string line = m_lines[i];
     line = "[" + uintToString(m_iteration) + "] " + line;
     lines.push_back(line);
   }
-  return(lines);
+  return (lines);
 }
 
 //----------------------------------------------------------------
 // Procedure: getLine()
 
-string AppLogEntry::getLine(unsigned int ix) const
-{
-  if(ix >= m_lines.size())
-    return("");
-  return(m_lines[ix]);
+string AppLogEntry::getLine(unsigned int ix) const {
+  if (ix >= m_lines.size())
+    return ("");
+  return (m_lines[ix]);
 }
 
 //----------------------------------------------------------------
 // Procedure: getTruncLine()
 
-string AppLogEntry::getTruncLine(unsigned int ix) const
-{
-  if(ix >= m_lines.size())
-    return("");
-  return(truncString(m_lines[ix],80));
+string AppLogEntry::getTruncLine(unsigned int ix) const {
+  if (ix >= m_lines.size())
+    return ("");
+  return (truncString(m_lines[ix], 80));
 }
 
 //----------------------------------------------------------------
 // Procedure: getTruncLines()
 
-vector<string> AppLogEntry::getTruncLines()
-{
+vector<string> AppLogEntry::getTruncLines() {
   vector<string> trunc_lines;
-  for(unsigned int i=0; i<m_lines.size(); i++) {
+  for (unsigned int i = 0; i < m_lines.size(); i++) {
     string str = truncString(m_lines[i], 80);
     trunc_lines.push_back(str);
   }
-  return(trunc_lines);
+  return (trunc_lines);
 }
 
 //----------------------------------------------------------------
 // Procedure: getWrapLines()
 
-vector<string> AppLogEntry::getWrapLines()
-{
+vector<string> AppLogEntry::getWrapLines() {
   vector<string> all_lines;
-  for(unsigned int i=0; i<m_lines.size(); i++) {
+  for (unsigned int i = 0; i < m_lines.size(); i++) {
     vector<string> wrap_strings = breakLen(m_lines[i], 70);
     all_lines = mergeVectors(all_lines, wrap_strings);
   }
-  return(all_lines);
+  return (all_lines);
 }
 
 //----------------------------------------------------------------
 // Procedure: stringToAppLogEntry()
 //   Example: APP_LOG = "iter=23,log=line!@#line!@#...!@#line"
 
-AppLogEntry stringToAppLogEntry(string raw, bool verbose)
-{
+AppLogEntry stringToAppLogEntry(string raw, bool verbose) {
   AppLogEntry null_entry;
   AppLogEntry good_entry;
 
-  while(raw != "") {
+  while (raw != "") {
     string param, value;
-    if(strBegins(raw, "log=")) {
+    if (strBegins(raw, "log=")) {
       param = biteStringX(raw, '=');
       value = raw;
-    }
-    else {
+    } else {
       string field = biteStringX(raw, ',');
       param = biteStringX(field, '=');
       value = field;
     }
-    
-    if(param == "iter") {
+
+    if (param == "iter") {
       int ival = atoi(value.c_str());
-      if(ival < 0) {
-	if(verbose)
-	  cout << "VERBOSE: bad ival:" << ival << endl;
-	return(null_entry);
+      if (ival < 0) {
+        if (verbose)
+          cout << "VERBOSE: bad ival:" << ival << endl;
+        return (null_entry);
       }
       good_entry.setIteration((unsigned int)(ival));
-    }
-    else if(param == "log") {
+    } else if (param == "log") {
       vector<string> lines = parseString(value, "!@#");
-      for(unsigned int i=0; i<lines.size(); i++)  {
-	lines[i] = removeTermColors(lines[i]);
+      for (unsigned int i = 0; i < lines.size(); i++) {
+        lines[i] = removeTermColors(lines[i]);
       }
       good_entry.setAppLogLines(lines);
-      if(verbose)
-	cout << "VERBOSE: numlines: " << lines.size() << endl;
+      if (verbose)
+        cout << "VERBOSE: numlines: " << lines.size() << endl;
       raw = "";
-    }
-    else {
-      if(verbose)
-	cout << "bad param:[" << param << "]" << endl;
-      return(null_entry);
+    } else {
+      if (verbose)
+        cout << "bad param:[" << param << "]" << endl;
+      return (null_entry);
     }
   }
 
-  return(good_entry);
+  return (good_entry);
 }
-
-

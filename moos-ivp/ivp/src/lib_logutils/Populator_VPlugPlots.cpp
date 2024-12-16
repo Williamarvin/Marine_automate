@@ -29,8 +29,8 @@ using namespace std;
 // Procedure: populateFromEntries()
 //      Note: Likely called from ALogDataBroker::getVPlugPlot()
 
-bool Populator_VPlugPlots::populateFromEntries(const vector<ALogEntry>& entries)
-{
+bool Populator_VPlugPlots::populateFromEntries(
+    const vector<ALogEntry> &entries) {
   // ===============================================================
   // Part 1: Determine bin value. The VPlugPlot will create a bin of
   // visuals for each unique timestamp, carrying over the visuals from
@@ -44,81 +44,76 @@ bool Populator_VPlugPlots::populateFromEntries(const vector<ALogEntry>& entries)
   // ===============================================================
   unsigned esize = entries.size();
   double binval = 0;
-  if(esize > 50000)
+  if (esize > 50000)
     binval = 0.001;
-  if(esize > 100000)
+  if (esize > 100000)
     binval = 0.002;
-  if(esize > 200000)
+  if (esize > 200000)
     binval = 0.005;
-  if(esize > 400000)
+  if (esize > 400000)
     binval = 0.01;
-  if(esize > 800000)
+  if (esize > 800000)
     binval = 0.05;
-  if(esize > 1200000)
+  if (esize > 1200000)
     binval = 0.1;
-  if(esize > 2000000)
+  if (esize > 2000000)
     binval = 0.15;
-  if(esize > 4000000)
+  if (esize > 4000000)
     binval = 0.2;
-  if(esize > 8000000)
+  if (esize > 8000000)
     binval = 0.5;
 
   // Adjust binval from the above policy based on an adjustment
   // factor chosen at launch time. "med" means just use binval as-is.
-  if(m_vqual == "max")
+  if (m_vqual == "max")
     binval = 0;
-  else if(m_vqual == "low")
+  else if (m_vqual == "low")
     binval = binval * 2;
-  else if(m_vqual == "vlow")
+  else if (m_vqual == "vlow")
     binval = binval * 4;
-  else if(m_vqual == "vvlow")
+  else if (m_vqual == "vvlow")
     binval = binval * 10;
-  else if(m_vqual == "high")
+  else if (m_vqual == "high")
     binval = binval / 2;
 
   m_vplug_plot.setBinVal(binval);
 
-  cout << "     Visual entries: " << uintToCommaString(esize); 
-  cout << ", binval: " << doubleToStringX(binval,2) << endl; 
-   
+  cout << "     Visual entries: " << uintToCommaString(esize);
+  cout << ", binval: " << doubleToStringX(binval, 2) << endl;
+
   // ===============================================================
   // Part 2: Handle each entry in the vector of entries
   // ===============================================================
   char carriage_return = 13;
-  int  pct_prev = 0;
-  int  pct = 0;
+  int pct_prev = 0;
+  int pct = 0;
 
   unsigned int vsize = entries.size();
-  for(unsigned int i=0; i<vsize; i++) {
+  for (unsigned int i = 0; i < vsize; i++) {
 
     pct = 1 + ((100 * i) / vsize);
-    if(pct != pct_prev) {
+    if (pct != pct_prev) {
       cout << "     Caching visual data: " << pct << "%";
       cout << carriage_return << flush;
       pct_prev = pct;
     }
 
-    m_vplug_plot.addEvent(entries[i].getVarName(), 
-			  entries[i].getStringVal(), 
-			  entries[i].getTimeStamp());
+    m_vplug_plot.addEvent(entries[i].getVarName(), entries[i].getStringVal(),
+                          entries[i].getTimeStamp());
   }
   unsigned int total_entries = m_vplug_plot.size();
   string str_entries = uintToCommaString(total_entries);
   cout << "Done. Total Plot Entries: " << str_entries << endl;
   cout << endl;
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: populateFromEntry()
 //      Note: Likely called from ALogDataBroker::getVPlugPlot()
 
-bool Populator_VPlugPlots::populateFromEntry(const ALogEntry& entry)
-{
-  bool ok = m_vplug_plot.addEvent(entry.getVarName(), 
-				  entry.getStringVal(), 
-				  entry.getTimeStamp());
-  return(ok);
+bool Populator_VPlugPlots::populateFromEntry(const ALogEntry &entry) {
+  bool ok = m_vplug_plot.addEvent(entry.getVarName(), entry.getStringVal(),
+                                  entry.getTimeStamp());
+  return (ok);
 }
-
-

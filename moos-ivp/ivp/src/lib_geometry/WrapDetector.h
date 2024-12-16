@@ -22,13 +22,13 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef WRAP_DETECTOR_HEADER
 #define WRAP_DETECTOR_HEADER
 
+#include "XYSegment.h"
 #include <list>
 #include <string>
-#include "XYSegment.h"
 
 class WrapDetector {
 public:
@@ -37,39 +37,25 @@ public:
 
   void updatePosition(double osx, double osy);
   void clear();
-  void reset() {clear();}
-  
+  void reset() { clear(); }
+
   void setMinLeg(double);
-  void setMaxLegs(unsigned int); 
-  
-  unsigned int getWraps() const {return(m_wraps);}
-  
- protected: // State vars
+  void setMaxLegs(unsigned int);
+
+  unsigned int getWraps() const { return (m_wraps); }
+
+protected: // State vars
   std::list<XYSegment> m_os_legs;
-  
-  double m_osx;  
-  double m_osy;  
-  bool   m_empty;
+
+  double m_osx;
+  double m_osy;
+  bool m_empty;
 
   unsigned int m_wraps;
 
- protected: // Config vars
+protected: // Config vars
   double m_min_leg;
-  double m_max_legs;  
+  double m_max_legs;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

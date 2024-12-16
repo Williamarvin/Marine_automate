@@ -32,41 +32,24 @@
 
 #include "ZAIC_HLEQ.h"
 
-class ZAIC_HEQ: public ZAIC_HLEQ {
+class ZAIC_HEQ : public ZAIC_HLEQ {
 public:
-  ZAIC_HEQ(IvPDomain domain, const std::string& varname) :
-  ZAIC_HLEQ(domain, varname) {m_break_ties=-0.00001;}
+  ZAIC_HEQ(IvPDomain domain, const std::string &varname)
+      : ZAIC_HLEQ(domain, varname) {
+    m_break_ties = -0.00001;
+  }
   virtual ~ZAIC_HEQ() {}
 
   // The older way of expressing this function, still supported.
-  IvPFunction* extractOF();
-  
+  IvPFunction *extractOF();
+
   // The newer way of expressing this function
-  IvPFunction* extractIvPFunction() {return(extractOF());}
+  IvPFunction *extractIvPFunction() { return (extractOF()); }
 
 protected:
-  void   setPointLocations();
-  PDMap* setPDMap();
+  void setPointLocations();
+  PDMap *setPDMap();
 
   double m_break_ties;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

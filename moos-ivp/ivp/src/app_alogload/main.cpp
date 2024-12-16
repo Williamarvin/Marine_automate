@@ -21,12 +21,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "LoadReporter.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
-#include "LoadReporter.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -35,47 +35,43 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   LoadReporter load_reporter;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    bool   handled = true;
- 
-    if((argi == "-v") || (argi == "--version") || (argi =="-version"))
+    bool handled = true;
+
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit("alogload", "gpl");
-    else if((argi == "-h") || (argi == "--help") || (argi =="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
+    else if ((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
       load_reporter.setVerbose();
-    else if((argi == "--terse") || (argi == "-t") || (argi == "-terse"))
+    else if ((argi == "--terse") || (argi == "-t") || (argi == "-terse"))
       load_reporter.setTerse();
-    else if((argi == "--near") || (argi == "-n") || (argi == "-near"))
+    else if ((argi == "--near") || (argi == "-n") || (argi == "-near"))
       load_reporter.setNearMode();
-    else if(strEnds(argi, ".alog")) 
+    else if (strEnds(argi, ".alog"))
       handled = load_reporter.addALogFile(argi);
     else
       handled = false;
 
-    if(!handled) {
+    if (!handled) {
       cout << "alogload: Bad Arg: " << argi << endl;
-      return(1);
-    }      
+      return (1);
+    }
   }
-  
+
   load_reporter.report();
 
-  return(0);
+  return (0);
 }
-
-
 
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogload one.alog two.alog [OPTIONS]                    " << endl;
   cout << "                                                          " << endl;
@@ -104,4 +100,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-

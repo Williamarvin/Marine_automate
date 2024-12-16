@@ -23,12 +23,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "XYWedge.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include <cmath>
 #include <cstdlib>
-#include "XYWedge.h"
-#include "GeomUtils.h"
-#include "AngleUtils.h"
-#include "MBUtils.h"
 
 using namespace std;
 
@@ -39,8 +39,7 @@ using namespace std;
 //-------------------------------------------------------------
 // Procedure: Constructor
 
-XYWedge::XYWedge()
-{
+XYWedge::XYWedge() {
   // Configuration variables
   m_x = 0;
   m_y = 0;
@@ -78,8 +77,7 @@ XYWedge::XYWedge()
 //-------------------------------------------------------------
 // Procedure: setX
 
-void XYWedge::setX(double x)
-{
+void XYWedge::setX(double x) {
   m_x = x;
   m_x_set = true;
   m_initialized = false;
@@ -88,58 +86,52 @@ void XYWedge::setX(double x)
 //-------------------------------------------------------------
 // Procedure: setY
 
-void XYWedge::setY(double y)
-{
+void XYWedge::setY(double y) {
   m_y = y;
   m_y_set = true;
   m_initialized = false;
 }
 
-
 //-------------------------------------------------------------
 // Procedure: setRadLow
 
-bool XYWedge::setRadLow(double radius)
-{
-  if(radius < 0)
-    return(false);
-  
+bool XYWedge::setRadLow(double radius) {
+  if (radius < 0)
+    return (false);
+
   m_radlow = radius;
   m_radlow_set = true;
 
   // Ensure radlow is always less than or equal to radhgh
-  if(m_radlow > m_radhgh)
+  if (m_radlow > m_radhgh)
     m_radhgh = m_radlow;
 
   m_initialized = false;
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: setRadHigh
 
-bool XYWedge::setRadHigh(double radius)
-{
-  if(radius < 0)
-    return(false);
-  
+bool XYWedge::setRadHigh(double radius) {
+  if (radius < 0)
+    return (false);
+
   m_radhgh = radius;
   m_radhgh_set = true;
 
   // Ensure radlow is always less than or equal to radhgh
-  if(m_radhgh < m_radlow)
+  if (m_radhgh < m_radlow)
     m_radlow = m_radhgh;
 
   m_initialized = false;
-  return(true);
+  return (true);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: setLangle
 
-void XYWedge::setLangle(double angle)
-{
+void XYWedge::setLangle(double angle) {
   m_langle = angle360(angle);
   m_langle_set = true;
   m_initialized = false;
@@ -148,44 +140,39 @@ void XYWedge::setLangle(double angle)
 //-------------------------------------------------------------
 // Procedure: setHangle
 
-void XYWedge::setHangle(double angle)
-{
+void XYWedge::setHangle(double angle) {
   m_hangle = angle360(angle);
   m_hangle_set = true;
   m_initialized = false;
 }
 
-
-
 //-------------------------------------------------------------
 // Procedure: isValid()
 
-bool XYWedge::isValid() const
-{
+bool XYWedge::isValid() const {
   cout << "langle_set " << boolToString(m_langle_set) << endl;
   cout << "hangle_set " << boolToString(m_hangle_set) << endl;
   cout << "m_x_set " << boolToString(m_x_set) << endl;
   cout << "m_y_set " << boolToString(m_y_set) << endl;
   cout << "m_radlow_set " << boolToString(m_radlow_set) << endl;
   cout << "m_radhgh_set " << boolToString(m_radhgh_set) << endl;
-  
-  return(m_langle_set && m_hangle_set && m_x_set && m_y_set &&
-	 m_radlow_set && m_radhgh_set);
+
+  return (m_langle_set && m_hangle_set && m_x_set && m_y_set && m_radlow_set &&
+          m_radhgh_set);
 }
 
 //-------------------------------------------------------------
 // Procedure: initialize
 
-bool XYWedge::initialize(double degrees_per_pt)
-{
+bool XYWedge::initialize(double degrees_per_pt) {
   // Part 1: Sanity checks
   cout << "XYWedge::initialize() 111" << endl;
-  if(m_initialized)
-    return(true);
+  if (m_initialized)
+    return (true);
   cout << "XYWedge::initialize() 222" << endl;
 
-  if(!isValid())
-    return(false);
+  if (!isValid())
+    return (false);
   cout << "XYWedge::initialize() 333" << endl;
 
   // Part 2: Initialize the wedge corner points
@@ -196,49 +183,61 @@ bool XYWedge::initialize(double degrees_per_pt)
 
   // Part 3: Set initial rectilinear bounds from the corner points
   m_xmin = m_llx;
-  if(m_lhx < m_xmin) m_xmin = m_lhx;
-  if(m_hlx < m_xmin) m_xmin = m_hlx;
-  if(m_hhx < m_xmin) m_xmin = m_hhx;
+  if (m_lhx < m_xmin)
+    m_xmin = m_lhx;
+  if (m_hlx < m_xmin)
+    m_xmin = m_hlx;
+  if (m_hhx < m_xmin)
+    m_xmin = m_hhx;
 
   m_xmax = m_llx;
-  if(m_lhx > m_xmax) m_xmax = m_lhx;
-  if(m_hlx > m_xmax) m_xmax = m_hlx;
-  if(m_hhx > m_xmax) m_xmax = m_hhx;
+  if (m_lhx > m_xmax)
+    m_xmax = m_lhx;
+  if (m_hlx > m_xmax)
+    m_xmax = m_hlx;
+  if (m_hhx > m_xmax)
+    m_xmax = m_hhx;
 
   m_ymin = m_lly;
-  if(m_lhy < m_ymin) m_ymin = m_lhy;
-  if(m_hly < m_ymin) m_ymin = m_hly;
-  if(m_hhy < m_ymin) m_ymin = m_hhy;
+  if (m_lhy < m_ymin)
+    m_ymin = m_lhy;
+  if (m_hly < m_ymin)
+    m_ymin = m_hly;
+  if (m_hhy < m_ymin)
+    m_ymin = m_hhy;
 
   m_ymax = m_lly;
-  if(m_lhy > m_ymax) m_ymax = m_lhy;
-  if(m_hly > m_ymax) m_ymax = m_hly;
-  if(m_hhy > m_ymax) m_ymax = m_hhy;
+  if (m_lhy > m_ymax)
+    m_ymax = m_lhy;
+  if (m_hly > m_ymax)
+    m_ymax = m_hly;
+  if (m_hhy > m_ymax)
+    m_ymax = m_hhy;
 
   // Part 4: Possibly modify the rectilinear bounds from the round
   // parts of the wedge
   double arclen = angle360(m_hangle - m_langle);
 
   // Check the case where the north (0 degree) axis is in the arc
-  if((m_langle + arclen) >= 360)
+  if ((m_langle + arclen) >= 360)
     m_ymax = m_y + m_radhgh;
 
   // Check the case where the east (90 degree) axis is in the arc
-  if((m_langle < 90) && ((m_langle + arclen) > 90))
+  if ((m_langle < 90) && ((m_langle + arclen) > 90))
     m_xmax = m_x + m_radhgh;
-  if((m_langle > 90) && ((m_langle + arclen) > 450))
+  if ((m_langle > 90) && ((m_langle + arclen) > 450))
     m_xmax = m_x + m_radhgh;
-  
+
   // Check the case where the south (180 degree) axis is in the arc
-  if((m_langle < 180) && ((m_langle + arclen) > 180))
+  if ((m_langle < 180) && ((m_langle + arclen) > 180))
     m_ymin = m_y - m_radhgh;
-  if((m_langle > 180) && ((m_langle + arclen) > 540))
+  if ((m_langle > 180) && ((m_langle + arclen) > 540))
     m_ymin = m_y - m_radhgh;
 
   // Check the case where the west (270 degree) axis is in the arc
-  if((m_langle < 270) && ((m_langle + arclen) > 270))
+  if ((m_langle < 270) && ((m_langle + arclen) > 270))
     m_xmin = m_x - m_radhgh;
-  if((m_langle > 270) && ((m_langle + arclen) > 630))
+  if ((m_langle > 270) && ((m_langle + arclen) > 630))
     m_xmin = m_x - m_radhgh;
 
   // Part 5: Build the drawpt cache for rendering
@@ -249,10 +248,10 @@ bool XYWedge::initialize(double degrees_per_pt)
   m_pt_cache.push_back(m_lly);
   m_pt_cache.push_back(m_lhx);
   m_pt_cache.push_back(m_lhy);
-  
+
   double delta = degrees_per_pt;
   // Draw the outer arc
-  for(double deg=m_langle; deg<m_hangle; deg+=delta) {
+  for (double deg = m_langle; deg < m_hangle; deg += delta) {
     double new_x, new_y;
     projectPoint(deg, m_radhgh, m_x, m_y, new_x, new_y);
     m_pt_cache.push_back(new_x);
@@ -265,7 +264,7 @@ bool XYWedge::initialize(double degrees_per_pt)
   m_pt_cache.push_back(m_hly);
 
   // Draw the inner arc
-  for(double deg=m_hangle; deg>m_langle; deg-=delta) {
+  for (double deg = m_hangle; deg > m_langle; deg -= delta) {
     double new_x, new_y;
     projectPoint(deg, m_radlow, m_x, m_y, new_x, new_y);
     m_pt_cache.push_back(new_x);
@@ -273,15 +272,13 @@ bool XYWedge::initialize(double degrees_per_pt)
   }
 
   m_initialized = true;
-  return(true);
+  return (true);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: get_spec()
 
-string XYWedge::get_spec(unsigned int precision, std::string param) const
-{
+string XYWedge::get_spec(unsigned int precision, std::string param) const {
   string spec;
   spec += "x=" + doubleToString(m_x, precision);
   spec += ",y=" + doubleToString(m_y, precision);
@@ -290,14 +287,13 @@ string XYWedge::get_spec(unsigned int precision, std::string param) const
   spec += ",rad_hgh=" + doubleToStringX(m_radhgh, precision);
   spec += ",ang_low=" + doubleToStringX(m_langle, precision);
   spec += ",ang_hgh=" + doubleToStringX(m_hangle, precision);
-  
+
   string obj_spec = XYObject::get_spec(param);
-  if(obj_spec != "") {
-    if(spec != "")
+  if (obj_spec != "") {
+    if (spec != "")
       spec += ",";
     spec += obj_spec;
   }
 
-  return(spec);
+  return (spec);
 }
-

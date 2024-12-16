@@ -12,30 +12,29 @@
 #ifndef PMGEN_HEADER
 #define PMGEN_HEADER
 
-#include <string>
-#include <list>
 #include "PlatModel.h"
+#include <list>
+#include <string>
 
-class PMGen
-{
- public:
-  PMGen() {};
-  virtual ~PMGen() {};
+class PMGen {
+public:
+  PMGen(){};
+  virtual ~PMGen(){};
 
 public: // Setters
-  virtual PlatModel generate(double osx, double osy,
-			     double osh, double osv) = 0;
+  virtual PlatModel generate(double osx, double osy, double osh,
+                             double osv) = 0;
 
-  virtual bool setParam(std::string, std::string) {return(true);}
+  virtual bool setParam(std::string, std::string) { return (true); }
 
-  virtual std::string getAlg() const {return("");}
-  virtual std::string getParamStr(std::string) const {return("");}
-  virtual double getParamDbl(std::string) const {return(0);}  
+  virtual std::string getAlg() const { return (""); }
+  virtual std::string getParamStr(std::string) const { return (""); }
+  virtual double getParamDbl(std::string) const { return (0); }
 
   void setHdgHist(std::list<double> hdgs, std::list<double> utcs);
 
   double getHdgAvg(double time_window);
-  
+
 protected:
   std::string m_algorithm;
 
@@ -43,4 +42,4 @@ protected:
   std::list<double> m_recent_utc_osh;
 };
 
-#endif 
+#endif

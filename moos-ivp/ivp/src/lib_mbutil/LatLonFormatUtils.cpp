@@ -23,9 +23,9 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "LatLonFormatUtils.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
@@ -40,89 +40,85 @@ using namespace std;
 //            It is assumed caller will handle appropriately
 //            In the case of NMEA msgs, an N/S designator is used
 
-string latDDtoDDMM(double gval)
-{
-  if((gval > 90) || (gval < -90))
-    return("");
-  if(gval < 0)
+string latDDtoDDMM(double gval) {
+  if ((gval > 90) || (gval < -90))
+    return ("");
+  if (gval < 0)
     gval = -gval;
-  
+
   int degs = (int)(gval);
 
   gval = gval - (double)(degs);
-  if(gval < 0)
+  if (gval < 0)
     gval = -gval;
 
   double mins = gval * 60;
 
   string str = intToString(degs);
-  if(str.length() == 1)
+  if (str.length() == 1)
     str = "0" + str;
 
-  if(mins < 10)
+  if (mins < 10)
     str += "0";
-  
+
   str += doubleToStringX(mins);
 
-  if(!strContains(str, '.'))
+  if (!strContains(str, '.'))
     str += ".00";
-  
-  return(str);
-}
 
+  return (str);
+}
 
 //--------------------------------------------------------
 // Procedure: lonDDDtoDDMM()
 //      Note: Convert: -116.395443 (double)
 //                 to: 11623.7267
-//                     DDDMM.MMMM                     
+//                     DDDMM.MMMM
 //            23.7267 minutes = 0.395443 degs * 60 minutes
 
-string lonDDDtoDDDMM(double gval)
-{
-  if((gval > 180) || (gval < -180))
-    return("");
-  if(gval < 0)
+string lonDDDtoDDDMM(double gval) {
+  if ((gval > 180) || (gval < -180))
+    return ("");
+  if (gval < 0)
     gval = -gval;
 
   int degs = (int)(gval);
 
   gval = gval - (double)(degs);
-  if(gval < 0)
+  if (gval < 0)
     gval = -gval;
 
   double mins = gval * 60;
 
   string str = intToString(degs);
-  if(str.length() == 1)
+  if (str.length() == 1)
     str = "0" + str;
-  if(str.length() == 2)
+  if (str.length() == 2)
     str = "0" + str;
 
-  if(mins < 10)
+  if (mins < 10)
     str += "0";
-  
+
   str += doubleToStringX(mins);
-  if(!strContains(str, '.'))
+  if (!strContains(str, '.'))
     str += ".00";
 
-  return(str);
+  return (str);
 }
 
 //--------------------------------------------------------
 // Procedure: latDDMMtoDD()
-//      Note: Convert 4849.518 to 
+//      Note: Convert 4849.518 to
 //                    48.8253
-//            
+//
 //            0.8253 degs = 49.518 minutes / 60 minutes
 
-double latDDMMtoDD(string sval)
-{
-  if(sval.length() < 2)  
-    return(0);
+double latDDMMtoDD(string sval) {
+  if (sval.length() < 2)
+    return (0);
 
   string sdegs;
-  if(sval[0] != '0')
+  if (sval[0] != '0')
     sdegs += sval[0];
   sdegs += sval[1];
 
@@ -133,26 +129,24 @@ double latDDMMtoDD(string sval)
 
   degs += (mins / 60);
 
-  return(degs);
+  return (degs);
 }
-
 
 //--------------------------------------------------------
 // Procedure: lonDDDMMtoDDD()
-//      Note: Convert 04849.518 to 
+//      Note: Convert 04849.518 to
 //                    48.8253
-//            
+//
 //            0.8253 degs = 49.518 minutes / 60 minutes
 
-double lonDDDMMtoDDD(string sval)
-{
-  if(sval.length() < 3)  
-    return(0);
+double lonDDDMMtoDDD(string sval) {
+  if (sval.length() < 3)
+    return (0);
 
   string sdegs;
-  if(sval[0] != '0')
+  if (sval[0] != '0')
     sdegs += sval[0];
-  if((sdegs != "") || (sval[1] != '0'))
+  if ((sdegs != "") || (sval[1] != '0'))
     sdegs += sval[1];
   sdegs += sval[2];
 
@@ -163,7 +157,5 @@ double lonDDDMMtoDDD(string sval)
 
   degs += (mins / 60);
 
-  return(degs);
+  return (degs);
 }
-
-

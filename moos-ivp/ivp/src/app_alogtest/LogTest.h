@@ -22,26 +22,26 @@
 /*****************************************************************/
 
 #ifndef LOG_TEST_HEADER
-#define	LOG_TEST_HEADER
+#define LOG_TEST_HEADER
 
-#include <vector>
-#include <string>
-#include "LogicCondition.h"
 #include "ALogEntry.h"
 #include "InfoBuffer.h"
+#include "LogicCondition.h"
+#include <string>
+#include <vector>
 
 class LogTest {
 public:
   LogTest();
-  ~LogTest() {};
+  ~LogTest(){};
 
 public: // Configuring
   bool setStartTime(std::string);
   bool setEndTime(std::string);
-  void setStartTime(double v)   {m_start_time=v;}
-  void setEndTime(double v)     {m_end_time=v;}
+  void setStartTime(double v) { m_start_time = v; }
+  void setEndTime(double v) { m_end_time = v; }
 
-  void setTestName(std::string s) {m_name = s;}
+  void setTestName(std::string s) { m_name = s; }
 
   bool addStartCondition(std::string);
   bool addEndCondition(std::string);
@@ -49,30 +49,29 @@ public: // Configuring
   bool addPassCondition(std::string);
   bool addFailCondition(std::string);
 
-  void setInfoBuffer(InfoBuffer* ibuff) {m_info_buffer=ibuff;}
-  
-public: // Modifying or Querying
+  void setInfoBuffer(InfoBuffer *ibuff) { m_info_buffer = ibuff; }
 
-  bool updateState(const ALogEntry&);
+public: // Modifying or Querying
+  bool updateState(const ALogEntry &);
   bool updateEndState();
 
-  void addEvent(const ALogEntry&, std::string info="");
-  
+  void addEvent(const ALogEntry &, std::string info = "");
+
   bool isEmpty() const;
   void print() const;
 
-  double getStartTime() const {return(m_start_time);}
-  double getEndTime() const   {return(m_end_time);}
+  double getStartTime() const { return (m_start_time); }
+  double getEndTime() const { return (m_end_time); }
 
-  std::string getState() const {return(m_state_pfail);}
-  std::string getName() const {return(m_name);}
-  std::string getFailReason() const {return(m_fail_reason);}
-  
-  std::vector<std::string> getVars() const {return(m_vars);}
+  std::string getState() const { return (m_state_pfail); }
+  std::string getName() const { return (m_name); }
+  std::string getFailReason() const { return (m_fail_reason); }
+
+  std::vector<std::string> getVars() const { return (m_vars); }
   std::vector<std::string> getEvents();
-  
+
 protected: // Utility Functions
-  bool addCondition(std::string, std::vector<LogicCondition>&);
+  bool addCondition(std::string, std::vector<LogicCondition> &);
 
   bool checkStartConditions();
   bool checkEndConditions();
@@ -80,41 +79,36 @@ protected: // Utility Functions
   bool checkPassConditions();
   std::string checkConditions(std::vector<LogicCondition>);
 
-  bool updateInfoBuffer(const ALogEntry&);
+  bool updateInfoBuffer(const ALogEntry &);
 
-  std::string getEntryInfo(const ALogEntry&);
-  
+  std::string getEntryInfo(const ALogEntry &);
+
 protected: // Config variables
-  
   std::string m_name;
 
   double m_start_time;
   double m_end_time;
-  
+
   std::vector<LogicCondition> m_start_conditions;
   std::vector<LogicCondition> m_end_conditions;
   std::vector<LogicCondition> m_pass_conditions;
   std::vector<LogicCondition> m_fail_conditions;
-  
+
   std::vector<std::string> m_vars;
 
   InfoBuffer *m_info_buffer;
-  
-protected: // State variables
 
+protected: // State variables
   std::vector<std::string> m_event_tstamp;
   std::vector<std::string> m_event_onoff;
   std::vector<std::string> m_event_pfail;
   std::vector<std::string> m_event_varname;
   std::vector<std::string> m_event_varvalue;
   std::vector<std::string> m_event_info;
-    
+
   std::string m_state_onoff;
   std::string m_state_pfail;
   std::string m_fail_reason;
 };
 
-#endif	
-
-
-
+#endif

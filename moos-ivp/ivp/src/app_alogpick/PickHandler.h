@@ -24,35 +24,31 @@
 #ifndef PICK_HANDLER_HEADER
 #define PICK_HANDLER_HEADER
 
-#include <string>
 #include <map>
+#include <string>
 
-class PickHandler
-{
- public:
+class PickHandler {
+public:
   PickHandler();
   ~PickHandler() {}
 
   bool handle();
-  
+
   bool setLogFile(std::string);
   bool addField(std::string);
-  void setVerbose() {m_verbose=true;}
-  void setFormatAligned(bool v) {m_format_aligned=v;}
-  
- protected: // Config vars
+  void setVerbose() { m_verbose = true; }
+  void setFormatAligned(bool v) { m_format_aligned = v; }
 
-  bool   m_verbose;
-  bool   m_format_aligned;
+protected: // Config vars
+  bool m_verbose;
+  bool m_format_aligned;
 
   std::vector<std::string> m_fields;
 
-  std::vector<std::vector<std::string> > m_values;
-  
- protected: // State vars
+  std::vector<std::vector<std::string>> m_values;
 
+protected: // State vars
   FILE *m_file_in;
 };
 
 #endif
-

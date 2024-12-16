@@ -26,10 +26,10 @@
 #ifndef OF_REFLECTOR_HEADER
 #define OF_REFLECTOR_HEADER
 
-#include <string>
-#include <vector>
 #include "AOF.h"
 #include "PQueue.h"
+#include <string>
+#include <vector>
 
 class IvPFunction;
 class PDMap;
@@ -43,82 +43,82 @@ class RT_AutoPeak;
 
 class OF_Reflector {
 public:
-  OF_Reflector(const AOF*, int degree=1);
+  OF_Reflector(const AOF *, int degree = 1);
   virtual ~OF_Reflector();
 
- public: 
-  int    create(const std::string);
-  int    create(int unif_amt=-1, int smart_amt=-1, double thresh=-1);
+public:
+  int create(const std::string);
+  int create(int unif_amt = -1, int smart_amt = -1, double thresh = -1);
 
   // extractOF is deprecated, supported for now, use extractIvPFunction
-  IvPFunction* extractOF(bool normalize=true);
-  IvPFunction* extractIvPFunction(bool normalize=true)
-  {return(extractOF(normalize));}
-  
-  std::string getWarnings() const        {return(m_warnings);}
+  IvPFunction *extractOF(bool normalize = true);
+  IvPFunction *extractIvPFunction(bool normalize = true) {
+    return (extractOF(normalize));
+  }
 
-  bool   stateOK() const    {return(m_warnings=="");}
-  bool   setParam(std::string);
-  bool   setParam(std::string, std::string);
-  bool   setParam(std::string, double);
-  bool   setParam(std::string, IvPBox);
-    
-  void setVerbose(bool v=true) {m_verbose=v;}
-  
+  std::string getWarnings() const { return (m_warnings); }
+
+  bool stateOK() const { return (m_warnings == ""); }
+  bool setParam(std::string);
+  bool setParam(std::string, std::string);
+  bool setParam(std::string, double);
+  bool setParam(std::string, IvPBox);
+
+  void setVerbose(bool v = true) { m_verbose = v; }
+
   // Added by mikerb May1614
   unsigned int getMessageCnt() const;
-  std::string  getMessage(unsigned int) const;  
+  std::string getMessage(unsigned int) const;
 
   // Added by mikerb Nov2217
   unsigned int getTotalEvals() const;
 
-  double checkPlateaus(bool verbose=false) const;
-  double checkBasins(bool verbose=false) const;
+  double checkPlateaus(bool verbose = false) const;
+  double checkBasins(bool verbose = false) const;
 
- protected:
-  void   clearPDMap();
-  bool   addWarning(std::string);
+protected:
+  void clearPDMap();
+  bool addWarning(std::string);
 
-  void   makeUniform();
+  void makeUniform();
 
- protected:
-  const AOF*   m_aof;
-  IvPDomain    m_domain;
-  PDMap*       m_pdmap;
+protected:
+  const AOF *m_aof;
+  IvPDomain m_domain;
+  PDMap *m_pdmap;
 
-  Regressor*   m_regressor;
-  RT_Uniform*  m_rt_uniform;
-  RT_UniformX* m_rt_uniformx;
-  RT_Directed* m_rt_directed;
-  RT_Evaluator* m_rt_evaluator;
-  RT_Smart*    m_rt_smart;
-  RT_AutoPeak* m_rt_autopeak;
-  PQueue       m_pqueue;
-  
-  IvPBox       m_uniform_piece;
-  IvPBox       m_uniform_grid;
-  int          m_uniform_amount;
-  int          m_qlevels;
-  int          m_smart_amount;
-  int          m_smart_percent;
-  double       m_smart_thresh;
-  bool         m_auto_peak;
-  int          m_auto_peak_max_pcs;
+  Regressor *m_regressor;
+  RT_Uniform *m_rt_uniform;
+  RT_UniformX *m_rt_uniformx;
+  RT_Directed *m_rt_directed;
+  RT_Evaluator *m_rt_evaluator;
+  RT_Smart *m_rt_smart;
+  RT_AutoPeak *m_rt_autopeak;
+  PQueue m_pqueue;
 
-  double       m_pcheck_thresh;
-  
-  std::vector<IvPBox>  m_refine_regions;
-  std::vector<IvPBox>  m_refine_pieces;
-  std::vector<IvPBox>  m_refine_points;
+  IvPBox m_uniform_piece;
+  IvPBox m_uniform_grid;
+  int m_uniform_amount;
+  int m_qlevels;
+  int m_smart_amount;
+  int m_smart_percent;
+  double m_smart_thresh;
+  bool m_auto_peak;
+  int m_auto_peak_max_pcs;
+
+  double m_pcheck_thresh;
+
+  std::vector<IvPBox> m_refine_regions;
+  std::vector<IvPBox> m_refine_pieces;
+  std::vector<IvPBox> m_refine_points;
 
   std::vector<IvPBox> m_plateaus;
   std::vector<IvPBox> m_basins;
-  
-  std::string  m_uniform_piece_str;
+
+  std::string m_uniform_piece_str;
 
   std::string m_warnings;
 
   bool m_verbose;
 };
 #endif
-

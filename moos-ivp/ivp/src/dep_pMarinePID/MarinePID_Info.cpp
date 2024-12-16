@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "MarinePID_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "MarinePID_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis()
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Provides a basic PID controller interface to control heading  ");
@@ -44,12 +43,10 @@ void showSynopsis()
   blk("  of pMarinePIDV22.                                             ");
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                           ");
   blu("========================================================== ");
   blu("Usage: pMarinePID file.moos [OPTIONS]                      ");
@@ -58,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                           ");
   blk("Options:                                                   ");
-  mag("  --alias","=<ProcessName>                                 ");
+  mag("  --alias", "=<ProcessName>                                 ");
   blk("      Launch pMarinePID with the given process name rather ");
   blk("      than pMarinePID.                                     ");
   mag("  --example, -e                                            ");
@@ -77,26 +74,24 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMarinePID Example MOOS Configuration                           ");
   blu("=============================================================== ");
-  blu("Blue lines:     ","Default configuration, i.e., the below blue  ");
+  blu("Blue lines:     ", "Default configuration, i.e., the below blue  ");
   blu("  lines, as configured, could be ommitted with no net effect.    ");
   blk("                                                                ");
   blk("ProcessConfig = pMarinePID                                      ");
   blk("{                                                               ");
-  blk("  AppTick   = 20         "," // Default MOOS AppTick=4          ");
-  blk("  CommsTick = 20         "," // Default MOOS CommsTick=4        ");
+  blk("  AppTick   = 20         ", " // Default MOOS AppTick=4          ");
+  blk("  CommsTick = 20         ", " // Default MOOS CommsTick=4        ");
   blk("                                                                ");
-  blk("  speed_factor    = 20   "," // Range [0,inf)                   ");
-  blu("  sim_instability = 0    "," // Range [0,inf)                   ");
+  blk("  speed_factor    = 20   ", " // Range [0,inf)                   ");
+  blu("  sim_instability = 0    ", " // Range [0,inf)                   ");
   blk("                                                                ");
   blu("  max_sat_hdg_debug = false                                     ");
   blu("  max_sat_spd_debug = false                                     ");
@@ -104,8 +99,8 @@ void showExampleConfigAndExit()
   blk("                                                                ");
   blu("  tardy_helm_threshold = 2.0                                    ");
   blu("  tardy_nav_threshold  = 2.0                                    ");
-  blu("  active_start         = false   "," // or {true}               ");
-  blu("  verbose              = terse   "," // or {verbose, quiet}     ");
+  blu("  active_start         = false   ", " // or {true}               ");
+  blu("  verbose              = terse   ", " // or {verbose, quiet}     ");
   blk("                                                                ");
   blk("  // Yaw control configuration                                  ");
   blk("  yaw_pid_kp  = 0.5                                             ");
@@ -123,7 +118,7 @@ void showExampleConfigAndExit()
   blk("  maxthrust    = 100                                            ");
   blk("                                                                ");
   blk("  // Depth control configuration                                ");
-  blk("  depth_control      = true  "," // or {false}                  ");
+  blk("  depth_control      = true  ", " // or {false}                  ");
   blk("  z_to_pitch_pid_kp  = 0.12                                     ");
   blk("  z_to_pitch_pid_kd  = 1.0                                      ");
   blk("  z_to_pitch_pid_ki  = 0.004                                    ");
@@ -161,12 +156,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pMarinePID INTERFACE                                            ");
@@ -213,17 +206,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit()
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pMarinePID", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

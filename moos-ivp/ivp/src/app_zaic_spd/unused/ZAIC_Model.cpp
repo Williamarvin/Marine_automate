@@ -16,17 +16,16 @@ using namespace std;
 //-------------------------------------------------------------
 // Procedure: getIvPDomain()
 
-IvPDomain ZAIC_Model::getIvPDomain()
-{
+IvPDomain ZAIC_Model::getIvPDomain() {
   IvPDomain null_domain;
   IvPFunction *ipf = getIvPFunction();
 
-  if(!ipf) 
-    return(null_domain);
-  if(ipf->getPDMap() == 0)
-    return(null_domain);
-  if(ipf->getPDMap()->getDomain().size() == 0)
-    return(null_domain);
+  if (!ipf)
+    return (null_domain);
+  if (ipf->getPDMap() == 0)
+    return (null_domain);
+  if (ipf->getPDMap()->getDomain().size() == 0)
+    return (null_domain);
 
-  return(ipf->getPDMap()->getDomain());
+  return (ipf->getPDMap()->getDomain());
 }

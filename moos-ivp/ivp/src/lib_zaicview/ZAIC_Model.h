@@ -26,26 +26,19 @@
 
 #include "IvPFunction.h"
 
-class ZAIC_Model 
-{
- public:
+class ZAIC_Model {
+public:
   ZAIC_Model() {}
-  virtual ~ZAIC_Model() {};
+  virtual ~ZAIC_Model(){};
 
   // Virtual function to be overloaded
-  virtual IvPFunction* getIvPFunction() {return(0);}
-  virtual void setDomain(unsigned int)  {};
-  virtual bool setParam(std::string, std::string) {return(false);}
-  virtual void moveX(double amt) {};
-  virtual void currMode(int) {};
+  virtual IvPFunction *getIvPFunction() { return (0); }
+  virtual void setDomain(unsigned int){};
+  virtual bool setParam(std::string, std::string) { return (false); }
+  virtual void moveX(double amt){};
+  virtual void currMode(int){};
 
-  
   // Getters
-  IvPDomain  getIvPDomain();
+  IvPDomain getIvPDomain();
 };
-#endif 
-
-
-
-
-
+#endif

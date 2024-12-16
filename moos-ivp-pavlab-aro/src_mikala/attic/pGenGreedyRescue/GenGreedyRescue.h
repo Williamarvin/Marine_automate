@@ -8,22 +8,21 @@
 #ifndef GenGreedyRescue_HEADER
 #define GenGreedyRescue_HEADER
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h" // Allows AppCasting
 #include "MBUtils.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h" // Allows AppCasting
+#include "XYPoint.h"
+#include "XYSegList.h"
+#include <cmath>
+#include <list>
+#include <map>
+#include <math.h>
+#include <set>
 #include <string>
 #include <vector>
-#include <set>
-#include <map>
-#include "XYPoint.h"
-#include <cmath>
-#include <math.h>
-#include "XYSegList.h"
-#include <list>
 
 using namespace std;
 
-class GenGreedyRescue : public AppCastingMOOSApp
-{
+class GenGreedyRescue : public AppCastingMOOSApp {
 public:
   GenGreedyRescue();
   ~GenGreedyRescue();
@@ -47,7 +46,7 @@ protected: // Standard AppCastingMOOSApp function to overload
   double m_x_current;
   double m_y_current;
   XYSegList m_vector;
-  XYPoint m_centroid; 
+  XYPoint m_centroid;
   std::vector<bool> m_vector_remain;
   std::set<string> m_found_list;
   std::map<string, XYPoint> m_swimmer_list;
@@ -57,8 +56,8 @@ protected: // Standard AppCastingMOOSApp function to overload
   int m_list_length;
   string m_vname;
   bool m_found;
-  double m_contact_x; 
-  double m_contact_y; 
+  double m_contact_x;
+  double m_contact_y;
   double m_contact_hdg;
 
 private: // Configuration variables

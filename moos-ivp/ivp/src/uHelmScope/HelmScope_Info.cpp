@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "HelmScope_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uHelmScope application is a terminal-based (non-GUI) scope");
@@ -45,8 +44,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uHelmScope file.moos [OPTIONS] [MOOS Variables]          ");
@@ -55,7 +53,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uHelmScope with the given process name rather      ");
   blk("      than uHelmScope.                                          ");
   mag("  --clean, -c                                                   ");
@@ -97,8 +95,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uHelmScope Example MOOS Configuration                           ");
@@ -106,16 +103,16 @@ void showExampleConfigAndExit()
   blk("                                                                ");
   blk("ProcessConfig = uHelmScope                                      ");
   blk("{                                                               ");
-  blk("  AppTick   = 1   "," // MOOSApp default is 4                   ");
-  blk("  CommsTick = 1   "," // MOOSApp default is 4                   ");
+  blk("  AppTick   = 1   ", " // MOOSApp default is 4                   ");
+  blk("  CommsTick = 1   ", " // MOOSApp default is 4                   ");
   blk("                                                                ");
   blk("  paused    = false   // default                                ");
   blk("                                                                ");
-  blk("  display_moos_scope = true    "," // default                   ");
-  blk("  display_bhv_posts  = true    "," // default                   ");
-  blk("  display_virgins    = true    "," // default                   ");
-  blk("  truncated_output   = false   "," // default                   ");
-  blk("  behaviors_concise  = true    "," // default                   ");
+  blk("  display_moos_scope = true    ", " // default                   ");
+  blk("  display_bhv_posts  = true    ", " // default                   ");
+  blk("  display_virgins    = true    ", " // default                   ");
+  blk("  truncated_output   = false   ", " // default                   ");
+  blk("  behaviors_concise  = true    ", " // default                   ");
   blk("                                                                ");
   blk("  var  = NAV_X, NAV_Y, NAV_SPEED, NAV_DEPTH   // MOOS vars are  ");
   blk("  var  = DESIRED_HEADING, DESIRED_SPEED       // case sensitive ");
@@ -124,12 +121,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uHelmScope INTERFACE                                           ");
@@ -165,18 +160,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uHelmScope", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

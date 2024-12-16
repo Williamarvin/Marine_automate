@@ -20,37 +20,37 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef MANIFEST_TESTER_HEADER
 #define MANIFEST_TESTER_HEADER
 
+#include "ManifestSet.h"
 #include <string>
 #include <vector>
-#include "ManifestSet.h"
 
 class ManifestTester {
 public:
   ManifestTester();
-  virtual ~ManifestTester() {};
+  virtual ~ManifestTester(){};
 
-  void setManifestSet(ManifestSet mset) {m_manifest_set=mset;}
-  void setVerbose(bool v)          {m_verbose=v;}
-  void setTestWarnings(bool v)     {m_warnings=v;}
-  void setTestDepends(bool v)      {m_depends=v;}
-  void setTestStats(bool v)        {m_stats=v;}
-  void addIgnoreLib(std::string s) {m_ignore_libs.push_back(s);}
+  void setManifestSet(ManifestSet mset) { m_manifest_set = mset; }
+  void setVerbose(bool v) { m_verbose = v; }
+  void setTestWarnings(bool v) { m_warnings = v; }
+  void setTestDepends(bool v) { m_depends = v; }
+  void setTestStats(bool v) { m_stats = v; }
+  void addIgnoreLib(std::string s) { m_ignore_libs.push_back(s); }
   void setIgnoreLibs(std::string);
-  
+
   bool test();
 
- protected:
+protected:
   bool testForDuplicates();
   bool testForErrors();
   bool testForWarnings();
   bool testDependencies();
   bool testStatistics();
 
- protected:
+protected:
   ManifestSet m_manifest_set;
 
   bool m_verbose;
@@ -62,4 +62,3 @@ public:
 };
 
 #endif
-

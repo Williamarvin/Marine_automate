@@ -9,12 +9,12 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "LogEvalHandler.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
-#include "LogEvalHandler.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -23,43 +23,41 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   LogEvalHandler handler;
 
   bool handled = false;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogbin", "gpl");
-      return(0);
-    }
-    else if(strEnds(argi, ".alog"))
+      return (0);
+    } else if (strEnds(argi, ".alog"))
       handled = handler.setALogFile(argi);
-    else if(strBegins(argi, "--file="))
+    else if (strBegins(argi, "--file="))
       handled = handler.setALogFile(argi.substr(7));
-    else if(strBegins(argi, "--ott="))
+    else if (strBegins(argi, "--ott="))
       handled = handler.setParam("on_tail_thresh", argi.substr(6));
-    else if(strBegins(argi, "--at="))
+    else if (strBegins(argi, "--at="))
       handled = handler.setParam("alignment_thresh", argi.substr(5));
-    else if(strBegins(argi, "--tt="))
+    else if (strBegins(argi, "--tt="))
       handled = handler.setParam("tracking_thresh", argi.substr(5));
-    else if(strBegins(argi, "--rst="))
+    else if (strBegins(argi, "--rst="))
       handled = handler.setParam("rng_switch_thresh", argi.substr(5));
-    else if(strBegins(argi, "--tes="))
+    else if (strBegins(argi, "--tes="))
       handled = handler.setParam("track_err_snap", argi.substr(6));
-    else if(strBegins(argi, "--rep="))
+    else if (strBegins(argi, "--rep="))
       handled = handler.setParam("report", argi.substr(6));
-    else if(argi ==  "-r1")
+    else if (argi == "-r1")
       handled = handler.setParam("report", "appcast");
-    else if(argi ==  "-r2")
+    else if (argi == "-r2")
       handled = handler.setParam("report", "track_err_bins");
-    else if(argi=="--verbose")
+    else if (argi == "--verbose")
       handled = handler.setParam("verbose", "true");
 
-    if(!handled) {
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -70,12 +68,11 @@ int main(int argc, char *argv[])
   handler.makeReports();
   exit(0);
 }
-  
-//------------------------------------------------------------
-// Procedure: showHelpAndExit()  
 
-void showHelpAndExit()
-{
+//------------------------------------------------------------
+// Procedure: showHelpAndExit()
+
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogceval file.log [OPTIONS]                             " << endl;
   cout << "                                                           " << endl;
@@ -105,5 +102,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-

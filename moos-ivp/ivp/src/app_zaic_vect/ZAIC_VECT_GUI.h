@@ -24,41 +24,36 @@
 #ifndef ZAIC_VECT_GUI_HEADER
 #define ZAIC_VECT_GUI_HEADER
 
-#include "ZAIC_Vector.h"
 #include "ZAIC_GUI.h"
+#include "ZAIC_Vector.h"
 #include <FL/Fl_Button.H>
 
 class ZAIC_VECT_GUI : public ZAIC_GUI {
- public:
-  ZAIC_VECT_GUI(int w, int h, const char *label=0);
-  ~ZAIC_VECT_GUI() {};
+public:
+  ZAIC_VECT_GUI(int w, int h, const char *label = 0);
+  ~ZAIC_VECT_GUI(){};
 
   void setZAIC(ZAIC_Vector *zaic);
   void setVerbose(bool);
 
- protected:
+protected:
   void updateOutput(); // overloading virtual function of ZAIC_GUI
   void augmentMenu();
 
- private:
-  Fl_Output  *m_min_util;
-  Fl_Output  *m_max_util;
+private:
+  Fl_Output *m_min_util;
+  Fl_Output *m_max_util;
 
-  Fl_Output  *m_fld_pieces;
-  Fl_Output  *m_fld_tolerance;
+  Fl_Output *m_fld_pieces;
+  Fl_Output *m_fld_tolerance;
 
-  Fl_Button  *m_but_rebuild;
+  Fl_Button *m_but_rebuild;
 
- private:
+private:
   inline void cb_ReBuild_i();
-  static void cb_ReBuild(Fl_Widget*);
+  static void cb_ReBuild(Fl_Widget *);
 
   inline void cb_Tolerance_i(int);
-  static void cb_Tolerance(Fl_Widget*, int);
+  static void cb_Tolerance(Fl_Widget *, int);
 };
 #endif
-
-
-
-
-

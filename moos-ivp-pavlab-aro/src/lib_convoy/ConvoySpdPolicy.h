@@ -8,13 +8,13 @@
 /* implied to use, copy, modify, and distribute this software    */
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
- 
+
 #ifndef CONVOY_SPD_POLICY_HEADER
 #define CONVOY_SPD_POLICY_HEADER
 
+#include <stdlib.h> // atof()
 #include <string>
 #include <vector>
-#include <stdlib.h>  // atof()
 
 class ConvoySpdPolicy {
 public:
@@ -22,61 +22,57 @@ public:
   ~ConvoySpdPolicy() {}
 
 public: // setters
-  void   setFullStopConvoyRng(double);
-  void   setSlowerConvoyRng(double);
-  void   setIdealConvoyRng(double);
-  void   setFasterConvoyRng(double);
-  void   setFullLagConvoyRng(double);
-  void   setMaxCompression(double);
-  void   setLagSpeedDelta(double);
-  void   setPolicyName(std::string s) {m_policy_name=s;}
-  void   setVName(std::string s)      {m_vname=s;}
-  bool   setParam(std::string, std::string);
+  void setFullStopConvoyRng(double);
+  void setSlowerConvoyRng(double);
+  void setIdealConvoyRng(double);
+  void setFasterConvoyRng(double);
+  void setFullLagConvoyRng(double);
+  void setMaxCompression(double);
+  void setLagSpeedDelta(double);
+  void setPolicyName(std::string s) { m_policy_name = s; }
+  void setVName(std::string s) { m_vname = s; }
+  bool setParam(std::string, std::string);
 
 public: // getters
-  double getFullStopConvoyRng() const {return(m_full_stop_convoy_rng);}
-  double getSlowerConvoyRng() const   {return(m_slower_convoy_rng);}
-  double getIdealConvoyRng() const    {return(m_ideal_convoy_rng);}
-  double getFasterConvoyRng() const   {return(m_faster_convoy_rng);}
-  double getFullLagConvoyRng() const  {return(m_full_lag_convoy_rng);}
-  double getLagSpeedDelta() const     {return(m_lag_speed_delta);}
-  double getMaxCompression() const    {return(m_max_compression);}
-  std::string getPolicyName() const   {return(m_policy_name);}
-  //std::string getVName() const        {return(m_vname);}
+  double getFullStopConvoyRng() const { return (m_full_stop_convoy_rng); }
+  double getSlowerConvoyRng() const { return (m_slower_convoy_rng); }
+  double getIdealConvoyRng() const { return (m_ideal_convoy_rng); }
+  double getFasterConvoyRng() const { return (m_faster_convoy_rng); }
+  double getFullLagConvoyRng() const { return (m_full_lag_convoy_rng); }
+  double getLagSpeedDelta() const { return (m_lag_speed_delta); }
+  double getMaxCompression() const { return (m_max_compression); }
+  std::string getPolicyName() const { return (m_policy_name); }
+  // std::string getVName() const        {return(m_vname);}
 
   std::string status();
-  std::string getCorrectionMode() const {return(m_correction_mode);}
-  
+  std::string getCorrectionMode() const { return (m_correction_mode); }
+
   double getSpdFromPolicy(double, double, double);
 
-  bool   compress(double pct);
+  bool compress(double pct);
 
-
-  bool   atIdealConvoyRng(double);
+  bool atIdealConvoyRng(double);
 
   std::string getSpec() const;
   std::string getTerse() const;
-  
+
 private: // Config params
   double m_full_stop_convoy_rng;
   double m_slower_convoy_rng;
   double m_ideal_convoy_rng;
   double m_faster_convoy_rng;
   double m_full_lag_convoy_rng;
-  
+
   double m_lag_speed_delta;
   double m_max_compression;
 
   std::string m_policy_name;
   std::string m_vname;
-  
-private: // State vars
 
+private: // State vars
   std::string m_correction_mode;
 };
 
 ConvoySpdPolicy string2ConvoySpdPolicy(std::string);
 
 #endif
-
-

@@ -24,51 +24,48 @@
 #ifndef EXPANDER_HEADER
 #define EXPANDER_HEADER
 
-#include <vector>
-#include <string>
-#include <map>
 #include "MacroUtils.h"
+#include <map>
+#include <string>
+#include <vector>
 
-class Expander
-{
- public:
-  Expander(std::string infile="", std::string outfile="");
+class Expander {
+public:
+  Expander(std::string infile = "", std::string outfile = "");
   ~Expander() {}
-  
-  void setInFile(std::string s)  {m_infile  = s;}
-  void setOutFile(std::string s) {m_outfile = s;}
-  void setIncTag(std::string s)  {m_inctag = s;}
+
+  void setInFile(std::string s) { m_infile = s; }
+  void setOutFile(std::string s) { m_outfile = s; }
+  void setIncTag(std::string s) { m_inctag = s; }
   bool addMacroFile(std::string);
-  
+
   bool expand();
   bool verifyInfile();
-  bool verifyInfile(const std::string& filename);
+  bool verifyInfile(const std::string &filename);
   bool writeOutput();
-  void addMacro(std::string, std::string, bool=false);
-  void setForce(bool v)      {m_force=v;}
-  void setStrict(bool v)     {m_strict=v;}
-  void setPartialsOK(bool v) {m_partial_expand_ok=v;}
-  void setTerminal(bool v)   {m_terminal=v;}
-  void setInteractive(bool v) {m_interactive=v;}
-  void setImpatient(bool v)   {m_impatient=v;}
+  void addMacro(std::string, std::string, bool = false);
+  void setForce(bool v) { m_force = v; }
+  void setStrict(bool v) { m_strict = v; }
+  void setPartialsOK(bool v) { m_partial_expand_ok = v; }
+  void setTerminal(bool v) { m_terminal = v; }
+  void setInteractive(bool v) { m_interactive = v; }
+  void setImpatient(bool v) { m_impatient = v; }
   void addPath(std::string);
 
- protected:
-  std::vector<std::string> 
-    expandFile(std::string filename,
-	       std::map<std::string, std::string>& macros,
-	       std::vector<std::string> filenames, 
-	       std::string inctag, bool& result);
-  
-  bool applyMacrosToLine(std::string&, 
-			 std::map<std::string, std::string>,
-			 unsigned int line_num);
+protected:
+  std::vector<std::string>
+  expandFile(std::string filename, std::map<std::string, std::string> &macros,
+             std::vector<std::string> filenames, std::string inctag,
+             bool &result);
+
+  bool applyMacrosToLine(std::string &, std::map<std::string, std::string>,
+                         unsigned int line_num);
 
   std::string containsMacro(std::string);
   std::string findFileInPath(std::string);
 
   bool checkIfDef(std::string, std::map<std::string, std::string>,
-		  unsigned int);
+                  unsigned int);
   bool checkIfDefConj(std::string, std::map<std::string, std::string>);
   bool checkIfDefDisj(std::string, std::map<std::string, std::string>);
 
@@ -81,27 +78,27 @@ class Expander
   bool skipLines();
 
   bool modeStackContains(std::string);
-    
-  void printModeStack();
-  void printMacros(std::map<std::string,std::string> macros);
 
- private:
+  void printModeStack();
+  void printMacros(std::map<std::string, std::string> macros);
+
+private:
   std::vector<std::string> m_path;
   std::vector<std::string> m_newlines;
 
   // For preventing self-referencing include-loops
-  std::vector<std::string>           m_initial_filenames;
+  std::vector<std::string> m_initial_filenames;
   std::map<std::string, std::string> m_initial_macros;
 
   std::string m_infile;
   std::string m_outfile;
   std::string m_inctag;
-  
+
   // if m_strict, quit if undefined macros are found
   bool m_strict;
   bool m_terminal;
   bool m_force;
-  int  m_max_subs_per_line;
+  int m_max_subs_per_line;
   std::vector<std::string> m_pmode;
 
   bool m_partial_expand_ok;
@@ -110,5 +107,4 @@ class Expander
   bool m_impatient;
 };
 
-#endif 
-
+#endif

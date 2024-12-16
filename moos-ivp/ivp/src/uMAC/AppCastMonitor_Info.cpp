@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "AppCastMonitor_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uMAC application is a utility for Monitoring AppCasts.    ");
@@ -52,8 +51,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uMAC file.moos [OPTIONS]                                 ");
@@ -62,7 +60,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uMAC with the given process name rather than uMAC. ");
   mag("  --example, -e                                                 ");
   blk("      Display example MOOS configuration block.                 ");
@@ -74,9 +72,9 @@ void showHelpAndExit()
   blk("      Display the release version of uMAC.                      ");
   mag("  --terse,-t                                                    ");
   blk("      Super condensed uMAC header output for small terminals    ");
-  mag("  --proc","=<ProcessName>                                       ");
+  mag("  --proc", "=<ProcessName>                                       ");
   blk("      Specify initial process to scope on.                      ");
-  mag("  --node","=<NodeName>                                          ");
+  mag("  --node", "=<NodeName>                                          ");
   blk("      Specify initial node to scope on.                         ");
   mag("  --web,-w                                                      ");
   blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uMAC ");
@@ -91,8 +89,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uMAC Example MOOS Configuration                                 ");
@@ -109,12 +106,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uMAC INTERFACE                                                  ");
@@ -140,18 +135,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uMAC", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

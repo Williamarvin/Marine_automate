@@ -20,35 +20,34 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_R13_HEADER
 #define AOF_R13_HEADER
 
 #include "AOF_Contact.h"
 
-class AOF_R13: public AOF_Contact {
+class AOF_R13 : public AOF_Contact {
 public:
   AOF_R13(IvPDomain);
-  ~AOF_R13() {};
+  ~AOF_R13(){};
 
-  double evalBox(const IvPBox*) const;   
-  bool   setParam(const std::string&, const std::string&);
-  bool   setParam(const std::string&, double);
-  bool   initialize();
-  
- protected: // non-virtual functions
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, const std::string &);
+  bool setParam(const std::string &, double);
+  bool initialize();
+
+protected: // non-virtual functions
   double metricCPA(double) const;
   double metricPassesSide(double, double, double) const;
 
- private:
-  int    m_crs_ix;             // Index of "course" variable in IvPDomain
-  int    m_spd_ix;             // Index of "speed" variable in IvPDomain 
-  bool   m_pass_to_port;
-  bool   m_passing_side_set;
-  bool   m_port_of_contact;
+private:
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed" variable in IvPDomain
+  bool m_pass_to_port;
+  bool m_passing_side_set;
+  bool m_port_of_contact;
 
   double m_cn_to_os_rel_bng;
 };
 
 #endif
-

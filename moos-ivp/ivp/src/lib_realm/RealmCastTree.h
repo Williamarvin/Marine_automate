@@ -26,85 +26,82 @@
 #ifndef REALMCAST_TREE_HEADER
 #define REALMCAST_TREE_HEADER
 
-#include <string>
-#include <map>
 #include "RealmCast.h"
 #include "RealmCastSet.h"
 #include "RealmSummary.h"
+#include <map>
+#include <string>
 
-class RealmCastTree
-{
- public:
+class RealmCastTree {
+public:
   RealmCastTree();
   ~RealmCastTree() {}
 
   bool addRealmSummary(RealmSummary, std::string, std::string);
-  void setDefaultNode(std::string s)   {m_default_node=s;}
-  void clearDefaultNode(std::string s) {m_default_node="";}
-  
-  // Return true if first time heard from this node
-  bool addRealmCast(const std::string&);
-  bool addRealmCast(const RealmCast&);
+  void setDefaultNode(std::string s) { m_default_node = s; }
+  void clearDefaultNode(std::string s) { m_default_node = ""; }
 
-  bool removeNode(const std::string&);
+  // Return true if first time heard from this node
+  bool addRealmCast(const std::string &);
+  bool addRealmCast(const RealmCast &);
+
+  bool removeNode(const std::string &);
 
   // Global getters (Queries requiring no key)
-  unsigned int getTreeRealmCastCount() const   {return(m_total_relcast_count);}
-  unsigned int getTreeNodeCount() const      {return(m_map_relcast_sets.size());}
+  unsigned int getTreeRealmCastCount() const { return (m_total_relcast_count); }
+  unsigned int getTreeNodeCount() const { return (m_map_relcast_sets.size()); }
   unsigned int getTreeProcCount() const;
-  std::vector<std::string> getNodes() const  {return(m_nodes);}
+  std::vector<std::string> getNodes() const { return (m_nodes); }
   std::vector<std::string> getNodeIDs() const;
 
   // Node Level getters (Queries requiring a node or node_id argument)
-  bool         hasNode(std::string node)                const;
-  std::string  getNodeNameFromID(std::string id)        const;
-  unsigned int getNodeRealmCastCount(std::string node)  const;
-  unsigned int getNodeTotalProcCount(std::string node)  const;
+  bool hasNode(std::string node) const;
+  std::string getNodeNameFromID(std::string id) const;
+  unsigned int getNodeRealmCastCount(std::string node) const;
+  unsigned int getNodeTotalProcCount(std::string node) const;
 
   std::vector<std::string> getProcIDs(std::string node) const;
-  std::vector<std::string> getProcs(std::string node)   const;
-  std::vector<std::string> getProcs()   const;
+  std::vector<std::string> getProcs(std::string node) const;
+  std::vector<std::string> getProcs() const;
 
   // Realm Level getters (Queries requiring a node + realm or realm_id argument)
-  bool         hasNodeProc(std::string node, std::string proc)         const;
-  std::string  getProcNameFromID(std::string node, std::string id)     const; 
+  bool hasNodeProc(std::string node, std::string proc) const;
+  std::string getProcNameFromID(std::string node, std::string id) const;
   unsigned int getProcRealmCastCount(std::string node, std::string proc) const;
-  
-  RealmCast    getRealmCast(std::string node, std::string proc) const;
 
-  std::string  report() const;
+  RealmCast getRealmCast(std::string node, std::string proc) const;
 
-  bool        setCurrentNode(std::string);
-  bool        setCurrentProc(std::string);
-  std::string getCurrentNode() const {return(m_current_node);}
+  std::string report() const;
+
+  bool setCurrentNode(std::string);
+  bool setCurrentProc(std::string);
+  std::string getCurrentNode() const { return (m_current_node); }
   std::string getCurrentProc() const;
 
-  
- protected:
+protected:
   void setNewNodeID(std::string node);
-  
-private: 
+
+private:
   std::string m_current_node;
-  
+
   // Default node used only if user wants the client app to view a node upon
   // upon client app startup
   std::string m_default_node;
-  
+
   // Mapping from ID to NodeName
-  std::map<std::string, std::string>  m_map_id_node;
+  std::map<std::string, std::string> m_map_id_node;
 
   // Mappings from NodeName to various data
-  std::map<std::string, RealmCastSet>   m_map_relcast_sets;
+  std::map<std::string, RealmCastSet> m_map_relcast_sets;
 
   // Keeping running total of nodes for help with auto-generating IDs
   unsigned int m_node_id_count;
   unsigned int m_total_relcast_count;
 
   // Keep a separate vector of node names so that when node name vector is
-  // retrieved by caller, the earlier items stay in the same order. The 
+  // retrieved by caller, the earlier items stay in the same order. The
   // alternative, iterating through the map, means order may shift as map grows.
   std::vector<std::string> m_nodes;
 };
 
-#endif 
-
+#endif

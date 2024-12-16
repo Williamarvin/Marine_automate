@@ -28,9 +28,8 @@
 #include <set>
 #include <string>
 
-class PlatformAlertRecord
-{
- public:
+class PlatformAlertRecord {
+public:
   PlatformAlertRecord() {}
   ~PlatformAlertRecord() {}
 
@@ -38,14 +37,14 @@ class PlatformAlertRecord
   void addVehicle(std::string str);
 
   bool removeVehicle(std::string str);
-  
+
   bool containsVehicle(std::string contact) const;
   bool containsAlertID(std::string alertid) const;
 
   void setAlertedValue(std::string contact, std::string id, bool);
   bool getAlertedValue(std::string contact, std::string id) const;
 
- public:
+public:
   std::string getAlertedGroup(bool alerted) const;
   unsigned int getAlertedGroupCount(bool alerted) const;
 
@@ -53,9 +52,9 @@ class PlatformAlertRecord
 
   void print() const;
 
- protected: 
+protected:
   //     map<vehicle, map<alertid, bool>>
-  //  
+  //
   //     vname   id=aa   id=bb
   //     -----   -----   -----
   //     gilda | true    false     "the gilda map"
@@ -63,12 +62,11 @@ class PlatformAlertRecord
   //     ike   | true    false
   //     jake  | false   true
 
-
   // The first Matix indicates whether a vehicle has been alerted,
   // for all defined alert-ids.
-  std::map<std::string, std::map<std::string, bool> > m_par_alerted;
+  std::map<std::string, std::map<std::string, bool>> m_par_alerted;
 
   std::set<std::string> m_alertids;
 };
 
-#endif 
+#endif

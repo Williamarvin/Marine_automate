@@ -21,47 +21,44 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
 #include "Populator_EncounterPlot.h"
-#include "MBUtils.h"
 #include "CPAEvent.h"
-
+#include "MBUtils.h"
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: populateFromEntries
 
-bool Populator_EncounterPlot::populateFromEntries(const vector<ALogEntry>& entries)
-{
-  if(entries.size() == 0)
-    return(false);
-  
-  for(unsigned int i=0; i<entries.size(); i++) {
+bool Populator_EncounterPlot::populateFromEntries(
+    const vector<ALogEntry> &entries) {
+  if (entries.size() == 0)
+    return (false);
+
+  for (unsigned int i = 0; i < entries.size(); i++) {
     string var = entries[i].getVarName();
-    if(var == "ENCOUNTER_SUMMARY") {
+    if (var == "ENCOUNTER_SUMMARY") {
       double time = entries[i].getTimeStamp();
       string sval = entries[i].getStringVal();
       CPAEvent event(sval);
       m_encounter_plot.addEncounter(time, event);
-    }
-    else if(var == "COLLISION_DETECT_PARAMS") {
+    } else if (var == "COLLISION_DETECT_PARAMS") {
       vector<string> svector = parseString(entries[i].getStringVal(), ',');
-      for(unsigned int j=0; j<svector.size(); j++) {
-	string param = biteStringX(svector[j], '=');
-	string value = svector[j];
-	cout << "   param:[" << param << "] value:[" << value << "]" << endl;
-	if(param == "collision_range")
-	  m_encounter_plot.setCollisionRange(atof(value.c_str()));
-	else if(param == "near_miss_range")
-	  m_encounter_plot.setNearMissRange(atof(value.c_str()));
-	else if(param == "encounter_range")
-	  m_encounter_plot.setEncounterRange(atof(value.c_str()));
+      for (unsigned int j = 0; j < svector.size(); j++) {
+        string param = biteStringX(svector[j], '=');
+        string value = svector[j];
+        cout << "   param:[" << param << "] value:[" << value << "]" << endl;
+        if (param == "collision_range")
+          m_encounter_plot.setCollisionRange(atof(value.c_str()));
+        else if (param == "near_miss_range")
+          m_encounter_plot.setNearMissRange(atof(value.c_str()));
+        else if (param == "encounter_range")
+          m_encounter_plot.setEncounterRange(atof(value.c_str()));
       }
     }
   }
-  return(true);
+  return (true);
 }
-

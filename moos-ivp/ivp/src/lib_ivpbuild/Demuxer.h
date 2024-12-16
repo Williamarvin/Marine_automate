@@ -26,61 +26,39 @@
 #ifndef DEMUXER_HEADER
 #define DEMUXER_HEADER
 
-#include <string>
-#include <list>
 #include "DemuxUnit.h"
 #include "DemuxedResult.h"
+#include <list>
+#include <string>
 
 class Demuxer {
 public:
-  Demuxer() {m_demuxed=true;}
+  Demuxer() { m_demuxed = true; }
   virtual ~Demuxer() {}
 
 public:
-  bool addMuxPacket(const std::string& packet, 
-		    double timestamp, 
-		    const std::string& source="");
+  bool addMuxPacket(const std::string &packet, double timestamp,
+                    const std::string &source = "");
 
-  std::string   getDemuxString();
+  std::string getDemuxString();
   DemuxedResult getDemuxedResult();
 
-  void   removeStaleUnits(double, double);
-  void   print();
-  double size()     {return(m_demuxed_results.size());}
+  void removeStaleUnits(double, double);
+  void print();
+  double size() { return (m_demuxed_results.size()); }
 
 protected:
-  void   demuxUnits();
+  void demuxUnits();
 
 protected:
   // Partially demuxed intermediate data
-  std::list<DemuxUnit*>     m_units;
+  std::list<DemuxUnit *> m_units;
 
   // Ready to be retrieved demuxed information
-  std::list<DemuxedResult>  m_demuxed_results;
-  
+  std::list<DemuxedResult> m_demuxed_results;
+
   // True if demuxed units are waiting for retieval
   bool m_demuxed;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

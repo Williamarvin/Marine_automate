@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef PICK_JOUST_INFO_HEADER
 #define PICK_JOUST_INFO_HEADER
 
@@ -29,11 +29,3 @@ void showHelpAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-

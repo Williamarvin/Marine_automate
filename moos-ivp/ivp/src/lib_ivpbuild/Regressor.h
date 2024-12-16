@@ -26,89 +26,68 @@
 #ifndef REGRESSOR_HEADER
 #define REGRESSOR_HEADER
 
-#include <vector>
-#include <string>
 #include "AOF.h"
+#include <string>
+#include <vector>
 
 class Regressor {
 public:
-  Regressor(const AOF*, int deg=1);
+  Regressor(const AOF *, int deg = 1);
   virtual ~Regressor();
 
-public:  
-  int     getDegree() const   {return(m_degree);}
+public:
+  int getDegree() const { return (m_degree); }
 
-  double  setWeight(IvPBox*, bool feedback=false);
-  void    setStrictRange(bool val) {m_strict_range = val;}
+  double setWeight(IvPBox *, bool feedback = false);
+  void setStrictRange(bool val) { m_strict_range = val; }
 
-  unsigned int getMessageCnt() const {return(m_messages.size());}
-  std::string  getMessage(unsigned int);
+  unsigned int getMessageCnt() const { return (m_messages.size()); }
+  std::string getMessage(unsigned int);
 
-  const AOF* getAOF() {return(m_aof);}
+  const AOF *getAOF() { return (m_aof); }
 
-  unsigned int getTotalSetWts() const {return(m_total_setwts);}
-  unsigned int getTotalEvals() const {return(m_total_evals);}
-  
+  unsigned int getTotalSetWts() const { return (m_total_setwts); }
+  unsigned int getTotalEvals() const { return (m_total_evals); }
+
 protected:
-  void    setCorners(IvPBox*);
-  double  setWeight0(IvPBox*, bool);
-  double  setWeight1(IvPBox*, bool);
-  double  setWeight2(IvPBox*, bool);
-  void    setQuadCoeffs(double, double,  double,  double, double, 
-			double, double&, double&, double&);
-  double  evalPtBox(const IvPBox*);
-  bool    centerBox(const IvPBox*, IvPBox*);
+  void setCorners(IvPBox *);
+  double setWeight0(IvPBox *, bool);
+  double setWeight1(IvPBox *, bool);
+  double setWeight2(IvPBox *, bool);
+  void setQuadCoeffs(double, double, double, double, double, double, double &,
+                     double &, double &);
+  double evalPtBox(const IvPBox *);
+  bool centerBox(const IvPBox *, IvPBox *);
 
 protected:
   // AOF represents the underlying function.
-  const AOF* m_aof;         
-  IvPDomain  m_domain;
+  const AOF *m_aof;
+  IvPDomain m_domain;
 
-  int        m_dim;
-  bool       m_strict_range;
+  int m_dim;
+  bool m_strict_range;
 
   std::vector<std::string> m_messages;
 
-  // The below data structures are used repeatedly on 
-  // successive calls to "setWeight". So they are allocated 
+  // The below data structures are used repeatedly on
+  // successive calls to "setWeight". So they are allocated
   // once for efficiency sake.
-  IvPBox*   m_center_point;
-  double    m_center_val;
-  IvPBox**  m_corner_point; 
-  double*   m_corner_val;   
-  int       m_corners;      
-  int*      m_mask;
-  double*   m_vals;
+  IvPBox *m_center_point;
+  double m_center_val;
+  IvPBox **m_corner_point;
+  double *m_corner_val;
+  int m_corners;
+  int *m_mask;
+  double *m_vals;
 
-  int       m_degree;
+  int m_degree;
 
-  double    m_pteval_min;
-  double    m_pteval_max;
-  bool      m_pteval_set;
+  double m_pteval_min;
+  double m_pteval_max;
+  bool m_pteval_set;
 
   unsigned int m_total_setwts;
   unsigned int m_total_evals;
-  
-  
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

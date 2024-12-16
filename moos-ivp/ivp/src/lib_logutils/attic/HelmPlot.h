@@ -27,37 +27,33 @@
 #include <string>
 #include <vector>
 
-class HelmPlot
-{
+class HelmPlot {
 public:
   HelmPlot();
-  ~HelmPlot() {};
+  ~HelmPlot(){};
 
-  void   set_vehi_name(std::string s) {m_vehi_name = s;};
-  void   set_vehi_length(double len)  {m_vehi_length = len;};
-  void   set_vehi_type(std::string);
-  
-  bool   add_entry(double time, std::string helm_summary);
-  
+  void set_vehi_name(std::string s) { m_vehi_name = s; };
+  void set_vehi_length(double len) { m_vehi_length = len; };
+  void set_vehi_type(std::string);
+
+  bool add_entry(double time, std::string helm_summary);
+
   double get_time_by_index(unsigned int index) const;
-  double get_time_by_iter_add(double curr_time, 
-			      unsigned int iter_offset) const;
-  double get_time_by_iter_sub(double curr_time, 
-			      unsigned int iter_offset) const;
+  double get_time_by_iter_add(double curr_time, unsigned int iter_offset) const;
+  double get_time_by_iter_sub(double curr_time, unsigned int iter_offset) const;
   unsigned int get_iter_by_time(double) const;
 
-  std::string  get_value_by_index(std::string value_type, 
-				  unsigned int index) const;
-  std::string  get_value_by_time(std::string value_type,
-				 double gtime) const;
-  
-  std::string  get_vehi_name()    const {return(m_vehi_name);};
-  std::string  get_vehi_type()    const {return(m_vehi_type);};
-  double       get_vehi_length()  const {return(m_vehi_length);};
-  unsigned int size()         const {return(m_time.size());};
-  double       get_min_time() const;
-  double       get_max_time() const;
-  void         print()        const;
+  std::string get_value_by_index(std::string value_type,
+                                 unsigned int index) const;
+  std::string get_value_by_time(std::string value_type, double gtime) const;
+
+  std::string get_vehi_name() const { return (m_vehi_name); };
+  std::string get_vehi_type() const { return (m_vehi_type); };
+  double get_vehi_length() const { return (m_vehi_length); };
+  unsigned int size() const { return (m_time.size()); };
+  double get_min_time() const;
+  double get_max_time() const;
+  void print() const;
 
 protected:
   int get_index_by_time(double) const;
@@ -65,25 +61,20 @@ protected:
 protected:
   std::string m_vehi_name;
   std::string m_vehi_type;
-  double      m_vehi_length;
+  double m_vehi_length;
 
-  std::vector<double>       m_time;
+  std::vector<double> m_time;
   std::vector<unsigned int> m_helm_iter_v;
-  std::vector<std::string>  m_helm_iter_s;
-  std::vector<std::string>  m_helm_mode;
-  std::vector<std::string>  m_helm_mode_short;
-  std::vector<std::string>  m_helm_utc;
-  std::vector<std::string>  m_helm_idle_bhvs;
-  std::vector<std::string>  m_helm_running_bhvs;
-  std::vector<std::string>  m_helm_active_bhvs;
-  std::vector<std::string>  m_helm_completed_bhvs;
-  std::vector<std::string>  m_helm_decision;
+  std::vector<std::string> m_helm_iter_s;
+  std::vector<std::string> m_helm_mode;
+  std::vector<std::string> m_helm_mode_short;
+  std::vector<std::string> m_helm_utc;
+  std::vector<std::string> m_helm_idle_bhvs;
+  std::vector<std::string> m_helm_running_bhvs;
+  std::vector<std::string> m_helm_active_bhvs;
+  std::vector<std::string> m_helm_completed_bhvs;
+  std::vector<std::string> m_helm_decision;
 
   double m_utc_start_time;
 };
-#endif 
-
-
-
-
-
+#endif

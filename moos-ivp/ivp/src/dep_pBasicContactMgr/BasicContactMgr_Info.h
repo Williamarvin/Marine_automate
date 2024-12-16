@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef PBASIC_CONTACT_MANAGER_INFO_HEADER
 #define PBASIC_CONTACT_MANAGER_INFO_HEADER
 
@@ -31,11 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-

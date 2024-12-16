@@ -26,26 +26,17 @@
 #ifndef FUNCTION_ENCODER_MK_HEADER
 #define FUNCTION_ENCODER_MK_HEADER
 
-#include <string>
 #include "IvPFunction.h"
+#include <string>
 
 // Convert an IvPFunction to string represntation
-std::string IvPFunctionToStringMK(IvPFunction*);
+std::string IvPFunctionToStringMK(IvPFunction *);
 
 // Convert an IvPFunction to a vector of strings
-std::vector<std::string> IvPFunctionToVectorMK(const std::string&, 
-					     const std::string&, int);
+std::vector<std::string> IvPFunctionToVectorMK(const std::string &,
+                                               const std::string &, int);
 
 // Create an IvPFunction based on a string representation
-IvPFunction *StringToIvPFunctionMK(const std::string&);
+IvPFunction *StringToIvPFunctionMK(const std::string &);
 
 #endif
-
-
-
-
-
-
-
-
-

@@ -26,13 +26,12 @@
 #ifndef COLOR_PACK_HEADER
 #define COLOR_PACK_HEADER
 
-#include <vector>
-#include <string>
-#include "MBUtils.h"
 #include "ColorParse.h"
+#include "MBUtils.h"
+#include <string>
+#include <vector>
 
-class ColorPack
-{
+class ColorPack {
 public:
   // Constructors/Destructor
   ColorPack();
@@ -46,37 +45,25 @@ public:
 
   // clear
   void clear() {
-    m_color_vector = std::vector<double>(3,0);
+    m_color_vector = std::vector<double>(3, 0);
     m_set = false;
   }
 
   void shade(double pct);
   void moregray(double pct);
 
-  double red() const {return(m_color_vector[0]);}
-  double grn() const {return(m_color_vector[1]);}
-  double blu() const {return(m_color_vector[2]);}
-  bool   set() const {return(m_set);}
-  bool   visible() const {return(m_visible);}
+  double red() const { return (m_color_vector[0]); }
+  double grn() const { return (m_color_vector[1]); }
+  double blu() const { return (m_color_vector[2]); }
+  bool set() const { return (m_set); }
+  bool visible() const { return (m_visible); }
 
-  std::string str(char sep=',') const;
+  std::string str(char sep = ',') const;
 
 protected:
   std::vector<double> m_color_vector;
-  bool                m_set;
-  bool                m_visible;
-  std::string         m_color_string;
+  bool m_set;
+  bool m_visible;
+  std::string m_color_string;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

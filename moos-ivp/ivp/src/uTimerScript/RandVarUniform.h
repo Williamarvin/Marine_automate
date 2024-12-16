@@ -24,30 +24,19 @@
 #ifndef RAND_VAR_UNIFORM_HEADER
 #define RAND_VAR_UNIFORM_HEADER
 
-#include <string>
 #include "RandomVariable.h"
+#include <string>
 
-class RandVarUniform : public RandomVariable
-{
- public:
+class RandVarUniform : public RandomVariable {
+public:
   RandVarUniform();
   virtual ~RandVarUniform() {}
 
- public: // Overloaded virtual functions
-  bool   setParam(std::string, double);
-  void   reset();
-  
+public: // Overloaded virtual functions
+  bool setParam(std::string, double);
+  void reset();
+
   std::string getStringSummary() const;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

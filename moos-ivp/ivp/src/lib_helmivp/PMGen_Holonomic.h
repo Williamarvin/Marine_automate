@@ -12,23 +12,21 @@
 #ifndef PMGEN_HOLONOMIC_HEADER
 #define PMGEN_HOLONOMIC_HEADER
 
-#include <string>
 #include "PMGen.h"
+#include <string>
 
-class PMGen_Holonomic : public PMGen
-{
- public:
-  PMGen_Holonomic() {};
-  ~PMGen_Holonomic() {};
+class PMGen_Holonomic : public PMGen {
+public:
+  PMGen_Holonomic(){};
+  ~PMGen_Holonomic(){};
 
 public: // Setters
-  PlatModel generate(double osx, double osy,
-		     double osh, double osv);
+  PlatModel generate(double osx, double osy, double osh, double osv);
 
-  bool setParam(std::string, std::string) {return(true);}
-  bool setParam(std::string, double) {return(true);}
+  bool setParam(std::string, std::string) { return (true); }
+  bool setParam(std::string, double) { return (true); }
 
-  std::string getAlg() const {return("holo");}
+  std::string getAlg() const { return ("holo"); }
 };
 
-#endif 
+#endif

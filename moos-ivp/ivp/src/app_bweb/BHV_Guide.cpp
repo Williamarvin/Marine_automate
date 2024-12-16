@@ -21,76 +21,67 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iterator>
-#include <iostream>
-#include <cstring>
 #include "BHV_Guide.h"
-#include "OpenURL.h"
 #include "MBUtils.h"
+#include "OpenURL.h"
+#include <cstring>
+#include <iostream>
+#include <iterator>
 
 using namespace std;
 
 //------------------------------------------------------------
 // Procedure: setBehaviorName()
 
-bool BHV_Guide::setBehaviorName(string bhv)
-{
+bool BHV_Guide::setBehaviorName(string bhv) {
   bhv = tolower(bhv);
 
-  if(bhv == "waypoint")
+  if (bhv == "waypoint")
     m_bhv_name = bhv;
-  else if(bhv == "loiter")
+  else if (bhv == "loiter")
     m_bhv_name = bhv;
   else {
     cout << "Unrecognized behavior: [" << bhv << "]" << endl;
-    cout << "NOTE: This tool is new. Check back later." << endl;    
-    return(false);
+    cout << "NOTE: This tool is new. Check back later." << endl;
+    return (false);
   }
-  
-  return(true);
+
+  return (true);
 }
 
 //------------------------------------------------------------
 // Procedure: setAction()
 
-bool BHV_Guide::setAction(string str)
-{
+bool BHV_Guide::setAction(string str) {
   str = tolower(str);
-  if(str == "web")
+  if (str == "web")
     m_action = str;
-  else if(str == "example")
+  else if (str == "example")
     m_action = str;
-  else if(str == "params")
+  else if (str == "params")
     m_action = str;
-  else if(str == "mission")
+  else if (str == "mission")
     m_action = str;
   else
-    return(false);
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //------------------------------------------------------------
 // Procedure: guide()
 
-void BHV_Guide::guide()
-{
-  if(m_action == "web") {
+void BHV_Guide::guide() {
+  if (m_action == "web") {
     bool handled = true;
-    if(m_bhv_name == "waypoint")
+    if (m_bhv_name == "waypoint")
       openURLX("https://oceanai.mit.edu/ivpman/bhvs/Waypoint");
-    else if(m_bhv_name == "loiter")
+    else if (m_bhv_name == "loiter")
       openURLX("https://oceanai.mit.edu/ivpman/bhvs/Loiter");
     else
       handled = false;
 
-    if(!handled)
+    if (!handled)
       cout << "Unknown behavior: [" << m_bhv_name << "]" << endl;
   }
-  
 }
-
-
-
-
-

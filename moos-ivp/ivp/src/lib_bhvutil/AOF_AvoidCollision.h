@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_AVOID_COLLISION_HEADER
 #define AOF_AVOID_COLLISION_HEADER
 
@@ -30,34 +30,33 @@
 #include "CPAEngine.h"
 
 class IvPDomain;
-class AOF_AvoidCollision: public AOF_Contact {
- public:
+class AOF_AvoidCollision : public AOF_Contact {
+public:
   AOF_AvoidCollision(IvPDomain);
   ~AOF_AvoidCollision() {}
 
- public: // virtuals defined
-  double evalBox(const IvPBox*) const;   
-  bool   setParam(const std::string&, double);
-  bool   initialize();
- public: // More virtuals defined Declare a known min/max eval range
-  bool   minMaxKnown() const {return(true);}
-  double getKnownMin() const {return(0);}
-  double getKnownMax() const {return(m_max_util);}
+public: // virtuals defined
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool initialize();
+
+public: // More virtuals defined Declare a known min/max eval range
+  bool minMaxKnown() const { return (true); }
+  double getKnownMin() const { return (0); }
+  double getKnownMax() const { return (m_max_util); }
 
   double evalROC(double osh, double osv) {
-    return(m_cpa_engine.evalROC(osh, osv));
+    return (m_cpa_engine.evalROC(osh, osv));
   }
-      
- protected:
+
+protected:
   double metric(double) const;
-  
- protected:
-  int    m_crs_ix;  // Index of "course" variable in IvPDomain
-  int    m_spd_ix;  // Index of "speed" variable in IvPDomain
+
+protected:
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed" variable in IvPDomain
 
   double m_max_util;
 };
 
 #endif
-
-

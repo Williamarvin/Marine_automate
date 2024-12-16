@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "CollisionDetector_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                      ");
   blk("------------------------------------                           ");
   blk("  The uCollisionDetect application is run by the shoreside     ");
@@ -56,8 +55,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uCollisionDetector file.moos [OPTIONS]                   ");
@@ -66,7 +64,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uCollisionDetector with the given process name     ");
   blk("      rather than uCollisionDetector.                           ");
   mag("  --example, -e                                                 ");
@@ -78,7 +76,8 @@ void showHelpAndExit()
   mag("  --version,-v                                                  ");
   blk("      Display the release version of uCollisionDetector.        ");
   mag("  --web,-w                                                      ");
-  blk("      Open browser to: https://oceanai.mit.edu/apps/uFldCollisionDetect ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/apps/uFldCollisionDetect ");
   blk("                                                                ");
   blk("Note: If argv[2] does not otherwise match a known option,       ");
   blk("      then it will be interpreted as a run alias. This is       ");
@@ -90,8 +89,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldCollisionDetect Example MOOS Configuration                  ");
   blu("=============================================================== ");
@@ -125,17 +123,15 @@ void showExampleConfigAndExit()
   blk("  report_all_encounters = true  // default is false             ");
   blk("                                                                ");
   blk("  app_logging = true  // {true or file} By default disabled     ");
-  blk("}                                                               ");  
+  blk("}                                                               ");
 
-exit(0);
+  exit(0);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("uFldCollisionDetect INTERFACE                                   ");
   blu("=============================================================== ");
@@ -177,16 +173,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uCollisionDetector", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-

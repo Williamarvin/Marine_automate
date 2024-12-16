@@ -28,29 +28,24 @@
 
 class ZAIC_HLEQ_GUI : public ZAIC_GUI {
 public:
-  ZAIC_HLEQ_GUI(int w, int h, const char *label=0);
-  ~ZAIC_HLEQ_GUI() {};
-  
+  ZAIC_HLEQ_GUI(int w, int h, const char *label = 0);
+  ~ZAIC_HLEQ_GUI(){};
+
   void updateOutput(); // overloading virtual function of ZAIC_GUI
   void augmentMenu();
 
- protected:
+protected:
   void initWidgets();
-  
- protected:
-  Fl_Output   *m_fld_summit;
-  Fl_Output   *m_fld_bwidth;
-  Fl_Output   *m_fld_minutil;
-  Fl_Output   *m_fld_maxutil;
-  Fl_Output   *m_fld_sumdelta;
 
- private:
+protected:
+  Fl_Output *m_fld_summit;
+  Fl_Output *m_fld_bwidth;
+  Fl_Output *m_fld_minutil;
+  Fl_Output *m_fld_maxutil;
+  Fl_Output *m_fld_sumdelta;
+
+private:
   inline void cb_ToggleHLEQ_i();
-  static void cb_ToggleHLEQ(Fl_Widget*);
+  static void cb_ToggleHLEQ(Fl_Widget *);
 };
 #endif
-
-
-
-
-

@@ -22,12 +22,12 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef LINEAR_EXTRAPOLATOR_HEADER
 #define LINEAR_EXTRAPOLATOR_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
 class LinearExtrapolator {
 public:
@@ -35,53 +35,38 @@ public:
   virtual ~LinearExtrapolator() {}
 
   void setDecay(double s, double e) {
-    m_decay_start = s; 
-    m_decay_end   = e;
+    m_decay_start = s;
+    m_decay_end = e;
   }
 
   void setPosition(double x, double y, double s, double h, double t) {
     m_xpos = x;
     m_ypos = y;
-    m_spd  = s;
-    m_hdg  = h;
+    m_spd = s;
+    m_hdg = h;
     m_timestamp = t;
     m_position_set = true;
   }
 
-  bool getPosition(double& xpos, double& ypos, double timestamp);
+  bool getPosition(double &xpos, double &ypos, double timestamp);
 
-  bool isDecayMaxed() {return(m_decay_maxed);}
+  bool isDecayMaxed() { return (m_decay_maxed); }
 
-  std::string getFailureReason() const {return(m_failure_reason);}
-  
- protected:
-  double m_xpos;         // Position in meters
-  double m_ypos;         // Position in meters
-  double m_spd;          // Speed in meters per second
-  double m_hdg;          // Heading in degress
-  double m_decay_start;  // Time in seconds
-  double m_decay_end;    // Time in seconds
-  double m_timestamp;    // Time in seconds
-  bool   m_position_set; // false until first setPosition
+  std::string getFailureReason() const { return (m_failure_reason); }
 
-  bool   m_decay_maxed;
+protected:
+  double m_xpos;        // Position in meters
+  double m_ypos;        // Position in meters
+  double m_spd;         // Speed in meters per second
+  double m_hdg;         // Heading in degress
+  double m_decay_start; // Time in seconds
+  double m_decay_end;   // Time in seconds
+  double m_timestamp;   // Time in seconds
+  bool m_position_set;  // false until first setPosition
+
+  bool m_decay_maxed;
 
   std::string m_failure_reason;
-  
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

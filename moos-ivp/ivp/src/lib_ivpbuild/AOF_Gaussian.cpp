@@ -23,10 +23,9 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-
 #include "AOF_Gaussian.h"
 #ifdef _WIN32
-#   define _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
 #endif
 
 #include <cmath>
@@ -35,51 +34,46 @@ using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: setParam
- 
-bool AOF_Gaussian::setParam(const string& param, double value)
-{
-  if(param == "xcent")
+
+bool AOF_Gaussian::setParam(const string &param, double value) {
+  if (param == "xcent")
     m_xcent = value;
-  else if(param == "ycent")
+  else if (param == "ycent")
     m_ycent = value;
-  else if(param == "sigma")
+  else if (param == "sigma")
     m_sigma = value;
-  else if(param == "range")
+  else if (param == "range")
     m_range = value;
   else
-    return(false);
-  return(true);
+    return (false);
+  return (true);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: evalPoint
 
-double AOF_Gaussian::evalPoint(const vector<double>& point) const
-{
+double AOF_Gaussian::evalPoint(const vector<double> &point) const {
   double xval = extract("x", point);
   double yval = extract("y", point);
 
   double dist = hypot((xval - m_xcent), (yval - m_ycent));
-  double pct  = pow(M_E, -((dist*dist)/(2*(m_sigma * m_sigma))));
+  double pct = pow(M_E, -((dist * dist) / (2 * (m_sigma * m_sigma))));
 
-  return(pct * m_range);
+  return (pct * m_range);
 }
 
 //----------------------------------------------------------------
 // Procedure: evalBox
 
-double AOF_Gaussian::evalBox(const IvPBox *b) const
-{
+double AOF_Gaussian::evalBox(const IvPBox *b) const {
   double xval = 0;
   double yval = 0;
 
-  m_domain.getVal(0, b->pt(0,0), xval);
-  m_domain.getVal(1, b->pt(1,0), yval);
-  
+  m_domain.getVal(0, b->pt(0, 0), xval);
+  m_domain.getVal(1, b->pt(1, 0), yval);
+
   double dist = hypot((xval - m_xcent), (yval - m_ycent));
-  double pct  = pow(M_E, -((dist*dist)/(2*(m_sigma * m_sigma))));
+  double pct = pow(M_E, -((dist * dist) / (2 * (m_sigma * m_sigma))));
 
-  return(pct * m_range);
+  return (pct * m_range);
 }
-

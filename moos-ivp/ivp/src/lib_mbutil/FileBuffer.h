@@ -22,19 +22,20 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef FILE_BUFFER_HEADER
 #define FILE_BUFFER_HEADER
 
 #include <list>
-#include <vector>
 #include <string>
+#include <vector>
 
-std::vector<std::string> fileBuffer(const std::string&, unsigned int amt=0);
+std::vector<std::string> fileBuffer(const std::string &, unsigned int amt = 0);
 
-std::list<std::string>   fileBufferList(const std::string&, unsigned int amt=0);
+std::list<std::string> fileBufferList(const std::string &,
+                                      unsigned int amt = 0);
 
-std::vector<std::string> fileBufferSlash(const std::string&, unsigned int amt=0);
+std::vector<std::string> fileBufferSlash(const std::string &,
+                                         unsigned int amt = 0);
 
 #endif
-

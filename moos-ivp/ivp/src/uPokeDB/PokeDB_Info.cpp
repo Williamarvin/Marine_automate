@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "PokeDB_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "PokeDB_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uPokeDB application is a command-line tool for poking a   ");
@@ -41,15 +40,14 @@ void showSynopsis()
   blk("  It finds the MOOSDB via mission file provided on the command  ");
   blk("  line, or the IP address and port number given on the command  ");
   blk("  line. It will connect to the DB, show the value prior to      ");
-  blk("  poking, poke the DB, and wait an iteration for mail from the  "); 
+  blk("  poking, poke the DB, and wait an iteration for mail from the  ");
   blk("  DB to confirm the result of the poke.                         ");
 }
 
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uPokeDB [file.moos] [OPTIONS] [VAR-DATA Pair(s)]         ");
@@ -95,8 +93,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uPokeDB Example MOOS Configuration                              ");
@@ -115,12 +112,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uPokeDB INTERFACE                                           ");
@@ -143,18 +138,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uPokeDB", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

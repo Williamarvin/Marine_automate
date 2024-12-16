@@ -25,11 +25,11 @@
 #define UTTER_PRIORITY_QUEUE
 
 #include "Utterance.h"
-#include <vector>
 #include <queue>
+#include <vector>
 
 class UtterQueue {
- public:
+public:
   UtterQueue();
   virtual ~UtterQueue() {}
 
@@ -39,23 +39,18 @@ class UtterQueue {
   Utterance pop();
 
   void clear();
-  bool empty() const {return(m_pqueue.empty());}
+  bool empty() const { return (m_pqueue.empty()); }
 
-  unsigned int size()  const {return(m_pqueue.size());}
-  
+  unsigned int size() const { return (m_pqueue.size()); }
+
   std::vector<Utterance> getCopyAllEntries() const;
 
- private:
-  std::priority_queue<Utterance, std::vector<Utterance>, 
-    std::greater<std::vector<Utterance>::value_type> > m_pqueue;
+private:
+  std::priority_queue<Utterance, std::vector<Utterance>,
+                      std::greater<std::vector<Utterance>::value_type>>
+      m_pqueue;
 
   unsigned int m_total_entries_ever;
 };
 
-#endif 
-
-
-
-
-
-
+#endif

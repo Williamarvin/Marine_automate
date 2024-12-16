@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef EDGE_TAG_HEADER
 #define EDGE_TAG_HEADER
 
@@ -34,13 +34,13 @@ public:
   EdgeTag(unsigned int, unsigned int, std::string);
   virtual ~EdgeTag() {}
 
-  bool   setIndices(unsigned int, unsigned int);
-  void   setTag(std::string tag) {m_tag=tag;}
+  bool setIndices(unsigned int, unsigned int);
+  void setTag(std::string tag) { m_tag = tag; }
 
-  unsigned int getIndex1() const {return(m_index1);}
-  unsigned int getIndex2() const {return(m_index2);}
+  unsigned int getIndex1() const { return (m_index1); }
+  unsigned int getIndex2() const { return (m_index2); }
 
-  std::string getTag() const {return(m_tag);}
+  std::string getTag() const { return (m_tag); }
   std::string getSpec() const;
 
   bool setOnSpec(std::string);
@@ -48,17 +48,12 @@ public:
   bool matches(unsigned int, unsigned int) const;
   bool matches(unsigned int, unsigned int, std::string) const;
 
-  void print() const;  
+  void print() const;
 
- protected:
+protected:
   unsigned int m_index1;
   unsigned int m_index2;
-  std::string  m_tag;
+  std::string m_tag;
 };
 
 #endif
-
-
-
-
-

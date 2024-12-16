@@ -26,48 +26,34 @@
 #ifndef STRING_TREE_HEADER
 #define STRING_TREE_HEADER
 
-#include <vector>
-#include <string>
 #include "StringNode.h"
+#include <string>
+#include <vector>
 
-class StringTree
-{
+class StringTree {
 public:
   StringTree() {}
   ~StringTree() {}
 
-  void setKey(std::string s) {m_key=s;}
+  void setKey(std::string s) { m_key = s; }
 
-  bool addParChild(const std::string& parent, 
-		   const std::string& child, 
-		   bool handle_waiters=true);
-  
+  bool addParChild(const std::string &parent, const std::string &child,
+                   bool handle_waiters = true);
+
   void print();
   std::vector<std::string> getPrintableSet();
-  
-  void writeGraphviz(std::ostream& os, std::string metadata = "");
- 
+
+  void writeGraphviz(std::ostream &os, std::string metadata = "");
+
   bool allHandled();
 
- protected:
+protected:
   void handleWaiters();
 
 protected:
-  std::string              m_key;
-  std::vector<StringNode>  m_nodes;
+  std::string m_key;
+  std::vector<StringNode> m_nodes;
   std::vector<std::string> m_parents_waiting;
   std::vector<std::string> m_children_waiting;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

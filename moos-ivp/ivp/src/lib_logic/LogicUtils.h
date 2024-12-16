@@ -26,10 +26,10 @@
 #ifndef LOGIC_UTILS_HEADER
 #define LOGIC_UTILS_HEADER
 
-#include <vector>
-#include <string>
-#include <set>
 #include "LogicCondition.h"
+#include <set>
+#include <string>
+#include <vector>
 
 std::vector<std::string> parseRelation(std::string);
 
@@ -47,33 +47,14 @@ bool isValidLiteral(std::string);
 
 bool isValidRightVariable(std::string);
 
-bool isConditionalParamString(const std::string&, 
-			      const std::string& s="//");
+bool isConditionalParamString(const std::string &, const std::string &s = "//");
 
-bool strFieldMatch(const std::string&, 
-		   const std::string&, char c=':');
+bool strFieldMatch(const std::string &, const std::string &, char c = ':');
 
-std::vector<std::string> getUniqueVars(const std::vector<LogicCondition>&);
+std::vector<std::string> getUniqueVars(const std::vector<LogicCondition> &);
 
-std::set<std::string> getLogicVars(const std::vector<LogicCondition>&);
+std::set<std::string> getLogicVars(const std::vector<LogicCondition> &);
 
-bool setLogicConditionOnString(std::vector<LogicCondition>&, std::string);
+bool setLogicConditionOnString(std::vector<LogicCondition> &, std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

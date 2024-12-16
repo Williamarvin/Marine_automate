@@ -21,73 +21,69 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_MaxDepth.h"
 #include "BuildUtils.h"
 #include "MBUtils.h"
 #include "ZAIC_LEQ.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_MaxDepth::BHV_MaxDepth(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_MaxDepth::BHV_MaxDepth(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "maxdepth");
 
   m_domain = subDomain(m_domain, "depth");
 
   m_max_depth = 0;
   m_basewidth = 100;
-  m_osd       = 0;
+  m_osd = 0;
 }
 
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_MaxDepth::setParam(string param, string val) 
-{
-  if(IvPBehavior::setParam(param, val))
-    return(true);
+bool BHV_MaxDepth::setParam(string param, string val) {
+  if (IvPBehavior::setParam(param, val))
+    return (true);
 
   double dval = atof(val.c_str());
 
-  if((param == "max_depth") && isNumber(val)) {
+  if ((param == "max_depth") && isNumber(val)) {
     m_max_depth = vclip_min(dval, 0);
-    return(true);
+    return (true);
   }
 
-  else if((param == "basewidth") && isNumber(val)) {
+  else if ((param == "basewidth") && isNumber(val)) {
     m_basewidth = vclip_min(dval, 0);
-    return(true);
+    return (true);
   }
 
-  else if((param == "tolerance") && isNumber(val)) {
+  else if ((param == "tolerance") && isNumber(val)) {
     m_basewidth = vclip_min(dval, 0);
-    return(true);
+    return (true);
   }
 
-  else if((param == "depth_slack_var") && !strContainsWhite(val)) {
+  else if ((param == "depth_slack_var") && !strContainsWhite(val)) {
     m_depth_slack_var = val;
-    return(true);
+    return (true);
   }
-  
-  return(false);
+
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_MaxDepth::onRunState() 
-{
+IvPFunction *BHV_MaxDepth::onRunState() {
   updateInfoIn();
-  if(!m_domain.hasDomain("depth")) {
+  if (!m_domain.hasDomain("depth")) {
     postEMessage("No 'depth' variable in the helm domain");
-    return(0);
+    return (0);
   }
 
   ZAIC_LEQ zaic(m_domain, "depth");
@@ -95,16 +91,16 @@ IvPFunction *BHV_MaxDepth::onRunState()
   zaic.setBaseWidth(m_basewidth);
 
   IvPFunction *ipf = zaic.extractIvPFunction();
-  if(ipf)
+  if (ipf)
     ipf->setPWT(m_priority_wt);
-  else 
+  else
     postEMessage("Unable to generate constant-depth IvP function");
 
   string zaic_warnings = zaic.getWarnings();
-  if(zaic_warnings != "")
+  if (zaic_warnings != "")
     postWMessage(zaic_warnings);
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
@@ -114,26 +110,20 @@ IvPFunction *BHV_MaxDepth::onRunState()
 //   Returns: true if no relevant info is missing from the info_buffer.
 //            false otherwise.
 
-bool BHV_MaxDepth::updateInfoIn()
-{
+bool BHV_MaxDepth::updateInfoIn() {
   bool ok;
   m_osd = getBufferDoubleVal("NAV_DEPTH", ok);
 
   // Should get ownship information from the InfoBuffer
-  if(!ok) {
-    postWMessage("No ownship DEPTH info in info_buffer.");  
-    return(false);
+  if (!ok) {
+    postWMessage("No ownship DEPTH info in info_buffer.");
+    return (false);
   }
-  
+
   double slack = m_max_depth - m_osd;
 
-  if(m_depth_slack_var != "")
+  if (m_depth_slack_var != "")
     postMessage(m_depth_slack_var, slack);
-  
-  return(true);
+
+  return (true);
 }
-
-
-
-
-

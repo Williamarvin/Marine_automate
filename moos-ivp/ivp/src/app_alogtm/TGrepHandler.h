@@ -24,14 +24,13 @@
 #ifndef ALOG_TGREP_HANDLER_HEADER
 #define ALOG_TGREP_HANDLER_HEADER
 
-#include <vector>
-#include <string>
-#include <set>
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
 
-class TGrepHandler
-{
- public:
+class TGrepHandler {
+public:
   TGrepHandler();
   ~TGrepHandler() {}
 
@@ -41,21 +40,20 @@ class TGrepHandler
   bool setMaxTDelta(std::string);
   bool setMaxVDelta(std::string);
   bool setSigDigits(std::string);
-  void setVerbose()                {m_verbose = true;}
-  void setTestFormat()             {m_test_format = true;}
+  void setVerbose() { m_verbose = true; }
+  void setTestFormat() { m_test_format = true; }
   bool addKey(std::string);
-  bool okALogFile() const          {return(m_file_in != 0);}
+  bool okALogFile() const { return (m_file_in != 0); }
   bool handle();
-    
- protected: // Config vars
 
-  FILE*  m_file_in;
+protected: // Config vars
+  FILE *m_file_in;
   double m_min_gap;
-  bool   m_verbose;
+  bool m_verbose;
 
   double m_max_tdelta;
   double m_max_vdelta;
-  
+
   std::string m_mark_var;
   std::string m_mark_val;
   bool m_test_format;
@@ -63,16 +61,14 @@ class TGrepHandler
   std::set<std::string> m_keys;
 
   unsigned int m_sig_digits;
-  
- protected: // State vars
 
+protected: // State vars
   std::set<std::string> m_unique_posts;
 
   std::map<std::string, double> m_latest_rep;
-  
+
   double m_mark_time;
-  bool   m_mark_made;
+  bool m_mark_made;
 };
 
 #endif
-

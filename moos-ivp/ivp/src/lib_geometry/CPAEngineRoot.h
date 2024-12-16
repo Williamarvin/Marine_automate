@@ -22,7 +22,7 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef CPA_ENGINE_ROOT_HEADER
 #define CPA_ENGINE_ROOT_HEADER
 
@@ -30,30 +30,34 @@
 
 class CPAEngineRoot {
 public:
-  CPAEngineRoot(double cny=0, double cnx=0, double cnh=0,
-		double cnv=0, double osy=0, double osx=0);
+  CPAEngineRoot(double cny = 0, double cnx = 0, double cnh = 0, double cnv = 0,
+                double osy = 0, double osx = 0);
 
   virtual ~CPAEngineRoot() {}
 
-public:    
-  virtual double evalCPAX(double osh, double osv, double ost) {return(0);}
-  virtual double evalCPA(double osh, double osv, double ost) const {return(0);}
-  virtual void   reset(double cny, double cnx, double cnh,
-		       double cnv, double osy, double osx);
+public:
+  virtual double evalCPAX(double osh, double osv, double ost) { return (0); }
+  virtual double evalCPA(double osh, double osv, double ost) const {
+    return (0);
+  }
+  virtual void reset(double cny, double cnx, double cnh, double cnv, double osy,
+                     double osx);
 
-  unsigned int getOpenings() const {return(m_openings);}
-  unsigned int getOpeningsEarly() const {return(m_openings_early);}
-  
- protected:
-  double degToRadiansX(double deg) const {return((deg/180.0) * 3.14159265359);}
-  
- protected: // Config parameters
-  double m_osx;    // Ownship Lon position at time Tm.
-  double m_osy;    // Ownship Lat position at time Tm.
-  double m_cnx;    // Contact Lon position at time Tm.
-  double m_cny;    // Contact Lat position at time Tm.
-  double m_cnv;    // Contact Speed in kts.
-  double m_cnh;    // Contact Course in degrees (0-359).
+  unsigned int getOpenings() const { return (m_openings); }
+  unsigned int getOpeningsEarly() const { return (m_openings_early); }
+
+protected:
+  double degToRadiansX(double deg) const {
+    return ((deg / 180.0) * 3.14159265359);
+  }
+
+protected:      // Config parameters
+  double m_osx; // Ownship Lon position at time Tm.
+  double m_osy; // Ownship Lat position at time Tm.
+  double m_cnx; // Contact Lon position at time Tm.
+  double m_cny; // Contact Lat position at time Tm.
+  double m_cnv; // Contact Speed in kts.
+  double m_cnh; // Contact Course in degrees (0-359).
 
   // Keep track of maneuvers evaluated to be opening. Also the number
   // of times the opening was detected early.
@@ -62,9 +66,3 @@ public:
 };
 
 #endif
-
-
-
-
-
-

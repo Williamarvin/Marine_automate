@@ -22,18 +22,8 @@
 /*****************************************************************/
 
 #ifndef LOG_CHECKER_INFO_HEADER
-#define	LOG_CHECKER_INFO_HEADER
+#define LOG_CHECKER_INFO_HEADER
 
 void showHelpAndExit();
 
-#endif	
-
-
-
-
-
-
-
-
-
-
+#endif

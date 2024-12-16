@@ -24,28 +24,26 @@
 #ifndef POPULATOR_VPLUG_PLOTS_HEADER
 #define POPULATOR_VPLUG_PLOTS_HEADER
 
-#include <vector>
-#include "VPlugPlot.h"
 #include "ALogEntry.h"
+#include "VPlugPlot.h"
+#include <vector>
 
-class Populator_VPlugPlots 
-{
+class Populator_VPlugPlots {
 public:
   Populator_VPlugPlots() {}
   ~Populator_VPlugPlots() {}
 
-  void  setVQual(std::string s) {m_vqual=s;}
-  void  setBinVal(double v)     {m_vplug_plot.setBinVal(v);}
-  
-  bool  populateFromEntries(const std::vector<ALogEntry>&);
-  bool  populateFromEntry(const ALogEntry&);
-  
-  VPlugPlot getVPlugPlot() {return(m_vplug_plot);}
+  void setVQual(std::string s) { m_vqual = s; }
+  void setBinVal(double v) { m_vplug_plot.setBinVal(v); }
+
+  bool populateFromEntries(const std::vector<ALogEntry> &);
+  bool populateFromEntry(const ALogEntry &);
+
+  VPlugPlot getVPlugPlot() { return (m_vplug_plot); }
 
 protected:
   VPlugPlot m_vplug_plot;
 
   std::string m_vqual;
 };
-#endif 
-
+#endif

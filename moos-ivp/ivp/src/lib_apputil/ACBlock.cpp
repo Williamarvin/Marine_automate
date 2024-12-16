@@ -21,61 +21,57 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <sstream>
-#include <iostream>
-#include "MBUtils.h"
 #include "ACBlock.h"
 #include "ColorParse.h"
+#include "MBUtils.h"
+#include <iostream>
+#include <sstream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Constructor
 
-ACBlock::ACBlock()
-{
+ACBlock::ACBlock() {
   m_separator = ',';
-  m_maxlen    = 0;
+  m_maxlen = 0;
 }
 
 //----------------------------------------------------------------
 // Constructor
 
-ACBlock::ACBlock(string label, string msg, unsigned int maxlen, char c)
-{
-  m_label     = label;
-  m_message   = msg;
+ACBlock::ACBlock(string label, string msg, unsigned int maxlen, char c) {
+  m_label = label;
+  m_message = msg;
   m_separator = c;
-  m_maxlen    = maxlen;
+  m_maxlen = maxlen;
 }
 
 //----------------------------------------------------------------
 // Procedure: setColor
 
-bool ACBlock::setColor(string color)
-{
-  if(!isTermColor(color))
-    return(false);
+bool ACBlock::setColor(string color) {
+  if (!isTermColor(color))
+    return (false);
 
   m_color = color;
-  return(true);
+  return (true);
 }
 
 //----------------------------------------------------------------
 // Procedure: getFormattedLines
-//   Example: 
+//   Example:
 //
 //  PHI_HOST_INFO:       community=henry,hostip=localhost,
 //                       port_db=9001,port_udp=9201,timewarp=2
 
-vector<string> ACBlock::getFormattedLines() const
-{
+vector<string> ACBlock::getFormattedLines() const {
   vector<string> rvector;
 
   // Part 1: Handle special case where the message is an empty string
-  if(m_message == "") {
+  if (m_message == "") {
     rvector.push_back(m_label);
-    return(rvector);
+    return (rvector);
   }
 
   // Part 2: Handle the general case where the message is non-empty
@@ -85,30 +81,29 @@ vector<string> ACBlock::getFormattedLines() const
   string empty_label(label_len, ' ');
 
   vector<string> svector = parseStringQ(m_message, m_separator, m_maxlen);
-  for(unsigned int i=0; i<svector.size(); i++) {
-    if(i==0) 
+  for (unsigned int i = 0; i < svector.size(); i++) {
+    if (i == 0)
       rvector.push_back(m_label + svector[i]);
     else
       rvector.push_back(empty_label + svector[i]);
   }
-  
-  return(rvector);
+
+  return (rvector);
 }
 
 //----------------------------------------------------------------
 // Procedure: getFormattedString
-//   Example: 
+//   Example:
 //
 //  PHI_HOST_INFO:       community=henry,hostip=localhost,
 //                       port_db=9001,port_udp=9201,timewarp=2
 
-string ACBlock::getFormattedString() const
-{
+string ACBlock::getFormattedString() const {
   stringstream ss;
 
   // Part 1: Handle special case where the message is an empty string
-  if(m_message == "") 
-    return(m_label);
+  if (m_message == "")
+    return (m_label);
 
   // Part 2: Handle the general case where the message is non-empty
   // Build an "empty label" simply for formating lines after line 1
@@ -116,22 +111,12 @@ string ACBlock::getFormattedString() const
   string empty_label(label_len, ' ');
 
   vector<string> svector = parseStringQ(m_message, m_separator, m_maxlen);
-  for(unsigned int i=0; i<svector.size(); i++) {
-    if(i==0) 
+  for (unsigned int i = 0; i < svector.size(); i++) {
+    if (i == 0)
       ss << (m_label + svector[i]) << endl;
     else
       ss << (empty_label + svector[i]) << endl;
   }
-  
-  return(ss.str());
+
+  return (ss.str());
 }
-
-
-
-
-
-
-
-
-
-

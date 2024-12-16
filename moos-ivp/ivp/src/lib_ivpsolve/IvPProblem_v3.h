@@ -22,39 +22,19 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef IVPPROBLEM_V3_HEADER
 #define IVPPROBLEM_V3_HEADER
 
 #include "IvPProblem.h"
 
-class IvPProblem_v3: public IvPProblem {
+class IvPProblem_v3 : public IvPProblem {
 public:
   IvPProblem_v3() {}
   ~IvPProblem_v3() {}
 
-  bool solve(const IvPBox *isolbox=0);
+  bool solve(const IvPBox *isolbox = 0);
   void solveRecurse(int);
-};  
+};
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

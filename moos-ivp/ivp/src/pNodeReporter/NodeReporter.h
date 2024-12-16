@@ -24,21 +24,20 @@
 #ifndef NODE_REPORTER_HEADER
 #define NODE_REPORTER_HEADER
 
-#include <string>
-#include <vector>
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "LinearExtrapolator.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "NodeRecord.h"
 #include "NodeRiderSet.h"
 #include "Odometer.h"
-#include "LinearExtrapolator.h"
+#include <string>
+#include <vector>
 
-class NodeReporter : public AppCastingMOOSApp
-{
+class NodeReporter : public AppCastingMOOSApp {
 public:
   NodeReporter();
   virtual ~NodeReporter() {}
-  
+
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
@@ -47,100 +46,99 @@ public:
   void registerVariables();
   bool buildReport();
 
- protected:
-  void handleLocalHelmSummary(const std::string&);
+protected:
+  void handleLocalHelmSummary(const std::string &);
   std::string assembleNodeReport(NodeRecord);
   std::string assemblePlatformReport();
-  
+
   void updatePlatformVar(std::string, std::string);
   bool addPlatformVar(std::string);
   bool setCrossFillPolicy(std::string);
-  void crossFillCoords(NodeRecord&, double, double);
-  void crossFillLocalToGlobal(NodeRecord&);
-  void crossFillGlobalToLocal(NodeRecord&);
+  void crossFillCoords(NodeRecord &, double, double);
+  void crossFillLocalToGlobal(NodeRecord &);
+  void crossFillGlobalToLocal(NodeRecord &);
   void handleHelmSwitch();
 
   void updateNavWarning(bool ok_nav) const;
   void updateMHashOdo();
-  
+
   bool handleMailRiderVars(std::string, std::string, double);
-  
- protected: // Configuration Variables (Node Reports)
-  std::string  m_vessel_name;
-  std::string  m_crossfill_policy;
-  std::string  m_node_report_var;
-  double       m_nohelm_thresh;
-  std::string  m_group_name;
-  bool         m_terse_reports;
-  bool         m_allow_color_change;
+
+protected: // Configuration Variables (Node Reports)
+  std::string m_vessel_name;
+  std::string m_crossfill_policy;
+  std::string m_node_report_var;
+  double m_nohelm_thresh;
+  std::string m_group_name;
+  bool m_terse_reports;
+  bool m_allow_color_change;
 
   // Sep 01, 2022
-  bool         m_extrap_enabled;
-  double       m_extrap_pos_thresh;
-  double       m_extrap_hdg_thresh;
-  double       m_extrap_max_gap;
-  
- protected: // State Variables (Node Reports)
+  bool m_extrap_enabled;
+  double m_extrap_pos_thresh;
+  double m_extrap_hdg_thresh;
+  double m_extrap_max_gap;
+
+protected: // State Variables (Node Reports)
   CMOOSGeodesy m_geodesy;
-  std::string  m_helm_mode;
-  std::string  m_helm_mode_aux;
-  std::string  m_helm_allstop_mode;
-  std::string  m_alt_nav_prefix;
-  std::string  m_alt_nav_name;
-  std::string  m_alt_nav_group;
-  std::string  m_helm_status_primary;
-  std::string  m_helm_status_standby;
-  double       m_helm_lastmsg;
+  std::string m_helm_mode;
+  std::string m_helm_mode_aux;
+  std::string m_helm_allstop_mode;
+  std::string m_alt_nav_prefix;
+  std::string m_alt_nav_name;
+  std::string m_alt_nav_group;
+  std::string m_helm_status_primary;
+  std::string m_helm_status_standby;
+  double m_helm_lastmsg;
 
   // Oct 18, 2021
   double m_nav_grace_period;
-  bool   m_nav_warning_posted;
-  
-  NodeRecord   m_record;
-  NodeRecord   m_record_gt;
-  double       m_record_gt_updated;
+  bool m_nav_warning_posted;
 
-  double       m_nav_xy_updated;
-  double       m_nav_latlon_updated;
-  double       m_nav_xy_updated_gt;
-  double       m_nav_latlon_updated_gt;
+  NodeRecord m_record;
+  NodeRecord m_record_gt;
+  double m_record_gt_updated;
 
- protected: // State Variables (General)
-  bool         m_helm_switch_noted;
+  double m_nav_xy_updated;
+  double m_nav_latlon_updated;
+  double m_nav_xy_updated_gt;
+  double m_nav_latlon_updated_gt;
+
+protected: // State Variables (General)
+  bool m_helm_switch_noted;
   unsigned int m_reports_posted;
   unsigned int m_reports_posted_alt_nav;
-  bool         m_thrust_mode_reverse;
-  bool         m_paused;
-  bool         m_node_info_posted;
-  
- protected: // Config and State Vars (Blackout Interval)
-  double  m_blackout_interval;
-  double  m_blackout_baseval;
-  double  m_blackout_variance;
-  double  m_last_post_time;
+  bool m_thrust_mode_reverse;
+  bool m_paused;
+  bool m_node_info_posted;
 
- protected: // Config and State Vars (Platform Reports)
-  std::string              m_plat_report_var;
+protected: // Config and State Vars (Blackout Interval)
+  double m_blackout_interval;
+  double m_blackout_baseval;
+  double m_blackout_variance;
+  double m_last_post_time;
+
+protected: // Config and State Vars (Platform Reports)
+  std::string m_plat_report_var;
   std::vector<std::string> m_plat_vars;
   std::vector<std::string> m_plat_vals;
   std::vector<std::string> m_plat_alias;
-  std::vector<double>      m_plat_post_gap;
-  std::vector<double>      m_plat_post_tstamp;
-  std::vector<double>      m_plat_recv_tstamp;
+  std::vector<double> m_plat_post_gap;
+  std::vector<double> m_plat_post_tstamp;
+  std::vector<double> m_plat_recv_tstamp;
 
- protected: 
+protected:
   LinearExtrapolator m_extrapolator;
-  NodeRecord         m_record_last_posted;
+  NodeRecord m_record_last_posted;
 
-protected: //MissionHash support
-  Odometer                      m_odometer;
-  std::string                   m_curr_mhash;
-  double                        m_max_extent;
-  double                        m_max_extent_prev;
-  
- protected: // NodeRider support
+protected: // MissionHash support
+  Odometer m_odometer;
+  std::string m_curr_mhash;
+  double m_max_extent;
+  double m_max_extent_prev;
+
+protected: // NodeRider support
   NodeRiderSet m_riderset;
 };
 
 #endif
-

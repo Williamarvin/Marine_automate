@@ -24,36 +24,36 @@
 #ifndef COMMON_MARINE_GUI_HEADER
 #define COMMON_MARINE_GUI_HEADER
 
-#include <string>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
 #include "MarineViewer.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Window.H>
+#include <string>
 
 class MarineGUI : public Fl_Window {
 public:
-  MarineGUI(int w, int h, const char *l=0);
+  MarineGUI(int w, int h, const char *l = 0);
   ~MarineGUI() {}
 
   static Fl_Menu_Item menu_[];
 
-  int  handle(int);
+  int handle(int);
   virtual void updateXY() {}
 
   void addGeoAttrMenu();
   void updateRadios();
   void setMenuItemColors();
 
-  //void setMenuItemColor(std::string item, int r=31, int g=71, int b=195);
-  void setMenuItemColor(std::string item, int r=31, int g=71, int b=155);
-  bool setMenuAttrib(std::string menu, std::string attr, std::string val="");
+  // void setMenuItemColor(std::string item, int r=31, int g=71, int b=195);
+  void setMenuItemColor(std::string item, int r = 31, int g = 71, int b = 155);
+  bool setMenuAttrib(std::string menu, std::string attr, std::string val = "");
 
   bool removeMenuItem(std::string);
 
-  MarineViewer* getMarineViewer() {return(m_mviewer);}
+  MarineViewer *getMarineViewer() { return (m_mviewer); }
 
- protected:
-  Fl_Menu_Bar  *m_menubar;
+protected:
+  Fl_Menu_Bar *m_menubar;
   MarineViewer *m_mviewer;
 
 protected:
@@ -61,44 +61,35 @@ protected:
   std::vector<std::string> m_pending_vals;
 
   virtual void cb_Zoom_i(int);
-  static  void cb_Zoom(Fl_Widget*, int);
+  static void cb_Zoom(Fl_Widget *, int);
 
   virtual void cb_HandleUpDown_i(int);
-  static  void cb_HandleUpDown(Fl_Widget*, int);
+  static void cb_HandleUpDown(Fl_Widget *, int);
 
   virtual void cb_HandleLeftRight_i(int);
-  static  void cb_HandleLeftRight(Fl_Widget*, int);
+  static void cb_HandleLeftRight(Fl_Widget *, int);
 
   inline void cb_ToggleTiffType_i();
-  static void cb_ToggleTiffType(Fl_Widget*);
+  static void cb_ToggleTiffType(Fl_Widget *);
 
   inline void cb_ToggleHash_i();
-  static void cb_ToggleHash(Fl_Widget*);
+  static void cb_ToggleHash(Fl_Widget *);
 
   inline void cb_HashDelta_i(unsigned long int);
-  static void cb_HashDelta(Fl_Widget*, unsigned long int);
+  static void cb_HashDelta(Fl_Widget *, unsigned long int);
 
   inline void cb_HashShade_i(int);
-  static void cb_HashShade(Fl_Widget*, int);
+  static void cb_HashShade(Fl_Widget *, int);
 
   inline void cb_SetGeoAttr_i(int);
-  static void cb_SetGeoAttr(Fl_Widget*, int);
+  static void cb_SetGeoAttr(Fl_Widget *, int);
 
   inline void cb_DatumSize_i(int);
-  static void cb_DatumSize(Fl_Widget*, int);
+  static void cb_DatumSize(Fl_Widget *, int);
 
   inline void cb_BackShade_i(int);
-  static void cb_BackShade(Fl_Widget*, int);
+  static void cb_BackShade(Fl_Widget *, int);
 
   static void cb_Quit();
 };
 #endif
-
-
-
-
-
-
-
-
-

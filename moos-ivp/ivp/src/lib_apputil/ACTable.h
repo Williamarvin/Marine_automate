@@ -24,81 +24,67 @@
 #ifndef ACTABLE_HEADER
 #define ACTABLE_HEADER
 
+#include <list>
 #include <string>
 #include <vector>
-#include <list>
 
-class ACTable
-{
+class ACTable {
 public:
-  ACTable(unsigned int columns=1, unsigned int column_pad=2);
+  ACTable(unsigned int columns = 1, unsigned int column_pad = 2);
   virtual ~ACTable() {}
-  
- public: // Setters
+
+public: // Setters
   void setColumnJustify(unsigned int ix, const std::string);
   void setColumnMaxWidth(unsigned int ix, unsigned int wid);
-  void addHeaderLines(unsigned int maxwid=0);
+  void addHeaderLines(unsigned int maxwid = 0);
 
-  // set the default number of spaces padding between each column 
+  // set the default number of spaces padding between each column
   void setColumnPad(unsigned int);
-  // set the number of spaces padding a given column 
-  void setColumnPadStr(unsigned int column_ix, const std::string&);
+  // set the number of spaces padding a given column
+  void setColumnPadStr(unsigned int column_ix, const std::string &);
   // declare a particular column to be *not* padded out
   void setColumnNoPad(unsigned int);
 
   // set a string to be prepended to each row (a left margin)
-  void setLeftMargin(const std::string& s);
+  void setLeftMargin(const std::string &s);
 
-  ACTable& operator<<(const std::string& s);
-  ACTable& operator<<(unsigned int);
-  ACTable& operator<<(int);
-  ACTable& operator<<(double);
+  ACTable &operator<<(const std::string &s);
+  ACTable &operator<<(unsigned int);
+  ACTable &operator<<(int);
+  ACTable &operator<<(double);
 
-  void addCell(const std::string&, const std::string& color="");
+  void addCell(const std::string &, const std::string &color = "");
 
- public: // Getters
+public: // Getters
   std::vector<std::string> getTableOutput();
-  std::string getFormattedString(bool remove_end_whites=true);
+  std::string getFormattedString(bool remove_end_whites = true);
 
   void print();
 
- private:
+private:
   void convertCellValuesLinearToRawTable();
   void convertCellColorsLinearToRawTable();
   void convertRawToFormattedTable();
-  
 
- private: // Configuration variables
-  unsigned int              m_columns;
+private: // Configuration variables
+  unsigned int m_columns;
   std::vector<unsigned int> m_column_width_limit;
-  std::vector<bool>         m_column_padded;
-  std::vector<char>         m_column_justify;
-  std::vector<std::string>  m_column_pad;
-  std::string               m_left_margin;
+  std::vector<bool> m_column_padded;
+  std::vector<char> m_column_justify;
+  std::vector<std::string> m_column_pad;
+  std::string m_left_margin;
 
- private: // State variables
-  std::list<std::string>    m_cell_values_linear;
-  std::list<std::string>    m_cell_colors_linear;
+private: // State variables
+  std::list<std::string> m_cell_values_linear;
+  std::list<std::string> m_cell_colors_linear;
 
   unsigned int m_max_headerline_width;
 
- private: // Post-process state variables
-  
-  std::vector<std::vector<std::string> > m_cell_values;
-  std::vector<std::vector<std::string> > m_cell_colors;
+private: // Post-process state variables
+  std::vector<std::vector<std::string>> m_cell_values;
+  std::vector<std::vector<std::string>> m_cell_colors;
 
   std::vector<unsigned int> m_column_width_maxfound;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
+#endif

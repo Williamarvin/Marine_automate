@@ -28,16 +28,15 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-TransRecord::TransRecord(string varname)
-{
+TransRecord::TransRecord(string varname) {
   m_varname = varname;
 
   m_curr_utc = 0;
-  
-  m_msgs  = 0;
+
+  m_msgs = 0;
   m_chars = 0;
 
-  m_msg_rate  = 0;
+  m_msg_rate = 0;
   m_char_rate = 0;
 
   m_rate_frame = 10;
@@ -46,8 +45,7 @@ TransRecord::TransRecord(string varname)
 //---------------------------------------------------------
 // Procedure: setCurrTime()
 
-void TransRecord::setCurrTime(double curr_utc)
-{
+void TransRecord::setCurrTime(double curr_utc) {
   m_curr_utc = curr_utc;
   pruneOldMsgHist();
 }
@@ -55,43 +53,40 @@ void TransRecord::setCurrTime(double curr_utc)
 //---------------------------------------------------------
 // Procedure: setRateFrame()
 
-bool TransRecord::setRateFrame(double rate_frame)
-{
-  if(rate_frame <= 0)
-    return(false);
+bool TransRecord::setRateFrame(double rate_frame) {
+  if (rate_frame <= 0)
+    return (false);
 
   m_rate_frame = rate_frame;
 
-  return(true);	   
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: addMsg()
 
-void TransRecord::addMsg(double utc, string src, unsigned int len)
-{
+void TransRecord::addMsg(double utc, string src, unsigned int len) {
   m_msgs++;
   m_chars += len;
   m_latest_src = src;
 
-  if(m_curr_utc == 0)
+  if (m_curr_utc == 0)
     return;
-  
+
   m_msg_utc.push_front(utc);
   m_msg_len.push_front(len);
 
-  bool done=false;
-  while(!done) {
-    if(m_msg_utc.size() <= 1)
+  bool done = false;
+  while (!done) {
+    if (m_msg_utc.size() <= 1)
       done = true;
     else {
       double oldest_utc = m_msg_utc.back();
-      if((m_curr_utc - oldest_utc) > m_rate_frame) {
-	m_msg_utc.pop_back();
-	m_msg_len.pop_back();
-      }
-      else
-	done = true;
+      if ((m_curr_utc - oldest_utc) > m_rate_frame) {
+        m_msg_utc.pop_back();
+        m_msg_len.pop_back();
+      } else
+        done = true;
     }
   }
 }
@@ -99,23 +94,21 @@ void TransRecord::addMsg(double utc, string src, unsigned int len)
 //---------------------------------------------------------
 // Procedure: pruneOldMsgHist()
 
-void TransRecord::pruneOldMsgHist()
-{
-  if(m_curr_utc == 0)
+void TransRecord::pruneOldMsgHist() {
+  if (m_curr_utc == 0)
     return;
-  
-  bool done=false;
-  while(!done) {
-    if(m_msg_utc.size() == 0)
+
+  bool done = false;
+  while (!done) {
+    if (m_msg_utc.size() == 0)
       done = true;
     else {
       double oldest_utc = m_msg_utc.back();
-      if((m_curr_utc - oldest_utc) > m_rate_frame) {
-	m_msg_utc.pop_back();
-	m_msg_len.pop_back();
-      }
-      else
-	done = true;
+      if ((m_curr_utc - oldest_utc) > m_rate_frame) {
+        m_msg_utc.pop_back();
+        m_msg_len.pop_back();
+      } else
+        done = true;
     }
   }
 }
@@ -123,27 +116,24 @@ void TransRecord::pruneOldMsgHist()
 //---------------------------------------------------------
 // Procedure: getMsgRate()
 
-double TransRecord::getMsgRate() const
-{
+double TransRecord::getMsgRate() const {
   double msgs = (double)(m_msg_utc.size());
   double rate = msgs / m_rate_frame;
 
-  return(rate);
+  return (rate);
 }
 
 //---------------------------------------------------------
 // Procedure: getCharRate()
 
-double TransRecord::getCharRate() const
-{
+double TransRecord::getCharRate() const {
   unsigned int total_chars = 0;
 
   list<unsigned int>::const_iterator p;
-  for(p=m_msg_len.begin(); p!=m_msg_len.end(); p++)
+  for (p = m_msg_len.begin(); p != m_msg_len.end(); p++)
     total_chars += *p;
 
   double rate = ((double)(total_chars)) / m_rate_frame;
 
-  return(rate);
+  return (rate);
 }
-

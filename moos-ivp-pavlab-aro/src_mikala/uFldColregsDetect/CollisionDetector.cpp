@@ -22,11 +22,11 @@
 /*****************************************************************/
 
 #include "CollisionDetector.h"
-#include "XYRangePulse.h"
-#include "XYCircle.h"
-#include "MBUtils.h"
-#include "LogicUtils.h"
 #include "ACTable.h"
+#include "LogicUtils.h"
+#include "MBUtils.h"
+#include "XYCircle.h"
+#include "XYRangePulse.h"
 #include <iterator>
 
 using namespace std;
@@ -34,8 +34,7 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-CollisionDetector::CollisionDetector()
-{
+CollisionDetector::CollisionDetector() {
   m_encounter_dist = 20;
   m_near_miss_dist = 6;
   m_collision_dist = 3;
@@ -71,13 +70,11 @@ CollisionDetector::CollisionDetector()
 //---------------------------------------------------------
 // Procedure: OnNewMail()
 
-bool CollisionDetector::OnNewMail(MOOSMSG_LIST &NewMail)
-{
+bool CollisionDetector::OnNewMail(MOOSMSG_LIST &NewMail) {
   AppCastingMOOSApp::OnNewMail(NewMail);
 
   MOOSMSG_LIST::iterator p;
-  for (p = NewMail.begin(); p != NewMail.end(); p++)
-  {
+  for (p = NewMail.begin(); p != NewMail.end(); p++) {
     CMOOSMsg &msg = *p;
     string key = msg.GetKey();
     string sval = msg.GetString();
@@ -86,29 +83,30 @@ bool CollisionDetector::OnNewMail(MOOSMSG_LIST &NewMail)
       handleMailNodeReport(sval);
     if (key == "UCD_RESET")
       m_cpa_monitor.resetClosestRange();
-    else if (key == "ENCOUNTER_START")
-    {
+    else if (key == "ENCOUNTER_START") {
       EncounterReport report = stringToEncounterReport(sval);
       std::string vname = report.getOS();
       m_map_active_encounters[vname]++;
       m_map_vname_spawns[vname]++;
       m_encounter_reports_all.push_back(report);
       m_new_encounter = true;
-      Notify("ACTIVE_ENCOUNTERS_" + toupper(vname), m_map_active_encounters[vname]);
-      
-    }
-    else if (key == "ENCOUNTER_END")
-    {
+      Notify("ACTIVE_ENCOUNTERS_" + toupper(vname),
+             m_map_active_encounters[vname]);
+
+    } else if (key == "ENCOUNTER_END") {
       EncounterReport report = stringToEncounterReport(sval);
       std::string vname = report.getOS();
-      // Check if vname exists and its counter is greater than 0 before decrementing
-      std::map<string, unsigned int>::iterator it = m_map_active_encounters.find(vname);
-      if (it != m_map_active_encounters.end() && it->second > 0)
-      {
+      // Check if vname exists and its counter is greater than 0 before
+      // decrementing
+      std::map<string, unsigned int>::iterator it =
+          m_map_active_encounters.find(vname);
+      if (it != m_map_active_encounters.end() && it->second > 0) {
         it->second--;
-        Notify("ACTIVE_ENCOUNTERS_" + toupper(vname), m_map_active_encounters[vname]);
+        Notify("ACTIVE_ENCOUNTERS_" + toupper(vname),
+               m_map_active_encounters[vname]);
       }
-      // Optionally, handle the case where vname does not exist or its counter is already 0
+      // Optionally, handle the case where vname does not exist or its counter
+      // is already 0
     }
 
     else
@@ -120,8 +118,7 @@ bool CollisionDetector::OnNewMail(MOOSMSG_LIST &NewMail)
 //---------------------------------------------------------
 // Procedure: OnConnectToServer()
 
-bool CollisionDetector::OnConnectToServer()
-{
+bool CollisionDetector::OnConnectToServer() {
   registerVariables();
   return (true);
 }
@@ -129,66 +126,60 @@ bool CollisionDetector::OnConnectToServer()
 //---------------------------------------------------------
 // Procedure: Iterate()
 
-bool CollisionDetector::Iterate()
-{
+bool CollisionDetector::Iterate() {
   AppCastingMOOSApp::Iterate();
 
-if(m_new_encounter){
-  for(unsigned int i=0; i < m_encounter_reports_all.size(); i++)
-  {
-    EncounterReport& report = m_encounter_reports_all[i];
-    bool classified = report.getClassified();
-    debug1 = "classified: " + boolToString(classified) + "  " + intToString(i); 
-    if (classified == false){
-      string situation = classifyEncounter(report);
-      if(situation == "headon"){
-        m_total_headon++;
-        m_map_vname_headon[report.getOS()]++;
-        Notify("HEADON_TOTAL", m_total_headon);
-        report.setClassified(true);
-      }
-      else if(situation == "overtaking"){
-        m_total_overtaking++;
-        m_map_vname_overtaking[report.getOS()]++;
-        Notify("OVERTAKING_TOTAL", m_total_overtaking);
-        report.setClassified(true);
-      }
-      else if(situation == "crossing"){
-        m_total_crossing++;
-        m_map_vname_crossing[report.getOS()]++;
-        Notify("CROSSING_TOTAL", m_total_crossing);
-        report.setClassified(true);
-        debug2 = "classified status after crossing: " + boolToString(report.getClassified()) + "  ";
+  if (m_new_encounter) {
+    for (unsigned int i = 0; i < m_encounter_reports_all.size(); i++) {
+      EncounterReport &report = m_encounter_reports_all[i];
+      bool classified = report.getClassified();
+      debug1 =
+          "classified: " + boolToString(classified) + "  " + intToString(i);
+      if (classified == false) {
+        string situation = classifyEncounter(report);
+        if (situation == "headon") {
+          m_total_headon++;
+          m_map_vname_headon[report.getOS()]++;
+          Notify("HEADON_TOTAL", m_total_headon);
+          report.setClassified(true);
+        } else if (situation == "overtaking") {
+          m_total_overtaking++;
+          m_map_vname_overtaking[report.getOS()]++;
+          Notify("OVERTAKING_TOTAL", m_total_overtaking);
+          report.setClassified(true);
+        } else if (situation == "crossing") {
+          m_total_crossing++;
+          m_map_vname_crossing[report.getOS()]++;
+          Notify("CROSSING_TOTAL", m_total_crossing);
+          report.setClassified(true);
+          debug2 = "classified status after crossing: " +
+                   boolToString(report.getClassified()) + "  ";
+        }
       }
     }
+    m_new_encounter = false;
   }
-  m_new_encounter = false;
-}
 
   m_cpa_monitor.examineAndReport();
 
   m_cpa_monitor.setIteration(m_iteration);
 
-  if (m_post_closest_range)
-  {
+  if (m_post_closest_range) {
     double closest_range = m_cpa_monitor.getClosestRange();
     if (closest_range > 0)
       Notify("UCD_CLOSEST_RANGE", closest_range);
   }
 
-  if (m_post_closest_range_ever)
-  {
+  if (m_post_closest_range_ever) {
     double closest_range_ever = m_cpa_monitor.getClosestRangeEver();
     if (closest_range_ever > 0)
       Notify("UCD_CLOSEST_RANGE_EVER", closest_range_ever);
   }
 
   m_conditions_ok = checkConditions();
-  if (m_conditions_ok)
-  {
+  if (m_conditions_ok) {
     unsigned int events = m_cpa_monitor.getEventCount();
-    for (unsigned int ix = 0; ix < events; ix++)
-    {
+    for (unsigned int ix = 0; ix < events; ix++) {
       CPAEvent event = m_cpa_monitor.getEvent(ix);
       handleCPAEvent(event);
     }
@@ -205,17 +196,14 @@ if(m_new_encounter){
 //---------------------------------------------------------
 // Procedure: postRings()
 
-void CollisionDetector::postRings()
-{
+void CollisionDetector::postRings() {
   set<string> vnames = m_cpa_monitor.getVNames();
 
   set<string>::iterator p;
-  for (p = vnames.begin(); p != vnames.end(); p++)
-  {
+  for (p = vnames.begin(); p != vnames.end(); p++) {
     string vname = *p;
     NodeRecord record = m_cpa_monitor.getVRecord(vname);
-    if (record.valid() && (vname != "badguy"))
-    {
+    if (record.valid() && (vname != "badguy")) {
       double x = record.getX();
       double y = record.getY();
       XYCircle circle(x, y, m_encounter_dist);
@@ -231,8 +219,7 @@ void CollisionDetector::postRings()
 //---------------------------------------------------------
 // Procedure: handleCPAEvent()
 
-void CollisionDetector::handleCPAEvent(CPAEvent event)
-{
+void CollisionDetector::handleCPAEvent(CPAEvent event) {
   //===========================================================
   // Part 1: Get the event structure information
   //===========================================================
@@ -255,17 +242,14 @@ void CollisionDetector::handleCPAEvent(CPAEvent event)
   Notify("ENCOUNTER_TOTAL", m_total_encounters);
 
   string rank = "clear";
-  if (cpa <= m_collision_dist)
-  {
+  if (cpa <= m_collision_dist) {
     rank = "collision";
     m_total_collisions++;
     m_map_vname_collisions[v1]++;
     m_map_vname_collisions[v2]++;
     postFlags(m_collision_flags, event);
     Notify("COLLISION_TOTAL", m_total_collisions);
-  }
-  else if (cpa <= m_near_miss_dist)
-  {
+  } else if (cpa <= m_near_miss_dist) {
     rank = "near_miss";
     m_total_near_misses++;
     m_map_vname_near_misses[v1]++;
@@ -319,8 +303,7 @@ void CollisionDetector::handleCPAEvent(CPAEvent event)
   if (beta > 0)
     report += ", beta=" + doubleToStringX(beta, 3);
 
-  if ((alpha > 0) && (beta > 0))
-  {
+  if ((alpha > 0) && (beta > 0)) {
     bool cn_port_of_os = (beta > 180);
     bool os_port_of_cn = (alpha > 180);
     bool cn_fore_of_os = ((beta <= 90) || (beta >= 270));
@@ -352,8 +335,7 @@ void CollisionDetector::handleCPAEvent(CPAEvent event)
   //===========================================================
   // Part 3: Build and post the Appcasting Event
   //===========================================================
-  if (rank != "clear")
-  {
+  if (rank != "clear") {
     string ac_event = v1 + "::" + v2 + ", " + "cpa=" + cpas;
     ac_event += ", rank=" + rank;
     reportEvent(ac_event);
@@ -362,8 +344,7 @@ void CollisionDetector::handleCPAEvent(CPAEvent event)
   //===========================================================
   // Part 4: Build the RANGE_PULSE if rendering turned on
   //===========================================================
-  if ((rank != "clear") && m_pulse_render)
-  {
+  if ((rank != "clear") && m_pulse_render) {
     string pulse_color = "red";
     if (rank == "near_miss")
       pulse_color = "yellow";
@@ -381,8 +362,7 @@ void CollisionDetector::handleCPAEvent(CPAEvent event)
 //---------------------------------------------------------
 // Procedure: OnStartUp()
 
-bool CollisionDetector::OnStartUp()
-{
+bool CollisionDetector::OnStartUp() {
   AppCastingMOOSApp::OnStartUp();
 
   STRING_LIST sParams;
@@ -391,8 +371,7 @@ bool CollisionDetector::OnStartUp()
     reportConfigWarning("No config block found for " + GetAppName());
 
   STRING_LIST::iterator p;
-  for (p = sParams.begin(); p != sParams.end(); p++)
-  {
+  for (p = sParams.begin(); p != sParams.end(); p++) {
     string line = *p;
     string orig = line;
     string param = tolower(biteStringX(line, '='));
@@ -429,8 +408,7 @@ bool CollisionDetector::OnStartUp()
       handled = m_cpa_monitor.addIgnoreGroup(value);
     else if (param == "reject_group")
       handled = m_cpa_monitor.addRejectGroup(value);
-    else if (param == "condition")
-    {
+    else if (param == "condition") {
       LogicCondition new_condition;
       handled = new_condition.setCondition(value);
       if (handled)
@@ -442,13 +420,11 @@ bool CollisionDetector::OnStartUp()
       reportUnhandledConfigWarning(orig);
   }
 
-  if (m_near_miss_dist < m_collision_dist)
-  {
+  if (m_near_miss_dist < m_collision_dist) {
     m_near_miss_dist = m_collision_dist;
     reportConfigWarning("near_miss_dist set smaller than collision_dist");
   }
-  if (m_encounter_dist < m_near_miss_dist)
-  {
+  if (m_encounter_dist < m_near_miss_dist) {
     m_encounter_dist = m_near_miss_dist;
     reportConfigWarning("encounter_dist set smaller than near_miss_dist");
   }
@@ -472,8 +448,7 @@ bool CollisionDetector::OnStartUp()
 //---------------------------------------------------------
 // Procedure: registerVariables()
 
-void CollisionDetector::registerVariables()
-{
+void CollisionDetector::registerVariables() {
   AppCastingMOOSApp::RegisterVariables();
   Register("NODE_REPORT", 0);
   Register("UCD_RESET", 0);
@@ -485,8 +460,7 @@ void CollisionDetector::registerVariables()
   //=======================================================
   // First get all the variable names from all present conditions.
   vector<string> all_vars;
-  for (unsigned int i = 0; i < m_logic_conditions.size(); i++)
-  {
+  for (unsigned int i = 0; i < m_logic_conditions.size(); i++) {
     vector<string> svector = m_logic_conditions[i].getVarNames();
     all_vars = mergeVectors(all_vars, svector);
   }
@@ -500,8 +474,7 @@ void CollisionDetector::registerVariables()
 //------------------------------------------------------------
 // Procedure: handleConfigFlag()
 
-bool CollisionDetector::handleConfigFlag(string flag_type, string str)
-{
+bool CollisionDetector::handleConfigFlag(string flag_type, string str) {
   string moosvar = biteStringX(str, '=');
   string moosval = str;
 
@@ -534,29 +507,23 @@ bool CollisionDetector::handleConfigFlag(string flag_type, string str)
 //            the Contact Density (CD) of the moment.
 
 string CollisionDetector::expandMacroCD(string orig, string vname1,
-                                        string vname2)
-{
+                                        string vname2) {
   string result = orig;
 
   vector<string> svector = parseString(orig, '$');
-  for (unsigned int i = 0; i < svector.size(); i++)
-  {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string str = svector[i];
-    if (strBegins(str, "[") && strContains(str, "]"))
-    {
+    if (strBegins(str, "[") && strContains(str, "]")) {
       biteString(str, '[');
       rbiteString(str, ']');
       string macro = "$[" + str + "]";
       vector<string> jvector = parseString(str, '@');
-      if (jvector.size() == 2)
-      {
+      if (jvector.size() == 2) {
         string vname = jvector[0];
         string range = jvector[1];
-        if (isNumber(range))
-        {
+        if (isNumber(range)) {
           double drng = atof(range.c_str());
-          if (drng >= 0)
-          {
+          if (drng >= 0) {
             if ((vname == "V1") || (vname == "v1"))
               vname = vname1;
             else if ((vname == "V2") || (vname == "v2"))
@@ -576,10 +543,8 @@ string CollisionDetector::expandMacroCD(string orig, string vname1,
 // Procedure: postFlags()
 
 void CollisionDetector::postFlags(const vector<VarDataPair> &flags,
-                                  const CPAEvent &event)
-{
-  for (unsigned int i = 0; i < flags.size(); i++)
-  {
+                                  const CPAEvent &event) {
+  for (unsigned int i = 0; i < flags.size(); i++) {
     VarDataPair pair = flags[i];
     string moosvar = pair.get_var();
 
@@ -593,21 +558,18 @@ void CollisionDetector::postFlags(const vector<VarDataPair> &flags,
     moosvar = findReplace(moosvar, "$IDX", uintToString(m_total_encounters));
 
     // If posting is a double, just post. No macro expansion
-    if (!pair.is_string())
-    {
+    if (!pair.is_string()) {
       double dval = pair.get_ddata();
       Notify(moosvar, dval);
     }
     // Otherwise if string posting, handle macro expansion
-    else
-    {
+    else {
       string sval = pair.get_sdata();
       double cpa_dbl = event.getCPA();
       string cpa_str = doubleToStringX(cpa_dbl, 4);
 
       sval = expandMacroCD(sval, vname1, vname2);
-      if (isNumber(sval))
-      {
+      if (isNumber(sval)) {
         double dval = atof(sval.c_str());
         Notify(moosvar, dval);
       }
@@ -616,8 +578,7 @@ void CollisionDetector::postFlags(const vector<VarDataPair> &flags,
         Notify(moosvar, cpa_dbl);
       else if (sval == "$IDX")
         Notify(moosvar, m_total_encounters);
-      else
-      {
+      else {
         sval = findReplace(sval, "$V1", vname1);
         sval = findReplace(sval, "$V2", vname2);
         sval = findReplace(sval, "$UP_V1", toupper(vname1));
@@ -636,8 +597,7 @@ void CollisionDetector::postFlags(const vector<VarDataPair> &flags,
 //            of conditions is met, given the snapshot of variable
 //            values in the info_buffer.
 
-bool CollisionDetector::checkConditions()
-{
+bool CollisionDetector::checkConditions() {
   if (!m_info_buffer)
     return (false);
 
@@ -646,21 +606,18 @@ bool CollisionDetector::checkConditions()
 
   // Phase 2: get values of all variables from the info_buffer and
   // propogate these values down to all the logic conditions.
-  for (unsigned int i = 0; i < condition_vars.size(); i++)
-  {
+  for (unsigned int i = 0; i < condition_vars.size(); i++) {
     string varname = condition_vars[i];
     bool ok_s, ok_d;
     string s_result = m_info_buffer->sQuery(varname, ok_s);
     double d_result = m_info_buffer->dQuery(varname, ok_d);
 
-    if (ok_s)
-    {
+    if (ok_s) {
       for (unsigned int j = 0; j < m_logic_conditions.size(); j++)
         m_logic_conditions[j].setVarVal(varname, s_result);
     }
 
-    if (ok_d)
-    {
+    if (ok_d) {
       for (unsigned int j = 0; j < m_logic_conditions.size(); j++)
         m_logic_conditions[j].setVarVal(varname, d_result);
     }
@@ -668,8 +625,7 @@ bool CollisionDetector::checkConditions()
 
   // Phase 3: evaluate all logic conditions. Return true only if all
   // conditions evaluate to be true.
-  for (unsigned int i = 0; i < m_logic_conditions.size(); i++)
-  {
+  for (unsigned int i = 0; i < m_logic_conditions.size(); i++) {
     bool satisfied = m_logic_conditions[i].eval();
     if (!satisfied)
       return (false);
@@ -680,8 +636,7 @@ bool CollisionDetector::checkConditions()
 //------------------------------------------------------------
 // Procedure: updateInfoBuffer()
 
-bool CollisionDetector::updateInfoBuffer(CMOOSMsg &msg)
-{
+bool CollisionDetector::updateInfoBuffer(CMOOSMsg &msg) {
   string key = msg.GetKey();
   string sdata = msg.GetString();
   double ddata = msg.GetDouble();
@@ -697,8 +652,7 @@ bool CollisionDetector::updateInfoBuffer(CMOOSMsg &msg)
 //------------------------------------------------------------
 // Procedure: handleMailNodeReport()
 
-void CollisionDetector::handleMailNodeReport(string sval)
-{
+void CollisionDetector::handleMailNodeReport(string sval) {
   // Part 1: inject the node report into the CPAMonitor
   bool ok1 = m_cpa_monitor.handleNodeReport(sval);
   if (!ok1)
@@ -711,8 +665,7 @@ void CollisionDetector::handleMailNodeReport(string sval)
   // up. But now that we have received a node report from that
   // vehicle, we can be pretty sure it will get this one-time msg.
   string vname = tokStringParse(sval, "NAME", ',', '=');
-  if (!vectorContains(m_notified_vehicles, vname))
-  {
+  if (!vectorContains(m_notified_vehicles, vname)) {
     m_notified_vehicles.push_back(vname);
     vname = toupper(vname);
     Notify("COLLISION_DETECT_PARAMS_" + vname, m_param_summary);
@@ -753,24 +706,24 @@ void CollisionDetector::handleMailNodeReport(string sval)
 //      ben         111           3            8
 //      cal          80           5           32
 
-bool CollisionDetector::buildReport()
-{
- m_msgs << "============================================ " << endl;
-  for (std::map<string, unsigned int>::iterator it = m_map_active_encounters.begin(); it != m_map_active_encounters.end(); ++it)
-  {
+bool CollisionDetector::buildReport() {
+  m_msgs << "============================================ " << endl;
+  for (std::map<string, unsigned int>::iterator it =
+           m_map_active_encounters.begin();
+       it != m_map_active_encounters.end(); ++it) {
     string key = it->first;
     unsigned int value = it->second;
     m_msgs << "Active Encounters: " << key << " " << value << endl;
   }
   m_msgs << "============================================ " << endl;
-  for(std::map<string, unsigned int>::iterator it = m_map_vname_spawns.begin(); it != m_map_vname_spawns.end(); ++it)
-  {
+  for (std::map<string, unsigned int>::iterator it = m_map_vname_spawns.begin();
+       it != m_map_vname_spawns.end(); ++it) {
     string key = it->first;
     unsigned int value = it->second;
     m_msgs << "Spawns: " << key << " " << value << endl;
   }
   m_msgs << "============================================ " << endl;
- 
+
   string encounter_str = doubleToString(m_encounter_dist, 2);
   string coll_dist_str = doubleToString(m_collision_dist, 2);
   string near_miss_str = doubleToString(m_near_miss_dist, 2);
@@ -793,8 +746,7 @@ bool CollisionDetector::buildReport()
   m_msgs << "   range_pulse_duration: " << pulse_dur_str << endl;
   m_msgs << "      range_pulse_range: " << pulse_rng_str << endl;
   m_msgs << "     post_closest_range: " << post_cr_str << endl;
-  m_msgs << "post_closest_range_ever: " << post_cre_str << endl
-         << endl;
+  m_msgs << "post_closest_range_ever: " << post_cre_str << endl << endl;
 
   string conditions_ok_str = boolToString(m_conditions_ok);
   string tot_encounters_str = uintToString(m_total_encounters);
@@ -814,8 +766,7 @@ bool CollisionDetector::buildReport()
   m_msgs << " Closest Range Ever: " << cre_str << endl;
   m_msgs << "   Total Encounters: " << tot_encounters_str << endl;
   m_msgs << "  Total Near Misses: " << tot_near_miss_str << endl;
-  m_msgs << "   Total Collisions: " << tot_collision_str << endl
-         << endl;
+  m_msgs << "   Total Collisions: " << tot_collision_str << endl << endl;
 
   m_msgs << "============================================" << endl;
   m_msgs << "State By Vehicle:                           " << endl;
@@ -823,12 +774,13 @@ bool CollisionDetector::buildReport()
 
   ACTable actab(7);
 
-  actab << "Vehicle | Encounters | Near Misses | Collisions | Overtaking | Head-on | Crossing";
+  actab << "Vehicle | Encounters | Near Misses | Collisions | Overtaking | "
+           "Head-on | Crossing";
   actab.addHeaderLines();
 
   map<string, unsigned int>::iterator p;
-  for (p = m_map_vname_encounters.begin(); p != m_map_vname_encounters.end(); p++)
-  {
+  for (p = m_map_vname_encounters.begin(); p != m_map_vname_encounters.end();
+       p++) {
     string vname = p->first;
     unsigned int encounters = p->second;
     unsigned int near_misses = m_map_vname_near_misses[vname];
@@ -844,7 +796,8 @@ bool CollisionDetector::buildReport()
     string s_headon = uintToString(headon);
     string s_crossing = uintToString(crossing);
 
-    actab << vname << s_encounters << s_near_misses << s_collisions << s_overtaking << s_headon << s_crossing;
+    actab << vname << s_encounters << s_near_misses << s_collisions
+          << s_overtaking << s_headon << s_crossing;
   }
   m_msgs << actab.getFormattedString() << endl;
 
@@ -852,8 +805,7 @@ bool CollisionDetector::buildReport()
 }
 //------------------------------------------------------------
 // Procedure: classifyEncounter(EncounterReport)
-string CollisionDetector::classifyEncounter(EncounterReport report)
-{
+string CollisionDetector::classifyEncounter(EncounterReport report) {
   string os = report.getOS();
   string cn = report.getCN();
   double rel_brg = report.getRelBrg();
@@ -862,13 +814,12 @@ string CollisionDetector::classifyEncounter(EncounterReport report)
   string situation = "undetermined";
 
   // check for headon
-  if ((rel_brg < 7 || rel_brg > 353) && (targ_ang < 7 || targ_ang > 353))
-  {
+  if ((rel_brg < 7 || rel_brg > 353) && (targ_ang < 7 || targ_ang > 353)) {
     situation = "headon";
   }
   // check for overtaking
-  else if ((rel_brg > 113 && rel_brg < 247) && (targ_ang < 90 || targ_ang > 270))
-  {
+  else if ((rel_brg > 113 && rel_brg < 247) &&
+           (targ_ang < 90 || targ_ang > 270)) {
     situation = "overtaking";
   }
   // check for crossing
@@ -878,20 +829,21 @@ string CollisionDetector::classifyEncounter(EncounterReport report)
   return situation;
 }
 //------------------------------------------------------------
-// Procedure: classifyEncounter(string os, string cn, double rng, double rel_brg, double targ_ang, double time)
-string CollisionDetector::classifyEncounter(string os, string cn, double rng, double rel_brg, double targ_ang, double time)
-{
+// Procedure: classifyEncounter(string os, string cn, double rng, double
+// rel_brg, double targ_ang, double time)
+string CollisionDetector::classifyEncounter(string os, string cn, double rng,
+                                            double rel_brg, double targ_ang,
+                                            double time) {
   string situation = "undetermined";
 
   // check for headon
-  if ((rel_brg < 7 || rel_brg > 353) && (targ_ang < 7 || targ_ang > 353))
-  {
+  if ((rel_brg < 7 || rel_brg > 353) && (targ_ang < 7 || targ_ang > 353)) {
     situation = "headon";
   }
 
   // check for overtaking
-  else if ((rel_brg > 113 && rel_brg < 247) && (targ_ang < 90 || targ_ang > 270))
-  {
+  else if ((rel_brg > 113 && rel_brg < 247) &&
+           (targ_ang < 90 || targ_ang > 270)) {
     situation = "overtaking";
   }
   // check for crossing
@@ -903,8 +855,7 @@ string CollisionDetector::classifyEncounter(string os, string cn, double rng, do
 //------------------------------------------------------------
 
 // Procedure: bool isUniqueEncounter(EncounterReport)
-bool CollisionDetector::isUniqueEncounter(EncounterReport report)
-{
+bool CollisionDetector::isUniqueEncounter(EncounterReport report) {
   string os = toupper(report.getOS());
   string cn = toupper(report.getCN());
   double range = report.getRange();
@@ -912,26 +863,21 @@ bool CollisionDetector::isUniqueEncounter(EncounterReport report)
   double targ_ang = report.getTargAng();
   bool unique = false;
 
-  for (std::size_t i = 0; i < m_encounter_reports_all.size(); i++)
-  {
+  for (std::size_t i = 0; i < m_encounter_reports_all.size(); i++) {
     string os_i = toupper(m_encounter_reports_all[i].getOS());
     string cn_i = toupper(m_encounter_reports_all[i].getCN());
     double range_i = m_encounter_reports_all[i].getRange();
     double rel_brg_i = m_encounter_reports_all[i].getRelBrg();
     double targ_ang_i = m_encounter_reports_all[i].getTargAng();
 
-    if ((os == os_i) && (cn == cn_i) && (range == range_i) && (rel_brg == rel_brg_i) && (targ_ang == targ_ang_i))
-    {
+    if ((os == os_i) && (cn == cn_i) && (range == range_i) &&
+        (rel_brg == rel_brg_i) && (targ_ang == targ_ang_i)) {
       unique = false;
       break;
-    }
-    else if ((os == cn_i) && (cn == os_i) && (range == range_i))
-    {
+    } else if ((os == cn_i) && (cn == os_i) && (range == range_i)) {
       unique = false;
       break;
-    }
-    else
-    {
+    } else {
       unique = true;
       break;
     }

@@ -22,27 +22,17 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_VECTOR_HEADER
 #define XY_FORMAT_UTILS_VECTOR_HEADER
 
-#include <string>
 #include "XYVector.h"
+#include <string>
 
 //---------------------------------------------------------------
-// Create an XYVector instance  from a string specification. 
+// Create an XYVector instance  from a string specification.
 // Example: x=12,y=4,mag=1.5,ang=45,vertex_size=3,label=foobar
 
 XYVector string2Vector(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

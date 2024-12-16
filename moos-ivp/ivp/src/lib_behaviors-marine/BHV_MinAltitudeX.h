@@ -20,46 +20,35 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_MIN_ALTITUDEX_HEADER
 #define BHV_MIN_ALTITUDEX_HEADER
 
-#include <string>
 #include "IvPBehavior.h"
+#include <string>
 
 class IvPDomain;
 class BHV_MinAltitudeX : public IvPBehavior {
 public:
   BHV_MinAltitudeX(IvPDomain);
   ~BHV_MinAltitudeX() {}
-  
-  bool         setParam(std::string, std::string);
-  IvPFunction* onRunState();
-  bool         isConstraint() {return(true);}
+
+  bool setParam(std::string, std::string);
+  IvPFunction *onRunState();
+  bool isConstraint() { return (true); }
 
 protected:
-  bool         updateInfoIn();
-  void         postStatusReport();
+  bool updateInfoIn();
+  void postStatusReport();
 
 private: // Behavior Configuration Parameters
-  double      m_min_altitude;
-  bool        m_missing_altitude_critical;
+  double m_min_altitude;
+  bool m_missing_altitude_critical;
 
 private: // Behavior state
-  double      m_curr_depth;
-  double      m_curr_altitude;
-  double      m_curr_max_depth;
+  double m_curr_depth;
+  double m_curr_altitude;
+  double m_curr_max_depth;
 };
 
 #endif
- 
-
-
-
-
-
-
-
-
-
-

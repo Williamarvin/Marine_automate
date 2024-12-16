@@ -28,18 +28,17 @@
 #include <vector>
 
 class CMOOSMsg;
-namespace MOOS
-{
+namespace MOOS {
 
- /** \internal
+/** \internal
  *
- *  @brief This class allows you to store and hence invoke a member function of a class which
- *  will handle a message. If you have a class with member function
+ *  @brief This class allows you to store and hence invoke a member function of
+ *a class which will handle a message. If you have a class with member function
  *
  *   bool f(CMOOSMsg &)
  *
- *  then a the following code will return an object which allows you to invoke it. An
- *  example is helpful
+ *  then a the following code will return an object which allows you to invoke
+ *it. An example is helpful
  *
  *  class ExampleClass
  *  {
@@ -51,79 +50,62 @@ namespace MOOS
  *  	ExampleClass K;
  *  	MOOSMsg M;
  *  	MOOS::Comms::MsgFunctor* pG;
- *  	pG  = MOOS::Comms::BindMsgFunctor<Whatever>(&K,&ExampleClass::OnMessage);
+ *  	pG  =
+ *MOOS::Comms::BindMsgFunctor<Whatever>(&K,&ExampleClass::OnMessage);
  *  	(*pG)(M);
  *  }
  *	\endinternal
  */
 
-	template<typename T>
-	struct MessageFunction{
-		typedef bool (T::*MsgFunction)(CMOOSMsg & M);
-		typedef bool (T::*MsgVecFunction)(std::vector<CMOOSMsg> & MVec);
-	};
+template <typename T> struct MessageFunction {
+  typedef bool (T::*MsgFunction)(CMOOSMsg &M);
+  typedef bool (T::*MsgVecFunction)(std::vector<CMOOSMsg> &MVec);
+};
 
-	class MsgFunctor
-	{
-	public:
-		virtual ~MsgFunctor() {}
-		virtual bool operator()(CMOOSMsg &) = 0;
-		virtual bool operator()(std::vector<CMOOSMsg> &) = 0;
-	};
+class MsgFunctor {
+public:
+  virtual ~MsgFunctor() {}
+  virtual bool operator()(CMOOSMsg &) = 0;
+  virtual bool operator()(std::vector<CMOOSMsg> &) = 0;
+};
 
-	template <typename T>
-	class CallableClassMemberFncPtr : public MsgFunctor
-	{
-	public:
+template <typename T> class CallableClassMemberFncPtr : public MsgFunctor {
+public:
+private:
+  T *inst;
+  typename MessageFunction<T>::MsgFunction pt2MsgFuncMember;
+  typename MessageFunction<T>::MsgVecFunction pt2MsgVecFuncMember;
+  // bool (T::*pt2Member)(CMOOSMsg & M);
+public:
+  CallableClassMemberFncPtr(T *who, bool (T::*memfunc)(CMOOSMsg &))
+      : inst(who), pt2MsgFuncMember(memfunc), pt2MsgVecFuncMember(0) {}
 
-	private:
-		T *inst;
-		typename MessageFunction<T>::MsgFunction pt2MsgFuncMember;
-		typename MessageFunction<T>::MsgVecFunction pt2MsgVecFuncMember;
-		//bool (T::*pt2Member)(CMOOSMsg & M);
-	public:
+  CallableClassMemberFncPtr(T *who, bool (T::*memfunc)(std::vector<CMOOSMsg> &))
+      : inst(who), pt2MsgFuncMember(0), pt2MsgVecFuncMember(memfunc) {}
 
+  CallableClassMemberFncPtr()
+      : inst(0), pt2MsgFuncMember(0), pt2MsgVecFuncMember(0){};
+  bool HasValidFunctionPtr() {
+    return (pt2MsgFuncMember || pt2MsgVecFuncMember) && inst;
+  };
+  bool operator()(CMOOSMsg &M) { return (inst->*pt2MsgFuncMember)(M); }
 
-		CallableClassMemberFncPtr(T* who, bool (T::*memfunc)(CMOOSMsg &))
-			 : inst(who), pt2MsgFuncMember(memfunc),pt2MsgVecFuncMember(0)
-		 {
-		 }
+  bool operator()(std::vector<CMOOSMsg> &Mvec) {
+    return (inst->*pt2MsgVecFuncMember)(Mvec);
+  }
+};
 
-		CallableClassMemberFncPtr(T* who, bool (T::*memfunc)(std::vector<CMOOSMsg>  &))
-        : inst(who), pt2MsgFuncMember(0),pt2MsgVecFuncMember(memfunc)
-		 {
-		 }
+template <typename T>
+MsgFunctor *BindMsgFunctor(T *who, bool (T::*memfunc)(CMOOSMsg &)) {
+  return new CallableClassMemberFncPtr<T>(who, memfunc);
+}
 
+template <typename T>
+MsgFunctor *BindMsgFunctor(T *who,
+                           bool (T::*memfunc)(std::vector<CMOOSMsg> &)) {
+  return new CallableClassMemberFncPtr<T>(who, memfunc);
+}
 
-		CallableClassMemberFncPtr():inst(0),pt2MsgFuncMember(0),pt2MsgVecFuncMember(0){};
-		 bool HasValidFunctionPtr(){return (pt2MsgFuncMember||pt2MsgVecFuncMember) && inst;};
-		 bool operator()(CMOOSMsg & M)
-		 {
-			 return (inst->*pt2MsgFuncMember)(M);
-		 }
-
-		 bool operator()(std::vector<CMOOSMsg> &Mvec)
-		 {
-			 return (inst->*pt2MsgVecFuncMember)(Mvec);
-		 }
-
-	};
-
-	template <typename T>
-	MsgFunctor * BindMsgFunctor(T* who, bool (T::*memfunc)(CMOOSMsg &))
-	{
-		return new CallableClassMemberFncPtr<T>(who,memfunc);
-	}
-
-
-	template <typename T>
-	MsgFunctor * BindMsgFunctor(T* who, bool (T::*memfunc)(std::vector<CMOOSMsg> &))
-	{
-		return new CallableClassMemberFncPtr<T>(who,memfunc);
-	}
-
-
-}//moos
-
+} // namespace MOOS
 
 #endif /* MESSAGEFUNCTION_H_ */

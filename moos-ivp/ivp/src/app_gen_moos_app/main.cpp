@@ -21,59 +21,47 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "MBUtils.h"
 #include "AppGenerator.h"
 #include "AppGenerator_Info.h"
+#include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   AppGenerator generator;
 
-  
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     bool handled = true;
 
     string argi = argv[i];
 
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
 
-    if((argi=="p") || (argi=="i") || (argi=="u") ||
-       (argi=="uFld") || (argi=="uSim"))
+    if ((argi == "p") || (argi == "i") || (argi == "u") || (argi == "uFld") ||
+        (argi == "uSim"))
       generator.setPrefix(argi);
-    
-    else if(strBegins(argi, "--org="))
+
+    else if (strBegins(argi, "--org="))
       generator.setOrg(argi.substr(6));
-    else if(strBegins(argi, "--name="))
+    else if (strBegins(argi, "--name="))
       generator.setName(argi.substr(7));
-    else if(strBegins(argi, "--date="))
+    else if (strBegins(argi, "--date="))
       generator.setDate(argi.substr(7));
-    else if(strBegins(argi, "--body="))
+    else if (strBegins(argi, "--body="))
       generator.setBody(argi.substr(7));
     else
       handled = false;
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled arg: " << argi << endl;
-      return(0);
+      return (0);
     }
   }
-  
+
   generator.generate();
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-

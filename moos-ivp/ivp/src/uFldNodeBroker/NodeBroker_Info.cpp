@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
+#include "NodeBroker_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "NodeBroker_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run on a vehicle or simulated vehicle in a multi-   ");
@@ -48,8 +47,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                          ");
   blu("==========================================================");
   blu("Usage: uFldNodeBroker file.moos [OPTIONS]                 ");
@@ -58,7 +56,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                          ");
   blk("Options:                                                  ");
-  mag("  --alias","=<ProcessName>                                ");
+  mag("  --alias", "=<ProcessName>                                ");
   blk("      Launch uFldNodeBroker with the given                ");
   blk("      process name rather than uFldNodeBroker.            ");
   mag("  --example, -e                                           ");
@@ -70,7 +68,8 @@ void showHelpAndExit()
   mag("  --version,-v                                            ");
   blk("      Display release version of uFldNodeBroker.          ");
   mag("  --web,-w                                                ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uFldNodeBroker ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uFldNodeBroker ");
   blk("                                                          ");
   blk("Note: If argv[2] does not otherwise match a known option, ");
   blk("      then it will be interpreted as a run alias. This is ");
@@ -80,10 +79,9 @@ void showHelpAndExit()
 }
 
 //----------------------------------------------------------------
-// Procedure: showExampleConfigAndExit                                  
+// Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldNodeBroker Example MOOS Configuration                       ");
   blu("=============================================================== ");
@@ -117,8 +115,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldNodeBroker INTERFACE                                        ");
@@ -152,9 +149,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldNodeBroker", "gpl");
   exit(0);
 }
-

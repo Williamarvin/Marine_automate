@@ -30,56 +30,50 @@
 #ifndef OF_ZAIC_HLEQ_HEADER
 #define OF_ZAIC_HLEQ_HEADER
 
-#include <string>
 #include "IvPDomain.h"
 #include "IvPFunction.h"
+#include <string>
 
 class PDMap;
 
 class ZAIC_HLEQ {
 public:
-  ZAIC_HLEQ(IvPDomain g_domain, const std::string& g_varname);
+  ZAIC_HLEQ(IvPDomain g_domain, const std::string &g_varname);
   virtual ~ZAIC_HLEQ() {}
 
-  bool  setSummit(double);
-  bool  setSummitDelta(double=1);
-  bool  setBaseWidth(double);
-  bool  setMinMaxUtil(double=0, double=100);
+  bool setSummit(double);
+  bool setSummitDelta(double = 1);
+  bool setBaseWidth(double);
+  bool setMinMaxUtil(double = 0, double = 100);
 
   double getParam(std::string);
-  bool   stateOK()          {return(m_state_ok);}
-  std::string getWarnings() {return(m_warning);}
+  bool stateOK() { return (m_state_ok); }
+  std::string getWarnings() { return (m_warning); }
 
-  IvPDomain    getIvPDomain() {return(m_ivp_domain);}
-  
-protected:  // Parameters
-  double  m_summit;
-  double  m_summit_delta;
-  double  m_basewidth;
-  double  m_minutil;
-  double  m_maxutil;
+  IvPDomain getIvPDomain() { return (m_ivp_domain); }
+
+protected: // Parameters
+  double m_summit;
+  double m_summit_delta;
+  double m_basewidth;
+  double m_minutil;
+  double m_maxutil;
 
 protected: // State values
-  int     m_ipt_low;
-  int     m_ipt_one;
-  int     m_ipt_two;
-  int     m_ipt_high;
-  int     i_basewidth;
+  int m_ipt_low;
+  int m_ipt_one;
+  int m_ipt_two;
+  int m_ipt_high;
+  int i_basewidth;
 
-  int     m_domain_pts;
-  int     m_domain_ix;
-  double  m_domain_high;
-  double  m_domain_low;
-  double  m_domain_delta;
+  int m_domain_pts;
+  int m_domain_ix;
+  double m_domain_high;
+  double m_domain_low;
+  double m_domain_delta;
 
-  bool         m_state_ok;
-  std::string  m_warning;
-  IvPDomain    m_ivp_domain;
+  bool m_state_ok;
+  std::string m_warning;
+  IvPDomain m_ivp_domain;
 };
 #endif
-
-
-
-
-
-

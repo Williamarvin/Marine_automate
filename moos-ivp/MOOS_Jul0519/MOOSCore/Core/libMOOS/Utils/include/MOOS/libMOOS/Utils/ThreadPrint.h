@@ -41,51 +41,50 @@ namespace MOOS {
 
 class ThreadPrint {
 public:
-	ThreadPrint(std::ostream & ofs);
-	virtual ~ThreadPrint();
+  ThreadPrint(std::ostream &ofs);
+  virtual ~ThreadPrint();
 
-	enum color_t
-	{
-		RED,
-		GREEN,
-		MAGENTA,
-		CYAN,
-		YELLOW,
-		NONE,
-	};
+  enum color_t {
+    RED,
+    GREEN,
+    MAGENTA,
+    CYAN,
+    YELLOW,
+    NONE,
+  };
 
-	/**
-	 * Print a formatted message to std::cerr in a threadsafe way.Prints a coloured message to std err in a way
-	 * which is guaranteed to be thread safe (ie atomic). Message will be printed with thread ID first, then
-	 * prompt the message, then std::endl
-	 * @param sMessage - what is to be printed
-	 * @param sPrompt - optional a prompt
-	 * @param color - optional colour
-	 */
-	void Print(const std::string & sMessage, const std::string & sPrompt="", color_t color = NONE, bool bAppendNewLine = true );
+  /**
+   * Print a formatted message to std::cerr in a threadsafe way.Prints a
+   * coloured message to std err in a way which is guaranteed to be thread safe
+   * (ie atomic). Message will be printed with thread ID first, then prompt the
+   * message, then std::endl
+   * @param sMessage - what is to be printed
+   * @param sPrompt - optional a prompt
+   * @param color - optional colour
+   */
+  void Print(const std::string &sMessage, const std::string &sPrompt = "",
+             color_t color = NONE, bool bAppendNewLine = true);
 
-	void PrintStatus(bool bStatus,const std::string & sMessage);
+  void PrintStatus(bool bStatus, const std::string &sMessage);
 
-	void SimplyPrintTimeAndMessage(const std::string & sMessage , color_t color = NONE);
+  void SimplyPrintTimeAndMessage(const std::string &sMessage,
+                                 color_t color = NONE);
 
+  /**
+   * Turn off printing
+   */
+  void Disable();
 
-
-	/**
-	 * Turn off printing
-	 */
-	void Disable();
-
-	/**
-	 * Turn on printing
-	 */
-	void Enable();
-
+  /**
+   * Turn on printing
+   */
+  void Enable();
 
 private:
-	class Impl;
-	Impl* _Impl;
+  class Impl;
+  Impl *_Impl;
 };
 
-}
+} // namespace MOOS
 
 #endif /* THREADPRINT_H_ */

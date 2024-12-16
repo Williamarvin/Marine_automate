@@ -8,16 +8,15 @@
 #ifndef HydroLink_HEADER
 #define HydroLink_HEADER
 
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 
-#include <unordered_map>
+#include <cstdarg> //va_list, va_start, va_end
 #include <set>
 #include <string>
-#include <cstdarg> //va_list, va_start, va_end
+#include <unordered_map>
 
-class ArduinoToRPiMsg
-{
+class ArduinoToRPiMsg {
 public:
   ArduinoToRPiMsg();
   double heading;
@@ -29,8 +28,7 @@ public:
   std::string repr();
 };
 
-class RPiToArduinoMsg
-{
+class RPiToArduinoMsg {
 public:
   int r;
   int g;
@@ -40,8 +38,7 @@ public:
   std::string repr();
 };
 
-class HydroLinkArduinoBridge : public AppCastingMOOSApp
-{
+class HydroLinkArduinoBridge : public AppCastingMOOSApp {
 public:
   HydroLinkArduinoBridge();
   ~HydroLinkArduinoBridge();
@@ -56,8 +53,8 @@ protected: // Standard MOOSApp functions to overload
 protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
   void registerVariables();
-  
-protected: //App-specific functions
+
+protected: // App-specific functions
   int startSerialComms();
   int readSerial();
   int writeSerial();
@@ -73,10 +70,10 @@ private: // Configuration variables
   std::string m_p_gps_tc_key;
   std::string m_p_debug_mode_key;
 
-  //Input messages
+  // Input messages
   std::string m_m_rgb_key;
-  
-  //Output messages
+
+  // Output messages
   std::string m_m_node_report_key;
 
   std::unordered_map<std::string, std::string> m_params;
@@ -104,7 +101,7 @@ private: // State variables
   double m_nav_y_prv;
   double m_nav_long;
   double m_nav_lat;
-  double m_nav_heading; 
+  double m_nav_heading;
   std::string m_sys_name;
 
   bool m_filtering_gps;

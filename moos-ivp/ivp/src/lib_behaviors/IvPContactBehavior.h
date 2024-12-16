@@ -22,17 +22,17 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef IVP_CONTACT_BEHAVIOR_HEADER
 #define IVP_CONTACT_BEHAVIOR_HEADER
 
+#include "CPAEngine.h"
+#include "ContactStateSet.h"
+#include "ExFilterSet.h"
+#include "IvPBehavior.h"
+#include "LinearExtrapolator.h"
 #include <string>
 #include <vector>
-#include "IvPBehavior.h"
-#include "CPAEngine.h"
-#include "LinearExtrapolator.h"
-#include "ExFilterSet.h"
-#include "ContactStateSet.h"
 
 class IvPDomain;
 class IvPContactBehavior : public IvPBehavior {
@@ -41,58 +41,56 @@ public:
   ~IvPContactBehavior() {}
 
   virtual void onSetParamComplete();
-  
- public: // Override virtual funcions 
-  bool  setParam(std::string, std::string);
-  void  setCPAEngine(const CPAEngine& engine) {m_cpa_engine=engine;}
-  void  onEveryState(std::string new_state);
+
+public: // Override virtual funcions
+  bool setParam(std::string, std::string);
+  void setCPAEngine(const CPAEngine &engine) { m_cpa_engine = engine; }
+  void onEveryState(std::string new_state);
   std::string expandMacros(std::string);
-  
- protected:
-  bool  updatePlatformInfo();
-  void  postViewableBearingLine(bool active=true);
 
-  bool  postingPerContactInfo() const {return(m_post_per_contact_info);}
-  bool  platformUpdateOK() const {return(m_cnos.update_ok());}
+protected:
+  bool updatePlatformInfo();
+  void postViewableBearingLine(bool active = true);
 
-  void  postFlag(const VarDataPair&, bool repeat=false);
-  bool  addContactFlag(std::string);
+  bool postingPerContactInfo() const { return (m_post_per_contact_info); }
+  bool platformUpdateOK() const { return (m_cnos.update_ok()); }
 
-  bool  filterCheckHolds() const;
-  
-  std::string getFilterSummary() const {return(m_filter_set.getSummary());}
+  void postFlag(const VarDataPair &, bool repeat = false);
+  bool addContactFlag(std::string);
 
-  void  handleContactFlags();
-  void  handleContactFlagRange(VarDataPair);
-  
- protected: // Configuration Parameters
-  
-  bool   m_on_no_contact_ok;  // true if no trouble reported on no contact
-  bool   m_extrapolate;
+  bool filterCheckHolds() const;
+
+  std::string getFilterSummary() const { return (m_filter_set.getSummary()); }
+
+  void handleContactFlags();
+  void handleContactFlagRange(VarDataPair);
+
+protected:                 // Configuration Parameters
+  bool m_on_no_contact_ok; // true if no trouble reported on no contact
+  bool m_extrapolate;
   double m_decay_start;
   double m_decay_end;
   double m_time_on_leg;
 
-  bool   m_post_per_contact_info;
+  bool m_post_per_contact_info;
 
   ExFilterSet m_filter_set;
   bool m_exit_on_filter_vtype;
   bool m_exit_on_filter_group;
   bool m_exit_on_filter_region;
-  
-  bool                     m_bearing_line_show;
-  std::vector<std::string> m_bearing_line_colors;
-  std::vector<double>      m_bearing_line_thresh;
-  std::string              m_bearing_line_info;
-  bool                     m_bearing_line_label_show;
 
- protected:  // State Variables
-  
-  double m_cnx;   // Current contact x position (meters) 
-  double m_cny;   // Current contact y position (meters) 
-  double m_cnh;   // Current contact heading (degrees 0-359)
-  double m_cnv;   // Current contact speed (meters) 
-  double m_contact_range; // Current range to contact (meters) 
+  bool m_bearing_line_show;
+  std::vector<std::string> m_bearing_line_colors;
+  std::vector<double> m_bearing_line_thresh;
+  std::string m_bearing_line_info;
+  bool m_bearing_line_label_show;
+
+protected:                // State Variables
+  double m_cnx;           // Current contact x position (meters)
+  double m_cny;           // Current contact y position (meters)
+  double m_cnh;           // Current contact heading (degrees 0-359)
+  double m_cnv;           // Current contact speed (meters)
+  double m_contact_range; // Current range to contact (meters)
 
   std::string m_cn_group;
   std::string m_cn_vtype;
@@ -111,4 +109,3 @@ private:
 };
 
 #endif
-

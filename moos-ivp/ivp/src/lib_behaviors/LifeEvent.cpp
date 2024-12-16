@@ -30,8 +30,7 @@ using namespace std;
 //-----------------------------------------------------------
 // Constructor
 
-LifeEvent::LifeEvent()
-{
+LifeEvent::LifeEvent() {
   m_timestamp = 0;
   m_iteration = 0;
   m_posting_index = -1;
@@ -40,25 +39,21 @@ LifeEvent::LifeEvent()
 //-----------------------------------------------------------
 // Procedure: Overload operator ==
 
-bool LifeEvent::operator==(const LifeEvent& event)
-{
-  if(m_timestamp != event.getTimeStamp())
-    return(false);
-  if(m_iteration != event.getIteration())
-    return(false);
-  if(m_event_type != event.getEventType())
-    return(false);
-  if(m_behavior_name != event.getBehaviorName())
-    return(false);
-  if(m_behavior_type != event.getBehaviorType())
-    return(false);
-  if(m_spawn_string != event.getSpawnString())
-    return(false);
-  if(m_posting_index != event.getPostingIndex())
-    return(false);
+bool LifeEvent::operator==(const LifeEvent &event) {
+  if (m_timestamp != event.getTimeStamp())
+    return (false);
+  if (m_iteration != event.getIteration())
+    return (false);
+  if (m_event_type != event.getEventType())
+    return (false);
+  if (m_behavior_name != event.getBehaviorName())
+    return (false);
+  if (m_behavior_type != event.getBehaviorType())
+    return (false);
+  if (m_spawn_string != event.getSpawnString())
+    return (false);
+  if (m_posting_index != event.getPostingIndex())
+    return (false);
 
-  return(true);
+  return (true);
 }
-
-
-

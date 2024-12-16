@@ -21,13 +21,13 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
 #include "MBUtils.h"
 #include "OpenURL.h"
-#include "ReleaseInfo.h"
 #include "PareEngine.h"
+#include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -36,54 +36,48 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string in_alog, out_alog;
   double pare_window = 30;
 
   PareEngine pare_engine;
-  
+
   bool handled = true;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogpare", "gpl");
-      return(0);
-    }
-    else if(strEnds(argi, ".alog") && (in_alog == "")) {
+      return (0);
+    } else if (strEnds(argi, ".alog") && (in_alog == "")) {
       handled = pare_engine.setALogFileIn(argi);
       in_alog = argi;
-    }
-    else if(strEnds(argi, ".alog") && (out_alog == "")) {
+    } else if (strEnds(argi, ".alog") && (out_alog == "")) {
       handled = pare_engine.setALogFileOut(argi);
       out_alog = argi;
-    }
-    else if(argi == "--verbose")
+    } else if (argi == "--verbose")
       pare_engine.setVerbose(true);
-    else if(strBegins(argi, "--pare_window=")) {
+    else if (strBegins(argi, "--pare_window=")) {
       string str = argi.substr(14);
       handled = setNonNegDoubleOnString(pare_window, str);
-    }
-    else if(strBegins(argi, "--markvars=")) 
+    } else if (strBegins(argi, "--markvars="))
       handled = pare_engine.addMarkListVars(argi.substr(11));
-    else if(strBegins(argi, "--hitvars=")) 
+    else if (strBegins(argi, "--hitvars="))
       handled = pare_engine.addHitListVars(argi.substr(10));
-    else if(strBegins(argi, "--parevars=")) 
+    else if (strBegins(argi, "--parevars="))
       handled = pare_engine.addPareListVars(argi.substr(11));
-    else if(strBegins(argi, "--test")) {
+    else if (strBegins(argi, "--test")) {
       handled = pare_engine.addMarkListVars("ENCOUNTER");
       handled = pare_engine.addHitListVars("*ITER_GAP,*ITER_LEN,DB_QOS");
       handled = pare_engine.addHitListVars("NODE_REPORT*,PSHARE*");
       handled = pare_engine.addPareListVars("BHV_IPF,VIEW_SEGLIST");
-    }
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    } else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogpare");
-    else 
+    else
       handled = false;
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -95,15 +89,13 @@ int main(int argc, char *argv[])
   pare_engine.setPareWindow(pare_window);
   pare_engine.pareTheFile();
   pare_engine.printReport();
-  return(0);
+  return (0);
 }
-
 
 //------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogpare .alog [out.alog] [OPTIONS]                    " << endl;
   cout << "                                                         " << endl;
@@ -144,9 +136,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-

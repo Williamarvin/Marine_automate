@@ -5,28 +5,28 @@
 /*   DATE: December 29th, 1963                                  */
 /****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "ChangeMyName_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
-  blk("  The uChangeMyName application is used to echo MOOS variable in"); 
+  blk("  The uChangeMyName application is used to echo MOOS variable in");
   blk("    a different name                                            ");
   blk("                                                                ");
-  blk("  The message content of the 'in' moos variable will be echoed  "); 
+  blk("  The message content of the 'in' moos variable will be echoed  ");
   blk("     with a new moos variable name 'out'                        ");
   blk("                                                                ");
-  blk("  trigger_type = on_receipt : The message content of 'in' moos variable  ");
+  blk("  trigger_type = on_receipt : The message content of 'in' moos variable "
+      " ");
   blk("                              will be stored in a buffer and once");
   blk("                              the 'trigger' variable is posted  ");
   blk("                              to the MOOSDB, the latest 'in' message");
@@ -44,14 +44,12 @@ void showSynopsis()
   blk("                              echoed with variable name 'out',  ");
   blk("                              until the 'trigger' variable      ");
   blk("                              becomes 'true'                    ");
- 
 }
 
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uChangeMyName file.moos [OPTIONS]                   ");
@@ -60,7 +58,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uChangeMyName with the given process name         ");
   blk("      rather than uChangeMyName.                           ");
   mag("  --example, -e                                                 ");
@@ -82,8 +80,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uChangeMyName Example MOOS Configuration                   ");
@@ -104,12 +101,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uChangeMyName INTERFACE                                    ");
@@ -132,9 +127,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uChangeMyName", "gpl");
   exit(0);
 }
-

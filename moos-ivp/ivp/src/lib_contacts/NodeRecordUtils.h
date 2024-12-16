@@ -26,20 +26,12 @@
 
 #include "NodeRecord.h"
 
-NodeRecord string2NodeRecord(const std::string&, bool retPartialResult=false);
+NodeRecord string2NodeRecord(const std::string &,
+                             bool retPartialResult = false);
 
-NodeRecord extrapolateRecord(const NodeRecord&, double curr_time,
-			     double max_delta=3600);
+NodeRecord extrapolateRecord(const NodeRecord &, double curr_time,
+                             double max_delta = 3600);
 
-double rangeBetweenRecords(const NodeRecord& rec1, const NodeRecord& rec2);
+double rangeBetweenRecords(const NodeRecord &rec1, const NodeRecord &rec2);
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

@@ -26,34 +26,14 @@
 #ifndef COMPACTOR_HEADER
 #define COMPACTOR_HEADER
 
-#include "IvPBox.h" 
+#include "IvPBox.h"
 
 class Compactor {
 public:
   Compactor() {}
   virtual ~Compactor() {}
 
-  virtual bool   compact(IvPBox*)       = 0;
-  virtual double maxVal(IvPBox*, bool*) = 0;
+  virtual bool compact(IvPBox *) = 0;
+  virtual double maxVal(IvPBox *, bool *) = 0;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

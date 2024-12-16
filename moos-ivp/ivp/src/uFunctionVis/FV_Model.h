@@ -24,65 +24,53 @@
 #ifndef IPF_MODEL_HEADER
 #define IPF_MODEL_HEADER
 
-#include "MOOS/libMOOS/MOOSLib.h"
-#include "QuadSet.h"
 #include "FColorMap.h"
 #include "IPF_BundleSeries.h"
+#include "MOOS/libMOOS/MOOSLib.h"
+#include "QuadSet.h"
 
-class FV_Model
-{
+class FV_Model {
 public:
   FV_Model();
   ~FV_Model() {}
 
 public:
-  void     addIPF(const std::string& ipf_str, const std::string& plat);
+  void addIPF(const std::string &ipf_str, const std::string &plat);
 
-  void     modColorMap(std::string);
-  void     modSource(std::string);
-  void     setNavHeading(double v)          {m_nav_heading=v;}
-  void     setCollective(std::string s="")  {m_collective=s;} 
-  void     toggleLockIPF()                  {m_lock_ipf = !m_lock_ipf;}
+  void modColorMap(std::string);
+  void modSource(std::string);
+  void setNavHeading(double v) { m_nav_heading = v; }
+  void setCollective(std::string s = "") { m_collective = s; }
+  void toggleLockIPF() { m_lock_ipf = !m_lock_ipf; }
 
-  int      getCurrIteration()               {return(m_curr_iter);}
-  bool     isLocked()                       {return(m_lock_ipf);}
-  double   getNavHeading() const            {return(m_nav_heading);}
-  
+  int getCurrIteration() { return (m_curr_iter); }
+  bool isLocked() { return (m_lock_ipf); }
+  double getNavHeading() const { return (m_nav_heading); }
+
   std::string getCurrPlatform();
   std::string getCurrSource();
   std::string getCurrPieces();
   std::string getCurrPriority();
   std::string getCurrDomain();
 
-  QuadSet  getQuadSet(bool dense=false);
+  QuadSet getQuadSet(bool dense = false);
 
- protected: // State variables
-  CMOOSLock        m_ipf_mutex;
-  unsigned int     m_curr_iter;
+protected: // State variables
+  CMOOSLock m_ipf_mutex;
+  unsigned int m_curr_iter;
   IPF_BundleSeries m_bundle_series;
-  std::string      m_bundle_series_platform;
+  std::string m_bundle_series_platform;
 
- protected: // Launch-time config variables
-  unsigned int     m_bundle_series_maxlen;
-  bool             m_verbose;
+protected: // Launch-time config variables
+  unsigned int m_bundle_series_maxlen;
+  bool m_verbose;
 
- protected: // Run-time user config variables
-  bool             m_lock_ipf;
-  FColorMap        m_color_map;
-  std::string      m_collective;
-  std::string      m_curr_source;
+protected: // Run-time user config variables
+  bool m_lock_ipf;
+  FColorMap m_color_map;
+  std::string m_collective;
+  std::string m_curr_source;
 
-  double           m_nav_heading;
-  
+  double m_nav_heading;
 };
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

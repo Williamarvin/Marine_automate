@@ -13,57 +13,55 @@
 #define SOCK_NINJA_PROTOBUF_HEADER
 
 //#include <sys/socket.h>
+#include <list>
+#include <map>
 #include <netdb.h>
 #include <string>
-#include <list> 
-#include <map> 
 
 #define MAX_NINJA_BUF_SIZE 16384
 
 class SockNinjaProtoBuf {
 public:
-  SockNinjaProtoBuf(std::string ntype="server", int port=50051);
-  ~SockNinjaProtoBuf() {closeSockFDs();}
- 
-  bool  setIPAddr(std::string); // ok
-  bool  setPortNumber(int);     // ok
+  SockNinjaProtoBuf(std::string ntype = "server", int port = 50051);
+  ~SockNinjaProtoBuf() { closeSockFDs(); }
 
-  void  setMaxVecSize(unsigned int);
-  bool  setupConnection();
-  void  closeSockFDs();
+  bool setIPAddr(std::string); // ok
+  bool setPortNumber(int);     // ok
 
-  bool  sendSockMessageString(std::string str);
-  bool  sendSockMessageDouble(double val);
-  
-  bool  getSockMessagesDouble(std::vector<std::string> &keys,
-			      std::vector<double> &vals);
-  bool  getSockMessagesString(std::vector<std::string> &keys,
-			      std::vector<std::string> &vals);
-  
+  void setMaxVecSize(unsigned int);
+  bool setupConnection();
+  void closeSockFDs();
+
+  bool sendSockMessageString(std::string str);
+  bool sendSockMessageDouble(double val);
+
+  bool getSockMessagesDouble(std::vector<std::string> &keys,
+                             std::vector<double> &vals);
+  bool getSockMessagesString(std::vector<std::string> &keys,
+                             std::vector<std::string> &vals);
+
 protected:
-  bool  readFromSock();
-  
+  bool readFromSock();
+
   std::string getIPAddrByName(std::string);
 
-  void addWarning(std::string warning); 
-  
+  void addWarning(std::string warning);
+
 protected:
-  std::string  m_ninja_type;
-  std::string  m_ninja_state;
-  
+  std::string m_ninja_type;
+  std::string m_ninja_state;
+
   unsigned int m_max_vec_size;
-  
-  char         m_in_buffer[MAX_NINJA_BUF_SIZE];;
-  int          m_port;
-  
-  std::string  m_ip_addr; 
-  std::string  m_ip_addr_name; 
-    
+
+  char m_in_buffer[MAX_NINJA_BUF_SIZE];
+  ;
+  int m_port;
+
+  std::string m_ip_addr;
+  std::string m_ip_addr_name;
+
   unsigned int m_total_msgs_sent;
   unsigned int m_total_msgs_rcvd;
-
 };
 
 #endif
-
-

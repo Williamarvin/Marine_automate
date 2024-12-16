@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
+#include "HostInfo_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "HostInfo_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Automatically detect the vehicle's host information including ");
@@ -47,25 +46,24 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelp
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blk("Usage: pHostInfo file.moos [OPTIONS]                            ");
   blk("                                                                ");
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch pHostInfo with the given process name rather       ");
   blk("      than pHostInfo.                                           ");
   mag("  --example, -e                                                 ");
   blk("      Display example MOOS configuration block.                 ");
   mag("  --help, -h                                                    ");
   blk("      Display this help message.                                ");
-  mag("  --hostip","=<HostIP>                                          ");
+  mag("  --hostip", "=<HostIP>                                          ");
   blk("      Use the given IP address as a fall-back rather than the   ");
   blk("      the fall-back address of \"localhost\".                   ");
-  mag("  --HOSTIP","=<HostIP>                                          ");
+  mag("  --HOSTIP", "=<HostIP>                                          ");
   blk("      Force the use of the given IP address as the reported IP  ");
   blk("      address ignoring any other auto-discovered IP address.    ");
   mag("  --interface, -i                                               ");
@@ -83,10 +81,9 @@ void showHelpAndExit()
 }
 
 //----------------------------------------------------------------
-// Procedure: showExampleConfigAndExit                                  
+// Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("pHostInfo Example MOOS Configuration                            ");
   blu("=============================================================== ");
@@ -110,8 +107,7 @@ void showExampleConfigAndExit()
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("pHostInfo INTERFACE                                             ");
@@ -143,17 +139,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("pHostInfo", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

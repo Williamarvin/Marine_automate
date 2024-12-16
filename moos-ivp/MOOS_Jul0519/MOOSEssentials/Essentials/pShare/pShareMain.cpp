@@ -7,8 +7,7 @@
 
 #include "Share.h"
 
-int main(int argc, char *argv[])
-{
-	MOOS::Share TheShare;
-	TheShare.Run(argc,argv);
+int main(int argc, char *argv[]) {
+  MOOS::Share TheShare;
+  TheShare.Run(argc, argv);
 }

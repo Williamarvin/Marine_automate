@@ -27,46 +27,43 @@
 #include <string>
 #include <vector>
 
-class ALogCatHandler
-{
- public:
+class ALogCatHandler {
+public:
   ALogCatHandler();
   ~ALogCatHandler() {}
 
-  void      setForceOverwrite()      {m_force_overwrite=true;}
-  void      setVerbose();
+  void setForceOverwrite() { m_force_overwrite = true; }
+  void setVerbose();
 
-  bool      addALogFile(std::string s);
-  bool      setNewALogFile(std::string s) {m_outfile=s; return(true);}
+  bool addALogFile(std::string s);
+  bool setNewALogFile(std::string s) {
+    m_outfile = s;
+    return (true);
+  }
 
-  bool      process();
+  bool process();
 
-  unsigned int size() const {return(m_alog_files.size());}
-  
- protected:
-  bool      preCheck();
-  bool      processFirstFile();
-  bool      processOtherFiles();
+  unsigned int size() const { return (m_alog_files.size()); }
 
- protected:
-  bool        m_force_overwrite;
-  bool        m_verbose;
-  bool        m_debug;
+protected:
+  bool preCheck();
+  bool processFirstFile();
+  bool processOtherFiles();
 
- private:
+protected:
+  bool m_force_overwrite;
+  bool m_verbose;
+  bool m_debug;
+
+private:
   std::vector<std::string> m_alog_files;
 
-  std::vector<double>      m_utc_log_start_times;    
-  std::vector<double>      m_utc_data_start_times;   
-  std::vector<double>      m_utc_data_end_times;     
-  std::string  m_outfile;
+  std::vector<double> m_utc_log_start_times;
+  std::vector<double> m_utc_data_start_times;
+  std::vector<double> m_utc_data_end_times;
+  std::string m_outfile;
 
   FILE *m_file_out;
 };
 
-#endif 
-
-
-
-
-
+#endif

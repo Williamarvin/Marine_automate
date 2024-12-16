@@ -14,15 +14,15 @@
 //   (2) "Serial Programming HOWTO"
 //       <https://tldp.org/HOWTO/Serial-Programming-HOWTO/>
 
-#include <stdio.h>    /* Standard input/output definitions */
-#include <string.h>   /* String function definitions */
-#include <unistd.h>   /* UNIX standard function definitions */
-#include <fcntl.h>    /* File control definitions */
-#include <errno.h>    /* Error number definitions */
-#include <termios.h>  /* POSIX terminal control definitions */
+#include <errno.h>   /* Error number definitions */
+#include <fcntl.h>   /* File control definitions */
+#include <stdio.h>   /* Standard input/output definitions */
+#include <string.h>  /* String function definitions */
+#include <termios.h> /* POSIX terminal control definitions */
+#include <unistd.h>  /* UNIX standard function definitions */
 
-#include <iostream>    /* Print to terminal */
-#include <signal.h>    /* Enable signal interrupts */
+#include <iostream> /* Print to terminal */
+#include <signal.h> /* Enable signal interrupts */
 
 using namespace std;
 
@@ -39,18 +39,16 @@ volatile int ACTIVE = TRUE;
 volatile int WAIT = TRUE;
 
 // declare serial port functions
-int open_port (void);
-int set_options (int fd);
-int read_port (int fd);
-int close_port (int fd);
+int open_port(void);
+int set_options(int fd);
+int read_port(int fd);
+int close_port(int fd);
 
 // define interrupt functions
-void interrupt (int s) {ACTIVE = FALSE;};
-void newmail (int s) {WAIT = FALSE;};
+void interrupt(int s) { ACTIVE = FALSE; };
+void newmail(int s) { WAIT = FALSE; };
 
-
-int main ()
-{
+int main() {
   // open serial port
   int fd = open_port();
   cout << "port open." << endl;
@@ -77,31 +75,29 @@ int main ()
 
   // enter infinite read loop
   unsigned int millisec = 1000;
-  while (ACTIVE){
-    usleep(100 * millisec); //sleep for 0.1 second
+  while (ACTIVE) {
+    usleep(100 * millisec); // sleep for 0.1 second
 
     // read port when data available (SIGIO)
-    if (WAIT==FALSE){
+    if (WAIT == FALSE) {
       read_port(fd);
     }
 
-    // close port when when user halts program (SIGINT) 
-    if (ACTIVE==FALSE){
+    // close port when when user halts program (SIGINT)
+    if (ACTIVE == FALSE) {
       close_port(fd);
       break;
     }
   }
-  return(0);
+  return (0);
 }
 
-
-int open_port (void)
-{
-  int fd;  // file descriptor for serial port
+int open_port(void) {
+  int fd; // file descriptor for serial port
 
   fd = open(PORT, O_RDONLY | O_NOCTTY | O_NONBLOCK);
 
-  if (fd<0){
+  if (fd < 0) {
     perror(PORT);
     exit(-1);
   }
@@ -112,13 +108,11 @@ int open_port (void)
   // F_SETFL=FNDELAY: return 0 if no characters are available on the port
   // F_SETFL=0      : block until characters arrive
   fcntl(fd, F_SETFL, FASYNC);
-  
-  return(fd);
+
+  return (fd);
 }
 
-
-int set_options (int fd)
-{
+int set_options(int fd) {
   // **************** CONFIGURE SERIAL PORT ***************** //
   struct termios options;
 
@@ -140,8 +134,8 @@ int set_options (int fd)
   options.c_cflag |= CS8;
 
   // harware control
-  //options.c_cflag |= CRTSCTS;  // enable
-  options.c_cflag &= ~CRTSCTS;   // disable
+  // options.c_cflag |= CRTSCTS;  // enable
+  options.c_cflag &= ~CRTSCTS; // disable
 
   // II. LOCAL OPTIONS
   // set canonical input mode (read full lines only)
@@ -150,15 +144,15 @@ int set_options (int fd)
 
   // III. INPUT OPTIONS
   // software control
-  //options.c_iflag |= (IXON | IXOFF | IXANY);  // enable
-  options.c_iflag &= ~(IXON | IXOFF | IXANY);   // disable
+  // options.c_iflag |= (IXON | IXOFF | IXANY);  // enable
+  options.c_iflag &= ~(IXON | IXOFF | IXANY); // disable
 
   // preserve carriage return
   options.c_iflag &= ~IGNCR;
 
   // disable parity checks
   options.c_iflag &= ~INPCK;
-  
+
   // disable end of line conversions
   options.c_iflag &= ~(INLCR | ICRNL | IMAXBEL);
 
@@ -167,39 +161,36 @@ int set_options (int fd)
 
   // IV. OUTPUT OPTIONS
   // post-processing
-  //options.c_oflag |= OPOST; // enable
-  options.c_oflag &= ~OPOST;  // disable
-  
+  // options.c_oflag |= OPOST; // enable
+  options.c_oflag &= ~OPOST; // disable
+
   // flush buffer and write updated attributes immediately
   tcflush(fd, TCIFLUSH);
   tcsetattr(fd, TCSANOW, &options);
 
-  return(0);
+  return (0);
 }
 
-
-int read_port(int fd){
-  char buf [256];
+int read_port(int fd) {
+  char buf[256];
   int len = read(fd, &buf, sizeof(buf));
-  if (len<0)
+  if (len < 0)
     cout << "Error reading " << strerror(errno) << endl;
-  else if (len==0)
+  else if (len == 0)
     cout << "Buffer empty." << endl;
-  else{
+  else {
     buf[len] = '\0';
     cout << buf;
     WAIT = TRUE;
   }
-  return(0);
+  return (0);
 }
 
-
-int close_port (int fd){
+int close_port(int fd) {
   close(fd);
   cout << "\n[data logging stopped by user]\n" << endl;
-  return(0);
+  return (0);
 }
-
 
 /* ----- ALT METHOD FOR NONBLOCKING QUERY ------*/
 // #include <sys/ioctl.h>

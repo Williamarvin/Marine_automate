@@ -23,18 +23,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "XYMarker.h"
 #include <iostream>
-#include "XYMarker.h" 
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor()
 
-XYMarker::XYMarker()
-{
-  m_x = 0;  // meters
-  m_y = 0;  // meters
+XYMarker::XYMarker() {
+  m_x = 0; // meters
+  m_y = 0; // meters
 
   init();
 }
@@ -43,10 +42,9 @@ XYMarker::XYMarker()
 // Constructor()
 // Note: Convenience constructor
 
-XYMarker::XYMarker(double x, double y)
-{
-  m_x = x;  // meters
-  m_y = y;  // meters
+XYMarker::XYMarker(double x, double y) {
+  m_x = x; // meters
+  m_y = y; // meters
 
   init();
 }
@@ -54,40 +52,36 @@ XYMarker::XYMarker(double x, double y)
 //---------------------------------------------------------------
 // Procedure: init()
 
-void XYMarker::init()
-{
-  m_width = 5;  // meters
-  m_range = 0;  // meters
-  m_type  = "circle";
+void XYMarker::init() {
+  m_width = 5; // meters
+  m_range = 0; // meters
+  m_type = "circle";
 
-  m_x_set     = false;
-  m_y_set     = false;
+  m_x_set = false;
+  m_y_set = false;
   m_width_set = false;
   m_range_set = false;
-  m_type_set  = false;
+  m_type_set = false;
 }
 
 //---------------------------------------------------------------
 // Procedure: set_type()
 
-bool XYMarker::set_type(string str)
-{
-  if((str == "circle")  ||  (str == "square") ||
-     (str == "diamond") ||  (str == "efield") ||
-     (str == "gateway") ||  (str == "triangle")) {
+bool XYMarker::set_type(string str) {
+  if ((str == "circle") || (str == "square") || (str == "diamond") ||
+      (str == "efield") || (str == "gateway") || (str == "triangle")) {
     m_type = str;
     m_type_set = true;
-    return(true);
+    return (true);
   }
-  return(false);
+  return (false);
 }
 
 //---------------------------------------------------------------
 // Procedure: set_width()
 
-void XYMarker::set_width(double width)
-{
-  if(width < 0)
+void XYMarker::set_width(double width) {
+  if (width < 0)
     width = 0;
   m_width = width;
   m_width_set = true;
@@ -96,9 +90,8 @@ void XYMarker::set_width(double width)
 //---------------------------------------------------------------
 // Procedure: set_range()
 
-void XYMarker::set_range(double range)
-{
-  if(range < 0)
+void XYMarker::set_range(double range) {
+  if (range < 0)
     range = 0;
   m_range = range;
   m_range_set = true;
@@ -107,8 +100,7 @@ void XYMarker::set_range(double range)
 //---------------------------------------------------------------
 // Procedure: get_spec()
 
-string XYMarker::get_spec(string param) const
-{
+string XYMarker::get_spec(string param) const {
   string spec;
 
   spec += "x=";
@@ -118,30 +110,29 @@ string XYMarker::get_spec(string param) const
   spec += ",width=";
   spec += doubleToStringX(m_width, 2);
 
-  if(m_range_set)
-    spec += ",range=" + doubleToStringX(m_range,2);
+  if (m_range_set)
+    spec += ",range=" + doubleToStringX(m_range, 2);
 
-  if(color_set("primary_color")) {
+  if (color_set("primary_color")) {
     string color = get_color("primary_color").str();
     aug_spec(spec, "primary_color=" + color);
   }
-  if(color_set("secondary_color")) {
+  if (color_set("secondary_color")) {
     string color = get_color("secondary_color").str();
     aug_spec(spec, "secondary_color=" + color);
   }
 
-  if(m_type != "")
+  if (m_type != "")
     aug_spec(spec, "type=" + m_type);
-  if(m_owner != "")
+  if (m_owner != "")
     aug_spec(spec, "owner=" + m_owner);
 
   string obj_spec = XYObject::get_spec(param);
-  if(obj_spec != "")
+  if (obj_spec != "")
     spec += ("," + obj_spec);
-  
-  return(spec);
-}
 
+  return (spec);
+}
 
 //---------------------------------------------------------------
 // Procedure: get_spec_inactive()
@@ -150,18 +141,13 @@ string XYMarker::get_spec(string param) const
 //            label, just generate a concise spec with a trivial
 //            convex poly.
 
-std::string XYMarker::get_spec_inactive() const
-{
+std::string XYMarker::get_spec_inactive() const {
   string spec = "x=0,y=0,active=false";
-  if(m_label != "")
-    spec += ",label=" + m_label; 
+  if (m_label != "")
+    spec += ",label=" + m_label;
 
-  if(m_duration_set && (m_duration==0))
+  if (m_duration_set && (m_duration == 0))
     aug_spec(spec, "duration=0");
 
-  return(spec);
+  return (spec);
 }
-
-
-
-

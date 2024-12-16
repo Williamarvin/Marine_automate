@@ -24,28 +24,27 @@
 #ifndef ZAIC_HLEQ_MODEL_HEADER
 #define ZAIC_HLEQ_MODEL_HEADER
 
-#include <string>
 #include "IvPDomain.h"
-#include "ZAIC_Model.h"
-#include "ZAIC_LEQ.h"
 #include "ZAIC_HEQ.h"
+#include "ZAIC_LEQ.h"
+#include "ZAIC_Model.h"
+#include <string>
 
-class ZAIC_HLEQ_Model : public ZAIC_Model
-{
- public:
+class ZAIC_HLEQ_Model : public ZAIC_Model {
+public:
   ZAIC_HLEQ_Model();
-  ~ZAIC_HLEQ_Model() {};
+  ~ZAIC_HLEQ_Model(){};
 
- public: // Virtual function overloaded
+public: // Virtual function overloaded
   IvPFunction *getIvPFunction();
-  void  setDomain(unsigned int);
-  
- public: // Editing functions
-  void  moveX(double amt);
+  void setDomain(unsigned int);
+
+public: // Editing functions
+  void moveX(double amt);
 
   // Change the Edit Mode
-  void  currMode(int);
-  void  toggleHLEQ() {m_leq_mode = !m_leq_mode;}
+  void currMode(int);
+  void toggleHLEQ() { m_leq_mode = !m_leq_mode; }
 
   // Getters
   double getSummit();
@@ -54,16 +53,10 @@ class ZAIC_HLEQ_Model : public ZAIC_Model
   double getMinUtil();
   double getMaxUtil();
 
- protected:
-  ZAIC_LEQ*  m_zaic_leq;
-  ZAIC_HEQ*  m_zaic_heq;
-  int        m_curr_mode;
-  bool       m_leq_mode;
-
+protected:
+  ZAIC_LEQ *m_zaic_leq;
+  ZAIC_HEQ *m_zaic_heq;
+  int m_curr_mode;
+  bool m_leq_mode;
 };
-#endif 
-
-
-
-
-
+#endif

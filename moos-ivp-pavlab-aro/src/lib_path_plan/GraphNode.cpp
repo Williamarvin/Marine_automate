@@ -5,14 +5,12 @@
 /*    DATE: March 5th, 2022                                 */
 /************************************************************/
 
-
 #include "GraphNode.h"
 
 //---------------------------------------------------------
 // Constructor
 
-Node::Node()
-{
+Node::Node() {
   m_number = -1;
   m_parent = -1;
   m_f = -1;
@@ -23,20 +21,15 @@ Node::Node()
   m_isGoal = false;
   m_isStart = false;
 }
-
 
 //---------------------------------------------------------
 // Destructor
 
-Node::~Node()
-{
-  
-}
+Node::~Node() {}
 
 //------------------------------------------------------------
 // Reset
-void Node::resetNode()
-{
+void Node::resetNode() {
   m_number = -1;
   m_parent = -1;
   m_f = -1;
@@ -46,6 +39,4 @@ void Node::resetNode()
   m_pos = std::vector<double>();
   m_isGoal = false;
   m_isStart = false;
-  
 }
-

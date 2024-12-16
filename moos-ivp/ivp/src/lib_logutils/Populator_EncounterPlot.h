@@ -24,26 +24,20 @@
 #ifndef POPULATOR_ENCOUNTER_PLOT_HEADER
 #define POPULATOR_ENCOUNTER_PLOT_HEADER
 
-#include <vector>
-#include "EncounterPlot.h"
 #include "ALogEntry.h"
+#include "EncounterPlot.h"
+#include <vector>
 
-class Populator_EncounterPlot 
-{
+class Populator_EncounterPlot {
 public:
   Populator_EncounterPlot() {}
   ~Populator_EncounterPlot() {}
-  
-  bool     populateFromEntries(const std::vector<ALogEntry>&);
-  EncounterPlot getEncounterPlot() {return(m_encounter_plot);}
-  
- protected:
+
+  bool populateFromEntries(const std::vector<ALogEntry> &);
+  EncounterPlot getEncounterPlot() { return (m_encounter_plot); }
+
+protected:
   EncounterPlot m_encounter_plot;
 };
 
-#endif 
-
-
-
-
-
+#endif

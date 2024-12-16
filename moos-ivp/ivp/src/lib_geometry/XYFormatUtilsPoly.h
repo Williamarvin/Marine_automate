@@ -22,22 +22,22 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_POLY_HEADER
 #define XY_FORMAT_UTILS_POLY_HEADER
 
-#include <string>
 #include "XYPolygon.h"
+#include <string>
 
 //---------------------------------------------------------------
 // #0 Create a polygon from a string specification. This function
 // will call one of the string*Poly(string) functions below.
 XYPolygon string2Poly(std::string);
 
-// *** IMPORTANT NOTE **** 
-// The below functions are not intended to be invoked directly by 
+// *** IMPORTANT NOTE ****
+// The below functions are not intended to be invoked directly by
 // the user. They are subortinate functions called by the above
-// function. While the above function will be maintained in the 
+// function. While the above function will be maintained in the
 // future for backward compatibility, the below functions are not.
 
 // #1 Create a polygon given a set of points
@@ -51,17 +51,17 @@ XYPolygon stringAbbreviated2Poly(std::string);
 
 //---------------------------------------------------------------
 // #3 Create a polygon that approximates an ellipse
-// Example: "ellipse:: x=val, y=val, major=val, minor=val, 
+// Example: "ellipse:: x=val, y=val, major=val, minor=val,
 //    degs=val, rads=val, pts=val, snap_value=val, label=val"
 XYPolygon stringEllipse2Poly(std::string);
 
 // #4 Create a polygon that approximates a circle.
-// Example: "radial:: x=val, y=val, radius=val, pts=val, snap=val, 
+// Example: "radial:: x=val, y=val, radius=val, pts=val, snap=val,
 //    label=val"
 XYPolygon stringRadial2Poly(std::string);
 
 // #5 Create a polygon that approximates a circle.
-// Example: "radial:xval,yval,radius,pts,snapval,label 
+// Example: "radial:xval,yval,radius,pts,snapval,label
 XYPolygon stringShortRadial2Poly(std::string);
 
 // #6 Create a polygon that approximates radial pie wedge
@@ -75,25 +75,14 @@ XYPolygon stringPieWedge2Poly(std::string);
 XYPolygon stringRangeWedge2Poly(std::string);
 
 // #8 Create a rectangle from two given points
-// Example: "x1=val, y1=val, x2=val, y2=val, axis_pad=val, 
+// Example: "x1=val, y1=val, x2=val, y2=val, axis_pad=val,
 //          perp_pad=val, snap_val=val, label=val"
 XYPolygon stringPylon2Poly(std::string);
 
 // Below added Nov 27th, 2023
-bool setPolyOnString(XYPolygon& poly, std::string spec,
-		     std::string label="");
+bool setPolyOnString(XYPolygon &poly, std::string spec, std::string label = "");
 
 // Below added Jan 11th, 2024
 XYPolygon stringOval2Poly(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

@@ -23,142 +23,131 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
 #include "PopulatorIPP.h"
-#include "MBUtils.h"
 #include "BuildUtils.h"
-#include "FunctionEncoder.h"
-#include "IvPProblem_v3.h"
-#include "IvPProblem_v2.h"
 #include "FileBuffer.h"
+#include "FunctionEncoder.h"
+#include "IvPProblem_v2.h"
+#include "IvPProblem_v3.h"
+#include "MBUtils.h"
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Procedure: populate
 
-bool PopulatorIPP::populate(string filename, int alg)
-{
+bool PopulatorIPP::populate(string filename, int alg) {
   FILE *f = fopen(filename.c_str(), "r");
-  if(!f) {
-    if(m_verbose)
+  if (!f) {
+    if (m_verbose)
       cout << "Could not find File: " << filename << endl;
-    return(false);
+    return (false);
   }
 
-  if(m_verbose)
+  if (m_verbose)
     cout << "Successfully found File: " << filename << endl;
   fclose(f);
 
-  if(m_ivp_problem)
-    delete(m_ivp_problem);
+  if (m_ivp_problem)
+    delete (m_ivp_problem);
 
-  if(alg == 0)
+  if (alg == 0)
     m_ivp_problem = new IvPProblem;
-  else if((alg == 1) || (alg == 2)) {
+  else if ((alg == 1) || (alg == 2)) {
     m_ivp_problem = new IvPProblem_v2;
-    if(alg == 1)
-      ((IvPProblem_v2*)(m_ivp_problem))->setFullTreeTraversal();
-  }
-  else if(alg == 3)
+    if (alg == 1)
+      ((IvPProblem_v2 *)(m_ivp_problem))->setFullTreeTraversal();
+  } else if (alg == 3)
     m_ivp_problem = new IvPProblem_v3;
 
   vector<string> svector = fileBuffer(filename);
-    
-  for(unsigned int i=0; i<svector.size(); i++) {
+
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string line = stripBlankEnds(svector[i]);
-    if((line.length()!=0) && ((line)[0]!='#')) {
+    if ((line.length() != 0) && ((line)[0] != '#')) {
       bool res = handleLine(line);
-      if(!res) {
-	cout << " Problem with line " << i+1;
-	cout << " in the file: " << filename << endl;
-	cout << line << endl;
+      if (!res) {
+        cout << " Problem with line " << i + 1;
+        cout << " in the file: " << filename << endl;
+        cout << line << endl;
 
-	delete(m_ivp_problem);
-	m_ivp_problem = 0;
+        delete (m_ivp_problem);
+        m_ivp_problem = 0;
 
-	return(false);
+        return (false);
       }
     }
   }
 
-  if(m_verbose)
+  if (m_verbose)
     cout << endl << "Done Populating from: " << filename << endl;
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: handleLine
 
-bool PopulatorIPP::handleLine(string line)
-{
+bool PopulatorIPP::handleLine(string line) {
   // Comments are anything to the right of a "#" or "//"
   line = stripComment(line, "//");
   line = stripComment(line, "#");
   line = stripBlankEnds(line);
 
-  if(line.size() == 0)  // Either blank or comment line
-    return(true);  
-  
-  string left  = biteStringX(line, '=');
+  if (line.size() == 0) // Either blank or comment line
+    return (true);
+
+  string left = biteStringX(line, '=');
   string right = line;
-  
-  if(left == "domain") {
+
+  if (left == "domain") {
     IvPDomain domain = stringToDomain(right);
-    if(domain.size() > 0) {
+    if (domain.size() > 0) {
       m_ivp_problem->setDomain(domain);
-      return(true);
+      return (true);
     }
   }
-  if(left == "ipf") {
-    if(m_verbose)
+  if (left == "ipf") {
+    if (m_verbose)
       cout << "." << flush;
 
     IvPFunction *ipf = StringToIvPFunction(right);
-    if(ipf) {
-      if(m_grid_override_size != 0)
-	overrideGrid(ipf);
+    if (ipf) {
+      if (m_grid_override_size != 0)
+        overrideGrid(ipf);
       m_ivp_problem->addOF(ipf);
-      return(true);
+      return (true);
     }
   }
-  if(left == "ipfs")
-    return(true);
+  if (left == "ipfs")
+    return (true);
 
-  return(false);
+  return (false);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: overrideGrid()
 
-void PopulatorIPP::overrideGrid(IvPFunction* ipf)
-{
-  if((m_grid_override_size <= 0) || !ipf)
+void PopulatorIPP::overrideGrid(IvPFunction *ipf) {
+  if ((m_grid_override_size <= 0) || !ipf)
     return;
 
   int dim = ipf->getDim();
   IvPBox gelbox(dim);
-  
-  for(int d=0; d<dim; d++) {
-    // Subtract 1: To get a 2D grid cell size of 10, for example, 
+
+  for (int d = 0; d < dim; d++) {
+    // Subtract 1: To get a 2D grid cell size of 10, for example,
     // we need a point box with both dimentions set to 9.
     int gelsz = m_grid_override_size - 1;
     int domsz = ipf->getPDMap()->getDomain().getVarPoints(d);
-    if(gelsz > domsz)
+    if (gelsz > domsz)
       gelsz = domsz;
-    
+
     gelbox.setPTS(d, gelsz, gelsz);
   }
 
   ipf->getPDMap()->setGelBox(gelbox);
   ipf->getPDMap()->updateGrid();
 }
-  
-
-
-
-
-

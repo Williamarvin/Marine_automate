@@ -21,13 +21,13 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "GrepHandler.h"
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
-#include "GrepHandler.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -36,107 +36,100 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   GrepHandler handler;
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     bool handled = true;
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogrep", "gpl");
-      return(0);
-    }
-    else if((argi == "--n o_comments") || (argi == "-nc"))
+      return (0);
+    } else if ((argi == "--n o_comments") || (argi == "-nc"))
       handler.setCommentsRetained(false);
-    else if((argi == "--keep_bad") || (argi == "-kb"))
+    else if ((argi == "--keep_bad") || (argi == "-kb"))
       handler.setBadLinesRetained(false);
-    else if((argi == "--no_report") || (argi == "-nr"))
+    else if ((argi == "--no_report") || (argi == "-nr"))
       handler.setMakeReport(false);
-    else if((argi == "--gap_len") || (argi == "-gl"))
+    else if ((argi == "--gap_len") || (argi == "-gl"))
       handler.setGapLinesRetained(true);
-    else if((argi == "--appcast") || (argi == "-ac"))
+    else if ((argi == "--appcast") || (argi == "-ac"))
       handler.setAppCastRetained(true);
-    else if((argi == "--sort") || (argi == "-s"))
+    else if ((argi == "--sort") || (argi == "-s"))
       handler.setSortEntries(true);
-    else if((argi == "--duplicates") || (argi == "-d"))
+    else if ((argi == "--duplicates") || (argi == "-d"))
       handler.setRemoveDups(true);
-    else if((argi == "--sd") || (argi == "-sd")) {
+    else if ((argi == "--sd") || (argi == "-sd")) {
       handler.setSortEntries(true);
       handler.setRemoveDups(true);
     }
 
-    else if(argi == "--kk")
+    else if (argi == "--kk")
       handler.setKeepKey(true);
-    else if((argi == "--csw") || (argi == "-csw"))
+    else if ((argi == "--csw") || (argi == "-csw"))
       handler.setColSep(' ');
-    else if((argi == "--csc") || (argi == "-csc"))
+    else if ((argi == "--csc") || (argi == "-csc"))
       handler.setColSep(',');
-    else if((argi == "--cso") || (argi == "-cso"))
+    else if ((argi == "--cso") || (argi == "-cso"))
       handler.setColSep(':');
-    else if((argi == "--css") || (argi == "-css"))
+    else if ((argi == "--css") || (argi == "-css"))
       handler.setColSep(';');
 
-    else if((argi == "--v") || (argi == "-vo")) 
+    else if ((argi == "--v") || (argi == "-vo"))
       handler.setFormat("val");
-    else if((argi == "--s") || (argi == "-so")) 
+    else if ((argi == "--s") || (argi == "-so"))
       handler.setFormat("src");
-    else if((argi == "--tv") || (argi == "-tvo"))
+    else if ((argi == "--tv") || (argi == "-tvo"))
       handler.setFormat("time:val");
-    else if(argi == "--tvv")
+    else if (argi == "--tvv")
       handler.setFormat("time:var:val");
 
-    else if(strBegins(argi, "--subpat=")) {
+    else if (strBegins(argi, "--subpat=")) {
       string patterns = argi.substr(9);
       vector<string> svector = parseString(patterns, ':');
-      for(unsigned int i=0; i<svector.size(); i++)
-	handler.addSubPattern(svector[i]);
-    }
-    else if(strBegins(argi, "--format=")) 
+      for (unsigned int i = 0; i < svector.size(); i++)
+        handler.addSubPattern(svector[i]);
+    } else if (strBegins(argi, "--format="))
       handled = handler.setFormat(argi.substr(9));
-    else if(argi == "--final") 
+    else if (argi == "--final")
       handler.setFinalOnly(true);
-    else if(argi == "--first") 
+    else if (argi == "--first")
       handler.setFirstOnly(true);
 
-
-    else if((argi == "--quiet") || (argi == "-q")) {
+    else if ((argi == "--quiet") || (argi == "-q")) {
       handler.setCommentsRetained(false);
       handler.setMakeReport(false);
-    }
-    else if((argi == "--force") || (argi == "-force") || (argi == "-f")) 
+    } else if ((argi == "--force") || (argi == "-force") || (argi == "-f"))
       handler.setFileOverWrite(true);
-    else if(strEnds(argi, ".alog") || strEnds(argi, ".klog")) 
+    else if (strEnds(argi, ".alog") || strEnds(argi, ".klog"))
       handled = handler.setALogFile(argi);
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/aloggrep");
-    else if(strBegins(argi, "-"))
+    else if (strBegins(argi, "-"))
       handled = false;
     else
       handler.addKey(argi);
 
-    if(!handled) {
+    if (!handled) {
       cout << "Exiting due to bad arg: " << argi << endl;
-      return(1);
+      return (1);
     }
   }
 
   bool handled = handler.handle();
-  if(!handled)
-    return(1);
+  if (!handled)
+    return (1);
 
   handler.printReport();
-  return(0);
+  return (0);
 }
 
-
 //------------------------------------------------------------
-// Procedure: showHelpAndExit()  
+// Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  aloggrep in.alog [VAR] [SRC] [out.alog] [OPTIONS]        " << endl;
   cout << "                                                           " << endl;
@@ -246,6 +239,3 @@ void showHelpAndExit()
   cout << "      alogview, alogsort.                                  " << endl;
   exit(0);
 }
-
-  
-

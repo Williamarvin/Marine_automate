@@ -29,66 +29,57 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor()
 
-CommsEntry::CommsEntry(double x, double y, double utc,
-		       unsigned int id)
-{
-  m_x   = x;
-  m_y   = y;
+CommsEntry::CommsEntry(double x, double y, double utc, unsigned int id) {
+  m_x = x;
+  m_y = y;
   m_utc = utc;
-  m_id  = id;
+  m_id = id;
 }
 
 //------------------------------------------------------------
 // Procedure: getSpec()
 
-string CommsEntry::getSpec() const
-{
+string CommsEntry::getSpec() const {
   string str;
   str += "x=" + doubleToStringX(m_x, 3);
   str += ",y=" + doubleToStringX(m_y, 3);
   str += ",utc=" + doubleToStringX(m_utc, 3);
   str += ",id=" + uintToString(m_id);
-  return(str);
+  return (str);
 }
 
 //------------------------------------------------------------
 // Procedure: stringToCommsEntry()
 
-CommsEntry stringToCommsEntry(string str)
-{
+CommsEntry stringToCommsEntry(string str) {
   CommsEntry null_entry;
-  
+
   string x_str, y_str, utc_str, id_str;
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
-    if(param == "x")
+    if (param == "x")
       x_str = value;
-    else if(param == "y")
+    else if (param == "y")
       y_str = value;
-    else if(param == "utc")
+    else if (param == "utc")
       utc_str = value;
-    else if(param == "id")
+    else if (param == "id")
       id_str = value;
     else
-      return(null_entry);
+      return (null_entry);
   }
 
-  if(!isNumber(x_str) || !isNumber(y_str) ||
-     !isNumber(utc_str) || !isNumber(id_str))
-    return(null_entry);
+  if (!isNumber(x_str) || !isNumber(y_str) || !isNumber(utc_str) ||
+      !isNumber(id_str))
+    return (null_entry);
 
   double x_dbl = atof(x_str.c_str());
   double y_dbl = atof(y_str.c_str());
   double utc_dbl = atof(utc_str.c_str());
   unsigned int id_uint = atoi(id_str.c_str());
-  
+
   CommsEntry entry(x_dbl, y_dbl, utc_dbl, id_uint);
-  return(entry);
+  return (entry);
 }
-			      
-  
-
-
-

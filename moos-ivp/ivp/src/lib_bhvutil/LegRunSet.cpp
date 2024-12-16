@@ -5,29 +5,24 @@
 /*    DATE: June 11th, 2023                                 */
 /************************************************************/
 
-#include <iterator>
-#include "GeomUtils.h"
-#include "AngleUtils.h"
-#include "MBUtils.h"
 #include "LegRunSet.h"
+#include "AngleUtils.h"
 #include "FileBuffer.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include <iterator>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor()
 
-LegRunSet::LegRunSet()
-{
-}
+LegRunSet::LegRunSet() {}
 
 //---------------------------------------------------------
 // Procedure: valid()
 
-bool LegRunSet::valid() const
-{
-  return(true);
-}
+bool LegRunSet::valid() const { return (true); }
 
 //---------------------------------------------------------
 // Procedure: setLegParams()
@@ -35,27 +30,25 @@ bool LegRunSet::valid() const
 //            id=alpha, turn1_rad=30, turn2_rad=40
 //            id=alpha, turn1_ext=10, turn2_ext=15
 
-bool LegRunSet::setLegParams(string str)
-{
+bool LegRunSet::setLegParams(string str) {
   string id = tokStringParse(str, "id");
-  if(id == "")
-    return(false);
+  if (id == "")
+    return (false);
 
   m_map_legruns[id].setParams(str);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: handleLegRunFile()
 
 bool LegRunSet::handleLegRunFile(string str, double curr_time,
-				  string& warning)
-{
+                                 string &warning) {
   vector<string> lines = fileBuffer(str);
-  if(lines.size() == 0) {
+  if (lines.size() == 0) {
     warning = "File not found, or empty: " + str;
-    return(false);
+    return (false);
   }
 #if 0
   // Part 1: Parse all the lines
@@ -98,6 +91,5 @@ bool LegRunSet::handleLegRunFile(string str, double curr_time,
 
   m_swim_file = str;
 #endif
-  return(true);
+  return (true);
 }
-

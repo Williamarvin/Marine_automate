@@ -37,40 +37,19 @@
 class Regressor;
 class RT_Smart {
 public:
-  RT_Smart(Regressor*);
+  RT_Smart(Regressor *);
   virtual ~RT_Smart() {}
 
- public: 
-  PDMap* create(PDMap*, PQueue&, int more_pcs, double thresh=0);
+public:
+  PDMap *create(PDMap *, PQueue &, int more_pcs, double thresh = 0);
 
-  void   setVerbose(bool v=true) {m_verbose=v;}
-  
- protected:
-  Regressor* m_regressor;
+  void setVerbose(bool v = true) { m_verbose = v; }
 
- private:
+protected:
+  Regressor *m_regressor;
+
+private:
   bool m_verbose;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

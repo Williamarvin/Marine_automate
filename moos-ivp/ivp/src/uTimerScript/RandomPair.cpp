@@ -21,80 +21,60 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "RandomPair.h"
 #include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-RandomPair::RandomPair()
-{
+RandomPair::RandomPair() {
   // Initial values for state variables.
-  m_value1   = 0;
-  m_value2   = 0;
+  m_value1 = 0;
+  m_value2 = 0;
 
   // Initial values for configuration parameters
   m_varname1 = "random_var1";
   m_varname2 = "random_var2";
-  m_keyname  = "";
+  m_keyname = "";
 }
 
 //---------------------------------------------------------
 // Procedure: setParam
 
-bool RandomPair::setParam(string param, double value)
-{
-  return(false); // indicates not handled
+bool RandomPair::setParam(string param, double value) {
+  return (false); // indicates not handled
 }
 
 //---------------------------------------------------------
 // Procedure: setParam
 
-bool RandomPair::setParam(string param, string value)
-{
-  return(false); // indicates not handled
+bool RandomPair::setParam(string param, string value) {
+  return (false); // indicates not handled
 }
 
 //---------------------------------------------------------
 // Procedure: getStringValue1
 
-string RandomPair::getStringValue1() const
-{
-  return(m_value_str1);
-}
-  
+string RandomPair::getStringValue1() const { return (m_value_str1); }
+
 //---------------------------------------------------------
 // Procedure: getStringValue2
 
-string RandomPair::getStringValue2() const
-{
-  return(m_value_str2);
-}
-  
-  
+string RandomPair::getStringValue2() const { return (m_value_str2); }
+
 //---------------------------------------------------------
 // Procedure: getStringSummary
 
-string RandomPair::getStringSummary() const
-{
+string RandomPair::getStringSummary() const {
   string str = "varname1=" + m_varname1 + ",varname2=" + m_varname2;
-  if(m_keyname != "")
+  if (m_keyname != "")
     str += ",keyname=" + m_keyname;
-  if(m_type != "")
+  if (m_type != "")
     str += ",type=" + m_type;
   str += ",val1=" + doubleToStringX(m_value1);
   str += ",val2=" + doubleToStringX(m_value2);
-  return(str);
+  return (str);
 }
-
-
-
-
-
-
-
-
-

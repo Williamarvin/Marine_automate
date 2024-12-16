@@ -32,18 +32,17 @@ class TStamp {
 
 public:
   TStamp();
-  ~TStamp() {};
+  ~TStamp(){};
 
-  bool  setTime(unsigned int hour, unsigned int min, double sec);
-  bool  setTimeStr(std::string);
+  bool setTime(unsigned int hour, unsigned int min, double sec);
+  bool setTimeStr(std::string);
 
   std::string getTimeStr() const;
-  bool  valid() const;
+  bool valid() const;
 
- protected:
-  unsigned int   m_hour;    // Hour in 24-hour clock (valid is 0 to 23)
-  unsigned int   m_min;     // Minute must be 0 to 59
-  double         m_sec;     // Second must be > 0.0 and < 60.0
+protected:
+  unsigned int m_hour; // Hour in 24-hour clock (valid is 0 to 23)
+  unsigned int m_min;  // Minute must be 0 to 59
+  double m_sec;        // Second must be > 0.0 and < 60.0
 };
 #endif
-

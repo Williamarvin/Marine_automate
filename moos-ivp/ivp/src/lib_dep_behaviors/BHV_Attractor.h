@@ -20,45 +20,45 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_ATTRACTORX_HEADER
 #define BHV_ATTRACTORX_HEADER
 
-#include <string>
 #include "IvPContactBehavior.h"
 #include "LinearExtrapolator.h"
+#include <string>
 
 class IvPDomain;
 class BHV_Attractor : public IvPContactBehavior {
 public:
   BHV_Attractor(IvPDomain);
   ~BHV_Attractor() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onIdleState();
-  void         onSetParamComplete();
-  void         onRunToIdleState();
+
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onIdleState();
+  void onSetParamComplete();
+  void onRunToIdleState();
 
 protected:
   double getRelevance(double, double, double, double);
   double getPriority();
 
-  void    postViewableTrailPoint();
-  void    postErasableTrailPoint();
+  void postViewableTrailPoint();
+  void postErasableTrailPoint();
   XYPoint m_trail_point;
 
 private:
   std::vector<std::string> m_contact_list;
 
-  double  m_min_util_cpa_dist;
-  double  m_max_util_cpa_dist;
+  double m_min_util_cpa_dist;
+  double m_max_util_cpa_dist;
 
-  double  m_max_priority_range;
-  double  m_min_priority_range;
+  double m_max_priority_range;
+  double m_min_priority_range;
 
-  double  m_giveup_range;
-  double  m_patience;
+  double m_giveup_range;
+  double m_patience;
 
   double strength;
 
@@ -67,22 +67,3 @@ private: // State Variables
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

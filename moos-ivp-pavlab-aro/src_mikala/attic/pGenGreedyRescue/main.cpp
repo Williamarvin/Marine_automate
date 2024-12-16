@@ -5,23 +5,21 @@
 /*    DATE: March 3rd 2022                                  */
 /************************************************************/
 
-#include <string>
-#include "MBUtils.h"
 #include "ColorParse.h"
-#include "XYPoint.h"
-#include "XYSegList.h"
 #include "GenGreedyRescue.h"
 #include "GenGreedyRescue_Info.h"
+#include "MBUtils.h"
+#include "XYPoint.h"
+#include "XYSegList.h"
+#include <string>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
 
-  for (int i = 1; i < argc; i++)
-  {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
     if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();

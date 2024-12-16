@@ -21,20 +21,19 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "ALogScanner.h"
+#include "ColorParse.h"
+#include "LogUtils.h"
+#include "MBUtils.h"
 #include <cstdio>
 #include <iostream>
-#include "MBUtils.h"
-#include "ALogScanner.h"
-#include "LogUtils.h"
-#include "ColorParse.h"
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: scan
 
-ScanReport ALogScanner::scan()
-{
+ScanReport ALogScanner::scan() {
   ScanReport report;
 
   char carriage_return = 13;
@@ -42,94 +41,80 @@ ScanReport ALogScanner::scan()
 
   bool done = false;
 
-  if(m_verbose)
+  if (m_verbose)
     cout << endl;
-  
-  while(!done) {
 
-    if(m_verbose) {
+  while (!done) {
+
+    if (m_verbose) {
       lines_read++;
-      if((lines_read % 5000) == 0) {
-	cout << "  Lines Read: " << uintToCommaString(lines_read);
-	cout << carriage_return << flush;
+      if ((lines_read % 5000) == 0) {
+        cout << "  Lines Read: " << uintToCommaString(lines_read);
+        cout << carriage_return << flush;
       }
     }
-    
+
     ALogEntry entry = getNextRawALogEntry(m_file, true);
     string status = entry.getStatus();
     // Check for the end of the file
-    if(status == "eof")
+    if (status == "eof")
       done = true;
     // If otherwise a "normal" line, process
-    else if(status != "invalid") {
+    else if (status != "invalid") {
       string src = entry.getSource();
       // If the source is the IvP Helm, then see if the behavior
       // information is present and append to the source
-      if((src == "pHelmIvP") && m_use_full_source) {
-	string src_aux = entry.getSrcAux();
-	if(src_aux != "") {
-	  if(strContains(src_aux, ':')) {
-	    string iter = biteString(src_aux, ':');
-	    string bhv  = src_aux;
-	    if(bhv != "")
-	      src = src + ":" + bhv;
-	  }
-	  else
-	    src += ":" + src_aux;
-	}	      
+      if ((src == "pHelmIvP") && m_use_full_source) {
+        string src_aux = entry.getSrcAux();
+        if (src_aux != "") {
+          if (strContains(src_aux, ':')) {
+            string iter = biteString(src_aux, ':');
+            string bhv = src_aux;
+            if (bhv != "")
+              src = src + ":" + bhv;
+          } else
+            src += ":" + src_aux;
+        }
       }
-      
-      report.addLine(entry.getTimeStamp(),
-		     entry.getVarName(),
-		     src,
-		     entry.getStringVal());
+
+      report.addLine(entry.getTimeStamp(), entry.getVarName(), src,
+                     entry.getStringVal());
     }
   }
 
-  if(m_verbose) {
+  if (m_verbose) {
     cout << termColor("blue");
     cout << "  Lines Read: " << uintToCommaString(lines_read) << endl;
     cout << termColor();
   }
-  
-  return(report);
+
+  return (report);
 }
 
 //--------------------------------------------------------
 // Procedure: scanRateOnly
 
-ScanReport ALogScanner::scanRateOnly()
-{
+ScanReport ALogScanner::scanRateOnly() {
   ScanReport report;
   bool done = false;
-  while(!done) {
+  while (!done) {
     ALogEntry entry = getNextRawALogEntry(m_file, true);
     string status = entry.getStatus();
-    if(status == "eof")
+    if (status == "eof")
       done = true;
-    else if(status != "invalid")
+    else if (status != "invalid")
       report.addLineRateOnly(entry);
   }
-  return(report);
+  return (report);
 }
 
 //--------------------------------------------------------
 // Procedure: openALogFile
 
-bool ALogScanner::openALogFile(string alogfile)
-{
+bool ALogScanner::openALogFile(string alogfile) {
   m_file = fopen(alogfile.c_str(), "r");
-  if(!m_file)
-    return(false);
+  if (!m_file)
+    return (false);
   else
-    return(true);
+    return (true);
 }
-
-
-
-
-
-
-
-
-

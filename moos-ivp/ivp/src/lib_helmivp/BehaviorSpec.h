@@ -24,71 +24,66 @@
 #ifndef BEHAVIOR_SPEC_HEADER
 #define BEHAVIOR_SPEC_HEADER
 
-#include <string>
-#include <vector>
 #include "InfoBuffer.h"
 #include "IvPBehavior.h"
+#include <string>
+#include <vector>
 
 class BehaviorSpec {
- public:
+public:
   BehaviorSpec();
   ~BehaviorSpec() {}
-  
- public: // Setting Parameters 
+
+public: // Setting Parameters
   void setBehaviorKind(std::string, unsigned int line_num);
   void addBehaviorConfig(std::string, unsigned int line_num);
 
-  std::vector<std::string>  checkForSpawningStrings();
+  std::vector<std::string> checkForSpawningStrings();
 
-  void setFileName(std::string filename)  {m_filename = filename;}
-  void setInfoBuffer(InfoBuffer *b)       {m_info_buffer=b;}
+  void setFileName(std::string filename) { m_filename = filename; }
+  void setInfoBuffer(InfoBuffer *b) { m_info_buffer = b; }
 
   bool setTemplatingType(std::string s);
 
-  void spawnTried() {m_spawns_tried++;}
-  void spawnMade()  {m_spawns_made++;}
-  
+  void spawnTried() { m_spawns_tried++; }
+  void spawnMade() { m_spawns_made++; }
+
   void clear();
   void print() const;
-    
- public: // Getting Parameters 
-  unsigned int  size() const              {return(m_config_lines.size());}
-  std::string   getTemplatingType() const {return(m_templating);}
-  bool          templating() const        {return(m_templating_enabled);}
-  std::string   getKind() const           {return(m_behavior_kind);}
-  unsigned int  getKindLine() const       {return(m_kind_line_num);}
-  std::string   getUpdatesVar() const     {return(m_updates_var);}
-  std::string   getFileName() const       {return(m_filename);}
-  std::string   getNamePrefix() const     {return(m_name_prefix);}
 
-  std::string   getConfigLine(unsigned int) const;
-  unsigned int  getConfigLineNum(unsigned int) const;
+public: // Getting Parameters
+  unsigned int size() const { return (m_config_lines.size()); }
+  std::string getTemplatingType() const { return (m_templating); }
+  bool templating() const { return (m_templating_enabled); }
+  std::string getKind() const { return (m_behavior_kind); }
+  unsigned int getKindLine() const { return (m_kind_line_num); }
+  std::string getUpdatesVar() const { return (m_updates_var); }
+  std::string getFileName() const { return (m_filename); }
+  std::string getNamePrefix() const { return (m_name_prefix); }
 
-  unsigned int  getSpawnsMade() const  {return(m_spawns_made);}
-  unsigned int  getSpawnsTried() const {return(m_spawns_tried);}
-  
- private: // State Variables
-  std::string   m_templating;
-  std::string   m_updates_var;
-  std::string   m_name_prefix;
+  std::string getConfigLine(unsigned int) const;
+  unsigned int getConfigLineNum(unsigned int) const;
 
-  std::string   m_filename;
-  std::string   m_behavior_kind;
-  unsigned int  m_kind_line_num;
+  unsigned int getSpawnsMade() const { return (m_spawns_made); }
+  unsigned int getSpawnsTried() const { return (m_spawns_tried); }
 
-  std::vector<std::string>   m_config_lines;
-  std::vector<unsigned int>  m_config_line_num;
+private: // State Variables
+  std::string m_templating;
+  std::string m_updates_var;
+  std::string m_name_prefix;
 
-  unsigned int  m_spawns_tried;
-  unsigned int  m_spawns_made;
-    
-  InfoBuffer   *m_info_buffer;
-  bool          m_templating_enabled;
+  std::string m_filename;
+  std::string m_behavior_kind;
+  unsigned int m_kind_line_num;
+
+  std::vector<std::string> m_config_lines;
+  std::vector<unsigned int> m_config_line_num;
+
+  unsigned int m_spawns_tried;
+  unsigned int m_spawns_made;
+
+  InfoBuffer *m_info_buffer;
+  bool m_templating_enabled;
 };
 
 #endif
-
-
-
-
-

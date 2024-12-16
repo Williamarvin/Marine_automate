@@ -21,29 +21,28 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "MBUtils.h"
 #include "IterBlockHelm.h"
 #include "BehaviorRecord.h"
+#include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //------------------------------------------------------------
 // Constructor
 
-IterBlockHelm::IterBlockHelm()
-{
-  m_iteration   = 0;
-  m_utc_time    = 0;
-  m_solve_time  = 0;
+IterBlockHelm::IterBlockHelm() {
+  m_iteration = 0;
+  m_utc_time = 0;
+  m_solve_time = 0;
   m_create_time = 0;
-  m_loop_time   = 0;
-  m_halted      = false;
+  m_loop_time = 0;
+  m_halted = false;
 
-  m_count_ipf   = 0;
+  m_count_ipf = 0;
   m_warning_cnt = 0;
-  m_error_cnt   = 0;
+  m_error_cnt = 0;
   m_posting_cnt = 0;
   m_infomsg_cnt = 0;
 }
@@ -51,74 +50,71 @@ IterBlockHelm::IterBlockHelm()
 //------------------------------------------------------------
 // Procedure: initialize()
 
-void IterBlockHelm::initialize(const IterBlockHelm& block)
-{
-  m_active_bhv    = block.m_active_bhv;
-  m_running_bhv   = block.m_running_bhv;
-  m_idle_bhv      = block.m_idle_bhv;
+void IterBlockHelm::initialize(const IterBlockHelm &block) {
+  m_active_bhv = block.m_active_bhv;
+  m_running_bhv = block.m_running_bhv;
+  m_idle_bhv = block.m_idle_bhv;
   m_completed_bhv = block.m_completed_bhv;
 
-  m_decvar        = block.m_decvar;
-  m_decval        = block.m_decval;
-  m_decchg        = block.m_decchg;
+  m_decvar = block.m_decvar;
+  m_decval = block.m_decval;
+  m_decchg = block.m_decchg;
 
   // Mark all decision vars "unchanged" until proven otherwise
   unsigned int i, vsize = m_decchg.size();
-  for(i=0; i<vsize; i++)
+  for (i = 0; i < vsize; i++)
     m_decchg[i] = false;
 
-  m_modes         = block.m_modes;
+  m_modes = block.m_modes;
 
-  m_solve_time    = block.m_solve_time;
-  m_create_time   = block.m_create_time;
-  m_loop_time     = block.m_loop_time;
-  m_halted        = block.m_halted;
+  m_solve_time = block.m_solve_time;
+  m_create_time = block.m_create_time;
+  m_loop_time = block.m_loop_time;
+  m_halted = block.m_halted;
 
-  m_count_ipf     = block.m_count_ipf;
-  m_warning_cnt   = block.m_warning_cnt;
-  m_error_cnt     = block.m_error_cnt;
-  m_posting_cnt   = block.m_posting_cnt;
-  m_infomsg_cnt   = block.m_infomsg_cnt;
+  m_count_ipf = block.m_count_ipf;
+  m_warning_cnt = block.m_warning_cnt;
+  m_error_cnt = block.m_error_cnt;
+  m_posting_cnt = block.m_posting_cnt;
+  m_infomsg_cnt = block.m_infomsg_cnt;
 }
 
 //------------------------------------------------------------
 // Procedure: setActiveBHVs
 // Ex:  "waypoint$100: loiter$98.2: return$45.1"
 
-void IterBlockHelm::setActiveBHVs(const string& str)
-{
+void IterBlockHelm::setActiveBHVs(const string &str) {
   vector<string> svector = parseString(str, ':');
   unsigned int i, vsize = svector.size();
-  
+
   m_active_bhv.clear();
 
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     BehaviorRecord record;
     svector[i] = stripBlankEnds(svector[i]);
     vector<string> ivector = parseString(svector[i], '$');
     unsigned int j, isize = ivector.size();
-    for(j=0; j<isize; j++)
+    for (j = 0; j < isize; j++)
       ivector[j] = stripBlankEnds(ivector[j]);
 
     record.setName(ivector[0]);
-    if(isize >= 2)
+    if (isize >= 2)
       record.setTimeStamp(atof(ivector[1].c_str()));
-    if(isize >= 3)
+    if (isize >= 3)
       record.setPriority(ivector[2]);
-    if(isize >= 4)
+    if (isize >= 4)
       record.setPieces(ivector[3]);
-    if(isize >= 5)
+    if (isize >= 5)
       record.setTimeCPU(ivector[4]);
-    if(isize >= 6)
-      if(ivector[5] != "n/a")
-	record.setUpdates(ivector[5]);
-    if(isize >= 7)
+    if (isize >= 6)
+      if (ivector[5] != "n/a")
+        record.setUpdates(ivector[5]);
+    if (isize >= 7)
       record.setIPFCount(ivector[6]);
-    if(isize >= 8)
+    if (isize >= 8)
       record.setOriginal(ivector[7]);
- 
 
-   m_active_bhv.push_back(record);
+    m_active_bhv.push_back(record);
   }
 }
 
@@ -130,25 +126,24 @@ void IterBlockHelm::setActiveBHVs(const string& str)
 //    (2) "23.4" is the number of second it has been in this state
 //    (3) "n/a" means the update feature off for this behavior
 
-void IterBlockHelm::setRunningBHVs(const string& str)
-{
+void IterBlockHelm::setRunningBHVs(const string &str) {
   vector<string> svector = parseString(str, ':');
   unsigned int i, vsize = svector.size();
 
   m_running_bhv.clear();
 
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     BehaviorRecord record;
-    vector<string> ivector = parseString(svector[i], '$'); 
+    vector<string> ivector = parseString(svector[i], '$');
     unsigned int j, isize = ivector.size();
-    for(j=0; j<isize; j++)
+    for (j = 0; j < isize; j++)
       ivector[j] = stripBlankEnds(ivector[j]);
     record.setName(ivector[0]);
-    if(isize >= 2)
+    if (isize >= 2)
       record.setTimeStamp(atof(ivector[1].c_str()));
-    if(isize >= 3)
-      if(ivector[2] != "n/a")
-	record.setUpdates(ivector[2]);
+    if (isize >= 3)
+      if (ivector[2] != "n/a")
+        record.setUpdates(ivector[2]);
     m_running_bhv.push_back(record);
   }
 }
@@ -161,25 +156,24 @@ void IterBlockHelm::setRunningBHVs(const string& str)
 //    (2) "23.4" is the number of second it has been in this state
 //    (3) "4/5" means 4 of 5 updates attempts were legal/accepted
 
-void IterBlockHelm::setIdleBHVs(const string& str)
-{
+void IterBlockHelm::setIdleBHVs(const string &str) {
   vector<string> jvector = parseString(str, ':');
   unsigned int j, jsize = jvector.size();
-  
+
   m_idle_bhv.clear();
 
-  for(j=0; j<jsize; j++) {
+  for (j = 0; j < jsize; j++) {
     BehaviorRecord record;
-    vector<string> kvector = parseString(jvector[j], '$'); 
+    vector<string> kvector = parseString(jvector[j], '$');
     unsigned int k, ksize = kvector.size();
-    for(k=0; k<ksize; k++)
+    for (k = 0; k < ksize; k++)
       kvector[k] = stripBlankEnds(kvector[k]);
     record.setName(kvector[0]);
-    if(ksize >= 2)
+    if (ksize >= 2)
       record.setTimeStamp(atof(kvector[1].c_str()));
-    if(ksize >= 3)
-      if(kvector[2] != "n/a")
-	record.setUpdates(kvector[2]);
+    if (ksize >= 3)
+      if (kvector[2] != "n/a")
+        record.setUpdates(kvector[2]);
     m_idle_bhv.push_back(record);
   }
 }
@@ -192,25 +186,24 @@ void IterBlockHelm::setIdleBHVs(const string& str)
 //    (2) "23.4" is the number of second it has been in this state
 //    (3) "4/5" means 4 of 5 updates attempts were legal/accepted
 
-void IterBlockHelm::setCompletedBHVs(const string& str)
-{
+void IterBlockHelm::setCompletedBHVs(const string &str) {
   vector<string> svector = parseString(str, ':');
   unsigned int i, vsize = svector.size();
-  
+
   m_completed_bhv.clear();
 
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     BehaviorRecord record;
-    vector<string> ivector = parseString(svector[i], '$'); 
+    vector<string> ivector = parseString(svector[i], '$');
     unsigned int j, isize = ivector.size();
-    for(j=0; j<isize; j++)
+    for (j = 0; j < isize; j++)
       ivector[j] = stripBlankEnds(ivector[j]);
     record.setName(ivector[0]);
-    if(isize >= 2)
+    if (isize >= 2)
       record.setTimeStamp(atof(ivector[1].c_str()));
-    if(isize >= 3)
-      if(ivector[2] != "n/a")
-	record.setUpdates(ivector[2]);
+    if (isize >= 3)
+      if (ivector[2] != "n/a")
+        record.setUpdates(ivector[2]);
     m_completed_bhv.push_back(record);
   }
 }
@@ -218,81 +211,74 @@ void IterBlockHelm::setCompletedBHVs(const string& str)
 //------------------------------------------------------------
 // Procedure: getActiveBHV()
 
-vector<string> IterBlockHelm::getActiveBHV(double utc_time) const
-{
+vector<string> IterBlockHelm::getActiveBHV(double utc_time) const {
   vector<string> rvector;
 
   unsigned int k, ksize = m_active_bhv.size();
-  for(k=0; k<ksize; k++)
+  for (k = 0; k < ksize; k++)
     rvector.push_back(m_active_bhv[k].getSummary(utc_time));
-  
-  return(rvector);
+
+  return (rvector);
 }
 
 //------------------------------------------------------------
 // Procedure: getRunningBHV()
 
-vector<string> IterBlockHelm::getRunningBHV(double utc_time) const
-{
+vector<string> IterBlockHelm::getRunningBHV(double utc_time) const {
   vector<string> rvector;
 
   unsigned int k, ksize = m_running_bhv.size();
-  for(k=0; k<ksize; k++)
-      rvector.push_back(m_running_bhv[k].getSummary(utc_time));
+  for (k = 0; k < ksize; k++)
+    rvector.push_back(m_running_bhv[k].getSummary(utc_time));
 
-  return(rvector);
+  return (rvector);
 }
 
 //------------------------------------------------------------
 // Procedure: getIdleBHV()
 
-vector<string> IterBlockHelm::getIdleBHV(double utc_time, 
-					 bool concise) const
-{
+vector<string> IterBlockHelm::getIdleBHV(double utc_time, bool concise) const {
   vector<string> rvector;
 
   unsigned int k, ksize = m_idle_bhv.size();
-  for(k=0; k<ksize; k++) {
-    if(concise)
+  for (k = 0; k < ksize; k++) {
+    if (concise)
       rvector.push_back(m_idle_bhv[k].getName());
     else
       rvector.push_back(m_idle_bhv[k].getSummary(utc_time));
   }
 
-  return(rvector);
+  return (rvector);
 }
 
 //------------------------------------------------------------
 // Procedure: getCompletedBHV()
 
-vector<string> IterBlockHelm::getCompletedBHV(double utc_time, 
-					      bool concise) const
-{
+vector<string> IterBlockHelm::getCompletedBHV(double utc_time,
+                                              bool concise) const {
   vector<string> rvector;
-  
+
   unsigned int k, ksize = m_completed_bhv.size();
-  for(k=0; k<ksize; k++) {
-    if(concise) 
+  for (k = 0; k < ksize; k++) {
+    if (concise)
       rvector.push_back(m_completed_bhv[k].getName());
     else
       rvector.push_back(m_completed_bhv[k].getSummary(utc_time));
   }
-  
-  return(rvector);
-}
 
+  return (rvector);
+}
 
 //------------------------------------------------------------
 // Procedure: addDecVarVal
 
-void IterBlockHelm::addDecVarVal(const string& varname, const string& value)
-{
+void IterBlockHelm::addDecVarVal(const string &varname, const string &value) {
   unsigned int i, vsize = m_decvar.size();
-  for(i=0; i<vsize; i++) {
-    if(varname == m_decvar[i]) {
-      if(value != m_decval[i]) {
-	m_decchg[i] = true;
-	m_decval[i] = value;
+  for (i = 0; i < vsize; i++) {
+    if (varname == m_decvar[i]) {
+      if (value != m_decval[i]) {
+        m_decchg[i] = true;
+        m_decval[i] = value;
       }
       return;
     }
@@ -302,71 +288,64 @@ void IterBlockHelm::addDecVarVal(const string& varname, const string& value)
   m_decval.push_back(value);
   m_decchg.push_back(true);
 }
-    
 
 //------------------------------------------------------------
 // Procedure: setModeString
 
-void IterBlockHelm::setModeString(string str)
-{
+void IterBlockHelm::setModeString(string str) {
   m_modes = "";
 
   vector<string> svector = parseString(str, '#');
   unsigned int i, vsize = svector.size();
-    
-  for(i=0; i<vsize; i++) {
-    if(i>0)
+
+  for (i = 0; i < vsize; i++) {
+    if (i > 0)
       m_modes += ", ";
-    string mode_name  = biteString(svector[i], '@');
+    string mode_name = biteString(svector[i], '@');
     string mode_value = stripBlankEnds(svector[i]);
-    if(vsize > 1) 
+    if (vsize > 1)
       m_modes += (mode_name + "=");
     m_modes += mode_value;
   }
-
 }
-    
+
 //------------------------------------------------------------
 // Procedure: getDecVar(int)
 
-string IterBlockHelm::getDecVar(unsigned int ix) const
-{
-  if(ix < m_decvar.size())
-    return(m_decvar[ix]);
+string IterBlockHelm::getDecVar(unsigned int ix) const {
+  if (ix < m_decvar.size())
+    return (m_decvar[ix]);
   else
-    return("");
+    return ("");
 }
 
 //------------------------------------------------------------
 // Procedure: getDecVal(int)
 
-string IterBlockHelm::getDecVal(unsigned int ix) const
-{
-  if(ix < m_decvar.size())
-    return(m_decval[ix]);
+string IterBlockHelm::getDecVal(unsigned int ix) const {
+  if (ix < m_decvar.size())
+    return (m_decval[ix]);
   else
-    return(0);
+    return (0);
 }
 
 //------------------------------------------------------------
 // Procedure: getDecChg(int)
 
-bool IterBlockHelm::getDecChg(unsigned int ix) const
-{
-  if(ix < m_decchg.size())
-    return(m_decchg[ix]);
+bool IterBlockHelm::getDecChg(unsigned int ix) const {
+  if (ix < m_decchg.size())
+    return (m_decchg[ix]);
   else
-    return(false);
+    return (false);
 }
 
 //------------------------------------------------------------
 // Procedure: print()
 
-void IterBlockHelm::print(int iter) const
-{
+void IterBlockHelm::print(int iter) const {
   cout << "==================================(" << iter << ")" << endl;
   cout << "m_iteration:    " << m_iteration << endl;
-  cout << "m_utc_time:     " << doubleToString(m_utc_time,2) << endl;
+  cout << "m_utc_time:     " << doubleToString(m_utc_time, 2) << endl;
   cout << "m_solve_time:   " << m_solve_time << endl;
   cout << "m_create_time:  " << m_create_time << endl;
   cout << "m_loop_time:    " << m_loop_time << endl;
@@ -382,13 +361,3 @@ void IterBlockHelm::print(int iter) const
   cout << "m_idle_bhv.size(): " << m_idle_bhv.size() << endl;
   cout << "m_completed_bhv.size(): " << m_completed_bhv.size() << endl;
 }
-
-
-
-
-
-
-
-
-
-

@@ -28,32 +28,30 @@
 
 #include <string>
 
-class AckMessage
-{
- public:
-  AckMessage(std::string src="", std::string dest="", std::string id="");
+class AckMessage {
+public:
+  AckMessage(std::string src = "", std::string dest = "", std::string id = "");
   ~AckMessage() {}
 
   // Setters
   void setSourceNode(std::string);
   void setDestNode(std::string);
-  void setMessageID(std::string id) {m_id=id;}
+  void setMessageID(std::string id) { m_id = id; }
 
-  std::string getSourceNode() const {return(m_src_node);}
-  std::string getDestNode() const   {return(m_dest_node);}
-  std::string getMessageID() const  {return(m_id);}
-  
+  std::string getSourceNode() const { return (m_src_node); }
+  std::string getDestNode() const { return (m_dest_node); }
+  std::string getMessageID() const { return (m_id); }
+
   bool valid() const;
 
   std::string getSpec() const;
 
- protected: 
-  std::string  m_id;
-  std::string  m_src_node;
-  std::string  m_dest_node;
+protected:
+  std::string m_id;
+  std::string m_src_node;
+  std::string m_dest_node;
 };
 
-AckMessage string2AckMessage(const std::string&);
+AckMessage string2AckMessage(const std::string &);
 
-#endif 
-
+#endif

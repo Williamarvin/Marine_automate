@@ -24,41 +24,39 @@
 #ifndef APPCAST_SET_HEADER
 #define APPCAST_SET_HEADER
 
-#include <string>
-#include <map>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCast.h"
+#include <map>
+#include <string>
 
-class AppCastSet
-{
- public:
+class AppCastSet {
+public:
   AppCastSet();
   ~AppCastSet() {}
 
-  bool         addAppCast(const AppCast& appcast);
-  AppCast      getAppCast(const std::string& proc) const;
+  bool addAppCast(const AppCast &appcast);
+  AppCast getAppCast(const std::string &proc) const;
 
-  std::string  getProcNameFromID(const std::string& id)    const;
-  bool         hasProc(const std::string& proc)            const;
-  unsigned int getAppCastCount(const std::string& proc)    const;
-  unsigned int getCfgWarningCount(const std::string& proc) const;
-  unsigned int getRunWarningCount(const std::string& proc) const;
+  std::string getProcNameFromID(const std::string &id) const;
+  bool hasProc(const std::string &proc) const;
+  unsigned int getAppCastCount(const std::string &proc) const;
+  unsigned int getCfgWarningCount(const std::string &proc) const;
+  unsigned int getRunWarningCount(const std::string &proc) const;
 
-  
   unsigned int getTotalCfgWarningCount() const;
   unsigned int getTotalRunWarningCount() const;
   unsigned int getTotalWarningCount() const;
-  unsigned int getTotalAppCastCount() const {return(m_total_appcasts);}
-  unsigned int getTotalProcCount()    const {return(m_map_appcasts.size());}
+  unsigned int getTotalAppCastCount() const { return (m_total_appcasts); }
+  unsigned int getTotalProcCount() const { return (m_map_appcasts.size()); }
 
-  std::vector<std::string> getIDs()   const;
-  std::vector<std::string> getProcs() const {return(m_procs);}
+  std::vector<std::string> getIDs() const;
+  std::vector<std::string> getProcs() const { return (m_procs); }
 
- private:
+private:
   // Map from ID to proc name
-  std::map<std::string, std::string>  m_map_id_src;
+  std::map<std::string, std::string> m_map_id_src;
 
   // Maps from proc name to various info
-  std::map<std::string, AppCast>      m_map_appcasts;
+  std::map<std::string, AppCast> m_map_appcasts;
   std::map<std::string, unsigned int> m_map_appcast_cnt;
 
   // total number of id's used so far
@@ -70,18 +68,9 @@ class AppCastSet
   unsigned int m_total_appcasts;
 
   // Keep a separate vector of proc names so that when proc name vector is
-  // retrieved by caller, the earlier items stay in the same order. The 
+  // retrieved by caller, the earlier items stay in the same order. The
   // alternative, iterating through the map, means order may shift as map grows.
   std::vector<std::string> m_procs;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

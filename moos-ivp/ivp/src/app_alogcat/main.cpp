@@ -21,14 +21,14 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <iostream>
+#include "ALogCatHandler.h"
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
-#include "ALogCatHandler.h"
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -37,59 +37,56 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ALogCatHandler handler;
 
   //===================================================================
   // Pass #1: Check for version/help/batch args
   //===================================================================
   vector<string> pass_two_args;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    bool   handled = true;
+    bool handled = true;
 
-    if((argi == "-v") || (argi == "--version") || (argi =="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit("alogcat", "gpl");
-    else if((argi == "-h") || (argi == "--help") || (argi =="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
 
-    else if(strBegins(argi, "--new="))
+    else if (strBegins(argi, "--new="))
       handled = handler.setNewALogFile(argi.substr(6));
-    else if(strEnds(argi, ".alog")) 
+    else if (strEnds(argi, ".alog"))
       handled = handler.addALogFile(argi);
-    else if((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
+    else if ((argi == "--verbose") || (argi == "-v") || (argi == "-verbose"))
       handler.setVerbose();
-    else if((argi == "--force") || (argi == "-f") || (argi == "-force"))
+    else if ((argi == "--force") || (argi == "-f") || (argi == "-force"))
       handler.setForceOverwrite();
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogcat");
     else
       handled = false;
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled argument: " << argi << endl;
       exit(1);
     }
   }
 
-  if(handler.size() < 2) {
+  if (handler.size() < 2) {
     showHelpAndExit();
   }
-  
+
   // Now execute the job and note the result.
   bool ok = handler.process();
-  if(!ok) 
-    return(1);
-  return(0);
+  if (!ok)
+    return (1);
+  return (0);
 }
-
 
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogcat one.alog two.alog --new=three.alog [OPTIONS]    " << endl;
   cout << "                                                          " << endl;
@@ -126,9 +123,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-

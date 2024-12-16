@@ -24,64 +24,51 @@
 #ifndef IPF_BUNDLE_SERIES_HEADER
 #define IPF_BUNDLE_SERIES_HEADER
 
-#include <vector>
-#include <string>
-#include <map>
 #include "IPF_Bundle.h"
+#include <map>
+#include <string>
+#include <vector>
 
 // Contains function bundles indexed by iteration
 
-class IPF_BundleSeries
-{
+class IPF_BundleSeries {
 public:
   IPF_BundleSeries();
   ~IPF_BundleSeries() {}
-  
-  void      clear();
-  void      addIPF(const std::string&);
-  
-  QuadSet   getCollectiveQuadSet(unsigned int iter, 
-				 std::string ctype="");
-  QuadSet   getQuadSet(unsigned int iter, std::string source,
-		       bool dense=false);
+
+  void clear();
+  void addIPF(const std::string &);
+
+  QuadSet getCollectiveQuadSet(unsigned int iter, std::string ctype = "");
+  QuadSet getQuadSet(unsigned int iter, std::string source, bool dense = false);
 
   IvPDomain getDomain(unsigned int iter);
   IvPDomain getDomain(unsigned int iter, std::string source);
 
+  double getPriority(unsigned int iter, std::string source);
 
-  double    getPriority(unsigned int iter, std::string source);
+  void popFront(unsigned int = 1);
+  void popBack(unsigned int = 1);
 
-  void      popFront(unsigned int=1);
-  void      popBack(unsigned int=1);
-  
-  void      print() const;
-  
-  unsigned int getMinIteration() const {return(m_min_iteration);}
-  unsigned int getMaxIteration() const {return(m_max_iteration);}
+  void print() const;
+
+  unsigned int getMinIteration() const { return (m_min_iteration); }
+  unsigned int getMaxIteration() const { return (m_max_iteration); }
   unsigned int getPieces(unsigned int iter, std::string src);
   unsigned int getTotalFunctions(unsigned int iter);
-  unsigned int size() const {return(m_bundles.size());}
-  
+  unsigned int size() const { return (m_bundles.size()); }
+
   std::vector<std::string> getIPFStrings(unsigned int iteration);
-  std::vector<std::string> getAllSources() {return(m_all_bhv_sources);}
-  std::string  getFirstSource() const;
-  
- protected:
-  std::map<unsigned int, IPF_Bundle>  m_bundles;
-  
+  std::vector<std::string> getAllSources() { return (m_all_bhv_sources); }
+  std::string getFirstSource() const;
+
+protected:
+  std::map<unsigned int, IPF_Bundle> m_bundles;
+
   unsigned int m_min_iteration;
   unsigned int m_max_iteration;
-  
+
   std::vector<std::string> m_all_bhv_sources;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

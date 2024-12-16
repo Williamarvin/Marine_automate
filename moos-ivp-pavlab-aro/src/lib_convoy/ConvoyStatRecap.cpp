@@ -17,8 +17,7 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor
 
-ConvoyStatRecap::ConvoyStatRecap()
-{
+ConvoyStatRecap::ConvoyStatRecap() {
   m_ideal_rng = -1;
   m_compression = 0;
   m_index = 0;
@@ -28,41 +27,39 @@ ConvoyStatRecap::ConvoyStatRecap()
 //---------------------------------------------------------------
 // Procedure: getStringValue()
 
-string ConvoyStatRecap::getStringValue(string key) const
-{
+string ConvoyStatRecap::getStringValue(string key) const {
   key = tolower(key);
-  if(key == "ideal_rng")
-    return(doubleToStringX(m_ideal_rng, 2));
-  else if(key == "compression")
-    return(doubleToStringX(m_compression, 2));
-  else if(key == "idle")
-    return(boolToString(m_idle));
+  if (key == "ideal_rng")
+    return (doubleToStringX(m_ideal_rng, 2));
+  else if (key == "compression")
+    return (doubleToStringX(m_compression, 2));
+  else if (key == "idle")
+    return (boolToString(m_idle));
   else
-    return("");  
+    return ("");
 }
 
 //------------------------------------------------------------
 // Procedure: getSpec()
 
-string ConvoyStatRecap::getSpec() const
-{
-  if(m_follower == "")
-    return("");
-  
+string ConvoyStatRecap::getSpec() const {
+  if (m_follower == "")
+    return ("");
+
   string str = "follower=" + m_follower;
 
-  if(isSetLeader())
+  if (isSetLeader())
     str += ",leader=" + m_leader;
-  if(isSetIdealRng())
-    str += ",ideal_rng=" + doubleToString(m_ideal_rng,2);
-  if(m_compression > 0)
-    str += ",compression=" + doubleToString(m_compression,2);
-  if(m_index > 0)
+  if (isSetIdealRng())
+    str += ",ideal_rng=" + doubleToString(m_ideal_rng, 2);
+  if (m_compression > 0)
+    str += ",compression=" + doubleToString(m_compression, 2);
+  if (m_index > 0)
     str += ",index=" + uintToString(m_index);
-  if(m_idle)
+  if (m_idle)
     str += ",idle=true";
-  
-  return(str);
+
+  return (str);
 }
 
 //---------------------------------------------------------
@@ -70,31 +67,28 @@ string ConvoyStatRecap::getSpec() const
 //   Example: follower=henry,leader=abe,ideal_rng=40,
 //            compression=0.4,index=23
 
-ConvoyStatRecap string2ConvoyStatRecap(string msg)
-{
+ConvoyStatRecap string2ConvoyStatRecap(string msg) {
   ConvoyStatRecap new_recap;
 
   vector<string> svector = parseString(msg, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
     double dval = atof(value.c_str());
-    
-    if(param == "follower")
+
+    if (param == "follower")
       new_recap.setFollower(value);
-    else if(param == "leader")
+    else if (param == "leader")
       new_recap.setLeader(value);
-    else if(param == "ideal_rng")
+    else if (param == "ideal_rng")
       new_recap.setIdealRng(dval);
-    else if(param == "compression")
+    else if (param == "compression")
       new_recap.setCompression(dval);
-    else if(param == "idle")
+    else if (param == "idle")
       new_recap.setIdle(tolower(value) == "true");
-    else if(param == "index")
+    else if (param == "index")
       new_recap.setIndex((unsigned int)(dval));
   }
 
-  return(new_recap);
+  return (new_recap);
 }
-
-

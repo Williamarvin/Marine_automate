@@ -24,76 +24,65 @@
 #ifndef TRANSLATOR_HEADER
 #define TRANSLATOR_HEADER
 
-#include <vector>
-#include <list>
-#include <string>
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "EFlipper.h"
 #include "LogicBuffer.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include <list>
+#include <string>
+#include <vector>
 
-class EchoVar : public AppCastingMOOSApp
-{
+class EchoVar : public AppCastingMOOSApp {
 public:
   EchoVar();
   virtual ~EchoVar() {}
-  
+
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
 protected:
   void registerVariables();
-  bool addMapping(std::string, std::string, bool boolswitch=false);
+  bool addMapping(std::string, std::string, bool boolswitch = false);
   bool noCycles();
   bool handleFlipEntry(std::string key, std::string line);
-  
+
   void holdMessage(CMOOSMsg);
   void releaseMessages();
 
   std::vector<std::string> expand(std::vector<std::string> v);
 
- protected: // Configuration variables
+protected: // Configuration variables
   bool m_hold_messages_during_pause;
   bool m_echo_latest_only;
 
- protected: // State variables
+protected: // State variables
   bool m_no_cycles;
 
   // Index: one for each mapping
-  std::vector<std::string>  m_var_source;
-  std::vector<std::string>  m_var_target;
-  std::vector<bool>         m_boolswitch;
+  std::vector<std::string> m_var_source;
+  std::vector<std::string> m_var_target;
+  std::vector<bool> m_boolswitch;
 
   // map from variable source to num times received mail
-  std::map<std::string, unsigned int>  m_map_hits;
+  std::map<std::string, unsigned int> m_map_hits;
 
   // map from variable source/dest to num times posted
-  std::map<std::string, unsigned int>  m_map_posts;
+  std::map<std::string, unsigned int> m_map_posts;
 
   // Index: one for each unique source. A source may have >1 mappings
-  std::vector<std::string>  m_unique_sources;
+  std::vector<std::string> m_unique_sources;
 
-  std::vector<EFlipper>     m_eflippers;
+  std::vector<EFlipper> m_eflippers;
   std::vector<unsigned int> m_eflip_count;
 
-  std::list<CMOOSMsg>       m_held_messages;
+  std::list<CMOOSMsg> m_held_messages;
 
-  LogicBuffer  m_logic_buffer;
-  bool         m_conditions_met;
+  LogicBuffer m_logic_buffer;
+  bool m_conditions_met;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

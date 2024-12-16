@@ -21,13 +21,13 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
 #include "MBUtils.h"
+#include "MHashReporter.h"
 #include "OpenURL.h"
 #include "ReleaseInfo.h"
-#include "MHashReporter.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -36,64 +36,60 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main()
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   MHashReporter mhash_reporter;
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
 
     bool handled = true;
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogmhash", "gpl");
-      return(0);
-    }
-    else if((argi=="-t") || (argi=="--terse")) 
+      return (0);
+    } else if ((argi == "-t") || (argi == "--terse"))
       mhash_reporter.setTerse();
-    else if((argi=="-m") || (argi=="--mhash")) 
+    else if ((argi == "-m") || (argi == "--mhash"))
       mhash_reporter.setReportMHash();
-    else if((argi=="-o") || (argi=="--odo")) 
+    else if ((argi == "-o") || (argi == "--odo"))
       mhash_reporter.setReportODist();
-    else if((argi=="-d") || (argi=="--duration")) 
+    else if ((argi == "-d") || (argi == "--duration"))
       mhash_reporter.setReportDuration();
-    else if((argi=="-n") || (argi=="--name")) 
+    else if ((argi == "-n") || (argi == "--name"))
       mhash_reporter.setReportName();
-    else if((argi=="-u") || (argi=="--utc")) 
+    else if ((argi == "-u") || (argi == "--utc"))
       mhash_reporter.setReportUTC();
-    else if((argi=="-x") || (argi=="--xhash")) 
+    else if ((argi == "-x") || (argi == "--xhash"))
       mhash_reporter.setReportXHash();
-    else if((argi=="-a") || (argi=="--all")) 
+    else if ((argi == "-a") || (argi == "--all"))
       mhash_reporter.setReportAll();
-    //else if(strBegins(argi, "--xhash="))
-    //  mhash_reporter.setReportXHash(argi.substr(8));
-    else if(strEnds(argi, ".alog"))
+    // else if(strBegins(argi, "--xhash="))
+    //   mhash_reporter.setReportXHash(argi.substr(8));
+    else if (strEnds(argi, ".alog"))
       handled = mhash_reporter.setALogFile(argi);
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web")) {
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web")) {
       openURLX("https://oceanai.mit.edu/ivpman/apps/alogmhash");
       exit(0);
     }
 
-    if(!handled) {
+    if (!handled) {
       cout << "alogmhash Bad Arg: " << argi << endl;
       exit(1);
     }
   }
-    
+
   bool ok = mhash_reporter.handle();
-  if(!ok)
-    return(1);
+  if (!ok)
+    return (1);
 
-  return(0);
+  return (0);
 }
-
 
 //------------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogmhash file.alog [OPTIONS]                    " << endl;
   cout << "                                                   " << endl;
@@ -149,4 +145,3 @@ void showHelpAndExit()
   cout << "    mhash=230512-2147I-ICED-OWEN                   " << endl;
   exit(0);
 }
-

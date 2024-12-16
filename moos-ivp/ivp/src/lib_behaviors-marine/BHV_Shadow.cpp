@@ -25,32 +25,30 @@
 #pragma warning(disable : 4503)
 #endif
 
-#include <cmath>
-#include <cstdlib>
-#include "AngleUtils.h"
 #include "BHV_Shadow.h"
-#include "ZAIC_PEAK.h"
-#include "OF_Coupler.h"
+#include "AngleUtils.h"
 #include "BuildUtils.h"
 #include "MBUtils.h"
+#include "OF_Coupler.h"
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_Shadow::BHV_Shadow(IvPDomain gdomain) : 
-  IvPContactBehavior(gdomain)
-{
+BHV_Shadow::BHV_Shadow(IvPDomain gdomain) : IvPContactBehavior(gdomain) {
   this->setParam("descriptor", "bhv_shadow");
 
   m_domain = subDomain(m_domain, "course,speed");
 
   m_pwt_outer_dist = 0;
-  m_hdg_peakwidth  = 20;
-  m_hdg_basewidth  = 160;
-  m_spd_peakwidth  = 0.1;
-  m_spd_basewidth  = 2.0;
+  m_hdg_peakwidth = 20;
+  m_hdg_basewidth = 160;
+  m_spd_peakwidth = 0.1;
+  m_spd_basewidth = 2.0;
 
   addInfoVars("NAV_X, NAV_Y, NAV_SPEED, NAV_HEADING");
 }
@@ -58,37 +56,35 @@ BHV_Shadow::BHV_Shadow(IvPDomain gdomain) :
 //-----------------------------------------------------------
 // Procedure: setParam
 
-bool BHV_Shadow::setParam(string param, string param_val) 
-{
-  if(IvPContactBehavior::setParam(param, param_val))
-    return(true);
+bool BHV_Shadow::setParam(string param, string param_val) {
+  if (IvPContactBehavior::setParam(param, param_val))
+    return (true);
 
-  if(param == "pwt_outer_dist")
-    return(setNonNegDoubleOnString(m_pwt_outer_dist, param_val));
-  else if((param == "heading_peakwidth") ||  // preferred
-	  (param == "hdg_peakwidth"))        // supported alternative
-    return(setNonNegDoubleOnString(m_hdg_peakwidth, param_val));
-  else if((param == "heading_basewidth") ||  // preferred
-	  (param == "hdg_basewidth"))        // supported alternative
-    return(setNonNegDoubleOnString(m_hdg_basewidth, param_val));
-  else if((param == "speed_peakwidth") ||    // preferred
-	  (param == "spd_peakwidth"))        // supported alternative
-    return(setNonNegDoubleOnString(m_spd_peakwidth, param_val));
-  else if((param == "speed_basewidth") ||    // preferred
-	  (param == "spd_basewidth"))        // supported alternative
-    return(setNonNegDoubleOnString(m_spd_basewidth, param_val));
-  
-  return(false);
+  if (param == "pwt_outer_dist")
+    return (setNonNegDoubleOnString(m_pwt_outer_dist, param_val));
+  else if ((param == "heading_peakwidth") || // preferred
+           (param == "hdg_peakwidth"))       // supported alternative
+    return (setNonNegDoubleOnString(m_hdg_peakwidth, param_val));
+  else if ((param == "heading_basewidth") || // preferred
+           (param == "hdg_basewidth"))       // supported alternative
+    return (setNonNegDoubleOnString(m_hdg_basewidth, param_val));
+  else if ((param == "speed_peakwidth") || // preferred
+           (param == "spd_peakwidth"))     // supported alternative
+    return (setNonNegDoubleOnString(m_spd_peakwidth, param_val));
+  else if ((param == "speed_basewidth") || // preferred
+           (param == "spd_basewidth"))     // supported alternative
+    return (setNonNegDoubleOnString(m_spd_basewidth, param_val));
+
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_Shadow::onRunState() 
-{
-  if(!updatePlatformInfo())
-    return(0);
-  
+IvPFunction *BHV_Shadow::onRunState() {
+  if (!updatePlatformInfo())
+    return (0);
+
   // Calculate the relevance first. If zero-relevance, we won't
   // bother to create the objective function.
   double relevance = getRelevance();
@@ -98,79 +94,58 @@ IvPFunction *BHV_Shadow::onRunState()
   postIntMessage("SHADOW_CONTACT_SPEED", m_cnv);
   postIntMessage("SHADOW_CONTACT_HEADING", m_cnh);
   postIntMessage("SHADOW_RELEVANCE", relevance);
-  
-  if(relevance <= 0)
-    return(0);
-  
+
+  if (relevance <= 0)
+    return (0);
+
   ZAIC_PEAK hdg_zaic(m_domain, "course");
   hdg_zaic.setSummit(m_cnh);
   hdg_zaic.setValueWrap(true);
   hdg_zaic.setPeakWidth(m_hdg_peakwidth);
   hdg_zaic.setBaseWidth(m_hdg_basewidth);
   hdg_zaic.setSummitDelta(50.0);
-  hdg_zaic.setMinMaxUtil(0,100);
+  hdg_zaic.setMinMaxUtil(0, 100);
   IvPFunction *hdg_ipf = hdg_zaic.extractIvPFunction();
-  if(!hdg_ipf) { 
+  if (!hdg_ipf) {
     postEMessage("Unable to generate hdg component of IvP function");
     postWMessage(hdg_zaic.getWarnings());
-    return(0);
+    return (0);
   }
-  
+
   ZAIC_PEAK spd_zaic(m_domain, "speed");
   spd_zaic.setSummit(m_cnv);
   spd_zaic.setPeakWidth(m_spd_peakwidth);
   spd_zaic.setBaseWidth(m_spd_basewidth);
-  spd_zaic.setSummitDelta(10.0); 
-  hdg_zaic.setMinMaxUtil(0,25);  
+  spd_zaic.setSummitDelta(10.0);
+  hdg_zaic.setMinMaxUtil(0, 25);
   IvPFunction *spd_ipf = spd_zaic.extractIvPFunction();
-  if(!spd_ipf) { 
+  if (!spd_ipf) {
     postEMessage("Unable to generate spd component of IvP function");
     postWMessage(spd_zaic.getWarnings());
-    return(0);
+    return (0);
   }
-  
+
   OF_Coupler coupler;
   IvPFunction *ipf = coupler.couple(hdg_ipf, spd_ipf);
-      
-  if(ipf) {
+
+  if (ipf) {
     ipf->getPDMap()->normalize(0.0, 100.0);
     ipf->setPWT(relevance * m_priority_wt);
-  }
-  else
+  } else
     postEMessage("Unable to generate coupled IvP function");
 
-  return(ipf);
+  return (ipf);
 }
 
 //-----------------------------------------------------------
 // Procedure: getRelevance
 
-double BHV_Shadow::getRelevance()
-{
-  if(m_pwt_outer_dist == 0)
-    return(1.0);
-  
-  if(m_contact_range < m_pwt_outer_dist)
-    return(1.0);
+double BHV_Shadow::getRelevance() {
+  if (m_pwt_outer_dist == 0)
+    return (1.0);
+
+  if (m_contact_range < m_pwt_outer_dist)
+    return (1.0);
   else
-    return(0.0);
+    return (0.0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

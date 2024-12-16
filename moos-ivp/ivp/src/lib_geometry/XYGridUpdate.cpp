@@ -23,24 +23,23 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "XYGridUpdate.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include <cmath>
 #include <cstdlib>
-#include "XYGridUpdate.h"
-#include "GeomUtils.h"
-#include "AngleUtils.h"
-#include "MBUtils.h"
 
 using namespace std;
 
 //-------------------------------------------------------------
 // Constructor()
 
-XYGridUpdate::XYGridUpdate(string grid_name)
-{
+XYGridUpdate::XYGridUpdate(string grid_name) {
   m_grid_name = grid_name;
 
   // By default the update type is delta
-  m_update_type_delta   = true;
+  m_update_type_delta = true;
   m_update_type_replace = false;
   m_update_type_average = false;
 }
@@ -48,29 +47,25 @@ XYGridUpdate::XYGridUpdate(string grid_name)
 //-------------------------------------------------------------
 // Procedure: setUpdateTypeDelta()
 
-void XYGridUpdate::setUpdateTypeDelta()
-{
-  m_update_type_delta   = true;
+void XYGridUpdate::setUpdateTypeDelta() {
+  m_update_type_delta = true;
   m_update_type_replace = false;
   m_update_type_average = false;
 }
 //-------------------------------------------------------------
 // Procedure: setUpdateTypeReplace()
 
-void XYGridUpdate::setUpdateTypeReplace()
-{
-  m_update_type_delta   = false;
+void XYGridUpdate::setUpdateTypeReplace() {
+  m_update_type_delta = false;
   m_update_type_replace = true;
   m_update_type_average = false;
 }
 
-
 //-------------------------------------------------------------
 // Procedure: setUpdateTypeAverage()
 
-void XYGridUpdate::setUpdateTypeAverage()
-{
-  m_update_type_delta   = false;
+void XYGridUpdate::setUpdateTypeAverage() {
+  m_update_type_delta = false;
   m_update_type_replace = false;
   m_update_type_average = true;
 }
@@ -78,140 +73,128 @@ void XYGridUpdate::setUpdateTypeAverage()
 //-------------------------------------------------------------
 // Procedure: valid()
 
-bool XYGridUpdate::valid() const
-{
-  if(m_grid_name == "")
-    return(false);
+bool XYGridUpdate::valid() const {
+  if (m_grid_name == "")
+    return (false);
 
-  if(size() == 0)
-    return(false);
+  if (size() == 0)
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: addUpdate()
 
-bool XYGridUpdate::addUpdate(unsigned int ix, string var, double val)
-{
+bool XYGridUpdate::addUpdate(unsigned int ix, string var, double val) {
   m_cell_ix.push_back(ix);
   m_cell_var.push_back(var);
   m_cell_val.push_back(val);
 
-  return(true);
+  return (true);
 }
 
 //-------------------------------------------------------------
 // Procedure: getCellIX()
 
-unsigned int XYGridUpdate::getCellIX(unsigned int ix) const
-{
-  if(ix >= m_cell_ix.size())
-    return(0);
+unsigned int XYGridUpdate::getCellIX(unsigned int ix) const {
+  if (ix >= m_cell_ix.size())
+    return (0);
 
-  return(m_cell_ix[ix]);
+  return (m_cell_ix[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: getCellVar()
 
-string XYGridUpdate::getCellVar(unsigned int ix) const
-{
-  if(ix >= m_cell_var.size())
-    return("");
+string XYGridUpdate::getCellVar(unsigned int ix) const {
+  if (ix >= m_cell_var.size())
+    return ("");
 
-  return(m_cell_var[ix]);
+  return (m_cell_var[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: getCellVal()
 
-double XYGridUpdate::getCellVal(unsigned int ix) const
-{
-  if(ix >= m_cell_val.size())
-    return(0);
+double XYGridUpdate::getCellVal(unsigned int ix) const {
+  if (ix >= m_cell_val.size())
+    return (0);
 
-  return(m_cell_val[ix]);
+  return (m_cell_val[ix]);
 }
 
 //-------------------------------------------------------------
 // Procedure: get_spec()
-//    Format: label @ delta @ ix,var,val : ix,var,val : ... : ix,var,val 
+//    Format: label @ delta @ ix,var,val : ix,var,val : ... : ix,var,val
 //   Example: psg @ 23,depth,12 : 23,temp,45 : 47,depth,9 : 47,temp,43
 
-string XYGridUpdate::get_spec() const
-{
+string XYGridUpdate::get_spec() const {
   string spec;
-  if(!valid())
-    return("");
-  
+  if (!valid())
+    return ("");
+
   spec += m_grid_name + "@";
-  if(m_update_type_replace)
+  if (m_update_type_replace)
     spec += "replace@";
-  else if(m_update_type_average)
+  else if (m_update_type_average)
     spec += "avg@";
-  
-  for(unsigned int i=0; i<m_cell_ix.size(); i++) {
-    if(i!=0)
+
+  for (unsigned int i = 0; i < m_cell_ix.size(); i++) {
+    if (i != 0)
       spec += ":";
     spec += uintToString(m_cell_ix[i]) + ",";
-    if(m_cell_var[i] != "")
+    if (m_cell_var[i] != "")
       spec += m_cell_var[i] + ",";
-    spec += doubleToStringX(m_cell_val[i],4);
+    spec += doubleToStringX(m_cell_val[i], 4);
   }
-  
-  return(spec);
+
+  return (spec);
 }
 
 //-------------------------------------------------------------
 // Procedure: stringToGridUpdate()
 
-XYGridUpdate stringToGridUpdate(string str)
-{
+XYGridUpdate stringToGridUpdate(string str) {
   XYGridUpdate null_update;
   XYGridUpdate grid_update;
 
   string grid_name = biteStringX(str, '@');
   grid_update.setGridName(grid_name);
 
-  if(strContains(str, '@')) {
+  if (strContains(str, '@')) {
     string update_type = biteStringX(str, '@');
-    if(update_type == "delta")
+    if (update_type == "delta")
       grid_update.setUpdateTypeDelta();
-    else if(update_type == "avg")
+    else if (update_type == "avg")
       grid_update.setUpdateTypeAverage();
-    else if(update_type == "replace")
+    else if (update_type == "replace")
       grid_update.setUpdateTypeReplace();
     else
-      return(null_update);
+      return (null_update);
   }
 
-  while(str != "") {
+  while (str != "") {
     string update = biteStringX(str, ':');
     vector<string> svector = parseString(update, ',');
     // In cases where no cell_var specified, assumed to be first
-    if(svector.size() == 2) {
+    if (svector.size() == 2) {
       unsigned int ix = atoi(svector[0].c_str());
       double cell_val = atof(svector[1].c_str());
       grid_update.addUpdate(ix, "", cell_val);
     }
     // cell_var is indeed specified
-    else if(svector.size() == 3) {
+    else if (svector.size() == 3) {
       unsigned int ix = atoi(svector[0].c_str());
       string cell_var = svector[1];
       double cell_val = atof(svector[2].c_str());
       grid_update.addUpdate(ix, cell_var, cell_val);
-    }
-    else
-      return(null_update);
-    
+    } else
+      return (null_update);
   }
-  
-  if(!grid_update.valid())
-    return(null_update);
-    
-  return(grid_update);
+
+  if (!grid_update.valid())
+    return (null_update);
+
+  return (grid_update);
 }
-
-
-

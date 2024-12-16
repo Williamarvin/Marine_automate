@@ -36,124 +36,103 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Exception_INCLUDED
 #define MOOS_POCO_Foundation_Exception_INCLUDED
-
 
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Foundation.h"
 #include <stdexcept>
 
-
 namespace MOOS {
 namespace Poco {
 
-
-class MOOS_POCO_Foundation_API Exception: public std::exception
-	/// This is the base class for all exceptions defined
-	/// in the Poco class library.
+class MOOS_POCO_Foundation_API Exception : public std::exception
+/// This is the base class for all exceptions defined
+/// in the Poco class library.
 {
 public:
-	Exception(const std::string& msg, int code = 0);
-		/// Creates an exception.
+  Exception(const std::string &msg, int code = 0);
+  /// Creates an exception.
 
-	Exception(const std::string& msg, const std::string& arg, int code = 0);
-		/// Creates an exception.
+  Exception(const std::string &msg, const std::string &arg, int code = 0);
+  /// Creates an exception.
 
-	Exception(const std::string& msg, const Exception& nested, int code = 0);
-		/// Creates an exception and stores a clone
-		/// of the nested exception.
+  Exception(const std::string &msg, const Exception &nested, int code = 0);
+  /// Creates an exception and stores a clone
+  /// of the nested exception.
 
-	Exception(const Exception& exc);
-		/// Copy constructor.
+  Exception(const Exception &exc);
+  /// Copy constructor.
 
-	~Exception() throw();
-		/// Destroys the exception and deletes the nested exception.
+  ~Exception() throw();
+  /// Destroys the exception and deletes the nested exception.
 
-	Exception& operator = (const Exception& exc);
-		/// Assignment operator.
+  Exception &operator=(const Exception &exc);
+  /// Assignment operator.
 
-	virtual const char* name() const throw();
-		/// Returns a static string describing the exception.
+  virtual const char *name() const throw();
+  /// Returns a static string describing the exception.
 
-	virtual const char* className() const throw();
-		/// Returns the name of the exception class.
+  virtual const char *className() const throw();
+  /// Returns the name of the exception class.
 
-	virtual const char* what() const throw();
-		/// Returns a static string describing the exception.
-		///
-		/// Same as name(), but for compatibility with std::exception.
+  virtual const char *what() const throw();
+  /// Returns a static string describing the exception.
+  ///
+  /// Same as name(), but for compatibility with std::exception.
 
-	const Exception* nested() const;
-		/// Returns a pointer to the nested exception, or
-		/// null if no nested exception exists.
+  const Exception *nested() const;
+  /// Returns a pointer to the nested exception, or
+  /// null if no nested exception exists.
 
-	const std::string& message() const;
-		/// Returns the message text.
+  const std::string &message() const;
+  /// Returns the message text.
 
-	int code() const;
-		/// Returns the exception code if defined.
+  int code() const;
+  /// Returns the exception code if defined.
 
-	std::string displayText() const;
-		/// Returns a string consisting of the
-		/// message name and the message text.
+  std::string displayText() const;
+  /// Returns a string consisting of the
+  /// message name and the message text.
 
-	virtual Exception* clone() const;
-		/// Creates an exact copy of the exception.
-		///
-		/// The copy can later be thrown again by
-		/// invoking rethrow() on it.
+  virtual Exception *clone() const;
+  /// Creates an exact copy of the exception.
+  ///
+  /// The copy can later be thrown again by
+  /// invoking rethrow() on it.
 
-	virtual void rethrow() const;
-		/// (Re)Throws the exception.
-		///
-		/// This is useful for temporarily storing a
-		/// copy of an exception (see clone()), then
-		/// throwing it again.
+  virtual void rethrow() const;
+  /// (Re)Throws the exception.
+  ///
+  /// This is useful for temporarily storing a
+  /// copy of an exception (see clone()), then
+  /// throwing it again.
 
 protected:
-	Exception(int code = 0);
-		/// Standard constructor.
+  Exception(int code = 0);
+  /// Standard constructor.
 
-	void message(const std::string& msg);
-		/// Sets the message for the exception.
+  void message(const std::string &msg);
+  /// Sets the message for the exception.
 
-	void extendedMessage(const std::string& arg);
-		/// Sets the extended message for the exception.
+  void extendedMessage(const std::string &arg);
+  /// Sets the extended message for the exception.
 
 private:
-	std::string _msg;
-	Exception*  _pNested;
-	int			_code;
+  std::string _msg;
+  Exception *_pNested;
+  int _code;
 };
-
 
 //
 // inlines
 //
-inline const Exception* Exception::nested() const
-{
-	return _pNested;
-}
+inline const Exception *Exception::nested() const { return _pNested; }
 
+inline const std::string &Exception::message() const { return _msg; }
 
-inline const std::string& Exception::message() const
-{
-	return _msg;
-}
+inline void Exception::message(const std::string &msg) { _msg = msg; }
 
-
-inline void Exception::message(const std::string& msg)
-{
-	_msg = msg;
-}
-
-
-inline int Exception::code() const
-{
-	return _code;
-}
-
+inline int Exception::code() const { return _code; }
 
 //
 // Macros for quickly declaring and implementing exception classes.
@@ -161,119 +140,133 @@ inline int Exception::code() const
 // pointers (which we need for specifying the exception name)
 // are not allowed as template arguments.
 //
-#define MOOS_POCO_DECLARE_EXCEPTION(API, CLS, BASE) \
-	class API CLS: public BASE														\
-	{																				\
-	public:																			\
-		CLS(int code = 0);															\
-		CLS(const std::string& msg, int code = 0);									\
-		CLS(const std::string& msg, const std::string& arg, int code = 0);			\
-		CLS(const std::string& msg, const Poco::Exception& exc, int code = 0);		\
-		CLS(const CLS& exc);														\
-		~CLS() throw();																\
-		CLS& operator = (const CLS& exc);											\
-		const char* name() const throw();											\
-		const char* className() const throw();										\
-		Poco::Exception* clone() const;												\
-		void rethrow() const;														\
-	};
+#define MOOS_POCO_DECLARE_EXCEPTION(API, CLS, BASE)                            \
+  class API CLS : public BASE {                                                \
+  public:                                                                      \
+    CLS(int code = 0);                                                         \
+    CLS(const std::string &msg, int code = 0);                                 \
+    CLS(const std::string &msg, const std::string &arg, int code = 0);         \
+    CLS(const std::string &msg, const Poco::Exception &exc, int code = 0);     \
+    CLS(const CLS &exc);                                                       \
+    ~CLS() throw();                                                            \
+    CLS &operator=(const CLS &exc);                                            \
+    const char *name() const throw();                                          \
+    const char *className() const throw();                                     \
+    Poco::Exception *clone() const;                                            \
+    void rethrow() const;                                                      \
+  };
 
-
-#define MOOS_POCO_IMPLEMENT_EXCEPTION(CLS, BASE, NAME)													\
-	CLS::CLS(int code): BASE(code)																	\
-	{																								\
-	}																								\
-	CLS::CLS(const std::string& msg, int code): BASE(msg, code)										\
-	{																								\
-	}																								\
-	CLS::CLS(const std::string& msg, const std::string& arg, int code): BASE(msg, arg, code)		\
-	{																								\
-	}																								\
-	CLS::CLS(const std::string& msg, const Poco::Exception& exc, int code): BASE(msg, exc, code)	\
-	{																								\
-	}																								\
-	CLS::CLS(const CLS& exc): BASE(exc)																\
-	{																								\
-	}																								\
-	CLS::~CLS() throw()																				\
-	{																								\
-	}																								\
-	CLS& CLS::operator = (const CLS& exc)															\
-	{																								\
-		BASE::operator = (exc);																		\
-		return *this;																				\
-	}																								\
-	const char* CLS::name() const throw()															\
-	{																								\
-		return NAME;																				\
-	}																								\
-	const char* CLS::className() const throw()														\
-	{																								\
-		return typeid(*this).name();																\
-	}																								\
-	Poco::Exception* CLS::clone() const																\
-	{																								\
-		return new CLS(*this);																		\
-	}																								\
-	void CLS::rethrow() const																		\
-	{																								\
-		throw *this;																				\
-	}
-
+#define MOOS_POCO_IMPLEMENT_EXCEPTION(CLS, BASE, NAME)                         \
+  CLS::CLS(int code) : BASE(code) {}                                           \
+  CLS::CLS(const std::string &msg, int code) : BASE(msg, code) {}              \
+  CLS::CLS(const std::string &msg, const std::string &arg, int code)           \
+      : BASE(msg, arg, code) {}                                                \
+  CLS::CLS(const std::string &msg, const Poco::Exception &exc, int code)       \
+      : BASE(msg, exc, code) {}                                                \
+  CLS::CLS(const CLS &exc) : BASE(exc) {}                                      \
+  CLS::~CLS() throw() {}                                                       \
+  CLS &CLS::operator=(const CLS &exc) {                                        \
+    BASE::operator=(exc);                                                      \
+    return *this;                                                              \
+  }                                                                            \
+  const char *CLS::name() const throw() { return NAME; }                       \
+  const char *CLS::className() const throw() { return typeid(*this).name(); }  \
+  Poco::Exception *CLS::clone() const { return new CLS(*this); }               \
+  void CLS::rethrow() const { throw *this; }
 
 //
 // Standard exception classes
 //
 MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, LogicException, Exception)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, AssertionViolationException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NullPointerException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, BugcheckException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, InvalidArgumentException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NotImplementedException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, RangeException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, IllegalStateException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, InvalidAccessException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SignalException, LogicException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, UnhandledException, LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            AssertionViolationException, LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NullPointerException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, BugcheckException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, InvalidArgumentException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NotImplementedException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, RangeException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, IllegalStateException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, InvalidAccessException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SignalException,
+                            LogicException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, UnhandledException,
+                            LogicException)
 
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, RuntimeException, Exception)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NotFoundException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ExistsException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, TimeoutException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SystemException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, RegularExpressionException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, LibraryLoadException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, LibraryAlreadyLoadedException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NoThreadAvailableException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PropertyNotSupportedException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PoolOverflowException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NoPermissionException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, OutOfMemoryException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, DataException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, RuntimeException,
+                            Exception)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NotFoundException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ExistsException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, TimeoutException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SystemException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            RegularExpressionException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, LibraryLoadException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            LibraryAlreadyLoadedException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            NoThreadAvailableException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            PropertyNotSupportedException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PoolOverflowException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, NoPermissionException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, OutOfMemoryException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, DataException,
+                            RuntimeException)
 
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, DataFormatException, DataException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SyntaxException, DataException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, CircularReferenceException, DataException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PathSyntaxException, SyntaxException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, IOException, RuntimeException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileException, IOException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileExistsException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileNotFoundException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PathNotFoundException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileReadOnlyException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileAccessDeniedException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, CreateFileException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, OpenFileException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, WriteFileException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ReadFileException, FileException)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, UnknownURISchemeException, RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, DataFormatException,
+                            DataException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, SyntaxException,
+                            DataException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API,
+                            CircularReferenceException, DataException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PathSyntaxException,
+                            SyntaxException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, IOException,
+                            RuntimeException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileException,
+                            IOException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileExistsException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileNotFoundException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, PathNotFoundException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileReadOnlyException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, FileAccessDeniedException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, CreateFileException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, OpenFileException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, WriteFileException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ReadFileException,
+                            FileException)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, UnknownURISchemeException,
+                            RuntimeException)
 
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ApplicationException, Exception)
-MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, BadCastException, RuntimeException)
-
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, ApplicationException,
+                            Exception)
+MOOS_POCO_DECLARE_EXCEPTION(MOOS_POCO_Foundation_API, BadCastException,
+                            RuntimeException)
 
 } // namespace Poco
 } // namespace MOOS
-
 
 #endif // MOOS_POCO_Foundation_Exception_INCLUDED

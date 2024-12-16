@@ -27,68 +27,61 @@
 #include <string>
 #include <vector>
 
-class LogPlot
-{
+class LogPlot {
 public:
   LogPlot();
   ~LogPlot() {}
-  
- public: // Setting
-  void   setVName(std::string s)    {m_vname = s;}
-  void   setVarName(std::string s)  {m_varname = s;}
-  bool   setValue(double gtime, double gvalue);
-  bool   setValueByIndex(unsigned int ix, double gvalue);
 
- public: // Modification
-  void   applySkew(double skew);
-  void   modValues(double modval);
-  void   filterOutHighest(double pct);
+public: // Setting
+  void setVName(std::string s) { m_vname = s; }
+  void setVarName(std::string s) { m_varname = s; }
+  bool setValue(double gtime, double gvalue);
+  bool setValueByIndex(unsigned int ix, double gvalue);
 
+public: // Modification
+  void applySkew(double skew);
+  void modValues(double modval);
+  void filterOutHighest(double pct);
 
- public: // Querying
+public: // Querying
   double getTimeByIndex(unsigned int index) const;
   double getValueByIndex(unsigned int index) const;
-  double getValueByTime(double gtime, bool interp=false) const;
+  double getValueByTime(double gtime, bool interp = false) const;
   double getAvgTimeGap();
-  
+
   unsigned int getLPIndexByTime(double gtime) const;
-  
+
   double getMedian();
   double getMinTime() const;
   double getMaxTime() const;
-  double getMean() const          {return((m_max_val-m_min_val)/2);}
-  double getMinVal() const        {return(m_min_val);}
-  double getMaxVal() const        {return(m_max_val);}
+  double getMean() const { return ((m_max_val - m_min_val) / 2); }
+  double getMinVal() const { return (m_min_val); }
+  double getMaxVal() const { return (m_max_val); }
   double getMinVal(double mintime, double maxtime) const;
   double getMaxVal(double mintime, double maxtime) const;
 
-  std::string getVName() const    {return(m_vname);}
-  std::string getVarName() const  {return(m_varname);}
-  unsigned int  size() const      {return(m_time.size());}
+  std::string getVName() const { return (m_vname); }
+  std::string getVarName() const { return (m_varname); }
+  unsigned int size() const { return (m_time.size()); }
 
-  bool   empty() const            {return(m_time.size() == 0);}
-  void   print() const;
+  bool empty() const { return (m_time.size() == 0); }
+  void print() const;
 
-  std::string getSpec(unsigned int tprec=3, unsigned vprec=3) const;
-  bool   setFromSpec(std::string);
-  
+  std::string getSpec(unsigned int tprec = 3, unsigned vprec = 3) const;
+  bool setFromSpec(std::string);
+
 protected:
-  std::string m_vname;           // Vehicle or Node name
-  std::string m_varname;         // Variable name to be plotted
+  std::string m_vname;   // Vehicle or Node name
+  std::string m_varname; // Variable name to be plotted
   std::vector<double> m_time;
   std::vector<double> m_value;
 
   double m_min_val;
   double m_max_val;
 
-  bool   m_median_set;
+  bool m_median_set;
   double m_median;
 
   double m_avg_time_gap;
 };
-#endif 
-
-
-
-
-
+#endif

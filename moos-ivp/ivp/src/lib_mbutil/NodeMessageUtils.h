@@ -28,16 +28,6 @@
 
 #include "NodeMessage.h"
 
-NodeMessage string2NodeMessage(const std::string&);
+NodeMessage string2NodeMessage(const std::string &);
 
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

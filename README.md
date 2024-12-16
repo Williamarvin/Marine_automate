@@ -52,6 +52,9 @@ source ~/.bashrc
 ```
 cd moos-ivp-pavlab-aro/missions/alpha_heron/
 ./launch_now.sh
+
+To Clean all log messages
+./clean.sh
 ```
 
 # If all else fails

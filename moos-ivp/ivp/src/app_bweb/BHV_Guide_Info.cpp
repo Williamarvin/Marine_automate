@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
 #include "BHV_Guide_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                 ");
   blk("------------------------------------                      ");
   blk("  The bweb is a terminal based tool for launching a web   ");
@@ -44,8 +43,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blu("========================================================= ");
   blu("Usage: bweb BEHAVIOR_NAME [OPTIONS]                       ");
   blu("========================================================= ");
@@ -68,18 +66,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit()
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("bweb", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

@@ -21,36 +21,30 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
 #include "Populator_HelmPlots.h"
 #include "MBUtils.h"
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: populateFromEntries
 
-bool Populator_HelmPlots::populateFromEntries(const vector<ALogEntry>& entries)
-{
+bool Populator_HelmPlots::populateFromEntries(
+    const vector<ALogEntry> &entries) {
   int i, vsize = entries.size();
-  if(vsize == 0)
-    return(false);
-  
-  for(i=0; i<vsize; i++) {
+  if (vsize == 0)
+    return (false);
+
+  for (i = 0; i < vsize; i++) {
     string var = entries[i].getVarName();
-    if(var == "IVPHELM_SUMMARY") {
+    if (var == "IVPHELM_SUMMARY") {
       double time = entries[i].getTimeStamp();
       string sval = entries[i].getStringVal();
       m_helm_plot.add_entry(time, sval);
     }
   }
-  return(true);
+  return (true);
 }
-
-
-
-
-
-

@@ -24,54 +24,53 @@
 #ifndef UFLD_MESSAGE_HANDLER_HEADER
 #define UFLD_MESSAGE_HANDLER_HEADER
 
-#include <string>
-#include <map>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "VarDataPair.h"
+#include <map>
+#include <string>
 
-class MessageHandler : public AppCastingMOOSApp
-{
- public:
+class MessageHandler : public AppCastingMOOSApp {
+public:
   MessageHandler();
   virtual ~MessageHandler() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
- protected:
+protected:
   void registerVariables();
-  bool handleMailNodeMessage(const std::string&);
+  bool handleMailNodeMessage(const std::string &);
   void postMsgSummary();
-  void postFlags(const std::vector<VarDataPair>& flags);
-  
- protected: // Config vars
-  bool         m_strict_addressing;
+  void postFlags(const std::vector<VarDataPair> &flags);
+
+protected: // Config vars
+  bool m_strict_addressing;
   unsigned int m_appcast_trunc_msg;
 
-  std::string  m_aux_info; 
+  std::string m_aux_info;
 
   std::vector<VarDataPair> m_msg_flags;
   std::vector<VarDataPair> m_bad_msg_flags;
-  
- protected: // State vars
+
+protected: // State vars
   unsigned int m_reports;
-  bool         m_newmail;
+  bool m_newmail;
 
   unsigned int m_total_messages_rcvd;
   unsigned int m_valid_messages_rcvd;
   unsigned int m_rejected_messages_rcvd;
-  double       m_last_message_rcvd;
+  double m_last_message_rcvd;
 
   std::map<std::string, unsigned int> m_map_msg_total;
-  std::map<std::string, double>       m_map_msg_tstamp;
-  std::map<std::string, std::string>  m_map_msg_var;
-  std::map<std::string, std::string>  m_map_msg_value;
+  std::map<std::string, double> m_map_msg_tstamp;
+  std::map<std::string, std::string> m_map_msg_var;
+  std::map<std::string, std::string> m_map_msg_value;
 
   unsigned int m_max_len_msg_src;
   unsigned int m_max_len_msg_total;
@@ -79,10 +78,9 @@ class MessageHandler : public AppCastingMOOSApp
   unsigned int m_max_len_msg_var;
   unsigned int m_max_len_msg_value;
 
-  std::list<std::string>  m_last_valid_msgs;
-  std::list<std::string>  m_last_invalid_msgs;
-  std::list<std::string>  m_last_rejected_msgs;
+  std::list<std::string> m_last_valid_msgs;
+  std::list<std::string> m_last_invalid_msgs;
+  std::list<std::string> m_last_rejected_msgs;
 };
 
-#endif 
-
+#endif

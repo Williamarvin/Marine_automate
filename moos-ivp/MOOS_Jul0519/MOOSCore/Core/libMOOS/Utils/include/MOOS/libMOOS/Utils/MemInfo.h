@@ -15,7 +15,8 @@
 //   This source code and the accompanying materials
 //   are made available under the terms of the GNU Lesser Public License v2.1
 //   which accompanies this distribution, and is available at
-//   http://www.gnu.org/licenses/lgpl.txt distributed in the hope that it will be useful,
+//   http://www.gnu.org/licenses/lgpl.txt distributed in the hope that it will
+be useful,
 //   but WITHOUT ANY WARRANTY; without even the implied warranty of
 //   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 //
@@ -31,14 +32,11 @@
 #ifndef MEMINFO_H_
 #define MEMINFO_H_
 
+namespace MOOS {
 
-namespace MOOS
-{
+size_t GetPeakMemoryUsage();
+size_t GetCurrentMemoryUsage();
 
-	size_t GetPeakMemoryUsage( );
-	size_t GetCurrentMemoryUsage( );
-
-};
-
+}; // namespace MOOS
 
 #endif /* MEMINFO_H_ */

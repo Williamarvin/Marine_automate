@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef UFLD_CONTACT_RANGE_SENSOR_EXAMPLE_CONFIG_HEADER
 #define UFLD_CONTACT_RANGE_SENSOR_EXAMPLE_CONFIG_HEADER
 
@@ -31,11 +31,3 @@ void showInterfaceAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-

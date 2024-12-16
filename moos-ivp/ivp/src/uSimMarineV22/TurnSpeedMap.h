@@ -24,26 +24,25 @@
 #ifndef TURN_SPEED_MAP
 #define TURN_SPEED_MAP
 
-class TurnSpeedMap
-{
+class TurnSpeedMap {
 public:
   TurnSpeedMap();
   ~TurnSpeedMap() {}
-  
- public:
+
+public:
   bool setFullSpeed(double);
   bool setNullSpeed(double);
   bool setFullRate(double);
   bool setNullRate(double);
 
-  double getFullSpeed() const {return(m_full_speed);}
-  double getNullSpeed() const {return(m_null_speed);}
-  double getFullRate() const  {return(m_full_rate);}
-  double getNullRate() const  {return(m_null_rate);}
-  
+  double getFullSpeed() const { return (m_full_speed); }
+  double getNullSpeed() const { return (m_null_speed); }
+  double getFullRate() const { return (m_full_rate); }
+  double getNullRate() const { return (m_null_rate); }
+
   double getTurnRate(double speed);
 
- protected:
+protected:
   double m_full_speed;
   double m_null_speed;
   double m_full_rate;
@@ -51,9 +50,3 @@ public:
 };
 
 #endif
-
-
-
-
-
-

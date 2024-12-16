@@ -21,11 +21,11 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "ZAIC_SPD_GUI.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
+#include "ZAIC_SPD_GUI.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -36,8 +36,7 @@ void idleProc(void *);
 //--------------------------------------------------------
 // Procedure: idleProc
 
-void idleProc(void *)
-{
+void idleProc(void *) {
   Fl::flush();
   millipause(10);
 }
@@ -45,54 +44,51 @@ void idleProc(void *)
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   Fl::add_idle(idleProc);
-  ZAIC_SPD_GUI* gui = new ZAIC_SPD_GUI(700, 460, "ZAIC_SPD-Viewer");
+  ZAIC_SPD_GUI *gui = new ZAIC_SPD_GUI(700, 460, "ZAIC_SPD-Viewer");
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi == "--version") || (argi=="-version"))
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit("zaic_spd", "gpl");
 
-    else if(strBegins(argi, "--verbose")) 
+    else if (strBegins(argi, "--verbose"))
       gui->setVerbose(true);
-    else if(strBegins(argi, "--domain=")) 
+    else if (strBegins(argi, "--domain="))
       gui->setParam("domain", argi.substr(9));
-    else if(strBegins(argi, "--med_spd=")) 
+    else if (strBegins(argi, "--med_spd="))
       gui->setParam("med_spd", argi.substr(10));
-    else if(strBegins(argi, "--low_spd=")) 
+    else if (strBegins(argi, "--low_spd="))
       gui->setParam("low_spd", argi.substr(10));
-    else if(strBegins(argi, "--hgh_spd=")) 
+    else if (strBegins(argi, "--hgh_spd="))
       gui->setParam("hgh_spd", argi.substr(10));
-    else if(strBegins(argi, "--low_spd_util=")) 
+    else if (strBegins(argi, "--low_spd_util="))
       gui->setParam("low_spd_util", argi.substr(15));
-    else if(strBegins(argi, "--hgh_spd_util=")) 
+    else if (strBegins(argi, "--hgh_spd_util="))
       gui->setParam("hgh_spd_util", argi.substr(15));
-    else if(strBegins(argi, "--max_spd_util=")) 
+    else if (strBegins(argi, "--max_spd_util="))
       gui->setParam("max_spd_util", argi.substr(15));
-    else if(strBegins(argi, "--min_spd_util=")) 
+    else if (strBegins(argi, "--min_spd_util="))
       gui->setParam("min_spd_util", argi.substr(15));
     else {
       cout << "Exiting due to Unhandled arg: " << argi << endl;
       exit(1);
-    }      
+    }
   }
-      
+
   gui->updateOutput();
 
   // Enter the GUI event loop.
   return Fl::run();
 }
 
-
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   cout << endl;
   cout << "Usage: zaic_spd [OPTIONS]                            " << endl;
   cout << "Options:                                             " << endl;
@@ -109,11 +105,7 @@ void showHelpAndExit()
   cout << "                                                     " << endl;
   cout << "Example:                                             " << endl;
   cout << " $ zaic_spd --domain=speed,0,5,51 --verbose          " << endl;
-  cout << " $ zaic_spd --domain=speed,0,8,41 --med_spd=4.5 --spd_max_util=80 " << endl;
+  cout << " $ zaic_spd --domain=speed,0,8,41 --med_spd=4.5 --spd_max_util=80 "
+       << endl;
   exit(0);
 }
-
-
-
-
-

@@ -21,79 +21,75 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <cmath>
-#include "MBUtils.h"
 #include "AvgHandler.h"
-#include "LogUtils.h"
 #include "ACTable.h"
+#include "LogUtils.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
-
 
 //--------------------------------------------------------
 // Constructor
 
-AvgHandler::AvgHandler()
-{
-  m_file_in  = 0;
-  m_verbose  = false;
+AvgHandler::AvgHandler() {
+  m_file_in = 0;
+  m_verbose = false;
 
   m_format_aligned = true;
-  m_format_negpos  = false;
+  m_format_negpos = false;
 }
 
 //--------------------------------------------------------
 // Procedure: setLogFile()
 
-bool AvgHandler::setLogFile(string logfile)
-{
-  if(m_file_in !=0) {
-    if(m_verbose)
+bool AvgHandler::setLogFile(string logfile) {
+  if (m_file_in != 0) {
+    if (m_verbose)
       cout << "Only one log file may be provided." << endl;
-    return(false);
+    return (false);
   }
-  
+
   m_file_in = fopen(logfile.c_str(), "r");
-  if(!m_file_in) {
-    if(m_verbose)
+  if (!m_file_in) {
+    if (m_verbose)
       cout << "Input file not found or unable to open: " + logfile << endl;
-    return(false);
+    return (false);
   }
-  
-  return(true);
+
+  return (true);
 }
 
 //--------------------------------------------------------
 // Procedure: handle
 
-bool AvgHandler::handle()
-{
-  if(!m_file_in)
-    return(false);
+bool AvgHandler::handle() {
+  if (!m_file_in)
+    return (false);
 
   // ==============================================
   // Part 1: Sort the bins
   // ==============================================
   bool done = false;
-  while(!done) {
+  while (!done) {
     string line_raw = getNextRawLine(m_file_in);
 
     // Check for end of file
-    if(line_raw == "eof") 
+    if (line_raw == "eof")
       break;
-    if(line_raw.at(0) == '%')
+    if (line_raw.at(0) == '%')
       continue;
 
     string line = stripBlankEnds(line_raw);
     string col1 = biteStringX(line, ' ');
     string col2 = line;
 
-    if(!isNumber(col1) || !isNumber(col2))
-      if(m_verbose)
-	cout << "bad line: [" << line_raw << "]" << endl;
+    if (!isNumber(col1) || !isNumber(col2))
+      if (m_verbose)
+        cout << "bad line: [" << line_raw << "]" << endl;
 
     double xval = atof(col1.c_str());
     double yval = atof(col2.c_str());
@@ -102,20 +98,20 @@ bool AvgHandler::handle()
     m_entries[xval].addYVal(yval);
   }
 
-  if(m_file_in)
+  if (m_file_in)
     fclose(m_file_in);
 
   // ==============================================
   // Part 2: Make the report
   // ==============================================
-  if(m_format_aligned) {
-    ACTable actab(5,2);
-    
+  if (m_format_aligned) {
+    ACTable actab(5, 2);
+
     map<double, ExpEntry>::iterator p;
-    for(p=m_entries.begin(); p!=m_entries.end(); p++) {
+    for (p = m_entries.begin(); p != m_entries.end(); p++) {
       double xval = p->first;
       ExpEntry entry = p->second;
-      
+
       double yavg = entry.getYAvg();
       double ymin = entry.getYMin();
       double ymax = entry.getYMax();
@@ -123,44 +119,36 @@ bool AvgHandler::handle()
       double ypos = entry.getYPos();
       double ystd = entry.getYStd();
 
-      if(m_format_negpos)
-	actab << xval << yavg << yneg << ypos << ystd;
+      if (m_format_negpos)
+        actab << xval << yavg << yneg << ypos << ystd;
       else
-	actab << xval << yavg << ymin << ymax << ystd;
+        actab << xval << yavg << ymin << ymax << ystd;
     }
     vector<string> lines = actab.getTableOutput();
-    for(unsigned int i=0; i<lines.size(); i++)
+    for (unsigned int i = 0; i < lines.size(); i++)
       cout << lines[i] << endl;
-    
-  }
-  else {
+
+  } else {
     map<double, ExpEntry>::iterator p;
-    for(p=m_entries.begin(); p!=m_entries.end(); p++) {
+    for (p = m_entries.begin(); p != m_entries.end(); p++) {
       double xval = p->first;
       ExpEntry entry = p->second;
-      
+
       double yavg = entry.getYAvg();
       double ymin = entry.getYMin();
       double ymax = entry.getYMax();
       double yneg = entry.getYNeg();
       double ypos = entry.getYPos();
       double ystd = entry.getYStd();
-      
-      if(m_format_negpos) {
-	cout << xval << " " << yavg << " " << yneg <<
-	  " " << ypos << " " << ystd << endl;
-      }
-      else 
-	cout << xval << " " << yavg << " " << ymin <<
-	  " " << ymax << " " << ystd << endl;
+
+      if (m_format_negpos) {
+        cout << xval << " " << yavg << " " << yneg << " " << ypos << " " << ystd
+             << endl;
+      } else
+        cout << xval << " " << yavg << " " << ymin << " " << ymax << " " << ystd
+             << endl;
     }
   }
 
-  return(true);
+  return (true);
 }
-
-
-
-
-
-

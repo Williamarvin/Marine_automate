@@ -26,55 +26,37 @@
 #ifndef CONDITIONAL_PARAM_HEADER
 #define CONDITIONAL_PARAM_HEADER
 
-#include <string>
 #include "LogicCondition.h"
+#include <string>
 
 class ConditionalParam {
 public:
-  ConditionalParam() {m_ok=false; m_comment_header="//";}
+  ConditionalParam() {
+    m_ok = false;
+    m_comment_header = "//";
+  }
   ~ConditionalParam() {}
-  
-  void setCommentHeader(const std::string& s) {m_comment_header=s;}
-  
 
-  bool setFromString(const std::string&);
+  void setCommentHeader(const std::string &s) { m_comment_header = s; }
 
-  bool setFromString(const std::string&, const std::string&);
+  bool setFromString(const std::string &);
 
-  std::string getParam()    {return(m_parameter);}
-  std::string getParamVal() {return(m_param_val);}
+  bool setFromString(const std::string &, const std::string &);
 
-  LogicCondition getCondition() {return(m_condition);}
-  
-  bool ok()                 {return(m_ok);}
+  std::string getParam() { return (m_parameter); }
+  std::string getParamVal() { return (m_param_val); }
+
+  LogicCondition getCondition() { return (m_condition); }
+
+  bool ok() { return (m_ok); }
 
 protected:
-  LogicCondition     m_condition;
-  std::string        m_parameter;
-  std::string        m_param_val;
-  std::string        m_comment_header;
+  LogicCondition m_condition;
+  std::string m_parameter;
+  std::string m_param_val;
+  std::string m_comment_header;
 
-  bool               m_ok;
+  bool m_ok;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

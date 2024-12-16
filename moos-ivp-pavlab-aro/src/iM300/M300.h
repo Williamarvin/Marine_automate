@@ -12,20 +12,19 @@
 #ifndef M300_HEADER
 #define M300_HEADER
 
-#include <string>
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include "NodeMessage.h" // for UREP coordination
 #include "SockNinja.h"
 #include "Thruster.h"
 #include "VehRotController.h"
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "XYRangePulse.h"  // for send pulse
-#include "NodeMessage.h"   // for UREP coordination
+#include "XYRangePulse.h" // for send pulse
 #include "c_library_v2/common/mavlink.h"
+#include <string>
 
 using namespace std;
 
-class M300 : public AppCastingMOOSApp
-{
+class M300 : public AppCastingMOOSApp {
 public:
   M300();
   ~M300();
@@ -56,12 +55,13 @@ protected: // App Specific functions
   bool handleMsgCPRCM(std::string);
   bool handleMsgCPNVR(std::string);
 
-  bool reportBadMessage(std::string msg, std::string reason="");
+  bool reportBadMessage(std::string msg, std::string reason = "");
   bool GeodesySetup();
   void checkForStalenessOrAllStop();
   void sendPulse();
-  void calculateFaultyThrust(double thrustL, double thrustR, double &thrustL_faulty, double &thrustR_faulty);
-  
+  void calculateFaultyThrust(double thrustL, double thrustR,
+                             double &thrustL_faulty, double &thrustR_faulty);
+
   // Auv functions
   void sendServo(uint8_t servoNumber, float pwmValue);
   void setBaudRate(int);
@@ -77,110 +77,109 @@ protected: // App Specific functions
   void ThrustOutputPriority();
 
 private: // Config variables
-  
   std::fstream serial;
   string serialPort;
-  
-  double       m_max_rudder;       // MAX_RUDDER
-  double       m_max_thrust;       // MAX_THRUST
-  std::string  m_drive_mode;       // DRIVE_MODE
-  std::string  m_vname;            // Vehicle name
-  
+
+  double m_max_rudder;      // MAX_RUDDER
+  double m_max_thrust;      // MAX_THRUST
+  std::string m_drive_mode; // DRIVE_MODE
+  std::string m_vname;      // Vehicle name
+
   // heading source variables
-  std::string  m_heading_source;   // gps, imu, or auto;
-  double       m_stale_gps_msg_thresh;
-  double       m_last_gps_msg_time;
-  bool         m_ignore_checksum;
+  std::string m_heading_source; // gps, imu, or auto;
+  double m_stale_gps_msg_thresh;
+  double m_last_gps_msg_time;
+  bool m_ignore_checksum;
 
   std::set<std::string> m_ignore_msgs;
 
-  // Requred mods for HydroMAN integration 
-  std::string  m_nav_prefix;
-  std::string  m_gps_prefix;
-  std::string  m_compass_prefix;
-  
+  // Requred mods for HydroMAN integration
+  std::string m_nav_prefix;
+  std::string m_gps_prefix;
+  std::string m_compass_prefix;
+
 private: // State variables
   CMOOSGeodesy m_geodesy;
-  SockNinja    m_ninja;
-  Thruster     m_thrust;
+  SockNinja m_ninja;
+  Thruster m_thrust;
   VehRotController m_rot_ctrl;
 
-  bool         m_ivp_allstop;
-  bool         m_moos_manual_override;
+  bool m_ivp_allstop;
+  bool m_moos_manual_override;
 
   // Stale Message Detection
-  bool         m_stale_check_enabled;
-  bool         m_stale_mode;
-  double       m_stale_threshold;
+  bool m_stale_check_enabled;
+  bool m_stale_mode;
+  double m_stale_threshold;
   unsigned int m_count_stale;
-  double       m_tstamp_des_rudder;
-  double       m_tstamp_des_thrust;
-  double       m_tstamp_compass_msg;
+  double m_tstamp_des_rudder;
+  double m_tstamp_des_thrust;
+  double m_tstamp_compass_msg;
 
   unsigned int m_num_satellites;
-  double       m_batt_voltage;
-  double       m_nav_x;
-  double       m_nav_y;
-  double       m_nav_hdg;
-  double       m_nav_spd;
-  double       m_compass_hdg;
+  double m_batt_voltage;
+  double m_nav_x;
+  double m_nav_y;
+  double m_nav_hdg;
+  double m_nav_spd;
+  double m_compass_hdg;
 
   unsigned int m_bad_nmea_semantic;
 
   // GPS denied navigation related
-  bool         m_gps_blocked;
+  bool m_gps_blocked;
 
   // Adaptive control related
-  bool         m_publish_body_vel;
-  bool         m_use_nvg_msg_for_nav_x_nav_y;
-  double       m_stale_compass_thresh;
-  double       m_declination;  // used for processing
-                               // raw compass
-  bool         m_add_thruster_fault; 
-  double       m_fault_factor_thr_L;
-  double       m_fault_factor_thr_R;
-  double       m_fault_bias_thr_L;
-  double       m_fault_bias_thr_R;
-  double       m_fault_factor_rudder;
-  double       m_rudder_bias_L;
-  double       m_rudder_bias_R; 
+  bool m_publish_body_vel;
+  bool m_use_nvg_msg_for_nav_x_nav_y;
+  double m_stale_compass_thresh;
+  double m_declination; // used for processing
+                        // raw compass
+  bool m_add_thruster_fault;
+  double m_fault_factor_thr_L;
+  double m_fault_factor_thr_R;
+  double m_fault_bias_thr_L;
+  double m_fault_bias_thr_R;
+  double m_fault_factor_rudder;
+  double m_rudder_bias_L;
+  double m_rudder_bias_R;
 
   // port related
-  int          pik_port = -1;
-  int          board_port = -1;
-  vector<string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2", "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4", "/dev/ttyFIQ0", "/dev/ttyS9"};
+  int pik_port = -1;
+  int board_port = -1;
+  vector<string> portList = {"/dev/ttyUSB0", "/dev/ttyUSB1", "/dev/ttyUSB2",
+                             "/dev/ttyACM0", "/dev/ttyUSB3", "/dev/ttyUSB4",
+                             "/dev/ttyFIQ0", "/dev/ttyS9"};
 
   // Message related
-  const        int BUFFER_SIZE = 1000;
-  char         vehicle_buffer[1000];
-  char         onBoard_buffer[1000];
+  const int BUFFER_SIZE = 1000;
+  char vehicle_buffer[1000];
+  char onBoard_buffer[1000];
 
   // Check bool variables
-  bool         checkVehicle = false;
-  bool         gpsFound = false;
-  bool         onBoard = false;
-  bool         hdg_found = false;
+  bool checkVehicle = false;
+  bool gpsFound = false;
+  bool onBoard = false;
+  bool hdg_found = false;
 
   // Beacon related
-  string       beaconMode = "";
+  string beaconMode = "";
 
   // Flotie related
-  string       mode = "floatie";
-  string       status = "";
-  float        f_Thrust_L= 0;
-  float        f_Thrust_R = 0;
-  float        o_Thrust_L = 0;
-  float        o_Thrust_R = 0;
-  float        a_Thrust_L = 0;
-  float        a_Thrust_R = 0;
+  string mode = "floatie";
+  string status = "";
+  float f_Thrust_L = 0;
+  float f_Thrust_R = 0;
+  float o_Thrust_L = 0;
+  float o_Thrust_R = 0;
+  float a_Thrust_L = 0;
+  float a_Thrust_R = 0;
 
   // Others
-  string       serial_output = "";
-  ssize_t      num_bytes;
+  string serial_output = "";
+  ssize_t num_bytes;
 
   // Modified
 };
 
-#endif 
-
-
+#endif

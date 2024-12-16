@@ -21,60 +21,59 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include "MBUtils.h"
-#include "OpenURL.h"
-#include "TermUtils.h"
-#include "ColorParse.h"
 #include "AppCastMonitor.h"
 #include "AppCastMonitor_Info.h"
+#include "ColorParse.h"
+#include "MBUtils.h"
 #include "MOOSAppRunnerThread.h"
+#include "OpenURL.h"
+#include "TermUtils.h"
+#include <string>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
-  bool   terse_mode = false;
+  bool terse_mode = false;
   string initial_proc;
   string initial_node;
   string refresh_mode;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if((argi == "-t") || (argi == "--terse"))
+    else if ((argi == "-t") || (argi == "--terse"))
       terse_mode = true;
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if(strBegins(argi, "--node="))
+    else if (strBegins(argi, "--node="))
       initial_node = argi.substr(7);
-    else if(strBegins(argi, "--proc="))
+    else if (strBegins(argi, "--proc="))
       initial_proc = argi.substr(7);
-    else if((argi == "--paused") || (argi == "-p"))
+    else if ((argi == "--paused") || (argi == "-p"))
       refresh_mode = "paused";
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/uMAC");
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
-  
-  if(mission_file == "")
+
+  if (mission_file == "")
     showHelpAndExit();
 
   // Build a unique run name based on the random number
   srand(time(NULL));
-  int    rand_int = rand() % 10000;
+  int rand_int = rand() % 10000;
   string rand_str = intToString(rand_int);
   run_command += "_" + rand_str;
 
@@ -86,17 +85,17 @@ int main(int argc, char *argv[])
   UMAC.setTerseMode(terse_mode);
   UMAC.setInitialNode(initial_node);
   UMAC.setInitialProc(initial_proc);
-  if(refresh_mode == "paused")
+  if (refresh_mode == "paused")
     UMAC.setRefreshPaused();
-  
+
   // start the UMAC in its own thread
-  MOOSAppRunnerThread appRunner(&UMAC, (char*)(run_command.c_str()), 
-				mission_file.c_str(), argc, argv);
+  MOOSAppRunnerThread appRunner(&UMAC, (char *)(run_command.c_str()),
+                                mission_file.c_str(), argc, argv);
 
   bool quit = false;
-  while(!quit) {
+  while (!quit) {
     char c = getCharNoWait();
-    if((c=='q') || (c==(char)(3)))   // ASCII 03 is control-c
+    if ((c == 'q') || (c == (char)(3))) // ASCII 03 is control-c
       quit = true;
     else {
       UMAC.handleCommand(c);
@@ -105,15 +104,5 @@ int main(int argc, char *argv[])
 
   cout << "Quitting....." << endl;
   appRunner.quit();
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-

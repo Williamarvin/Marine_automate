@@ -22,127 +22,122 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cmath>
-#include "GeomUtils.h"
-#include "AngleUtils.h"
+
 #include "CPA_Utils.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include <cmath>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: evalCPA
-//   Purpose: 
+//   Purpose:
 
 double evalCPA(double cnLON, double cnLAT, double cnSPD, double cnCRS,
-	       double osLON, double osLAT, double osSPD, double osCRS,
-	       double osTOL)
-{
+               double osLON, double osLAT, double osSPD, double osCRS,
+               double osTOL) {
 
-  double gamCN   = degToRadians(cnCRS);  // Angle in radians.
-  double cgamCN  = cos(gamCN);           // Cosine of Angle (cnCRS).
-  double sgamCN  = sin(gamCN);           // Sine   of Angle (cnCRS).
+  double gamCN = degToRadians(cnCRS); // Angle in radians.
+  double cgamCN = cos(gamCN);         // Cosine of Angle (cnCRS).
+  double sgamCN = sin(gamCN);         // Sine   of Angle (cnCRS).
 
-  double statK2  = (+1.0) * cgamCN * cgamCN * cnSPD * cnSPD;    //(3,3)(a)
-  statK2 += (+1.0) * sgamCN * sgamCN * cnSPD * cnSPD;    //(3,3)(b)
+  double statK2 = (+1.0) * cgamCN * cgamCN * cnSPD * cnSPD; //(3,3)(a)
+  statK2 += (+1.0) * sgamCN * sgamCN * cnSPD * cnSPD;       //(3,3)(b)
 
-  double statK1  = (-2.0) * osLAT * cgamCN * cnSPD;    // (2,3)(3,2)(a)
-  statK1 += (-2.0) * osLON * sgamCN * cnSPD;    // (2,3)(3,2)(b)
-  statK1 += ( 2.0) * cnLAT * cgamCN * cnSPD;    // (3,4)(4,3)(a)
-  statK1 += ( 2.0) * cnLON * sgamCN * cnSPD;    // (3,4)(4,3)(b)
-  
-  double statK0  =          osLAT * osLAT;  // (2,2)(a)
-  statK0 +=          osLON * osLON;  // (2,2)(b)
-  statK0 += (-2.0) * osLAT * cnLAT;  // (2,4)(4,2)(a)
-  statK0 += (-2.0) * osLON * cnLON;  // (2,4)(4,2)(a)
-  statK0 +=          cnLAT * cnLAT;  // (4,4)(a)
-  statK0 +=          cnLON * cnLON;  // (4,4)(b)
-  
+  double statK1 = (-2.0) * osLAT * cgamCN * cnSPD; // (2,3)(3,2)(a)
+  statK1 += (-2.0) * osLON * sgamCN * cnSPD;       // (2,3)(3,2)(b)
+  statK1 += (2.0) * cnLAT * cgamCN * cnSPD;        // (3,4)(4,3)(a)
+  statK1 += (2.0) * cnLON * sgamCN * cnSPD;        // (3,4)(4,3)(b)
+
+  double statK0 = osLAT * osLAT;    // (2,2)(a)
+  statK0 += osLON * osLON;          // (2,2)(b)
+  statK0 += (-2.0) * osLAT * cnLAT; // (2,4)(4,2)(a)
+  statK0 += (-2.0) * osLON * cnLON; // (2,4)(4,2)(a)
+  statK0 += cnLAT * cnLAT;          // (4,4)(a)
+  statK0 += cnLON * cnLON;          // (4,4)(b)
+
   // Set static variables for quickening the "crossingType" queries
-  //double statCLOW, statCHGH;
-  //double statCNDIS = distPointToPoint(osLON, osLAT, cnLON, cnLAT);
-  //double statCNANG = relAng(osLON, osLAT, cnLON, cnLAT);
-  //if((cnCRS - statCNANG) <= 180) {
+  // double statCLOW, statCHGH;
+  // double statCNDIS = distPointToPoint(osLON, osLAT, cnLON, cnLAT);
+  // double statCNANG = relAng(osLON, osLAT, cnLON, cnLAT);
+  // if((cnCRS - statCNANG) <= 180) {
   //  statCLOW = statCNANG;
   //  statCHGH = cnCRS;
   //}
-  //else {
+  // else {
   //  statCLOW = cnCRS;
   //  statCHGH = statCNANG;
   //}
 
-  //double ang1 = angle360(statCHGH - statCLOW);
-  //double ang2 = angle360(statCLOW - statCHGH);
+  // double ang1 = angle360(statCHGH - statCLOW);
+  // double ang2 = angle360(statCLOW - statCHGH);
 
-  //double statCRNG;
-  //if(ang1 < ang2)
-  //  statCRNG = ang1;
-  //else
-  //  statCRNG = ang2;
-
+  // double statCRNG;
+  // if(ang1 < ang2)
+  //   statCRNG = ang1;
+  // else
+  //   statCRNG = ang2;
 
   // Phase II ----------------------------------------------------
-  
+
   osCRS = angle360(osCRS);
 
-  double gamOS  = degToRadians(osCRS);    // Angle in radians.
-  double cgamOS = cos(gamOS);             // Cosine of Angle (osCRS).
-  double sgamOS = sin(gamOS);             // Sine   of Angle (osCRS).
-  
+  double gamOS = degToRadians(osCRS); // Angle in radians.
+  double cgamOS = cos(gamOS);         // Cosine of Angle (osCRS).
+  double sgamOS = sin(gamOS);         // Sine   of Angle (osCRS).
+
   double k2 = statK2;
   double k1 = statK1;
   double k0 = statK0;
-  
-  if((cnCRS==osCRS) && (cnSPD==osSPD))  // Special case. K1,K2 would
-    return(sqrt(k0));                   // be 0, resuling in NaN.
-  
-  k2 +=          cgamOS * cgamOS * osSPD * osSPD;   // (1,1)(a)
-  k2 +=          sgamOS * sgamOS * osSPD * osSPD;   // (1,1)(b)
-  k2 += (-2.0) * cgamOS * osSPD * cgamCN * cnSPD;   // (1,3)(3,1)(a)
-  k2 += (-2.0) * sgamOS * osSPD * sgamCN * cnSPD;   // (1,3)(3,1)(b)
-  
-  k1 += ( 2.0) * cgamOS * osSPD * osLAT;  // (1,2)(2,1)(a)
-  k1 += ( 2.0) * sgamOS * osSPD * osLON;  // (1,2)(2,1)(b)
-  k1 += (-2.0) * cgamOS * osSPD * cnLAT;  // (1,4)(4,1)(a)
-  k1 += (-2.0) * sgamOS * osSPD * cnLON;  // (1,4)(4,1)(b)
-  
+
+  if ((cnCRS == osCRS) && (cnSPD == osSPD)) // Special case. K1,K2 would
+    return (sqrt(k0));                      // be 0, resuling in NaN.
+
+  k2 += cgamOS * cgamOS * osSPD * osSPD;          // (1,1)(a)
+  k2 += sgamOS * sgamOS * osSPD * osSPD;          // (1,1)(b)
+  k2 += (-2.0) * cgamOS * osSPD * cgamCN * cnSPD; // (1,3)(3,1)(a)
+  k2 += (-2.0) * sgamOS * osSPD * sgamCN * cnSPD; // (1,3)(3,1)(b)
+
+  k1 += (2.0) * cgamOS * osSPD * osLAT;  // (1,2)(2,1)(a)
+  k1 += (2.0) * sgamOS * osSPD * osLON;  // (1,2)(2,1)(b)
+  k1 += (-2.0) * cgamOS * osSPD * cnLAT; // (1,4)(4,1)(a)
+  k1 += (-2.0) * sgamOS * osSPD * cnLON; // (1,4)(4,1)(b)
+
   double cpaDist;
   double minT = ((-1.0) * k1) / (2.0 * k2);
 
-  if(minT <= 0) 
-    cpaDist = sqrt(k0); 
-  else { 
-    if((minT >= osTOL) && (osTOL != -1)) {
-      double dist_squared = (k2*osTOL*osTOL) + (k1*osTOL) + k0;
-      if(dist_squared < 0)
-	cpaDist = 0;
+  if (minT <= 0)
+    cpaDist = sqrt(k0);
+  else {
+    if ((minT >= osTOL) && (osTOL != -1)) {
+      double dist_squared = (k2 * osTOL * osTOL) + (k1 * osTOL) + k0;
+      if (dist_squared < 0)
+        cpaDist = 0;
       else
-	cpaDist = sqrt(dist_squared);
-    }
-    else {
-      double dist_squared = (k2*minT*minT) + (k1*minT) + k0;
-      if(dist_squared < 0)
-	cpaDist = 0;
+        cpaDist = sqrt(dist_squared);
+    } else {
+      double dist_squared = (k2 * minT * minT) + (k1 * minT) + k0;
+      if (dist_squared < 0)
+        cpaDist = 0;
       else
-	cpaDist = sqrt(dist_squared);
+        cpaDist = sqrt(dist_squared);
     }
   }
-  return(cpaDist);
+  return (cpaDist);
 }
 
 //---------------------------------------------------------------
 // Procedure: crossesBow
 //   Purpose: Determine if the ownship object with the given position
 //            and trajectory will cross paths with the contact object
-//            in front of the contact or not. 
-//            If ostol is given (>0) then we apply the further 
+//            in front of the contact or not.
+//            If ostol is given (>0) then we apply the further
 //            condition that it cross in front within the time given
 //            by ostol (ownship time on leg) in seconds.
 
-bool crossesBow(double cnx, double cny, double cnspd, double cnhdg,
-		double osx, double osy, double osspd, double oshdg,
-		double ostol)
-{
+bool crossesBow(double cnx, double cny, double cnspd, double cnhdg, double osx,
+                double osy, double osspd, double oshdg, double ostol) {
   // First find out where the tracks intersect (or if parallel)
 
   double cn_ptx;
@@ -158,36 +153,33 @@ bool crossesBow(double cnx, double cny, double cnspd, double cnhdg,
   double int_ptx;
   double int_pty;
 
-  bool res = linesCross(cnx, cny, cn_ptx, cn_pty, 
-			osx, osy, os_ptx, os_pty, 
-			int_ptx, int_pty);
+  bool res = linesCross(cnx, cny, cn_ptx, cn_pty, osx, osy, os_ptx, os_pty,
+                        int_ptx, int_pty);
 
   // If tracks are parallel return false
-  if(res==false)
-    return(false);
+  if (res == false)
+    return (false);
 
-
-  // Second, determine if both objects are moving toward the 
+  // Second, determine if both objects are moving toward the
   // intersection point. If not, then return false.
 
-  bool   os_heading_toward_int = true;
+  bool os_heading_toward_int = true;
   double os_angle_toward_int = relAng(osx, osy, int_ptx, int_pty);
-  if(fabs(os_angle_toward_int - oshdg) > 90)
+  if (fabs(os_angle_toward_int - oshdg) > 90)
     os_heading_toward_int = false;
 
-  if(!os_heading_toward_int)
-    return(false);
-  
-  
-  bool   cn_heading_toward_int = true;
+  if (!os_heading_toward_int)
+    return (false);
+
+  bool cn_heading_toward_int = true;
   double cn_angle_toward_int = relAng(cnx, cny, int_ptx, int_pty);
-  if(fabs(cn_angle_toward_int - cnhdg) > 90)
+  if (fabs(cn_angle_toward_int - cnhdg) > 90)
     cn_heading_toward_int = false;
-  
-  if(!cn_heading_toward_int)
-    return(false);
-  
-  // Third, if both objects are indeed heading toward the 
+
+  if (!cn_heading_toward_int)
+    return (false);
+
+  // Third, if both objects are indeed heading toward the
   // intersection point, determine which one gets there first.
 
   double os_dist_to_int = hypot((int_pty - osy), (int_ptx - osx));
@@ -196,24 +188,24 @@ bool crossesBow(double cnx, double cny, double cnspd, double cnhdg,
   // if ostol parameter given and os doesnt reach the intersection
   // within this time, then return false immediately. Dont bother
   // calculating the contact distance and time below.
-  if((ostol > 0) && (ostol < os_time_to_int))
-    return(false);
+  if ((ostol > 0) && (ostol < os_time_to_int))
+    return (false);
 
   double cn_dist_to_int = hypot((int_pty - cny), (int_ptx - cnx));
   double cn_time_to_int = cn_dist_to_int / cnspd;
 
   // if the os object gets there first, it crosses the bow of the
   // cn object.
-  if(os_time_to_int < cn_time_to_int)    
-    return(true);
+  if (os_time_to_int < cn_time_to_int)
+    return (true);
   else
-    return(false);
+    return (false);
 }
 
 //---------------------------------------------------------------
 // Procedure: closingSpeed
 //   Purpose: Determine the rate at which an object at the given
-//            position and trajectory is closing distance to an 
+//            position and trajectory is closing distance to an
 //            object at the given position.
 //       osx: X position of the moving object (meters)
 //       osy: Y position of the moving object (meters)
@@ -222,36 +214,34 @@ bool crossesBow(double cnx, double cny, double cnspd, double cnhdg,
 //        px: X position of the stationary object (meters)
 //        py: Y position of the stationary object (meters)
 
-double closingSpeed(double osx,   double osy, double osspd, 
-		    double oshdg, double ptx,  double pty)
-{
+double closingSpeed(double osx, double osy, double osspd, double oshdg,
+                    double ptx, double pty) {
   // Handle the special case where the two positions are identical
-  if((osx==ptx)&&(osy==pty))
-    return(0);
+  if ((osx == ptx) && (osy == pty))
+    return (0);
 
   double angle_to_wpt = relAng(osx, osy, ptx, pty);
-  
-  double angle_diff   = (oshdg - angle_to_wpt);
+
+  double angle_diff = (oshdg - angle_to_wpt);
 
   // Put the angle in the 0-359.999 range
-  while(angle_diff >= 360)
+  while (angle_diff >= 360)
     angle_diff -= 360.0;
-  while(angle_diff < 0)
+  while (angle_diff < 0)
     angle_diff += 360.0;
 
   // Convert Degrees to Radians
-  double rad_diff        = (angle_diff / 180) * 3.1415926;
+  double rad_diff = (angle_diff / 180) * 3.1415926;
   double rate_of_closure = cos(rad_diff) * osspd;
 
-  return(rate_of_closure);
+  return (rate_of_closure);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: closingSpeed
 //   Purpose: Determine the rate at which an object at the given
-//            position and trajectory is closing distance to  
-//            another moving object at the given position and 
+//            position and trajectory is closing distance to
+//            another moving object at the given position and
 //            trajectory.
 //       osx: X position of the moving object (meters)
 //       osy: Y position of the moving object (meters)
@@ -262,32 +252,28 @@ double closingSpeed(double osx,   double osy, double osspd,
 //     cnspd: Speed of position of the other moving object (m/sec)
 //     cnhdg: Heading of the moving other object (m/sec)
 
-double closingSpeed(double osx,   double osy, double osspd, 
-		    double oshdg, double cnx, double cny,
-		    double cnspd, double cnhdg)
-{
-  double mod_cnhdg = angle360(cnhdg-180);
+double closingSpeed(double osx, double osy, double osspd, double oshdg,
+                    double cnx, double cny, double cnspd, double cnhdg) {
+  double mod_cnhdg = angle360(cnhdg - 180);
 
   double hdg_sum, spd_sum;
 
   velocityVectorSum(oshdg, osspd, mod_cnhdg, cnspd, hdg_sum, spd_sum);
-  
-  double rate_of_closure = closingSpeed(osx,osy,spd_sum,hdg_sum,cnx,cny);
 
-  return(rate_of_closure);
+  double rate_of_closure = closingSpeed(osx, osy, spd_sum, hdg_sum, cnx, cny);
+
+  return (rate_of_closure);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: velocityVectorSum
 //   Purpose: Determine the sum of two velocity vectors.
 
-void velocityVectorSum(double hdg1, double spd1, double hdg2, 
-		       double spd2, double& hdg, double& spd)
-{
+void velocityVectorSum(double hdg1, double spd1, double hdg2, double spd2,
+                       double &hdg, double &spd) {
   double hdg1_rad = headingToRadians(hdg1);
   double hdg2_rad = headingToRadians(hdg2);
-  
+
   double xspd1 = cos(hdg1_rad) * spd1;
   double yspd1 = sin(hdg1_rad) * spd1;
   double xspd2 = cos(hdg2_rad) * spd2;
@@ -297,41 +283,32 @@ void velocityVectorSum(double hdg1, double spd1, double hdg2,
   double yspd = yspd1 + yspd2;
 
   spd = hypot(xspd, yspd);
-  
-  if(spd==0)
+
+  if (spd == 0)
     hdg = 0;
   else
-    hdg = relAng(0,0,xspd,yspd);
+    hdg = relAng(0, 0, xspd, yspd);
 }
-
 
 //-------------------------------------------------------------
 // Procedure: relAngRate
-//   Purpose: Calculate the rate at which a relative angle is 
+//   Purpose: Calculate the rate at which a relative angle is
 //            changing over the given time window.
 
-double relAngRate(double xa, double ya, double xb, double yb,
-		  double xc, double yc, double xd, double yd,
-		  double time_duration)
-{
-  if(time_duration <= 0)
-    return(0);
+double relAngRate(double xa, double ya, double xb, double yb, double xc,
+                  double yc, double xd, double yd, double time_duration) {
+  if (time_duration <= 0)
+    return (0);
 
   double relang1 = relAng(xa, ya, xb, yb);
   double relang2 = relAng(xc, yc, xd, yd);
 
   double diff = relang2 - relang1;
-  if(diff < 180)
+  if (diff < 180)
     diff += 360;
-  if(diff > 180)
+  if (diff > 180)
     diff -= 360;
-  
+
   double rate = (diff / time_duration);
-  return(rate);
+  return (rate);
 }
-
-
-
-
-
-

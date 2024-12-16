@@ -26,49 +26,39 @@
 #ifndef PDMAP_BUILDER_HEADER
 #define PDMAP_BUILDER_HEADER
 
-#include <vector>
-#include <string>
 #include "IvPBox.h"
 #include "PDMap.h"
+#include <string>
+#include <vector>
 
 class PDMapBuilder {
 public:
-  PDMapBuilder() {};
-  virtual ~PDMapBuilder() {clearBldPieces();}
+  PDMapBuilder(){};
+  virtual ~PDMapBuilder() { clearBldPieces(); }
 
-  void   setIvPDomain(IvPDomain);
-  void   setDomainVals(std::vector<unsigned int>);
-  void   setRangeVals(std::vector<double>);
-  PDMap* getPDMap();
-  
-  bool   hasWarnings();
-  void   clearWarnings();
-  std::string  getWarnings();
+  void setIvPDomain(IvPDomain);
+  void setDomainVals(std::vector<unsigned int>);
+  void setRangeVals(std::vector<double>);
+  PDMap *getPDMap();
 
- protected:
+  bool hasWarnings();
+  void clearWarnings();
+  std::string getWarnings();
 
-  bool   preprocess();
-  void   clearBldPieces();
-  void   addWarning(std::string);
+protected:
+  bool preprocess();
+  void clearBldPieces();
+  void addWarning(std::string);
 
-  IvPBox* buildBox(unsigned int ix_low, double val_low,
-		   unsigned int ix_hgh, double val_hgh);
+  IvPBox *buildBox(unsigned int ix_low, double val_low, unsigned int ix_hgh,
+                   double val_hgh);
 
-protected:  
+protected:
   std::vector<unsigned int> m_dom_vals;
-  std::vector<double>       m_rng_vals;
-  std::vector<std::string>  m_warnings;
-  std::vector<IvPBox*>      m_bld_pieces;
+  std::vector<double> m_rng_vals;
+  std::vector<std::string> m_warnings;
+  std::vector<IvPBox *> m_bld_pieces;
 
   IvPDomain m_ivp_domain;
 };
 #endif
-
-
-
-
-
-
-
-
-

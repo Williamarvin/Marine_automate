@@ -12,46 +12,44 @@
 #ifndef PLAT_MODEL_GENERATOR_HEADER
 #define PLAT_MODEL_GENERATOR_HEADER
 
-#include <string>
 #include "PMGen.h"
+#include <string>
 
-class PlatModelGenerator 
-{
- public:
+class PlatModelGenerator {
+public:
   PlatModelGenerator();
-  ~PlatModelGenerator() {};
+  ~PlatModelGenerator(){};
 
 public: // Setters
-  PlatModel generate(double osx, double osy, double osh, double osv=0);
+  PlatModel generate(double osx, double osy, double osh, double osv = 0);
   bool setParams(std::string);
-  void setCurrTime(double utc) {m_curr_utc=utc;}
+  void setCurrTime(double utc) { m_curr_utc = utc; }
 
   std::string getParamStr(std::string) const;
   double getParamDbl(std::string) const;
 
-  bool stalePModel() {return(true);}
+  bool stalePModel() { return (true); }
 
   double getTurnRate();
-  
+
 protected:
   void updateHdgHist(double osh);
-  
+
 private: // Config vars
   std::string m_alg;
-  double m_hdg_hist_length;  // seconds
-  
-private: // State vars
+  double m_hdg_hist_length; // seconds
 
-  bool   m_stale_pmodel;
-  
+private: // State vars
+  bool m_stale_pmodel;
+
   PMGen *m_pmgen;
 
   std::list<double> m_recent_val_osh;
   std::list<double> m_recent_utc_osh;
 
   double m_curr_utc;
-  
+
   unsigned int m_count;
 };
 
-#endif 
+#endif

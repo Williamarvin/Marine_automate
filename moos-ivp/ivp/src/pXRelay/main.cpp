@@ -21,68 +21,56 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include "MBUtils.h"
-#include "ReleaseInfo.h"
 #include "ColorParse.h"
-#include "PXR_MOOSApp.h"
+#include "MBUtils.h"
 #include "PXR_Info.h"
+#include "PXR_MOOSApp.h"
+#include "ReleaseInfo.h"
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
   string run_command = argv[0];
   string incoming_var;
   string outgoing_var;
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if(strBegins(argi, "--in="))
+    else if (strBegins(argi, "--in="))
       incoming_var = argi.substr(5);
-    else if(strBegins(argi, "--out="))
+    else if (strBegins(argi, "--out="))
       outgoing_var = argi.substr(6);
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
-  
-  if(mission_file == "")
+
+  if (mission_file == "")
     showHelpAndExit();
 
   cout << termColor("green");
   cout << "pXRelay launching as " << run_command << endl;
   cout << termColor() << endl;
 
-  PXR_MOOSApp relayer;	
-  if(incoming_var != "")
+  PXR_MOOSApp relayer;
+  if (incoming_var != "")
     relayer.setIncomingVar(incoming_var);
-  if(outgoing_var != "")
+  if (outgoing_var != "")
     relayer.setOutgoingVar(outgoing_var);
 
   relayer.Run(run_command.c_str(), mission_file.c_str(), argc, argv);
 
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-
-

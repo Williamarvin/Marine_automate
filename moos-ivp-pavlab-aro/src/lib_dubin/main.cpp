@@ -28,48 +28,50 @@ using namespace std;
 //     return 0;
 // }
 
-int main(int ac, char* av[]) {
+int main(int ac, char *av[]) {
 
-    ifstream file("test.txt");
-    string line;    
-    double r1 = 1;
-    double r2 = 1;
-    double r3 = 1;
-    //Need function for converting between compass and cartesian coordinates
+  ifstream file("test.txt");
+  string line;
+  double r1 = 1;
+  double r2 = 1;
+  double r3 = 1;
+  // Need function for converting between compass and cartesian coordinates
 
+  if (file.is_open()) {
+    while (getline(file, line)) {
+      stringstream ss(line);
+      double xs, ys, hs, xg, yg, hg, length;
+      string type;
 
-    if(file.is_open()){
-        while(getline(file, line)){
-            stringstream ss(line);
-            double xs, ys, hs, xg, yg, hg, length;
-            string type;
+      // Assuming each line is in the format: xs;ys;hs;xg;yg;hg;length;type
+      char delimiter; // To absorb the ';' characters
 
-            // Assuming each line is in the format: xs;ys;hs;xg;yg;hg;length;type
-            char delimiter;  // To absorb the ';' characters
+      ss >> xs >> delimiter >> ys >> delimiter >> hs >> delimiter >> xg >>
+          delimiter >> yg >> delimiter >> hg >> delimiter >> length >>
+          delimiter >> type;
 
-            ss >> xs >> delimiter >> ys >> delimiter >> hs >> delimiter >> xg >> delimiter >> yg >> delimiter >> hg >> delimiter >> length >> delimiter >> type;
+      Point ps = Point(xs, ys);
+      Point pg = Point(xg, yg);
 
-            Point ps = Point(xs, ys);
-            Point pg = Point(xg, yg);
+      DubinsPath dp = DubinsPath();
+      dp.findOptimalPath(ps, hs, pg, hg, r1, r2, r3);
 
-            DubinsPath dp = DubinsPath();
-            dp.findOptimalPath(ps, hs, pg, hg, r1, r2, r3);
+      // Compare our calculated values stored in dp with length and type from
+      // file
+      double epsilon = 0.0001;
+      double diff = abs(length - dp.m_length);
 
-            //Compare our calculated values stored in dp with length and type from file
-            double epsilon = 0.0001;
-            double diff = abs(length - dp.m_length);
-
-
-            if ((diff > epsilon) || (type != dp.m_type)){
-                cout << "Error: Length or type mismatch" << endl;
-                cout << "\tLength of path: " << dp.m_length << " Type: " << dp.m_type << endl;
-                cout << "\tLength of path: " << length << " Type: " << type << endl;
-            }
-        }
-
-    } else {
-        cout << "File not found" << endl;
+      if ((diff > epsilon) || (type != dp.m_type)) {
+        cout << "Error: Length or type mismatch" << endl;
+        cout << "\tLength of path: " << dp.m_length << " Type: " << dp.m_type
+             << endl;
+        cout << "\tLength of path: " << length << " Type: " << type << endl;
+      }
     }
 
-    return 0;
+  } else {
+    cout << "File not found" << endl;
+  }
+
+  return 0;
 }

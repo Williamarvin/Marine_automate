@@ -24,29 +24,28 @@
 #ifndef UFS_MOOS_APP_HEADER
 #define UFS_MOOS_APP_HEADER
 
-#include <set>
-#include <vector>
-#include <map>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "UFS_Config.h"
 #include "VarDataPair.h"
+#include <map>
+#include <set>
+#include <vector>
 
-class UFS_MOOSApp : public AppCastingMOOSApp
-{
- public:
+class UFS_MOOSApp : public AppCastingMOOSApp {
+public:
   UFS_MOOSApp();
   virtual ~UFS_MOOSApp() {}
 
- public: // Standard MOOSApp functions to overload
+public: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
- protected:
+protected:
   void registerVariables();
   bool addScope(std::string);
   bool addLayout(std::string);
@@ -56,42 +55,32 @@ class UFS_MOOSApp : public AppCastingMOOSApp
 
   void makeReportRaw();
 
-  bool configInLayout(const UFS_Config&) const;
+  bool configInLayout(const UFS_Config &) const;
 
   void outputRawReport() const;
 
- protected: // Config Variables
+protected: // Config Variables
   // A representation of all the info the user desires to show
-  std::vector<UFS_Config>            m_config;
+  std::vector<UFS_Config> m_config;
 
   // A map from MOOS variable to the key indicating the vname
   // For example: NODE_REPORT -> henry
   std::map<std::string, std::string> m_map_varkeys;
 
-  std::vector<std::vector<std::string> > m_layouts;
+  std::vector<std::vector<std::string>> m_layouts;
 
- protected: // State Variables
-  std::vector<std::string> m_postings_moosvar;  // e.g. "NODE_REPORT"
-  std::vector<std::string> m_postings_keyval;   // e.g. "henry"
-  std::vector<std::string> m_postings_msgval;   // e.g. "X=2,y=44,TIME..."
+protected:                                     // State Variables
+  std::vector<std::string> m_postings_moosvar; // e.g. "NODE_REPORT"
+  std::vector<std::string> m_postings_keyval;  // e.g. "henry"
+  std::vector<std::string> m_postings_msgval;  // e.g. "X=2,y=44,TIME..."
 
   // A 2D report structure - one vehicle per row, one fld per column
-  std::vector<std::vector<std::string> > m_raw_report;
-  
+  std::vector<std::vector<std::string>> m_raw_report;
+
   unsigned int m_total_reports;
-  
+
   // Mode States
-  bool         m_layout_applied;
+  bool m_layout_applied;
   unsigned int m_layout_index;
-
 };
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

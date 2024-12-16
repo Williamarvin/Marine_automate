@@ -26,40 +26,33 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class MissionHash_MOOSApp : public AppCastingMOOSApp
-{
+class MissionHash_MOOSApp : public AppCastingMOOSApp {
 public:
   MissionHash_MOOSApp();
-  ~MissionHash_MOOSApp() {};
+  ~MissionHash_MOOSApp(){};
 
-protected: // Standard MOOSApp functions to overload  
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
-protected: // Standard AppCastingMOOSApp function to overload 
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
 protected:
   bool setMissionHash();
   void registerVariables();
 
-private: // Configuration variables
+private:                          // Configuration variables
+  std::string m_mission_hash_var; // MISSION_HASH
+  std::string m_mhash_short_var;  // MHASH
 
-  std::string m_mission_hash_var;  // MISSION_HASH
-  std::string m_mhash_short_var;   // MHASH
-  
 private: // State variables
-
-  double      m_last_mhash_post;
+  double m_last_mhash_post;
 
   std::string m_mission_hash;
   std::string m_mhash_short;
-
-
-
 };
 
-#endif 
-
+#endif

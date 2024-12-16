@@ -23,37 +23,36 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath>
-#include <cassert>
-#include <cstdlib>
 #include "XYHexagon.h"
-#include "MBUtils.h"
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include <cassert>
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: initialize
 
-bool XYHexagon::initialize(string str)
-{
+bool XYHexagon::initialize(string str) {
   string mstr = stripBlankEnds(str);
   vector<string> svector = parseString(mstr, ',');
   int vsize = svector.size();
-  if(vsize != 3)
-    return(false);
-  for(int i=0; i<3; i++) {
+  if (vsize != 3)
+    return (false);
+  for (int i = 0; i < 3; i++) {
     svector[i] = stripBlankEnds(svector[i]);
-    if(!isNumber(svector[i]))
-      return(false);
+    if (!isNumber(svector[i]))
+      return (false);
   }
-  
+
   double m_cx = atof(svector[0].c_str());
   double m_cy = atof(svector[1].c_str());
   double m_dist = atof(svector[2].c_str());
-  
-  return(initialize(m_cx, m_cy, m_dist));
+
+  return (initialize(m_cx, m_cy, m_dist));
 }
 
 //---------------------------------------------------------------
@@ -72,29 +71,34 @@ bool XYHexagon::initialize(string str)
 //                       o---------o                           |
 //                     (3)         (2)                         |
 //                                                             |
-//                                                         
-//                                                          
+//
+//
 
-bool XYHexagon::initialize(double gcx, double gcy, double gdist)
-{
+bool XYHexagon::initialize(double gcx, double gcy, double gdist) {
   this->clear();
-    
-  if(gdist <= 0)
-    return(false);
 
-  m_cx   = gcx;
-  m_cy   = gcy;
+  if (gdist <= 0)
+    return (false);
+
+  m_cx = gcx;
+  m_cy = gcy;
   m_dist = gdist;
 
   double x0, x1, x2, x3, x4, x5;
   double y0, y1, y2, y3, y4, y5;
 
-  x0 = m_cx + (m_dist/2);    y0 = m_cy + m_dist;
-  x1 = m_cx + m_dist;        y1 = m_cy;
-  x2 = m_cx + (m_dist/2);    y2 = m_cy - m_dist;
-  x3 = m_cx - (m_dist/2);    y3 = m_cy - m_dist;
-  x4 = m_cx - m_dist;        y4 = m_cy;
-  x5 = m_cx - (m_dist/2);    y5 = m_cy + m_dist;
+  x0 = m_cx + (m_dist / 2);
+  y0 = m_cy + m_dist;
+  x1 = m_cx + m_dist;
+  y1 = m_cy;
+  x2 = m_cx + (m_dist / 2);
+  y2 = m_cy - m_dist;
+  x3 = m_cx - (m_dist / 2);
+  y3 = m_cy - m_dist;
+  x4 = m_cx - m_dist;
+  y4 = m_cy;
+  x5 = m_cx - (m_dist / 2);
+  y5 = m_cy + m_dist;
 
   XYPolygon::add_vertex(x0, y0);
   XYPolygon::add_vertex(x1, y1);
@@ -103,7 +107,7 @@ bool XYHexagon::initialize(double gcx, double gcy, double gdist)
   XYPolygon::add_vertex(x4, y4);
   XYPolygon::add_vertex(x5, y5);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
@@ -121,47 +125,27 @@ bool XYHexagon::initialize(double gcx, double gcy, double gdist)
 //                     \             /                         |
 //                       o---------o                           |
 //                           (3)                               |
-//                                                           
+//
 
-XYHexagon XYHexagon::addNeighbor(int nix)
-{
+XYHexagon XYHexagon::addNeighbor(int nix) {
   assert(m_vx.size() == 6);
   assert(nix >= 0);
   assert(nix <= 5);
 
   XYHexagon newhex;
 
-  if(nix == 0)
-    newhex.initialize(m_cx, m_cy+(2*m_dist), m_dist);
-  else if(nix == 1)
-    newhex.initialize(m_cx+(1.5*m_dist), m_cy+m_dist, m_dist);
-  else if(nix == 2)
-    newhex.initialize(m_cx+(1.5*m_dist), m_cy-m_dist, m_dist);
-  else if(nix == 3)
-    newhex.initialize(m_cx, m_cy-(2*m_dist), m_dist);
-  else if(nix == 4)
-    newhex.initialize(m_cx-(1.5*m_dist), m_cy-m_dist, m_dist);
-  else if(nix == 5)
-    newhex.initialize(m_cx-(1.5*m_dist), m_cy+m_dist, m_dist);
+  if (nix == 0)
+    newhex.initialize(m_cx, m_cy + (2 * m_dist), m_dist);
+  else if (nix == 1)
+    newhex.initialize(m_cx + (1.5 * m_dist), m_cy + m_dist, m_dist);
+  else if (nix == 2)
+    newhex.initialize(m_cx + (1.5 * m_dist), m_cy - m_dist, m_dist);
+  else if (nix == 3)
+    newhex.initialize(m_cx, m_cy - (2 * m_dist), m_dist);
+  else if (nix == 4)
+    newhex.initialize(m_cx - (1.5 * m_dist), m_cy - m_dist, m_dist);
+  else if (nix == 5)
+    newhex.initialize(m_cx - (1.5 * m_dist), m_cy + m_dist, m_dist);
 
-  return(newhex);
+  return (newhex);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

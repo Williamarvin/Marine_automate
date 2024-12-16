@@ -25,97 +25,91 @@
 #define COMMON_IPF_GUI_HEADER
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Output.H>
+#include <FL/Fl_Window.H>
 
-#include "IvPProblem.h"
 #include "Common_IPFViewer.h"
+#include "IvPProblem.h"
 
 class Common_IPF_GUI : public Fl_Window {
 public:
-  Common_IPF_GUI(int w, int h, const char *l=0);
-  virtual ~Common_IPF_GUI() {};
+  Common_IPF_GUI(int w, int h, const char *l = 0);
+  virtual ~Common_IPF_GUI(){};
 
-  virtual void updateXY()=0;
-  
+  virtual void updateXY() = 0;
+
   bool setViewerParam(std::string, std::string);
   bool setViewerParam(std::string, double);
-  
- protected:
+
+protected:
   void augmentMenu();
   void setMenuColors();
   void setMenuItemColor(std::string);
-  int  handle(int);
-  
- protected:
-  Common_IPFViewer  *m_viewer;
-  Fl_Menu_Bar       *m_menubar;
+  int handle(int);
+
+protected:
+  Common_IPFViewer *m_viewer;
+  Fl_Menu_Bar *m_menubar;
 
   int m_start_hgt;
   int m_start_wid;
-  
- protected:
+
+protected:
   inline void cb_Zoom_i(int);
-  static void cb_Zoom(Fl_Widget*, int);
+  static void cb_Zoom(Fl_Widget *, int);
 
   inline void cb_Reset_i(int);
-  static void cb_Reset(Fl_Widget*, int);
+  static void cb_Reset(Fl_Widget *, int);
 
   inline void cb_RotateX_i(int);
-  static void cb_RotateX(Fl_Widget*, int);
+  static void cb_RotateX(Fl_Widget *, int);
 
   inline void cb_RotateZ_i(int);
-  static void cb_RotateZ(Fl_Widget*, int);
+  static void cb_RotateZ(Fl_Widget *, int);
 
   inline void cb_ModScale_i(int);
-  static void cb_ModScale(Fl_Widget*, int);
+  static void cb_ModScale(Fl_Widget *, int);
 
   inline void cb_ModShipScale_i(int);
-  static void cb_ModShipScale(Fl_Widget*, int);
+  static void cb_ModShipScale(Fl_Widget *, int);
 
   inline void cb_ModBaseIPF_i(int);
-  static void cb_ModBaseIPF(Fl_Widget*, int);
+  static void cb_ModBaseIPF(Fl_Widget *, int);
 
   inline void cb_ModFrameBaseIPF_i(int);
-  static void cb_ModFrameBaseIPF(Fl_Widget*, int);
+  static void cb_ModFrameBaseIPF(Fl_Widget *, int);
 
   inline void cb_ToggleIPF_i();
-  static void cb_ToggleIPF(Fl_Widget*);
+  static void cb_ToggleIPF(Fl_Widget *);
 
   inline void cb_ToggleDrawShip_i();
-  static void cb_ToggleDrawShip(Fl_Widget*);
+  static void cb_ToggleDrawShip(Fl_Widget *);
 
   inline void cb_ToggleFrame_i();
-  static void cb_ToggleFrame(Fl_Widget*);
+  static void cb_ToggleFrame(Fl_Widget *);
 
   inline void cb_TogglePieceLines_i();
-  static void cb_TogglePieceLines(Fl_Widget*);
+  static void cb_TogglePieceLines(Fl_Widget *);
 
   inline void cb_ToggleDrawPcs_i();
-  static void cb_ToggleDrawPcs(Fl_Widget*);
+  static void cb_ToggleDrawPcs(Fl_Widget *);
 
   inline void cb_FrameHgt_i(int);
-  static void cb_FrameHgt(Fl_Widget*, int);
+  static void cb_FrameHgt(Fl_Widget *, int);
 
   inline void cb_FrameShade_i(int);
-  static void cb_FrameShade(Fl_Widget*, int);
+  static void cb_FrameShade(Fl_Widget *, int);
 
   inline void cb_ColorMap_i(int);
-  static void cb_ColorMap(Fl_Widget*, int);
+  static void cb_ColorMap(Fl_Widget *, int);
 
   inline void cb_ColorBack_i(int);
-  static void cb_ColorBack(Fl_Widget*, int);
+  static void cb_ColorBack(Fl_Widget *, int);
 
   inline void cb_Polar_i(int);
-  static void cb_Polar(Fl_Widget*, int);
+  static void cb_Polar(Fl_Widget *, int);
 
   static void cb_Quit();
 };
 #endif
-
-
-
-
-
-

@@ -9,21 +9,20 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include <cmath>
-#include <cstdlib>
 #include "ConvoyMarker.h"
 #include "MBUtils.h"
+#include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-ConvoyMarker::ConvoyMarker()
-{
+ConvoyMarker::ConvoyMarker() {
   m_x = 0;
   m_y = 0;
-  m_id  = 0;
+  m_id = 0;
   m_set = false;
   m_utc = 0;
 }
@@ -31,11 +30,10 @@ ConvoyMarker::ConvoyMarker()
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-ConvoyMarker::ConvoyMarker(double x, double y, unsigned int id)
-{
+ConvoyMarker::ConvoyMarker(double x, double y, unsigned int id) {
   m_x = x;
   m_y = y;
-  m_id  = id;
+  m_id = id;
   m_set = true;
   m_utc = 0;
 }
@@ -43,83 +41,73 @@ ConvoyMarker::ConvoyMarker(double x, double y, unsigned int id)
 //-----------------------------------------------------------
 // Procedure: distToMarker()
 
-double ConvoyMarker::distToMarker(double x, double y) 
-{
-  return(hypot(m_x-x, m_y-y));
+double ConvoyMarker::distToMarker(double x, double y) {
+  return (hypot(m_x - x, m_y - y));
 }
-
 
 //-----------------------------------------------------------
 // Procedure: getSpec()
 
-string ConvoyMarker::getSpec(string vname) const 
-{
+string ConvoyMarker::getSpec(string vname) const {
   string spec;
-  spec =  "x="  + doubleToStringX(m_x, 2);
+  spec = "x=" + doubleToStringX(m_x, 2);
   spec += ",y=" + doubleToStringX(m_y, 2);
   spec += ",id=" + uintToString(m_id);
 
-  if(vname != "")
+  if (vname != "")
     spec += ",vname=" + vname;
-  else if(m_vname != "")
+  else if (m_vname != "")
     spec += ",vname=" + m_vname;
-  
-  if(m_utc > 0)
-    spec += ",time=" + doubleToString(m_utc,3);
-  
-  return(spec);
-}
 
+  if (m_utc > 0)
+    spec += ",time=" + doubleToString(m_utc, 3);
+
+  return (spec);
+}
 
 //-----------------------------------------------------------
 // Procedure: string2ConvoyMarker()
 
-ConvoyMarker string2ConvoyMarker(string str)
-{
+ConvoyMarker string2ConvoyMarker(string str) {
   ConvoyMarker marker;
 
   double x = 0;
   double y = 0;
   bool x_set = false;
   bool y_set = false;
-  
+
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
 
-    if((param == "x") && isNumber(value)) {
+    if ((param == "x") && isNumber(value)) {
       x = atof(value.c_str());
       x_set = true;
-    }
-    else if((param == "y") && isNumber(value)) {
+    } else if ((param == "y") && isNumber(value)) {
       y = atof(value.c_str());
       y_set = true;
-    }
-    else if((param == "id") && isNumber(value)) {
+    } else if ((param == "id") && isNumber(value)) {
       int int_id = atoi(value.c_str());
       unsigned int uint_id = 0;
-      if(int_id >= 0)
-	uint_id = (unsigned int)(int_id);
+      if (int_id >= 0)
+        uint_id = (unsigned int)(int_id);
       marker.setID(uint_id);
-    }
-    else if(param == "vname")
+    } else if (param == "vname")
       marker.setVName(value);
-    else if((param == "utc") && isNumber(value)) {
+    else if ((param == "utc") && isNumber(value)) {
       double utc = atof(value.c_str());
-      if(utc > 0)
-	marker.setUTC(utc);
+      if (utc > 0)
+        marker.setUTC(utc);
     }
-  }	 
+  }
 
-  if(x_set && y_set)
-    marker.setXY(x,y);
-  
-  if(marker.valid())
-    return(marker);
+  if (x_set && y_set)
+    marker.setXY(x, y);
+
+  if (marker.valid())
+    return (marker);
 
   ConvoyMarker null_marker;
-  return(null_marker);
+  return (null_marker);
 }
-
-

@@ -23,39 +23,34 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "BundleOut.h"
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Procedure: bundle_cout(list<string>)
 
-void bundle_cout(const list<string>& lines)
-{
+void bundle_cout(const list<string> &lines) {
   list<string>::const_iterator p;
-  for(p=lines.begin(); p!=lines.end(); p++)
+  for (p = lines.begin(); p != lines.end(); p++)
     cout << *p << endl;
 }
 
 //---------------------------------------------------------
 // Procedure: bundle_cout(set<string>)
 
-void bundle_cout(const set<string>& lines)
-{
+void bundle_cout(const set<string> &lines) {
   set<string>::const_iterator p;
-  for(p=lines.begin(); p!=lines.end(); p++)
+  for (p = lines.begin(); p != lines.end(); p++)
     cout << *p << endl;
 }
 
 //---------------------------------------------------------
 // Procedure: bundle_cout(vector<string>)
 
-void bundle_cout(const vector<string>& lines)
-{
+void bundle_cout(const vector<string> &lines) {
   vector<string>::const_iterator p;
-  for(p=lines.begin(); p!=lines.end(); p++)
+  for (p = lines.begin(); p != lines.end(); p++)
     cout << *p << endl;
 }
-
-

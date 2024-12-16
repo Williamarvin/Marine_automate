@@ -27,75 +27,72 @@ using namespace std;
 //---------------------------------------------------------
 // Constructor
 
-AppCastSet::AppCastSet()
-{
-  m_proc_id_count     = 0;
+AppCastSet::AppCastSet() {
+  m_proc_id_count = 0;
   m_max_proc_name_len = 0;
-  m_total_appcasts    = 0;
+  m_total_appcasts = 0;
 }
 
 //---------------------------------------------------------
 // Procedure: addAppCast
 //   Returns: true if appcast added proc never seen before.
 
-bool AppCastSet::addAppCast(const AppCast& appcast)
-{
+bool AppCastSet::addAppCast(const AppCast &appcast) {
   m_total_appcasts++;
 
   string proc = appcast.getProcName();
-  if(proc == "")
+  if (proc == "")
     proc = "unknown_proc";
 
-  if(appcast.size() == 0)
-    return(false);
+  if (appcast.size() == 0)
+    return (false);
 
   bool new_proc = false;
-  if(m_map_appcasts.count(proc) == 0)
+  if (m_map_appcasts.count(proc) == 0)
     new_proc = true;
-  
+
   m_map_appcast_cnt[proc]++;
   m_map_appcasts[proc] = appcast;
 
-  if(!new_proc)
-    return(false);
+  if (!new_proc)
+    return (false);
   else
     m_procs.push_back(proc);
 
-  if(proc == "uFldShoreBroker")
+  if (proc == "uFldShoreBroker")
     m_map_id_src["9"] = proc;
-  else if(proc == "uFldNodeBroker")
+  else if (proc == "uFldNodeBroker")
     m_map_id_src["1"] = proc;
-  else if(proc == "pHostInfo")
+  else if (proc == "pHostInfo")
     m_map_id_src["3"] = proc;
-  else if(proc == "pBasicContactMgr")
+  else if (proc == "pBasicContactMgr")
     m_map_id_src["2"] = proc;
-  else if(proc == "pHelmIvP")
+  else if (proc == "pHelmIvP")
     m_map_id_src["0"] = proc;
   else {
-    unsigned char c = 97 + (int)(m_proc_id_count);  // 'a' + cnt
+    unsigned char c = 97 + (int)(m_proc_id_count); // 'a' + cnt
     m_proc_id_count++;
 
-    if((c=='e') || (c=='h') || (c=='n')) {
+    if ((c == 'e') || (c == 'h') || (c == 'n')) {
       c++;
       m_proc_id_count++;
-    }
-    else if((c=='p') || (c=='q') || (c=='r') || (c=='s')) {
+    } else if ((c == 'p') || (c == 'q') || (c == 'r') || (c == 's')) {
       c += 4;
       m_proc_id_count += 4;
     }
 
     // If exceeded the {a-z}, then start using {A-Z}
-    if((c > 122) && (c <= 126))
+    if ((c > 122) && (c <= 126))
       c = c - 58;
-    
-    string id(1,c);
+
+    string id(1, c);
     m_map_id_src[id] = proc;
   }
 
-  if(proc.length() > m_max_proc_name_len)
+  if (proc.length() > m_max_proc_name_len)
     m_max_proc_name_len = proc.length();
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
@@ -103,13 +100,12 @@ bool AppCastSet::addAppCast(const AppCast& appcast)
 //   Returns: The process name associated with the given ID, or
 //            the empty string if the process name is not found.
 
-string AppCastSet::getProcNameFromID(const string& id) const
-{
+string AppCastSet::getProcNameFromID(const string &id) const {
   map<string, string>::const_iterator p = m_map_id_src.find(id);
-  if(p==m_map_id_src.end())
-    return("");
+  if (p == m_map_id_src.end())
+    return ("");
   else
-    return(p->second);
+    return (p->second);
 }
 
 //---------------------------------------------------------
@@ -117,9 +113,8 @@ string AppCastSet::getProcNameFromID(const string& id) const
 //   Returns: true if an appcast has been received to-date with
 //            the given process name.
 
-bool AppCastSet::hasProc(const string& proc) const
-{
-  return(m_map_appcasts.count(proc) != 0);
+bool AppCastSet::hasProc(const string &proc) const {
+  return (m_map_appcasts.count(proc) != 0);
 }
 
 //---------------------------------------------------------
@@ -127,13 +122,12 @@ bool AppCastSet::hasProc(const string& proc) const
 //   Returns: The total number of appcasts received from the named
 //            process.
 
-unsigned int AppCastSet::getAppCastCount(const string& proc) const
-{
+unsigned int AppCastSet::getAppCastCount(const string &proc) const {
   map<string, unsigned int>::const_iterator p = m_map_appcast_cnt.find(proc);
-  if(p==m_map_appcast_cnt.end()) 
-    return(0);
+  if (p == m_map_appcast_cnt.end())
+    return (0);
   else
-    return(p->second);
+    return (p->second);
 }
 
 //---------------------------------------------------------
@@ -141,13 +135,12 @@ unsigned int AppCastSet::getAppCastCount(const string& proc) const
 //   Returns: Total number of configuration warnings in the latest
 //            appcast received from the named process.
 
-unsigned int AppCastSet::getCfgWarningCount(const string& proc) const
-{
+unsigned int AppCastSet::getCfgWarningCount(const string &proc) const {
   map<string, AppCast>::const_iterator p = m_map_appcasts.find(proc);
-  if(p==m_map_appcasts.end()) 
-    return(0);
+  if (p == m_map_appcasts.end())
+    return (0);
   else
-    return(p->second.getCfgWarningCount());
+    return (p->second.getCfgWarningCount());
 }
 
 //---------------------------------------------------------
@@ -155,90 +148,73 @@ unsigned int AppCastSet::getCfgWarningCount(const string& proc) const
 //   Returns: Total number of run warnings in the latest appcast
 //            received from the named process.
 
-unsigned int AppCastSet::getRunWarningCount(const string& proc) const
-{
+unsigned int AppCastSet::getRunWarningCount(const string &proc) const {
   map<string, AppCast>::const_iterator p = m_map_appcasts.find(proc);
-  if(p==m_map_appcasts.end()) 
-    return(0);
+  if (p == m_map_appcasts.end())
+    return (0);
   else
-    return(p->second.getRunWarningCount());
+    return (p->second.getRunWarningCount());
 }
 
 //---------------------------------------------------------
 // Procedure: getTotalCfgWarningCount()
 //   Returns: Total number of config warnings for ALL processes.
 
-unsigned int AppCastSet::getTotalCfgWarningCount() const
-{
+unsigned int AppCastSet::getTotalCfgWarningCount() const {
   unsigned int total = 0;
 
   map<string, AppCast>::const_iterator p;
-  for(p=m_map_appcasts.begin(); p!=m_map_appcasts.end(); p++)
+  for (p = m_map_appcasts.begin(); p != m_map_appcasts.end(); p++)
     total += p->second.getCfgWarningCount();
 
-  return(total);
+  return (total);
 }
 
 //---------------------------------------------------------
 // Procedure: getTotalRunWarningCount()
 //   Returns: Total number of run warnings for ALL processes.
 
-unsigned int AppCastSet::getTotalRunWarningCount() const
-{
+unsigned int AppCastSet::getTotalRunWarningCount() const {
   unsigned int total = 0;
 
   map<string, AppCast>::const_iterator p;
-  for(p=m_map_appcasts.begin(); p!=m_map_appcasts.end(); p++)
+  for (p = m_map_appcasts.begin(); p != m_map_appcasts.end(); p++)
     total += p->second.getRunWarningCount();
 
-  return(total);
+  return (total);
 }
 
 //---------------------------------------------------------
 // Procedure: getTotalWarningCount()
 //   Returns: Total number of config + run warnings for ALL procs.
 
-unsigned int AppCastSet::getTotalWarningCount() const
-{
-  return(getTotalCfgWarningCount() + getTotalRunWarningCount());
+unsigned int AppCastSet::getTotalWarningCount() const {
+  return (getTotalCfgWarningCount() + getTotalRunWarningCount());
 }
 
 //---------------------------------------------------------
 // Procedure: getIDs
 //   Returns: vector of all ids [0]="a" [1]="b" [2]="1" [3]="2"
 
-vector<string> AppCastSet::getIDs() const
-{
+vector<string> AppCastSet::getIDs() const {
   vector<string> rvector;
 
   map<string, string>::const_iterator p;
-  for(p=m_map_id_src.begin(); p!=m_map_id_src.end(); p++)
+  for (p = m_map_id_src.begin(); p != m_map_id_src.end(); p++)
     rvector.push_back(p->first);
 
-  return(rvector);
+  return (rvector);
 }
 
 //---------------------------------------------------------
 // Procedure: getAppCast(proc)
 //   Returns: A copy of the latest appcast for the named process
 
-AppCast AppCastSet::getAppCast(const string& proc) const
-{
+AppCast AppCastSet::getAppCast(const string &proc) const {
   map<string, AppCast>::const_iterator p = m_map_appcasts.find(proc);
-  if(p==m_map_appcasts.end()) {
+  if (p == m_map_appcasts.end()) {
     AppCast null_appcast;
-    return(null_appcast);
-  }
-  else
-    return(p->second);
+    return (null_appcast);
+  } else
+    return (p->second);
 }
-
-
-
-
-
-
-
-
-
-

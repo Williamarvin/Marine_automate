@@ -26,52 +26,50 @@
 #ifndef WATCH_CLUSTER_HEADER
 #define WATCH_CLUSTER_HEADER
 
-#include <string>
-#include <map>
-#include "WatchCast.h"
 #include "InfoCastSettings.h"
+#include "WatchCast.h"
+#include <map>
+#include <string>
 
-class WatchCluster
-{
- public:
+class WatchCluster {
+public:
   WatchCluster();
   ~WatchCluster() {}
 
-  void setKey(std::string s)    {m_key=s;}
+  void setKey(std::string s) { m_key = s; }
   bool addVar(std::string s);
 
-  bool addWatchCast(const WatchCast&);
+  bool addWatchCast(const WatchCast &);
 
-  std::string getKey() const   {return(m_key);}
+  std::string getKey() const { return (m_key); }
 
-  std::vector<std::string> getVars() const   {return(m_cluster_vars);}
+  std::vector<std::string> getVars() const { return (m_cluster_vars); }
   std::string getVarsAsString() const;
-  
+
   std::vector<std::string> getReport(std::string var, InfoCastSettings ics);
 
   unsigned int getVarCount(std::string var) const;
-  unsigned int getWCastCount() const {return(m_wcast_cnt);}
+  unsigned int getWCastCount() const { return (m_wcast_cnt); }
 
- protected:
+protected:
   std::vector<std::string> getReportSingle(std::string, InfoCastSettings) const;
   std::vector<std::string> getReportMulti() const;
-  
- private: 
+
+private:
   std::string m_key;
 
   unsigned int m_report_cnt;
   unsigned int m_wcast_cnt;
-  
+
   std::vector<std::string> m_cluster_vars;
 
   // outer key is the node. Inner key is the varname.
   // m_map_info[node][varname] = watchast
-  
-  std::map<std::string, std::map<std::string, WatchCast> > m_map_info;
+
+  std::map<std::string, std::map<std::string, WatchCast>> m_map_info;
 
   // key is varname, count is number of watchcast updates for this var
   std::map<std::string, unsigned int> m_map_varcount;
 };
 
-#endif 
-
+#endif

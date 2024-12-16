@@ -24,42 +24,31 @@
 #ifndef BEHAVIOR_REGISTRY_HEADER
 #define BEHAVIOR_REGISTRY_HEADER
 
+#include "IvPFunction.h"
 #include <string>
 #include <vector>
-#include "IvPFunction.h"
 
 class BehaviorRegistry {
 public:
   BehaviorRegistry();
   virtual ~BehaviorRegistry() {}
-  
-  bool addIPF(IvPFunction*, unsigned int, std::string="");
-  
-  unsigned int size() const    {return(m_keys.size());}
-  bool         isEmpty() const {return(m_keys.empty());}
+
+  bool addIPF(IvPFunction *, unsigned int, std::string = "");
+
+  unsigned int size() const { return (m_keys.size()); }
+  bool isEmpty() const { return (m_keys.empty()); }
 
   IvPFunction *getIPF(unsigned int index) const;
   IvPFunction *getIPF(std::string key) const;
 
- protected:
-  std::vector<std::string>  m_keys;
-  std::vector<IvPFunction*> m_ipfs;
+protected:
+  std::vector<std::string> m_keys;
+  std::vector<IvPFunction *> m_ipfs;
   std::vector<unsigned int> m_iter;
 
-  bool  m_keys_unique;
-  
+  bool m_keys_unique;
+
   unsigned int m_latest_iteration;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
-
-
+#endif

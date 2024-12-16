@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "RandomVariable.h"
 #include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-RandomVariable::RandomVariable()
-{
+RandomVariable::RandomVariable() {
   // Initial values for state variables.
-  m_value   = 0;
+  m_value = 0;
 
   // Initial values for configuration parameters
   m_varname = "random_var";
@@ -45,58 +44,40 @@ RandomVariable::RandomVariable()
 //---------------------------------------------------------
 // Procedure: setParam
 
-bool RandomVariable::setParam(string param, double value)
-{
-  if(param == "min") {
+bool RandomVariable::setParam(string param, double value) {
+  if (param == "min") {
     m_min_val = value;
-    if(m_max_val < m_min_val)
+    if (m_max_val < m_min_val)
       m_max_val = m_min_val;
-  }
-  else if(param == "max") {
+  } else if (param == "max") {
     m_max_val = value;
-    if(m_min_val > m_max_val)
+    if (m_min_val > m_max_val)
       m_min_val = m_max_val;
-  }
-  else if(param == "snap") {
-    if(value > 0)
+  } else if (param == "snap") {
+    if (value > 0)
       m_snap = value;
-  }
-  else
-    return(false);
+  } else
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------
 // Procedure: getStringValue
 
-string RandomVariable::getStringValue() const
-{
-  return(m_value_str);
-}
-  
-  
+string RandomVariable::getStringValue() const { return (m_value_str); }
+
 //---------------------------------------------------------
 // Procedure: getStringSummary
 
-string RandomVariable::getStringSummary() const
-{
+string RandomVariable::getStringSummary() const {
   string str = "varname=" + m_varname;
-  if(m_keyname != "")
+  if (m_keyname != "")
     str += ",keyname=" + m_keyname;
-  if(m_type != "")
+  if (m_type != "")
     str += ",type=" + m_type;
   str += ",min=" + doubleToStringX(m_min_val);
   str += ",max=" + doubleToStringX(m_max_val);
   str += ",val=" + doubleToStringX(m_value);
-  return(str);
+  return (str);
 }
-
-
-
-
-
-
-
-
-

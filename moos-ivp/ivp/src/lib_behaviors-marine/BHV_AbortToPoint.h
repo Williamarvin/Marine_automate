@@ -20,67 +20,46 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_ABORT_TO_POINT_HEADER
 #define BHV_ABORT_TO_POINT_HEADER
 
-#include <string>
 #include "IvPBehavior.h"
 #include "WaypointEngine.h"
+#include <string>
 
 class BHV_AbortToPoint : public IvPBehavior {
 public:
   BHV_AbortToPoint(IvPDomain);
   ~BHV_AbortToPoint() {}
-  
-  bool         setParam(std::string, std::string);
-  void         onIdleState();
-  IvPFunction* onRunState();
+
+  bool setParam(std::string, std::string);
+  void onIdleState();
+  IvPFunction *onRunState();
 
 protected:
-  bool         updateInfoIn();
-  IvPFunction* buildOF(std::string);
-  void         updateInfoOut();
+  bool updateInfoIn();
+  IvPFunction *buildOF(std::string);
+  void updateInfoOut();
 
 protected: // configuration parameters
-  double      m_cruise_speed;
+  double m_cruise_speed;
   std::string m_ipf_type;
 
-protected: // intermediate or object global variables.
-  double    m_osv;  // Ownship velocity
-  double    m_osx;  // Ownship x position
-  double    m_osy;  // Ownship y position
-  double    m_abort_x;
-  double    m_abort_y;
-  
-  double    m_capture_radius;
-  double    m_nm_radius;
+protected:      // intermediate or object global variables.
+  double m_osv; // Ownship velocity
+  double m_osx; // Ownship x position
+  double m_osy; // Ownship y position
+  double m_abort_x;
+  double m_abort_y;
+
+  double m_capture_radius;
+  double m_nm_radius;
 
   std::string m_status_var;
   std::string m_state;
-  bool        m_sent_msg_inactive;
-  bool        m_sent_msg_completed;
-  bool        m_sent_msg_abandoned;
-  
+  bool m_sent_msg_inactive;
+  bool m_sent_msg_completed;
+  bool m_sent_msg_abandoned;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "CollObDetect_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                        ");
   blk("------------------------------------                             ");
   blk(" The uFldCollObDetect application is run on the shoreside and    ");
@@ -50,8 +49,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uFldCollObDetect file.moos [OPTIONS]                     ");
@@ -60,7 +58,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldCollObDetect with the given process name       ");
   blk("      rather than uFldCollObDetect.                             ");
   mag("  --example, -e                                                 ");
@@ -72,7 +70,8 @@ void showHelpAndExit()
   mag("  --version,-v                                                  ");
   blk("      Display the release version of uFldCollObDetect.          ");
   mag("  --web,-w                                                      ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uFldCollObDetect ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uFldCollObDetect ");
   blk("                                                                ");
   blk("Note: If argv[2] does not otherwise match a known option,       ");
   blk("      then it will be interpreted as a run alias. This is       ");
@@ -84,8 +83,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldCollObDetect Example MOOS Configuration                     ");
   blu("=============================================================== ");
@@ -109,12 +107,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldCollObDetect INTERFACE                                      ");
@@ -133,7 +129,7 @@ void showInterfaceAndExit()
   blk("                   label=ob_3,duration=451.74                   ");
   blk("                                                                ");
   blk("  KNOWN_OBSTACLE_CLEAR = ob_3     (or \"all\")                  ");
-  
+
   blk("  NODE_REPORT = NAME=alpha,TYPE=UUV,TIME=1252348077.59,         ");
   blk("                COLOR=red,X=51.71,Y=-35.50, LAT=43.824981,      ");
   blk("                LON=-70.329755,SPD=2.0,HDG=118.8,               ");
@@ -151,10 +147,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldCollObDetect", "gpl");
   exit(0);
 }
-
-

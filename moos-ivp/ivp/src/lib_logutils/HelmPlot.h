@@ -24,62 +24,49 @@
 #ifndef HELM_TPLOTX_HEADER
 #define HELM_TPLOTX_HEADER
 
+#include "HelmReport.h"
 #include <string>
 #include <vector>
-#include "HelmReport.h"
 
-class HelmPlot 
-{
+class HelmPlot {
 public:
   HelmPlot();
   ~HelmPlot() {}
 
-  void   setVehiLength(double len)  {m_vehi_length = len;}
-  void   setVehiType(std::string);
-  
-  bool   addEntry(double time, std::string helm_summary);
+  void setVehiLength(double len) { m_vehi_length = len; }
+  void setVehiType(std::string);
+
+  bool addEntry(double time, std::string helm_summary);
 
   double getTimeByIndex(unsigned int index) const;
-  double getTimeByIterAdd(double curr_time, 
-			  unsigned int iter_offset) const;
-  double getTimeByIterSub(double curr_time, 
-			  unsigned int iter_offset) const;
+  double getTimeByIterAdd(double curr_time, unsigned int iter_offset) const;
+  double getTimeByIterSub(double curr_time, unsigned int iter_offset) const;
 
   unsigned int getIterByIndex(unsigned int) const;
   unsigned int getIterByTime(double) const;
-  
-  std::string  getValueByIndex(std::string query, unsigned int index) const;
-  std::string  getValueByTime(std::string query, double gtime) const;
-  
-  std::string  getVName()       const {return(m_vname);}
-  std::string  getVType()       const {return(m_vehi_type);}
-  double       getVLength()     const {return(m_vehi_length);}
-  unsigned int size()           const {return(m_time.size());}
-  void         print()          const;
 
-  bool         containsTime(double) const;
+  std::string getValueByIndex(std::string query, unsigned int index) const;
+  std::string getValueByTime(std::string query, double gtime) const;
 
-  double getCurrTime() {return(0);}
+  std::string getVName() const { return (m_vname); }
+  std::string getVType() const { return (m_vehi_type); }
+  double getVLength() const { return (m_vehi_length); }
+  unsigned int size() const { return (m_time.size()); }
+  void print() const;
 
-  unsigned int getIndexByIter(unsigned int) const {return(0);}
+  bool containsTime(double) const;
+
+  double getCurrTime() { return (0); }
+
+  unsigned int getIndexByIter(unsigned int) const { return (0); }
 
 protected:
-  std::string m_vname; 
+  std::string m_vname;
   std::string m_vehi_type;
-  double      m_vehi_length;
-  
+  double m_vehi_length;
+
   // Parallel indices each index once per IVPHELM_SUMMARY
-  std::vector<double>     m_time;
+  std::vector<double> m_time;
   std::vector<HelmReport> m_helm_reports;
 };
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

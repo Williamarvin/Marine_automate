@@ -29,7 +29,8 @@ using namespace std;
 
 //==============================================================================
 
-std::vector<std::string> tokenize(const std::string & s, const std::string & separator) {
+std::vector<std::string> tokenize(const std::string &s,
+                                  const std::string &separator) {
   vector<string> v;
 
   if (s.length() == 0) {
@@ -39,15 +40,14 @@ std::vector<std::string> tokenize(const std::string & s, const std::string & sep
   string::size_type pos1 = 0;
 
   bool done = false;
-  while (! done) {
+  while (!done) {
     string::size_type pos2 = s.find(separator, pos1);
     string token = s.substr(pos1, pos2 - pos1);
     v.push_back(token);
 
     if (pos2 == string::npos) {
       done = true;
-    }
-    else {
+    } else {
       pos1 = pos2 + separator.length();
     }
   }
@@ -57,8 +57,8 @@ std::vector<std::string> tokenize(const std::string & s, const std::string & sep
 
 //==============================================================================
 
-std::string vect_to_string(std::string prefix, std::string suffix, 
-    const std::vector<std::string> & v) {
+std::string vect_to_string(std::string prefix, std::string suffix,
+                           const std::vector<std::string> &v) {
 
   ostringstream os;
 
@@ -68,12 +68,3 @@ std::string vect_to_string(std::string prefix, std::string suffix,
 
   return os.str();
 }
-
-
-
-
-
-
-
-
-

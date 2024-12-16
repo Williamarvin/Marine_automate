@@ -21,12 +21,12 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
+#include "LogBinHandler.h"
 #include "MBUtils.h"
 #include "ReleaseInfo.h"
-#include "LogBinHandler.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -35,31 +35,29 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   LogBinHandler handler;
 
   bool handled = false;
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi=="-v") || (argi=="--version") || (argi=="-version")) {
+    else if ((argi == "-v") || (argi == "--version") || (argi == "-version")) {
       showReleaseInfo("alogbin", "gpl");
-      return(0);
-    }
-    else if(argi=="--verbose")
+      return (0);
+    } else if (argi == "--verbose")
       handled = handler.setVerbose();
-    else if(strEnds(argi, ".log"))
+    else if (strEnds(argi, ".log"))
       handled = handler.setLogFile(argi);
-    else if(strBegins(argi, "--file="))
+    else if (strBegins(argi, "--file="))
       handled = handler.setLogFile(argi.substr(7));
-    else if(strBegins(argi, "--delta="))
+    else if (strBegins(argi, "--delta="))
       handled = handler.setDelta(argi.substr(8));
-    else if(strBegins(argi, "--min="))
+    else if (strBegins(argi, "--min="))
       handled = handler.setDelta(argi.substr(6));
 
-    if(!handled) {
+    if (!handled) {
       cout << "Unhandled command line argument: " << argi << endl;
       cout << "Use --help for usage. Exiting.   " << endl;
       exit(1);
@@ -69,12 +67,11 @@ int main(int argc, char *argv[])
   handler.handle();
   exit(0);
 }
-  
-//------------------------------------------------------------
-// Procedure: showHelpAndExit()  
 
-void showHelpAndExit()
-{
+//------------------------------------------------------------
+// Procedure: showHelpAndExit()
+
+void showHelpAndExit() {
   cout << "Usage: " << endl;
   cout << "  alogbin file.log [OPTIONS]                               " << endl;
   cout << "                                                           " << endl;
@@ -102,9 +99,3 @@ void showHelpAndExit()
   cout << endl;
   exit(0);
 }
-
-
-
-
-
-

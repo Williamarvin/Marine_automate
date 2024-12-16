@@ -22,41 +22,31 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef XY_FORMAT_UTILS_RANGE_PULSE_HEADER
 #define XY_FORMAT_UTILS_RANGE_PULSE_HEADER
 
-#include <string>
 #include "XYRangePulse.h"
+#include <string>
 
 //---------------------------------------------------------------
 // Create an XYRangePulse from a string specification. This function
-// calls one of the string*2RangePulse functions below. Only this 
+// calls one of the string*2RangePulse functions below. Only this
 // function should be called by the user. The other functions
 // are subject to change without regard to backward compatibility.
 XYRangePulse string2RangePulse(std::string);
 
-// *** IMPORTANT NOTE **** 
-// The below functions are not intended to be invoked directly by 
+// *** IMPORTANT NOTE ****
+// The below functions are not intended to be invoked directly by
 // the user. They are subortinate functions called by the above
-// function. While the above function will be maintained in the 
+// function. While the above function will be maintained in the
 // future for backward compatibility, the below functions are not.
 
 //---------------------------------------------------------------
-// Create an XYRangePulse from a string specification. 
+// Create an XYRangePulse from a string specification.
 // This function is standard because it processes the string format
 // used when a string is created from an existing XYRangePulse instance.
 // Example: x=val, y=val, radius=val, duration=val, label=bobby
 XYRangePulse stringStandard2RangePulse(std::string);
 
 #endif
-
-
-
-
-
-
-
-
-
-

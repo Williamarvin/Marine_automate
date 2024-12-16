@@ -12,58 +12,55 @@
 #include "demuster_geometry.h"
 #include <map>
 
+class DemusterAssign : public AppCastingMOOSApp {
+public:
+  DemusterAssign();
+  ~DemusterAssign();
 
-class DemusterAssign : public AppCastingMOOSApp
-{
- public:
-   DemusterAssign();
-   ~DemusterAssign();
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+protected:
+  void registerVariables();
 
- protected:
-   void registerVariables();
+private: // Configuration variables
+  std::string m_type;
+  Point m_CG;
+  Point m_anchor;
+  double m_distance;
+  double m_heading;
+  double m_margin;
+  double m_dubin_turn_radius;
 
- private: // Configuration variables
-   std::string m_type;
-   Point m_CG;
-   Point m_anchor;
-   double m_distance;
-   double m_heading;
-   double m_margin;
-   double m_dubin_turn_radius;
+  std::string m_assignment_algorithm;
+  std::string m_assignment_metric;
 
-   std::string m_assignment_algorithm;
-   std::string m_assignment_metric;
+  // Type specific variables
+  double m_circle_radius;
+  double m_arrow_angle;
 
-   //Type specific variables
-   double m_circle_radius;
-   double m_arrow_angle;
-  
- private: // State variables
-   bool m_calculate_formation;
-   double m_formations_calculated;
-   std::vector<Pose> m_formation;
-   std::map<std::string, Pose> m_node_poses;
-   std::map<std::string, Pose> m_node_destinations;
+private: // State variables
+  bool m_calculate_formation;
+  double m_formations_calculated;
+  std::vector<Pose> m_formation;
+  std::map<std::string, Pose> m_node_poses;
+  std::map<std::string, Pose> m_node_destinations;
 
-   std::vector<std::vector<double> > m_cost_matrix;
-   double m_total_cost;
+  std::vector<std::vector<double>> m_cost_matrix;
+  double m_total_cost;
 
-   std::vector<std::string> m_arrived_nodes; //for temp convoy solution
-   std::vector<std::string> m_complete_nodes;
-   double m_complete_timer;
+  std::vector<std::string> m_arrived_nodes; // for temp convoy solution
+  std::vector<std::string> m_complete_nodes;
+  double m_complete_timer;
 
-   std::map<std::string, bool> m_node_deadlocks;
-   std::vector<std::string> m_node_permablocks;
-
+  std::map<std::string, bool> m_node_deadlocks;
+  std::vector<std::string> m_node_permablocks;
 };
 
-#endif 
+#endif

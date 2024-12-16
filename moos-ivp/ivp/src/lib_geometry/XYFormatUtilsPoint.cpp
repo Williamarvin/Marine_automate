@@ -23,77 +23,75 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <vector>
-#include <cstdlib>
 #include "XYFormatUtilsPoint.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <vector>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: string2Point (Method #0)
-//   Example: Create a point from a string representation. Will 
-//            call one of the string*2Point functions below. 
-//   ***NOTE: This is the only function that should be called by 
-//            the user. The other functions are subject to change 
+//   Example: Create a point from a string representation. Will
+//            call one of the string*2Point functions below.
+//   ***NOTE: This is the only function that should be called by
+//            the user. The other functions are subject to change
 //            without regard to backward compatibility.
 
-XYPoint string2Point(const string& str)
-{
+XYPoint string2Point(const string &str) {
   XYPoint new_point = stringStandard2Point(str);
-  if(new_point.valid())
-    return(new_point);
-  
+  if (new_point.valid())
+    return (new_point);
+
   // Last chance....
-  return(stringAbbreviated2Point(str));
+  return (stringAbbreviated2Point(str));
 }
 
 //---------------------------------------------------------------
 // Procedure: stringStandard2Point  (Method #1)
-//      Note: This function is standard because it processes the 
-//            string format used when a string is created from an 
+//      Note: This function is standard because it processes the
+//            string format used when a string is created from an
 //            existing XYPoint instance.
 //   Example: x=4,y=2,z=3,vertex_size=2,label_color=red,
 //            vertex_color=white,soure=foobar
-// 
+//
 
-XYPoint stringStandard2Point(const string& str)
-{
+XYPoint stringStandard2Point(const string &str) {
   XYPoint null_point;
   XYPoint new_point;
 
   vector<string> mvector = parseString(str, ',');
   unsigned int i, vsize = mvector.size();
-  
-  string x,y,z,trans;
+
+  string x, y, z, trans;
   string hdg; // Allow for heading spec to be just ignored
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string param = biteStringX(mvector[i], '=');
     string value = mvector[i];
 
-    if(param == "x")
+    if (param == "x")
       x = value;
-    else if(param == "y")
+    else if (param == "y")
       y = value;
-    else if(param == "z")
+    else if (param == "z")
       z = value;
-    else if(param == "heading")
+    else if (param == "heading")
       hdg = value;
-    else if((param == "trans") && isNumber(value))
+    else if ((param == "trans") && isNumber(value))
       trans = value;
     else
       new_point.set_param(param, value);
   }
-  
-  if((x=="") || (y==""))
-    return(null_point);
 
-  if(trans != "")
+  if ((x == "") || (y == ""))
+    return (null_point);
+
+  if (trans != "")
     new_point.set_transparency(atof(trans.c_str()));
-  
+
   new_point.set_vertex(atof(x.c_str()), atof(y.c_str()), atof(z.c_str()));
-  
-  return(new_point);
+
+  return (new_point);
 }
 
 //---------------------------------------------------------------
@@ -101,48 +99,38 @@ XYPoint stringStandard2Point(const string& str)
 //   Example: 0,0
 //   Example: 4,5:label,foobar:source,bravo:msg,hello
 
-XYPoint stringAbbreviated2Point(const string& str)
-{
+XYPoint stringAbbreviated2Point(const string &str) {
   XYPoint null_point;
   XYPoint new_point;
 
   vector<string> mvector = parseString(str, ':');
   unsigned int i, vsize = mvector.size();
-  
-  for(i=0; i<vsize; i++) {
+
+  for (i = 0; i < vsize; i++) {
     string param = biteStringX(mvector[i], ',');
     string value = mvector[i];
     bool handled = new_point.set_param(param, value);
 
-    if(!handled) { // This component might be the vertex  x,y or x,y,z
+    if (!handled) { // This component might be the vertex  x,y or x,y,z
       string xstr = param;
       string ystr = value;
       string zstr;
-      if(strContains(ystr, ',')) {
-	ystr = biteStringX(value, ',');
-	zstr = value;
+      if (strContains(ystr, ',')) {
+        ystr = biteStringX(value, ',');
+        zstr = value;
       }
 
-      if(isNumber(xstr) && isNumber(ystr) && (isNumber(zstr)||(zstr==""))) {
-	double xval = atof(xstr.c_str());
-	double yval = atof(ystr.c_str());
-	double zval = 0;
-	if(isNumber(zstr))
-	  zval = atof(zstr.c_str());
-	new_point.set_vertex(xval,yval,zval);
+      if (isNumber(xstr) && isNumber(ystr) &&
+          (isNumber(zstr) || (zstr == ""))) {
+        double xval = atof(xstr.c_str());
+        double yval = atof(ystr.c_str());
+        double zval = 0;
+        if (isNumber(zstr))
+          zval = atof(zstr.c_str());
+        new_point.set_vertex(xval, yval, zval);
       }
     }
   }
 
-  return(new_point);
+  return (new_point);
 }
-
-
-
-
-
-
-
-
-
-

@@ -26,47 +26,36 @@
 
 #include <string>
 
-class CollisionReporter
-{
- public:
+class CollisionReporter {
+public:
   CollisionReporter();
   ~CollisionReporter() {}
 
   bool setTimeStampFile(std::string);
   bool setALogFile(std::string);
-  void setTerse() {m_terse=true;}
-  
+  void setTerse() { m_terse = true; }
+
   bool handle();
   void printReport();
 
-  bool hadCollisions() {return(m_collisions > 0);}
-  bool hadEncounters() {return(m_encounters > 0);}
-  
- protected:
+  bool hadCollisions() { return (m_collisions > 0); }
+  bool hadEncounters() { return (m_encounters > 0); }
+
+protected:
   unsigned int m_encounters;
   unsigned int m_near_misses;
   unsigned int m_collisions;
-  
+
   double m_total_encounter_cpa;
   double m_total_near_miss_cpa;
   double m_total_collision_cpa;
-  
+
   double m_collision_worst;
 
   std::string m_time_stamp_file;
   std::string m_alog_file;
 
-  bool   m_terse;
+  bool m_terse;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

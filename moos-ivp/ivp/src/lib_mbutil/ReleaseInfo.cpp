@@ -23,44 +23,41 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "ReleaseInfo.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfo
 
-void showReleaseInfo(string app, string license_info)
-{
+void showReleaseInfo(string app, string license_info) {
   string pad = "";
-  if(app.length() < 22)
-    pad = padString("", (22-app.length()));
-  cout << "******************************************************************" << endl;
-  cout << "* " + app + " - Part of the MOOS-IvP Release Bundle   " +  pad +"*" << endl;
-  cout << "* Version 22.8                                                   *" << endl;
-  cout << "* M.Benjamin (MIT), P.Newman (Oxford)                            *" << endl;
-  if(license_info == "gpl") { 
-    cout << "* This is free software; see the source for copying conditions.  *" << endl;
+  if (app.length() < 22)
+    pad = padString("", (22 - app.length()));
+  cout << "******************************************************************"
+       << endl;
+  cout << "* " + app + " - Part of the MOOS-IvP Release Bundle   " + pad + "*"
+       << endl;
+  cout << "* Version 22.8                                                   *"
+       << endl;
+  cout << "* M.Benjamin (MIT), P.Newman (Oxford)                            *"
+       << endl;
+  if (license_info == "gpl") {
+    cout << "* This is free software; see the source for copying conditions.  *"
+         << endl;
   }
-  cout << "******************************************************************" << endl;
+  cout << "******************************************************************"
+       << endl;
   cout << "" << endl;
 }
 
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit(string app, string license_info)
-{
+void showReleaseInfoAndExit(string app, string license_info) {
   showReleaseInfo(app, license_info);
   exit(0);
 }
-
-
-
-
-
-
-

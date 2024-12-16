@@ -36,58 +36,35 @@
 
 class DemuxUnit {
 public:
-  DemuxUnit(const std::string&, unsigned int, 
-	    double, const std::string& src="");
+  DemuxUnit(const std::string &, unsigned int, double,
+            const std::string &src = "");
   virtual ~DemuxUnit() {}
 
 public:
+  bool addString(const std::string &str, unsigned int ix) {
+    if (ix >= m_data.size())
+      return (false);
+    if (m_flag[ix] == true) // don't allow double writes
+      return (false);
+    m_data[ix] = str;
+    m_flag[ix] = true;
+    return (true);
+  }
 
-  bool addString(const std::string& str, unsigned int ix)
-    {
-      if(ix>=m_data.size())
-	return(false);
-      if(m_flag[ix]==true) // don't allow double writes
-	return(false);
-      m_data[ix] = str;
-      m_flag[ix] = true;
-      return(true);
-    }
-  
   std::string getDemuxString();
-  std::string getUnitID()       {return(m_unit_id);}
-  std::string getSource()       {return(m_source);}
-  double      getTimeStamp()    {return(m_time_stamp);}
-  bool        unitReady();
-  void        print();
+  std::string getUnitID() { return (m_unit_id); }
+  std::string getSource() { return (m_source); }
+  double getTimeStamp() { return (m_time_stamp); }
+  bool unitReady();
+  void print();
 
 protected:
-  std::string              m_unit_id;
+  std::string m_unit_id;
   std::vector<std::string> m_data;
-  std::vector<bool>        m_flag;
-  std::string              m_source;
+  std::vector<bool> m_flag;
+  std::string m_source;
 
   double m_time_stamp;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

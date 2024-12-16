@@ -21,54 +21,52 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "MBUtils.h"
 #include "ObstacleFieldGenerator.h"
 #include "ObstacleFieldGenerator_Info.h"
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   ObstacleFieldGenerator generator;
 
   string arg_summary = argv[0];
 
-  for(int i=1; i<argc; i++) {
-    bool   handled = false;
+  for (int i = 1; i < argc; i++) {
+    bool handled = false;
 
     string argi = argv[i];
     arg_summary += " " + argi;
 
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
 
-    else if(strBegins(argi, "--amt=")) 
+    else if (strBegins(argi, "--amt="))
       handled = generator.setAmount(argi.substr(6));
-    else if(strBegins(argi, "--min_range="))
+    else if (strBegins(argi, "--min_range="))
       handled = generator.setMinRange(argi.substr(12));
-    else if(strBegins(argi, "--min_size="))
+    else if (strBegins(argi, "--min_size="))
       handled = generator.setObstacleMinSize(argi.substr(11));
-    else if(strBegins(argi, "--max_size="))
+    else if (strBegins(argi, "--max_size="))
       handled = generator.setObstacleMaxSize(argi.substr(11));
-    else if(strBegins(argi, "--meter"))
+    else if (strBegins(argi, "--meter"))
       handled = generator.setPrecision(1);
-    else if(strBegins(argi, "--poly="))
+    else if (strBegins(argi, "--poly="))
       handled = generator.setPolygon(argi.substr(7));
-    
-    if(!handled) {
+
+    if (!handled) {
       cout << "Unhandled arg: " << argi << endl;
-      return(0);
+      return (0);
     }
   }
-  
+
   cout << "# " << arg_summary << endl;
 
   bool ok = generator.generate();
-  if(!ok)
-    return(1);
-  return(0);
+  if (!ok)
+    return (1);
+  return (0);
 }
-

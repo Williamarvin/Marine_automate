@@ -24,38 +24,36 @@
 #ifndef TAG_HANDLER_HEADER
 #define TAG_HANDLER_HEADER
 
-#include <string>
 #include <map>
+#include <string>
 
-class TagHandler
-{
- public:
+class TagHandler {
+public:
   TagHandler();
   ~TagHandler() {}
 
   bool handle();
-  
+
   bool setInputFile(std::string);
   bool setTag(std::string);
   bool setHeader(std::string);
 
-  void setKeepTagLine()   {m_keep_tag_line=true;}
-  void setFirstLineOnly() {m_first_line_only=true;}
-  void setNoBlankLines()  {m_keep_blanks=false;}
-  void setVerbose()       {m_verbose=true;}
+  void setKeepTagLine() { m_keep_tag_line = true; }
+  void setFirstLineOnly() { m_first_line_only = true; }
+  void setNoBlankLines() { m_keep_blanks = false; }
+  void setVerbose() { m_verbose = true; }
 
-  bool isInputFileSet() {return(m_input_file!="");}
-  
- protected: // Config vars
+  bool isInputFileSet() { return (m_input_file != ""); }
+
+protected: // Config vars
   std::string m_input_file;
   std::string m_tag;
   std::string m_header;
 
-  bool  m_verbose;
-  bool  m_keep_blanks;
-  bool  m_keep_tag_line;
-  bool  m_first_line_only;
+  bool m_verbose;
+  bool m_keep_blanks;
+  bool m_keep_tag_line;
+  bool m_first_line_only;
 };
 
 #endif
-

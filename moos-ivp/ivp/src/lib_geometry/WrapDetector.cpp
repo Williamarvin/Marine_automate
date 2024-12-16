@@ -23,17 +23,16 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "WrapDetector.h"
 #include "GeomUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor()
 
-WrapDetector::WrapDetector()
-{
+WrapDetector::WrapDetector() {
   // Init state vars
   m_osx = 0;
   m_osy = 0;
@@ -41,15 +40,14 @@ WrapDetector::WrapDetector()
   m_wraps = 0;
 
   // Init config vars
-  m_min_leg  = 1;
+  m_min_leg = 1;
   m_max_legs = 5000;
 }
 
 //---------------------------------------------------------------
 // Procedure: clear()
 
-void WrapDetector::clear()
-{
+void WrapDetector::clear() {
   // clear state vars
   m_osx = 0;
   m_osy = 0;
@@ -65,9 +63,8 @@ void WrapDetector::clear()
 //            previous point. This is to reduce computational load
 //            of line segment intersection tests.
 
-void WrapDetector::setMinLeg(double min_leg)
-{
-  if(min_leg < 0)
+void WrapDetector::setMinLeg(double min_leg) {
+  if (min_leg < 0)
     return;
 
   m_min_leg = min_leg;
@@ -78,17 +75,13 @@ void WrapDetector::setMinLeg(double min_leg)
 //      Note: An upper bound on the number of legs helps guard
 //            against a memory leak introduced by a user.
 
-void WrapDetector::setMaxLegs(unsigned int max_legs)
-{
-  m_max_legs = max_legs;
-}
+void WrapDetector::setMaxLegs(unsigned int max_legs) { m_max_legs = max_legs; }
 
 //---------------------------------------------------------------
 // Procedure: updatePosition()
 
-void WrapDetector::updatePosition(double osx, double osy)
-{
-  if(m_empty) {
+void WrapDetector::updatePosition(double osx, double osy) {
+  if (m_empty) {
     m_osx = osx;
     m_osy = osy;
     m_empty = false;
@@ -96,30 +89,30 @@ void WrapDetector::updatePosition(double osx, double osy)
   }
 
   XYSegment new_seg(m_osx, m_osy, osx, osy);
-  if(new_seg.length() < m_min_leg)
+  if (new_seg.length() < m_min_leg)
     return;
-  
+
   bool wrapped = false;
 
-  if(m_os_legs.size() != 0) {
+  if (m_os_legs.size() != 0) {
     // Temporarily remove last segment since we know it will
     // intersect with the new segment.
     XYSegment final_seg = m_os_legs.back();
     m_os_legs.pop_back();
 
     list<XYSegment>::iterator p;
-    for(p=m_os_legs.begin(); p!=m_os_legs.end(); p++) {
+    for (p = m_os_legs.begin(); p != m_os_legs.end(); p++) {
       XYSegment this_seg = *p;
-      if(this_seg.intersects(new_seg))
-	wrapped = true;
+      if (this_seg.intersects(new_seg))
+        wrapped = true;
     }
     // Now re-instate the last segment to back of the list
     m_os_legs.push_back(final_seg);
   }
 
-  if(!wrapped) {
+  if (!wrapped) {
     m_os_legs.push_back(new_seg);
-    if(m_os_legs.size() > m_max_legs)
+    if (m_os_legs.size() > m_max_legs)
       m_os_legs.pop_front();
 
     m_osx = osx;
@@ -132,12 +125,9 @@ void WrapDetector::updatePosition(double osx, double osy)
   m_wraps++;
 
   cout << "Wrap detected!!!" << endl;
-  
+
   m_osx = 0;
   m_osy = 0;
   m_empty = true;
   m_os_legs.clear();
 }
-
-
-

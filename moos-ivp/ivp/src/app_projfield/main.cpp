@@ -4,12 +4,12 @@
 /*    DATE: Nov 19th, 2023                                       */
 /*****************************************************************/
 
-#include "MBUtils.h"
-#include "GeomUtils.h"
-#include <cmath>
-#include <stdlib.h>
-#include <iostream>
 #include "FldProjector.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include <cmath>
+#include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -18,43 +18,42 @@ void showHelpAndExit();
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc, char *argv[])
-{ 
-  double root_x  = 0;
-  double root_y  = 0;
-  double angle   = 0;
-  double grid    = 10;
-  double offset  = 0;
+int main(int argc, char *argv[]) {
+  double root_x = 0;
+  double root_y = 0;
+  double angle = 0;
+  double grid = 10;
+  double offset = 0;
   unsigned int cells_x = 26;
   unsigned int cells_y = 26;
-  
-  for(int i=0; i<argc; i++) {
-    string argi = argv[i]; 
-    if((argi == "-h") || (argi == "--help"))
+
+  for (int i = 0; i < argc; i++) {
+    string argi = argv[i];
+    if ((argi == "-h") || (argi == "--help"))
       showHelpAndExit();
   }
 
   string cmds;
-  for(int i=1; i<argc; i++) {
-    string argi = argv[i]; 
-    cmds += argi + " ";      
+  for (int i = 1; i < argc; i++) {
+    string argi = argv[i];
+    cmds += argi + " ";
 
     bool handled = true;
-    if(strBegins(argi, "--x="))
+    if (strBegins(argi, "--x="))
       handled = setDoubleOnString(root_x, argi.substr(4));
-    else if(strBegins(argi, "--y="))
+    else if (strBegins(argi, "--y="))
       handled = setDoubleOnString(root_y, argi.substr(4));
-    else if(strBegins(argi, "--ang="))
+    else if (strBegins(argi, "--ang="))
       handled = setDoubleOnString(angle, argi.substr(6));
-    else if(strBegins(argi, "--grid="))
+    else if (strBegins(argi, "--grid="))
       handled = setDoubleOnString(grid, argi.substr(7));
-    else if(strBegins(argi, "--offset="))
+    else if (strBegins(argi, "--offset="))
       handled = setDoubleOnString(offset, argi.substr(9));
-    else if(strBegins(argi, "--cx="))
+    else if (strBegins(argi, "--cx="))
       handled = setUIntOnString(cells_x, argi.substr(5));
-    else if(strBegins(argi, "--cy="))
+    else if (strBegins(argi, "--cy="))
       handled = setUIntOnString(cells_y, argi.substr(5));
-    else if(argi == "--pav") {
+    else if (argi == "--pav") {
       root_x = 0;
       root_y = 0;
       angle = 64.6356;
@@ -62,36 +61,33 @@ int main(int argc, char *argv[])
       cells_x = 26;
       cells_y = 26;
       offset = 5;
-    }
-    else
+    } else
       handled = false;
 
-    if(!handled) {
+    if (!handled) {
       cout << "Bad Arg:[" << argi << "]. Exiting." << endl;
       exit(1);
-    }    
+    }
   }
 
   cout << "# $ projfield " + cmds << endl;
-  
+
   FldProjector proj(root_x, root_y, angle);
   proj.setGrid(grid);
   proj.setCellsX(cells_x);
   proj.setCellsY(cells_y);
   proj.setOffset(offset);
-  
+
   proj.buildProjection();
   proj.print();
-  
-  return(0);
-}
 
+  return (0);
+}
 
 //--------------------------------------------------------
 // Procedure: showHelpAndExit()
 
-void showHelpAndExit()
-{ 
+void showHelpAndExit() {
   cout << "Usage:                                              " << endl;
   cout << "  projfield [OPTIONS]                               " << endl;
   cout << "                                                    " << endl;

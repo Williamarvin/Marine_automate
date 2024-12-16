@@ -22,13 +22,13 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef EDGE_TAG_SET_HEADER
 #define EDGE_TAG_SET_HEADER
 
-#include <vector>
-#include <string>
 #include "EdgeTag.h"
+#include <string>
+#include <vector>
 
 class EdgeTagSet {
 public:
@@ -38,22 +38,16 @@ public:
   bool addEdgeTag(EdgeTag);
   bool setOnSpec(std::string);
 
-  unsigned int size() const {return(m_edge_tags.size());}
-  
+  unsigned int size() const { return (m_edge_tags.size()); }
+
   std::string getSpec() const;
 
   bool matches(unsigned int, unsigned int, std::string) const;
 
   void print() const;
- 
- protected:
 
+protected:
   std::vector<EdgeTag> m_edge_tags;
 };
 
 #endif
-
-
-
-
-

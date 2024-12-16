@@ -21,21 +21,20 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iterator>
 #include "UFS_Config.h"
 #include "ColorParse.h"
 #include "MBUtils.h"
+#include <cstdlib>
+#include <iterator>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-UFS_Config::UFS_Config(const string& optional_config_str)
-{
+UFS_Config::UFS_Config(const string &optional_config_str) {
   m_xthresh = 0;
-  if(optional_config_str != "")
+  if (optional_config_str != "")
     init(optional_config_str);
 }
 
@@ -46,50 +45,37 @@ UFS_Config::UFS_Config(const string& optional_config_str)
 //   Example: "var=NODE_REPORT,fld=MODE,alias=mode,color=blue,
 //             xcolor=red,xthresh=3"
 
-void UFS_Config::init(const string& config)
-{
+void UFS_Config::init(const string &config) {
   vector<string> svector = parseString(config, ',');
   unsigned int i, vsize = svector.size();
-  for(i=0; i<vsize; i++) {
-    string left  = tolower(biteStringX(svector[i], '='));
+  for (i = 0; i < vsize; i++) {
+    string left = tolower(biteStringX(svector[i], '='));
     string right = svector[i];
-    if(left == "var")
+    if (left == "var")
       m_var = right;
-    else if(left == "key")
+    else if (left == "key")
       m_key = right;
-    else if(left == "fld")
+    else if (left == "fld")
       m_fld = right;
-    else if(left == "alias")
+    else if (left == "alias")
       m_alias = right;
-    else if((left == "color") && isColor(right))
+    else if ((left == "color") && isColor(right))
       m_color = right;
-    else if((left == "xcolor") && isColor(right))
+    else if ((left == "xcolor") && isColor(right))
       m_xcolor = right;
-    else if((left == "xthresh") && isNumber(right))
+    else if ((left == "xthresh") && isNumber(right))
       m_xthresh = atof(right.c_str());
   }
 
-  if(m_alias=="")
+  if (m_alias == "")
     m_alias = m_fld;
 }
-
 
 //---------------------------------------------------------
 // Procedure: valid
 
-bool UFS_Config::valid() const
-{
-  if(m_var.empty() || m_fld.empty())
-    return(false);
-  return(true);
+bool UFS_Config::valid() const {
+  if (m_var.empty() || m_fld.empty())
+    return (false);
+  return (true);
 }
-
-
-
-
-
-
-
-
-
-

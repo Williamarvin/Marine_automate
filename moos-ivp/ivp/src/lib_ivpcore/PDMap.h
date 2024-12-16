@@ -26,72 +26,63 @@
 #ifndef PDMAP_HEADER
 #define PDMAP_HEADER
 
-#include <string> 
-#include "IvPBox.h"
 #include "BoxSet.h"
-#include "IvPGrid.h"
+#include "IvPBox.h"
 #include "IvPDomain.h"
+#include "IvPGrid.h"
+#include <string>
 
 class PDMap {
 public:
-  PDMap(int pcs, const IvPDomain& gdomain, int deg=1);
-  PDMap(const PDMap*);
+  PDMap(int pcs, const IvPDomain &gdomain, int deg = 1);
+  PDMap(const PDMap *);
   virtual ~PDMap();
 
-  int       getIX(const IvPBox *);
-  void      applyWeight(double);
-  void      applyScalar(double);
-  void      normalize(double base, double range);
-  
-  int       getDim() const        {return(m_domain.size());}
-  IvPGrid*  getGrid()             {return(m_grid);}
-  IvPBox    getGelBox() const     {return(m_gelbox);}
-  IvPDomain getDomain() const     {return(m_domain);}
-  BoxSet*   getBS(const IvPBox*); 
-  IvPBox    getUniverse() const;
+  int getIX(const IvPBox *);
+  void applyWeight(double);
+  void applyScalar(double);
+  void normalize(double base, double range);
 
-  int       size() const          {return(m_boxCount);}
-  int       getDegree() const     {return(m_degree);}
-  double    getMinWT() const;
-  double    getMaxWT() const;
+  int getDim() const { return (m_domain.size()); }
+  IvPGrid *getGrid() { return (m_grid); }
+  IvPBox getGelBox() const { return (m_gelbox); }
+  IvPDomain getDomain() const { return (m_domain); }
+  BoxSet *getBS(const IvPBox *);
+  IvPBox getUniverse() const;
 
-  void      updateGrid(bool BX=1, bool UB=1);
-  bool      setGelBox(const IvPBox& box);
-  void      setGelBox();
+  int size() const { return (m_boxCount); }
+  int getDegree() const { return (m_degree); }
+  double getMinWT() const;
+  double getMaxWT() const;
+
+  void updateGrid(bool BX = 1, bool UB = 1);
+  bool setGelBox(const IvPBox &box);
+  void setGelBox();
   std::string getGridConfig() const;
-  
-  double    evalPoint(const IvPBox*, bool* covered=0) const;
 
-  void      print(bool full=true) const;
-  void      growBoxArray(int);
-  void      growBoxCount(int i=1) {m_boxCount += i;}
-  bool      freeOfNan() const;
+  double evalPoint(const IvPBox *, bool *covered = 0) const;
 
-  bool      valid(bool verbose=false) const;
-  
-  const IvPBox *getBox(int i) const {return(m_boxes[i]);}
+  void print(bool full = true) const;
+  void growBoxArray(int);
+  void growBoxCount(int i = 1) { m_boxCount += i; }
+  bool freeOfNan() const;
 
-  IvPBox*&  bx(int i) {return(m_boxes[i]);}
+  bool valid(bool verbose = false) const;
+
+  const IvPBox *getBox(int i) const { return (m_boxes[i]); }
+
+  IvPBox *&bx(int i) { return (m_boxes[i]); }
 
 public: // Conversion Functions
-  bool      transDomain(const IvPDomain&, const int*);
-  void      removeNULLs();
+  bool transDomain(const IvPDomain &, const int *);
+  void removeNULLs();
 
 protected:
   IvPDomain m_domain;
-  IvPBox**  m_boxes;
-  int       m_boxCount;
-  int       m_degree;   // Zero:Scalar, Nonzero: Linear
-  IvPBox    m_gelbox;
-  IvPGrid*  m_grid;
-}; 
+  IvPBox **m_boxes;
+  int m_boxCount;
+  int m_degree; // Zero:Scalar, Nonzero: Linear
+  IvPBox m_gelbox;
+  IvPGrid *m_grid;
+};
 #endif
-
-
-
-
-
-
-
-
-

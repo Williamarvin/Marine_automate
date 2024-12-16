@@ -26,51 +26,47 @@
 #ifndef ARC_XY_HEADER
 #define ARC_XY_HEADER
 
-#include <string>
 #include "XYCircle.h"
+#include <string>
 
 class XYArc : public XYCircle {
 public:
   XYArc();
   XYArc(double x, double y, double rad, double langle, double rangle);
   XYArc(double x, double y, double rad, double langle, double rangle,
-	double ax1, double ay1, double ax2, double ay2);
+        double ax1, double ay1, double ax2, double ay2);
   virtual ~XYArc() {}
 
-  bool   initialize(const std::string&);
-  void   set(double x, double y, double radius, 
-	     double langle, double rangle);
-  void   set(double x, double y, double radius, 
-	     double langle, double rangle, double ax1,
-	     double ay1, double ax2, double ay2);
-  void   setLangle(double v);
-  void   setRangle(double v);
+  bool initialize(const std::string &);
+  void set(double x, double y, double radius, double langle, double rangle);
+  void set(double x, double y, double radius, double langle, double rangle,
+           double ax1, double ay1, double ax2, double ay2);
+  void setLangle(double v);
+  void setRangle(double v);
 
-  double getLangle() const    {return(m_langle);}
-  double getRangle() const    {return(m_rangle);}
+  double getLangle() const { return (m_langle); }
+  double getRangle() const { return (m_rangle); }
 
   double lengthUnits() const;
   double lengthDegrees() const;
-  bool   containsAngle(double) const;
-  bool   containsPoint(double, double) const;
+  bool containsAngle(double) const;
+  bool containsPoint(double, double) const;
 
-  bool   segIntersectStrict(double, double, double, double) const;
+  bool segIntersectStrict(double, double, double, double) const;
   double ptDistToArc(double, double) const;
-  
-  int    segIntersectPts(double x1, double y1, 
-			 double x2, double y2, 
-			 double& rx1, double& ry1, 
-			 double& rx2, double& ry2) const;
+
+  int segIntersectPts(double x1, double y1, double x2, double y2, double &rx1,
+                      double &ry1, double &rx2, double &ry2) const;
 
   std::string toString();
 
-  double getAX1() {return(m_ax1);}
-  double getAY1() {return(m_ay1);}
-  double getAX2() {return(m_ax2);}
-  double getAY2() {return(m_ay2);}
+  double getAX1() { return (m_ax1); }
+  double getAY1() { return (m_ay1); }
+  double getAX2() { return (m_ax2); }
+  double getAY2() { return (m_ay2); }
 
 protected:
-  void   setBoundingBox();
+  void setBoundingBox();
   double cutLength(double, int);
   double cutLengthXPlus(double);
 
@@ -79,33 +75,14 @@ protected:
   double m_rangle; // The angle to the end-point
 
 private:
-  double m_ax1;    // The x position of the start-point
-  double m_ay1;    // The y position of the start-point
-  double m_ax2;    // The x position of the end-point
-  double m_ay2;    // The y position of the end-point
+  double m_ax1; // The x position of the start-point
+  double m_ay1; // The y position of the start-point
+  double m_ax2; // The x position of the end-point
+  double m_ay2; // The y position of the end-point
 
-  double m_xlow;   // The lowest  x position of the arc  
-  double m_xhigh;  // The highest x position of the arc  
-  double m_ylow;   // The lowest  y position of the arc  
-  double m_yhigh;  // The highest y position of the arc  
+  double m_xlow;  // The lowest  x position of the arc
+  double m_xhigh; // The highest x position of the arc
+  double m_ylow;  // The lowest  y position of the arc
+  double m_yhigh; // The highest y position of the arc
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

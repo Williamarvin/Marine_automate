@@ -21,68 +21,65 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstring>
-#include "TermUtils.h"
+#include "ColorParse.h"
 #include "MBUtils.h"
+#include "MOOSAppRunnerThread.h"
 #include "OpenURL.h"
 #include "TermCommand.h"
-#include "ColorParse.h"
 #include "TermCommand_Info.h"
-#include "MOOSAppRunnerThread.h"
+#include "TermUtils.h"
+#include <cstring>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc ,char * argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
-  string run_command  = argv[0];
+  string run_command = argv[0];
   string verbose_setting;
 
-  for(int i=1; i<argc; i++) {
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strBegins(argi, "--alias="))
+    else if (strBegins(argi, "--alias="))
       run_command = argi.substr(8);
-    else if(strBegins(argi, "--verbose="))
+    else if (strBegins(argi, "--verbose="))
       verbose_setting = tolower(argi.substr(10));
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/uTermCommand");
-    else if(i==2)
+    else if (i == 2)
       run_command = argi;
   }
-  
-  if(mission_file == "")
+
+  if (mission_file == "")
     showHelpAndExit();
 
   cout << termColor("green");
   cout << "uTermCommand launching as " << run_command << endl;
   cout << termColor() << endl;
 
-  TermCommand  theTermCommand;
-  MOOSAppRunnerThread appThread(&theTermCommand, 
-				run_command.c_str(), 
-				mission_file.c_str(), argc, argv);
+  TermCommand theTermCommand;
+  MOOSAppRunnerThread appThread(&theTermCommand, run_command.c_str(),
+                                mission_file.c_str(), argc, argv);
 
   bool quit = false;
-  while(!quit) {
+  while (!quit) {
     char c = getCharNoWait();
-    if((c=='q') || (c==(char)(3))) {  // ASCII 03 is control-c
+    if ((c == 'q') || (c == (char)(3))) { // ASCII 03 is control-c
       quit = true;
       cout << "Quitting....." << endl;
-    }
-    else {
+    } else {
       theTermCommand.m_tc_mutex.Lock();
       theTermCommand.handleCharInput(c);
       theTermCommand.m_tc_mutex.UnLock();
@@ -90,16 +87,5 @@ int main(int argc ,char * argv[])
   }
 
   appThread.quit();
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-
-

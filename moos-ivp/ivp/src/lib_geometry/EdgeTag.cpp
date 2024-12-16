@@ -23,29 +23,25 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "MBUtils.h"
 #include "EdgeTag.h"
+#include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor()
 
-EdgeTag::EdgeTag()
-{
+EdgeTag::EdgeTag() {
   m_index1 = 0;
   m_index2 = 0;
 }
 
-
-
 //---------------------------------------------------------------
 // Constructor()
 
-EdgeTag::EdgeTag(unsigned int index1, unsigned int index2, string tag)
-{
-  if(!setIndices(index1, index2))
+EdgeTag::EdgeTag(unsigned int index1, unsigned int index2, string tag) {
+  if (!setIndices(index1, index2))
     return;
 
   m_tag = tag;
@@ -54,70 +50,66 @@ EdgeTag::EdgeTag(unsigned int index1, unsigned int index2, string tag)
 //---------------------------------------------------------------
 // Procedure: setIndices()
 
-bool EdgeTag::setIndices(unsigned int index1, unsigned int index2)
-{
-  if(((index1 + 1) == index2) || (index2 + 1) == index1) {
+bool EdgeTag::setIndices(unsigned int index1, unsigned int index2) {
+  if (((index1 + 1) == index2) || (index2 + 1) == index1) {
     m_index1 = index1;
     m_index2 = index2;
-    return(true);
+    return (true);
   }
 
-  return(false);
+  return (false);
 }
 
 //---------------------------------------------------------------
 // Procedure: valid()
 
-bool EdgeTag::valid() const
-{
-  if(((m_index1 + 1) != m_index2) && (m_index2 + 1) != m_index1)
-    return(false);
-  if(m_tag == "")
-    return(false);
+bool EdgeTag::valid() const {
+  if (((m_index1 + 1) != m_index2) && (m_index2 + 1) != m_index1)
+    return (false);
+  if (m_tag == "")
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: getSpec()
 //   Example: "56:55:yellow"
 
-string EdgeTag::getSpec() const
-{
+string EdgeTag::getSpec() const {
   string str = uintToString(m_index1);
   str += ":" + uintToString(m_index2);
   str += ":" + m_tag;
 
-  return(str);
+  return (str);
 }
 
 //---------------------------------------------------------------
 // Procedure: setOnSpec("56:55:yellow")
 
-bool EdgeTag::setOnSpec(string str)
-{
+bool EdgeTag::setOnSpec(string str) {
   vector<string> svector = parseString(str, ':');
-  if(svector.size() < 3)
-    return(false);
+  if (svector.size() < 3)
+    return (false);
 
   string ix1 = stripBlankEnds(svector[0]);
   string ix2 = stripBlankEnds(svector[1]);
   string tag = stripBlankEnds(svector[2]);
 
-  if(!isNumber(ix1) || !isNumber(ix2) || (tag == ""))
-    return(false);
+  if (!isNumber(ix1) || !isNumber(ix2) || (tag == ""))
+    return (false);
 
   int nx1 = atoi(ix1.c_str());
   int nx2 = atoi(ix2.c_str());
-  if((nx1 < 0) || (nx2 < 0))
-    return(false);
+  if ((nx1 < 0) || (nx2 < 0))
+    return (false);
 
-  if(!setIndices(nx1, nx2))
-    return(false);
-  
+  if (!setIndices(nx1, nx2))
+    return (false);
+
   m_tag = tag;
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
@@ -125,38 +117,31 @@ bool EdgeTag::setOnSpec(string str)
 //   Returns: true if the given two indices match in either order
 //            false otherwise.
 
-bool EdgeTag::matches(unsigned int ix1, unsigned int ix2) const
-{
-  if((ix1 == m_index1) && (ix2 == m_index2))
-    return(true);
-  if((ix2 == m_index1) && (ix1 == m_index2))
-    return(true);
+bool EdgeTag::matches(unsigned int ix1, unsigned int ix2) const {
+  if ((ix1 == m_index1) && (ix2 == m_index2))
+    return (true);
+  if ((ix2 == m_index1) && (ix1 == m_index2))
+    return (true);
 
-  return(false);
+  return (false);
 }
 
 //---------------------------------------------------------------
 // Procedure: matches()
 
-bool EdgeTag::matches(unsigned int ix1, unsigned int ix2,
-		      string tag) const
-{
-  if(!matches(ix1, ix2))
-    return(false);
+bool EdgeTag::matches(unsigned int ix1, unsigned int ix2, string tag) const {
+  if (!matches(ix1, ix2))
+    return (false);
 
-  if(tag != m_tag)     
-    return(false);
+  if (tag != m_tag)
+    return (false);
 
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: print()
 
-void EdgeTag::print() const
-{
+void EdgeTag::print() const {
   cout << m_index1 << ", " << m_index2 << ", " << m_tag << endl;
 }
-
-

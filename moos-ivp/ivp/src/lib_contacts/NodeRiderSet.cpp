@@ -29,22 +29,21 @@ using namespace std;
 //------------------------------------------------------------
 // Procedure: addNodeRider()
 
-bool NodeRiderSet::addNodeRider(string str)
-{
+bool NodeRiderSet::addNodeRider(string str) {
   NodeRider rider;
 
   bool handled = true;
-  
+
   vector<string> svector = parseString(str, ',');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     string param = biteStringX(svector[i], '=');
     string value = svector[i];
 
-    if((param == "var") && !strContainsWhite(value))
+    if ((param == "var") && !strContainsWhite(value))
       handled = handled && rider.setVar(value);
-    else if(param == "policy")
+    else if (param == "policy")
       handled = handled && rider.setPolicyConfig(value);
-    else if(param == "rfld")
+    else if (param == "rfld")
       handled = handled && rider.setRiderFld(value);
     else
       handled = false;
@@ -52,129 +51,121 @@ bool NodeRiderSet::addNodeRider(string str)
 
   handled = handled && addNodeRider(rider);
 
-  return(handled);
+  return (handled);
 }
 
 //------------------------------------------------------------
 // Procedure: addNodeRider()
 
-bool NodeRiderSet::addNodeRider(NodeRider rider)
-{
-  for(unsigned int i=0; i<m_riders.size(); i++) {
-    if(m_riders[i].getVar() == rider.getVar())
-      return(false);
+bool NodeRiderSet::addNodeRider(NodeRider rider) {
+  for (unsigned int i = 0; i < m_riders.size(); i++) {
+    if (m_riders[i].getVar() == rider.getVar())
+      return (false);
   }
 
   m_riders.push_back(rider);
-  return(true);
+  return (true);
 }
 
 //------------------------------------------------------------
 // Procedure: updateRider()
 
-bool NodeRiderSet::updateRider(string var, string val, double utc)
-{
+bool NodeRiderSet::updateRider(string var, string val, double utc) {
   bool ok = false;
-  for(unsigned int i=0; i<m_riders.size(); i++) {
-    if(m_riders[i].getVar() == var) 
+  for (unsigned int i = 0; i < m_riders.size(); i++) {
+    if (m_riders[i].getVar() == var)
       ok = m_riders[i].updateValue(val, utc);
   }
-  return(ok);
+  return (ok);
 }
 
 //------------------------------------------------------------
 // Procedure: getVars()
 
-vector<string> NodeRiderSet::getVars() const
-{
+vector<string> NodeRiderSet::getVars() const {
   vector<string> vars;
 
-  for(unsigned int i=0; i<m_riders.size(); i++) 
+  for (unsigned int i = 0; i < m_riders.size(); i++)
     vars.push_back(m_riders[i].getVar());
 
-  return(vars);
+  return (vars);
 }
 
 //------------------------------------------------------------
 // Procedure: getRiderSpecs()
 
-vector<string> NodeRiderSet::getRiderSpecs() const
-{
+vector<string> NodeRiderSet::getRiderSpecs() const {
   vector<string> specs;
 
-  for(unsigned int i=0; i<m_riders.size(); i++) {
+  for (unsigned int i = 0; i < m_riders.size(); i++) {
     string spec = m_riders[i].getSpec();
-    if(spec != "")
+    if (spec != "")
       specs.push_back(m_riders[i].getSpec());
   }
-  
-  return(specs);
+
+  return (specs);
 }
 
 //---------------------------------------------------------------
 // Procedure: getNodeRider()
 
-NodeRider NodeRiderSet::getNodeRider(unsigned int i) const
-{
+NodeRider NodeRiderSet::getNodeRider(unsigned int i) const {
   NodeRider null_rider;
-  if(i >= m_riders.size())
-    return(null_rider);
-  
-  return(m_riders[i]);
+  if (i >= m_riders.size())
+    return (null_rider);
+
+  return (m_riders[i]);
 }
 
 //---------------------------------------------------------------
 // Procedure: getRiderReports()
 
-string NodeRiderSet::getRiderReports(double curr_time)
-{
+string NodeRiderSet::getRiderReports(double curr_time) {
   string reports;
-  for(unsigned int i=0; i<m_riders.size(); i++) {
-    string policy  = m_riders[i].getPolicy();
+  for (unsigned int i = 0; i < m_riders.size(); i++) {
+    string policy = m_riders[i].getPolicy();
     string moosvar = m_riders[i].getVar();
     string currval = m_riders[i].getCurrVal();
-    string rfield  = m_riders[i].getRiderFld();
-    double freq    = m_riders[i].getFrequency();
-    bool   fresh   = m_riders[i].isFresh();
+    string rfield = m_riders[i].getRiderFld();
+    double freq = m_riders[i].getFrequency();
+    bool fresh = m_riders[i].isFresh();
     double elapsed = curr_time - m_riders[i].getLastUTC();
     string report;
 
-    if(currval == "")
+    if (currval == "")
       continue;
 
-    if(rfield == "")
+    if (rfield == "")
       rfield = moosvar;
-    
+
     // Wrap in braces if value contains comma to protect
     // node report parsing.
-    if(strContains(currval, ','))
+    if (strContains(currval, ','))
       currval = "{" + currval + "}";
-    
-    if(policy == "always") 
+
+    if (policy == "always")
       report = rfield + "=" + currval;
-    else if(policy == "updated") {
-      if(fresh)
-	report = rfield + "=" + currval;
-      else if(freq > 0) {
-	if(elapsed >= freq) {
-	  report = moosvar + "=" + currval;
-	  m_riders[i].setLastUTC(curr_time);
-	}
+    else if (policy == "updated") {
+      if (fresh)
+        report = rfield + "=" + currval;
+      else if (freq > 0) {
+        if (elapsed >= freq) {
+          report = moosvar + "=" + currval;
+          m_riders[i].setLastUTC(curr_time);
+        }
+      }
+    } else if (policy == "freq") {
+      if (elapsed >= freq) {
+        report = rfield + "=" + currval;
+        m_riders[i].setLastUTC(curr_time);
       }
     }
-    else if(policy == "freq") {
-      if(elapsed >= freq) {
-	report = rfield + "=" + currval;
-	m_riders[i].setLastUTC(curr_time);
-      }
-    }      
     m_riders[i].setFresh(false);
 
-    if(reports != "")
+    if (reports != "")
       reports += ",";
     reports += report;
   }
-    
-  return(reports);
-}
 
+  return (reports);
+}

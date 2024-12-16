@@ -9,46 +9,46 @@
 #define HydroMAN_IvPExtend_HEADER
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "lib_hydroman_protobuf/hydroman_interface.pb.h"
-#include "tcp/tcp_client.h"
 #include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "NodeRecord.h"
+#include "lib_hydroman_protobuf/hydroman_interface.pb.h"
+#include "tcp/tcp_client.h"
 
 using namespace boost;
 
-class HydroMAN_IvPExtend : public AppCastingMOOSApp
-{
- public:
-   HydroMAN_IvPExtend();
-   ~HydroMAN_IvPExtend();
+class HydroMAN_IvPExtend : public AppCastingMOOSApp {
+public:
+  HydroMAN_IvPExtend();
+  ~HydroMAN_IvPExtend();
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
 
- protected:
-   void registerVariables();
-   bool handleConfigHydroMANGatewayIp(std::string value);
-   bool GeodesySetup();
-   void connectToiHydroMAN_Gateway();
-   void defineIncomingInterfaceMsges();
-   void handle_DataFromHydroMAN_interfaceMsges(
-    const hydroman::interface::DataFromHydroMAN& msg, const boost::asio::ip::tcp::endpoint& ep);
-   void handle_gps_data();
-   void handle_no_gps();
-   void handle_compass_data(double);
-   void handle_actuator_data();
-   // bool readConfigTargetVehicles(std::string value);
-   void handle_tgt_range_data(std::string sval);
-   void handle_tgt_bearing_data(std::string sval);
-   void handle_tgt_track_data(std::string sval);
+protected:
+  void registerVariables();
+  bool handleConfigHydroMANGatewayIp(std::string value);
+  bool GeodesySetup();
+  void connectToiHydroMAN_Gateway();
+  void defineIncomingInterfaceMsges();
+  void handle_DataFromHydroMAN_interfaceMsges(
+      const hydroman::interface::DataFromHydroMAN &msg,
+      const boost::asio::ip::tcp::endpoint &ep);
+  void handle_gps_data();
+  void handle_no_gps();
+  void handle_compass_data(double);
+  void handle_actuator_data();
+  // bool readConfigTargetVehicles(std::string value);
+  void handle_tgt_range_data(std::string sval);
+  void handle_tgt_bearing_data(std::string sval);
+  void handle_tgt_track_data(std::string sval);
 
- private: // Configuration variables
+private: // Configuration variables
   // MOOS Message variable names
   std::string m_var_gps_x = "GPS_X";
   std::string m_var_gps_y = "GPS_Y";
@@ -63,15 +63,15 @@ class HydroMAN_IvPExtend : public AppCastingMOOSApp
   std::string m_var_tgt_bearing = "CRS_BEARING_REPORT";
   std::string m_var_tgt_track = "UNIT_TRACK_IN";
   bool m_publish_tgt_node_rpt = true;
-  bool m_use_p_nav_for_track  = false;
+  bool m_use_p_nav_for_track = false;
 
-  double gps_expire_time  = 5;
-  double m_compass_stdev  = 1;
-  double m_pitch_stdev    = 0.5;
-  double m_roll_stdev     = 0.5;
-  double m_range_stdev    = 3;
+  double gps_expire_time = 5;
+  double m_compass_stdev = 1;
+  double m_pitch_stdev = 0.5;
+  double m_roll_stdev = 0.5;
+  double m_range_stdev = 3;
 
- private: // State variables
+private: // State variables
   // Geodesy related
   CMOOSGeodesy m_geodesy;
   double lat_origin_;
@@ -79,7 +79,8 @@ class HydroMAN_IvPExtend : public AppCastingMOOSApp
 
   // Interface related
   boost::asio::io_service io_;
-  std::shared_ptr<hydroman::tcp_client> client_{hydroman::tcp_client::create(io_)};
+  std::shared_ptr<hydroman::tcp_client> client_{
+      hydroman::tcp_client::create(io_)};
   unsigned int m_hm_gateway_port = 1101;
   std::string m_hm_gateway_ip_str = "127.0.0.1";
 
@@ -113,7 +114,6 @@ class HydroMAN_IvPExtend : public AppCastingMOOSApp
   // // Target vehicle nav related
   std::string m_ownship_name = "";
   // std::vector<std::string> target_vehicles;
- 
 };
 
-#endif 
+#endif

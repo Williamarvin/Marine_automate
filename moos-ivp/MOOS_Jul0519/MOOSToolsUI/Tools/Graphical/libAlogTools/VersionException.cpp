@@ -2,5 +2,4 @@
 
 using namespace std;
 
-VersionException::VersionException(const string &msg) : runtime_error(msg) {
-}
+VersionException::VersionException(const string &msg) : runtime_error(msg) {}

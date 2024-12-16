@@ -28,15 +28,6 @@
 
 #include <unistd.h>
 
-char getCharNoWait(useconds_t usecs=100000);
+char getCharNoWait(useconds_t usecs = 100000);
 
 #endif
-
-
-
-
-
-
-
-
-

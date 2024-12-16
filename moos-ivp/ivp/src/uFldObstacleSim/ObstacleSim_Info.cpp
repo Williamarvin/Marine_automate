@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
-#include <iostream>
 #include "ObstacleSim_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  The uFldObstacleSim app will simulate the posting of obstacles");
@@ -44,8 +43,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uFldObstacleSim file.moos [OPTIONS]                   ");
@@ -54,7 +52,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uFldObstacleSim with the given process name        ");
   blk("      rather than uFldObstacleSim.                              ");
   mag("  --example, -e                                                 ");
@@ -66,7 +64,8 @@ void showHelpAndExit()
   mag("  --version,-v                                                  ");
   blk("      Display the release version of uFldObstacleSim.           ");
   mag("  --web,-w                                                      ");
-  blk("      Open browser to: https://oceanai.mit.edu/ivpman/apps/uFldObstacleSim ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/ivpman/apps/uFldObstacleSim ");
   blk("                                                                ");
   blk("Note: If argv[2] does not otherwise match a known option,       ");
   blk("      then it will be interpreted as a run alias. This is       ");
@@ -78,8 +77,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uFldObstacleSim Example MOOS Configuration                      ");
   blu("=============================================================== ");
@@ -128,12 +126,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldObstacleSim INTERFACE                                       ");
@@ -159,10 +155,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldObstacleSim", "gpl");
   exit(0);
 }
-
-

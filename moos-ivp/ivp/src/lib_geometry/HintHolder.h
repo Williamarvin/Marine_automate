@@ -22,15 +22,15 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef HINT_HOLDER_HEADER
 #define HINT_HOLDER_HEADER
 
-#include <string>
-#include <map>
 #include "XYPoint.h"
-#include "XYSegList.h"
 #include "XYPolygon.h"
+#include "XYSegList.h"
+#include <map>
+#include <string>
 
 class HintHolder {
 public:
@@ -44,7 +44,7 @@ public:
   bool setHints(std::string);
   bool setHint(std::string);
   bool setHint(std::string, std::string);
-  
+
   std::string getColor(std::string key) const;
   double getMeasure(std::string key) const;
 
@@ -52,16 +52,14 @@ public:
   bool hasMeasure(std::string key) const;
 
   std::string getSpec() const;
-  
-protected: // configuration parameters
 
+protected: // configuration parameters
   std::map<std::string, std::string> m_map_colors;
-  std::map<std::string, double>      m_map_measures;
+  std::map<std::string, double> m_map_measures;
 };
 
-void applyHints(XYPoint&, const HintHolder&, std::string prefix="");
-void applyHints(XYSegList&, const HintHolder&, std::string prefix="");
-void applyHints(XYPolygon&, const HintHolder&, std::string prefix="");
+void applyHints(XYPoint &, const HintHolder &, std::string prefix = "");
+void applyHints(XYSegList &, const HintHolder &, std::string prefix = "");
+void applyHints(XYPolygon &, const HintHolder &, std::string prefix = "");
 
 #endif
-

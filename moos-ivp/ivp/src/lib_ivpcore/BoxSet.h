@@ -31,7 +31,7 @@
 #include "BoxSetNode.h"
 
 #define FIRST 0
-#define LAST  1
+#define LAST 1
 
 class BoxSet {
 public:
@@ -40,43 +40,23 @@ public:
 
   void makeEmpty();
   void makeEmptyAndDeleteBoxes();
-  int  getSize()     { return(m_size); }
-  int  size()        { return(m_size); }
+  int getSize() { return (m_size); }
+  int size() { return (m_size); }
 
-  void        addBox(IvPBox*, int end=FIRST);
-  void        addBSN(BoxSetNode&, int end=FIRST);
-  BoxSetNode *retBSN(int end=FIRST);
-  BoxSetNode *remBSN(int end=FIRST);
-  void        remBSN(BoxSetNode*);
+  void addBox(IvPBox *, int end = FIRST);
+  void addBSN(BoxSetNode &, int end = FIRST);
+  BoxSetNode *retBSN(int end = FIRST);
+  BoxSetNode *remBSN(int end = FIRST);
+  void remBSN(BoxSetNode *);
 
-  void  merge(BoxSet&);
-  void  mergeCopy(BoxSet&);
-  void  print();
-  void  removeDups();
+  void merge(BoxSet &);
+  void mergeCopy(BoxSet &);
+  void print();
+  void removeDups();
 
 private:
   BoxSetNode *m_head;
   BoxSetNode *m_tail;
-  int         m_size;
+  int m_size;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

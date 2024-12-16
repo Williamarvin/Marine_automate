@@ -24,64 +24,53 @@
 #ifndef UPV_PLOT_GUI_HEADER
 #define UPV_PLOT_GUI_HEADER
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include "UPV_Viewer.h"
 #include "MY_Output.h"
+#include "UPV_Viewer.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Window.H>
 
 class UPV_GUI : Fl_Window {
 public:
-  UPV_GUI(int w, int h, const char *l=0);
+  UPV_GUI(int w, int h, const char *l = 0);
   ~UPV_GUI() {}
-  
+
   static Fl_Menu_Item menu_[];
 
   void updateOutput();
-  int  handle(int);
+  int handle(int);
 
   void addScopeVar(std::string);
 
-  UPV_Viewer  *viewer() {return(m_plot_viewer);}
+  UPV_Viewer *viewer() { return (m_plot_viewer); }
 
- protected:
-  UPV_Viewer  *m_plot_viewer;
+protected:
+  UPV_Viewer *m_plot_viewer;
   Fl_Menu_Bar *m_menubar;
-  MY_Output   *m_varname;
-  MY_Output   *m_varavg;
+  MY_Output *m_varname;
+  MY_Output *m_varavg;
 
   std::vector<std::string> m_scope_vars;
 
- private:
+private:
   static void cb_Quit();
 
   inline void cb_ChangeScopeVar_i(int);
-  static void cb_ChangeScopeVar(Fl_Widget*, int);
+  static void cb_ChangeScopeVar(Fl_Widget *, int);
 
   inline void cb_ToggleScopeVar_i(int);
-  static void cb_ToggleScopeVar(Fl_Widget*, int);
+  static void cb_ToggleScopeVar(Fl_Widget *, int);
 
   inline void cb_GridSize_i(int);
-  static void cb_GridSize(Fl_Widget*, int);
+  static void cb_GridSize(Fl_Widget *, int);
 
   inline void cb_GridShade_i(int);
-  static void cb_GridShade(Fl_Widget*, int);
+  static void cb_GridShade(Fl_Widget *, int);
 
   inline void cb_LineShade_i(int);
-  static void cb_LineShade(Fl_Widget*, int);
+  static void cb_LineShade(Fl_Widget *, int);
 
   inline void cb_BackShade_i(int);
-  static void cb_BackShade(Fl_Widget*, int);
-
+  static void cb_BackShade(Fl_Widget *, int);
 };
 #endif
-
-
-
-
-
-
-
-
-
-

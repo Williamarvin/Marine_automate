@@ -24,66 +24,60 @@
 #ifndef PARE_ENGINE_HEADER
 #define PARE_ENGINE_HEADER
 
-#include <vector>
 #include <list>
 #include <map>
 #include <string>
+#include <vector>
 
-class PareEngine
-{
- public:
+class PareEngine {
+public:
   PareEngine();
   ~PareEngine() {}
 
   bool setALogFileIn(std::string);
   bool setALogFileOut(std::string);
-  
+
   bool addMarkListVars(std::string);
   bool addHitListVars(std::string);
   bool addPareListVars(std::string);
 
   void defaultHitList();
   void defaultPareList();
-  
-  void setVerbose(bool v) {m_verbose=v;}
-  void setPareWindow(double v) {m_pare_window=v;}
+
+  void setVerbose(bool v) { m_verbose = v; }
+  void setPareWindow(double v) { m_pare_window = v; }
   void pareTheFile();
   void printReport();
 
- protected:
+protected:
   void passOneFindTimeStamps();
   void passTwoPareTimeStamps();
-  void writeLine(FILE*, const std::string&) const;
+  void writeLine(FILE *, const std::string &) const;
 
   bool varOnMarkList(std::string);
   bool varOnHitList(std::string);
   bool varOnPareList(std::string);
 
- private:
+private:
   bool varOnList(std::vector<std::string>, std::string) const;
-  
- protected:
-  std::list<double>        m_timestamps;
+
+protected:
+  std::list<double> m_timestamps;
 
   std::vector<std::string> m_marklist_vars;
   std::vector<std::string> m_hitlist_vars;
   std::vector<std::string> m_parelist_vars;
 
-  std::map<std::string, bool>  m_mark_cache;
-  std::map<std::string, bool>  m_hit_cache;
-  std::map<std::string, bool>  m_pare_cache;
-  
+  std::map<std::string, bool> m_mark_cache;
+  std::map<std::string, bool> m_hit_cache;
+  std::map<std::string, bool> m_pare_cache;
+
   std::string m_alog_file_in;
   std::string m_alog_file_out;
   std::string m_community_name;
-  
-  double  m_pare_window;
-  bool    m_verbose;
+
+  double m_pare_window;
+  bool m_verbose;
 };
 
 #endif
-
-
-
-
-

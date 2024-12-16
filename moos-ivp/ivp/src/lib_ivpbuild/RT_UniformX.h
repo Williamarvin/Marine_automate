@@ -35,29 +35,31 @@ class Regressor;
 
 class RT_UniformX {
 public:
-  RT_UniformX(Regressor *regressor)
-  {m_regressor=regressor; m_verbose=false;}
+  RT_UniformX(Regressor *regressor) {
+    m_regressor = regressor;
+    m_verbose = false;
+  }
   virtual ~RT_UniformX() {}
 
-  void setVerbose() {m_verbose=true;}
-  
- public:
-  void setPlateaus(std::vector<IvPBox> plateaus) {m_plateaus=plateaus;} 
-  void setBasins(std::vector<IvPBox> basins) {m_basins=basins;} 
-  
-  PDMap*  create(const IvPBox& unifbox, const IvPBox& gelbox);
+  void setVerbose() { m_verbose = true; }
 
- private:
-  void    handleOverlappingPlatBasins();
-  
-  BoxSet *subtractPlateaus(BoxSet*);
-  BoxSet *subtractPlateau(BoxSet*, const IvPBox&);
-  
-  BoxSet *subtractBasins(BoxSet*);
-  BoxSet *subtractBasin(BoxSet*, const IvPBox&);
-  
- protected:
-  Regressor* m_regressor;
+public:
+  void setPlateaus(std::vector<IvPBox> plateaus) { m_plateaus = plateaus; }
+  void setBasins(std::vector<IvPBox> basins) { m_basins = basins; }
+
+  PDMap *create(const IvPBox &unifbox, const IvPBox &gelbox);
+
+private:
+  void handleOverlappingPlatBasins();
+
+  BoxSet *subtractPlateaus(BoxSet *);
+  BoxSet *subtractPlateau(BoxSet *, const IvPBox &);
+
+  BoxSet *subtractBasins(BoxSet *);
+  BoxSet *subtractBasin(BoxSet *, const IvPBox &);
+
+protected:
+  Regressor *m_regressor;
 
   std::vector<IvPBox> m_plateaus;
   std::vector<IvPBox> m_basins;
@@ -66,5 +68,3 @@ public:
 };
 
 #endif
-
-

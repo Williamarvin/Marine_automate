@@ -7,25 +7,21 @@
 
 #ifndef MOOSDBLOGGER_H_
 #define MOOSDBLOGGER_H_
-namespace MOOS
-{
+namespace MOOS {
 class MOOSDBLogger {
 public:
-    MOOSDBLogger();
-    virtual ~MOOSDBLogger();
+  MOOSDBLogger();
+  virtual ~MOOSDBLogger();
 
-    bool AddEvent(const std::string & sEvent,
-                const std::string & sClient,
-                const std::string & sDetails);
+  bool AddEvent(const std::string &sEvent, const std::string &sClient,
+                const std::string &sDetails);
 
-
-    bool Run(const std::string & sLogFileName);
+  bool Run(const std::string &sLogFileName);
 
 private:
-    class Impl;
-    Impl* Impl_;
-
+  class Impl;
+  Impl *Impl_;
 };
-}
+} // namespace MOOS
 
 #endif /* MOOSDBLOGGER_H_ */

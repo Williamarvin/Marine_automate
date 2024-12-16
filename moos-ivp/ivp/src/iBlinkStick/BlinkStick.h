@@ -10,40 +10,36 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class BlinkStick : public AppCastingMOOSApp
-{
- public:
+class BlinkStick : public AppCastingMOOSApp {
+public:
   BlinkStick();
-  ~BlinkStick() {};
-  
-protected: // Standard MOOSApp functions to overload  
+  ~BlinkStick(){};
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
 
   bool handleMailQBlink(std::string);
-  
- protected:
+
+protected:
   void registerVariables();
 
   void setPathEnv();
   bool validColor(std::string);
-  
- private: // Configuration variables
 
+private: // Configuration variables
   std::string m_qblink;
-  
-private: // State variables
 
+private: // State variables
   int m_system_result;
   int m_total_cmds;
 
   std::string m_path_env;
-  
 };
 
-#endif 
+#endif

@@ -21,69 +21,59 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib>
 #include "RandVarUniform.h"
 #include "MBUtils.h"
+#include <cstdlib>
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-RandVarUniform::RandVarUniform() : RandomVariable()
-{
+RandVarUniform::RandVarUniform() : RandomVariable() {
   m_min_val = 0;
   m_max_val = 1;
 }
 
-
 //---------------------------------------------------------
 // Procedure: setParam
 
-bool RandVarUniform::setParam(string param, double value)
-{
+bool RandVarUniform::setParam(string param, double value) {
   bool result = RandomVariable::setParam(param, value);
-  return(result);
+  return (result);
 }
 
 //---------------------------------------------------------
 // Procedure: reset
 
-void RandVarUniform::reset()
-{
+void RandVarUniform::reset() {
   // Unlikely but check and handle special case anyway.
-  if(m_min_val >= m_max_val) {
+  if (m_min_val >= m_max_val) {
     m_value = m_min_val;
     return;
   }
 
-  int    rand_int = rand() % 10000;
+  int rand_int = rand() % 10000;
   double rand_pct = (double)(rand_int) / 10000;
-  m_value = m_min_val + ((m_max_val-m_min_val) * rand_pct);
+  m_value = m_min_val + ((m_max_val - m_min_val) * rand_pct);
 
   m_value = snapToStep(m_value, m_snap);
-  if(m_value < m_min_val)
+  if (m_value < m_min_val)
     m_value = m_min_val;
-  if(m_value > m_max_val)
+  if (m_value > m_max_val)
     m_value = m_max_val;
 
   m_value_str = doubleToStringX(m_value, 3);
-
-  
-
 }
-  
+
 //---------------------------------------------------------
 // Procedure: getStringSummary
 
-string RandVarUniform::getStringSummary() const
-{
+string RandVarUniform::getStringSummary() const {
   string str = RandomVariable::getStringSummary();
-  if(str != "")
+  if (str != "")
     str += ",";
 
   str += "type=uniform";
-  return(str);
+  return (str);
 }
-
-

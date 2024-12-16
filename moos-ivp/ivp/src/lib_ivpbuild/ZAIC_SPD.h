@@ -26,53 +26,53 @@
 #ifndef OF_ZAIC_SPD_HEADER
 #define OF_ZAIC_SPD_HEADER
 
-#include <string>
-#include <vector>
 #include "IvPDomain.h"
 #include "IvPFunction.h"
+#include <string>
+#include <vector>
 
 class PDMap;
 
 class ZAIC_SPD {
 public:
-  ZAIC_SPD(IvPDomain domain, std::string varname="");
-  virtual ~ZAIC_SPD() {};
+  ZAIC_SPD(IvPDomain domain, std::string varname = "");
+  virtual ~ZAIC_SPD(){};
 
-  bool setParams(double med_spd, double low_spd, double hgh_spd, 
-		 double low_spd_util, double hgh_spd_util,
-		 double min_spd_util=0, double max_spd_util=0,
-		 double max_util=100);
+  bool setParams(double med_spd, double low_spd, double hgh_spd,
+                 double low_spd_util, double hgh_spd_util,
+                 double min_spd_util = 0, double max_spd_util = 0,
+                 double max_util = 100);
 
-  bool   setMedSpeed(double);
-  bool   setLowSpeed(double);
-  bool   setHghSpeed(double);
+  bool setMedSpeed(double);
+  bool setLowSpeed(double);
+  bool setHghSpeed(double);
 
-  bool   setLowSpeedUtil(double);
-  bool   setHghSpeedUtil(double);
-  bool   setMinSpdUtil(double);
-  bool   setMaxSpdUtil(double);
-  bool   setMaxUtil(double);
-  bool   setMinMaxUtil(double, double, double);
-  
+  bool setLowSpeedUtil(double);
+  bool setHghSpeedUtil(double);
+  bool setMinSpdUtil(double);
+  bool setMaxSpdUtil(double);
+  bool setMaxUtil(double);
+  bool setMinMaxUtil(double, double, double);
+
   double getParam(std::string);
 
-  void   disableLowSpeed();
-  void   disableHighSpeed();
-  
-  bool   adjustParams();
-  
-  bool         stateOK()     {return(m_ivp_domain.size() == 0);};
-  std::string  getWarnings() {return(m_warning);};
-  IvPFunction* extractOF();
-  IvPDomain    getIvPDomain() {return(m_ivp_domain);}
-  IvPFunction* extractIvPFunction() {return(extractOF());};
+  void disableLowSpeed();
+  void disableHighSpeed();
+
+  bool adjustParams();
+
+  bool stateOK() { return (m_ivp_domain.size() == 0); };
+  std::string getWarnings() { return (m_warning); };
+  IvPFunction *extractOF();
+  IvPDomain getIvPDomain() { return (m_ivp_domain); }
+  IvPFunction *extractIvPFunction() { return (extractOF()); };
 
   std::vector<std::string> getSummary() const;
-  
+
 protected:
-  void   setPointLocations();
-  PDMap* setPDMap();
-  
+  void setPointLocations();
+  PDMap *setPDMap();
+
 protected:
   double m_med_spd;
   double m_low_spd;
@@ -84,20 +84,19 @@ protected:
   double m_max_spd_util;
   double m_max_util;
 
-  bool   m_low_spd_enabled;
-  bool   m_hgh_spd_enabled;
-  
- protected:
+  bool m_low_spd_enabled;
+  bool m_hgh_spd_enabled;
+
+protected:
   std::vector<unsigned int> m_dom;
-  std::vector<double>       m_rng;
+  std::vector<double> m_rng;
 
 private:
   double m_domain_high;
   double m_domain_low;
 
-  std::string  m_warning;
-  IvPDomain    m_ivp_domain;
+  std::string m_warning;
+  IvPDomain m_ivp_domain;
 };
 
 #endif
-

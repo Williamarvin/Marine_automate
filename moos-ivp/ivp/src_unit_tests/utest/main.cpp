@@ -4,22 +4,21 @@
 /*    DATE: Nov 5th, 2018                                        */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
 #include "UnitTester.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
-int main(int argc, char** argv) 
-{
+int main(int argc, char **argv) {
   UnitTester utester;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
     bool ok = false;
-    if((argi == "--help") || (argi == "-h")) {
+    if ((argi == "--help") || (argi == "-h")) {
       cout << "Usage:                                            " << endl;
       cout << "  utest file.utf [OPTIONS]                        " << endl;
       cout << "                                                  " << endl;
@@ -45,23 +44,23 @@ int main(int argc, char** argv)
       cout << "                                                  " << endl;
       cout << "  --file=FILE   Test file to be used. If file ends" << endl;
       cout << "                in .utf, then --file= not needed  " << endl;
-      return(0);
+      return (0);
     }
-    if((argi == "--verbose") || (argi == "-v"))
+    if ((argi == "--verbose") || (argi == "-v"))
       ok = utester.addVerbosity();
-    else if(strBegins(argi, "--file="))
+    else if (strBegins(argi, "--file="))
       ok = utester.addTestFile(argi.substr(7));
-    else if(strEnds(argi, ".utf"))
+    else if (strEnds(argi, ".utf"))
       ok = utester.addTestFile(argi);
 
-    if(!ok) {
+    if (!ok) {
       cout << "Error arg: " << argi << " Exiting." << endl;
-      return(1);
+      return (1);
     }
   }
 
   bool all_ok = utester.runUnitTests();
-  if(!all_ok)
-    return(1);
-  return(0);
+  if (!all_ok)
+    return (1);
+  return (0);
 }

@@ -20,12 +20,12 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef RING_MASTER_HEADER
 #define RING_MASTER_HEADER
 
-#include <string>
 #include <map>
+#include <string>
 //#include "LegRun.h"
 
 class RingMaster {
@@ -35,40 +35,38 @@ public:
 
   void setCurrUTC(double);
 
-  void setDimensionsLR(std::string vname, double leg,
-		       double t1, double t2);
-  
-  bool updatePosCN(std::string vname, double spd,
-		   double degs, double utc);
+  void setDimensionsLR(std::string vname, double leg, double t1, double t2);
 
-  void   updateCenter();
+  bool updatePosCN(std::string vname, double spd, double degs, double utc);
+
+  void updateCenter();
 
   double getOwnDegs();
   double getOwnDegsPerSec();
-  
-  double getCenterDegs() {return(m_center_degs);}
-  double getCenterDist() {return(m_center_dist);}
 
-  double getGrpTurn1Len() const {return(m_glr_turn1_len);}
-  double getGrpTurn2Len() const {return(m_glr_turn2_len);}
-  double getGrpTotalLen() const {return(m_glr_total_len);}
+  double getCenterDegs() { return (m_center_degs); }
+  double getCenterDist() { return (m_center_dist); }
 
-  unsigned int getTotalStale() const {return(m_total_stale);}
-  
+  double getGrpTurn1Len() const { return (m_glr_turn1_len); }
+  double getGrpTurn2Len() const { return (m_glr_turn2_len); }
+  double getGrpTotalLen() const { return (m_glr_total_len); }
+
+  unsigned int getTotalStale() const { return (m_total_stale); }
+
 private:
   void extrapolate();
   void checkForStale();
   void updateGroupDims();
-  
+
 protected: // Config vars
   double m_stale_thresh;
-  bool   m_coord_extrap;
-  
+  bool m_coord_extrap;
+
 protected: // State Vars (positions)
-  double m_curr_utc;  
+  double m_curr_utc;
   double m_center_dist;
   double m_center_degs;
-  bool   m_guard_active;
+  bool m_guard_active;
 
   // Keyed on vname
   std::map<std::string, double> m_map_degs;
@@ -76,7 +74,6 @@ protected: // State Vars (positions)
   std::map<std::string, double> m_map_utc;
 
 protected: // State Vars (dimensions)
-
   // latest dimensions from other vehcles' legruns
   std::map<std::string, double> m_map_td1;
   std::map<std::string, double> m_map_td2;
@@ -89,7 +86,6 @@ protected: // State Vars (dimensions)
 
 protected: // State Vars (other)
   unsigned int m_total_stale;
-  
 };
 
 #endif

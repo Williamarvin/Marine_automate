@@ -24,26 +24,25 @@
 #ifndef MOOS_APP_GENERATOR_HEADER
 #define MOOS_APP_GENERATOR_HEADER
 
-#include <vector>
-#include <string>
 #include <set>
+#include <string>
+#include <vector>
 
-class AppGenerator
-{
- public:
+class AppGenerator {
+public:
   AppGenerator();
   virtual ~AppGenerator() {}
 
-  void   setBody(std::string s="") {};
-  void   setPrefix(std::string s="") {};
-  void   setDate(std::string s="") {};
-  void   setName(std::string n="") {};
-  void   setOrg(std::string n="") {};
-  
-  bool   generate();
+  void setBody(std::string s = ""){};
+  void setPrefix(std::string s = ""){};
+  void setDate(std::string s = ""){};
+  void setName(std::string n = ""){};
+  void setOrg(std::string n = ""){};
 
- protected: // Config variables
-  bool        m_appcasting;
+  bool generate();
+
+protected: // Config variables
+  bool m_appcasting;
   std::string m_comments;
 
   std::string m_prefix;
@@ -51,16 +50,6 @@ class AppGenerator
   std::string m_name;
   std::string m_date;
   std::string m_org;
-
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

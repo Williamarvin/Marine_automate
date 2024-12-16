@@ -20,44 +20,43 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_CUTRANGE_HEADER
 #define BHV_CUTRANGE_HEADER
 
-#include <string>
-#include "VarDataPair.h"
 #include "IvPContactBehavior.h"
+#include "VarDataPair.h"
+#include <string>
 
 class IvPDomain;
 class BHV_CutRange : public IvPContactBehavior {
 public:
   BHV_CutRange(IvPDomain);
   ~BHV_CutRange() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onHelmStart();
 
- protected:
-  void   checkPursuit();
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onHelmStart();
+
+protected:
+  void checkPursuit();
   double getRelevance();
   double getPriority();
-  
- private: // Config params
-  double  m_pwt_outer_dist;
-  double  m_pwt_inner_dist;
 
-  double  m_giveup_range;
-  double  m_giveup_thresh;
-  double  m_patience;
+private: // Config params
+  double m_pwt_outer_dist;
+  double m_pwt_inner_dist;
 
-  bool    m_no_alert_request;
+  double m_giveup_range;
+  double m_giveup_thresh;
+  double m_patience;
+
+  bool m_no_alert_request;
 
 private: // State vars
-  bool    m_in_pursuit;
+  bool m_in_pursuit;
 
   std::vector<VarDataPair> m_pursue_flags;
   std::vector<VarDataPair> m_giveup_flags;
 };
 #endif
-

@@ -24,52 +24,51 @@
 #ifndef VAR_SCOPE_MODEL_HEADER
 #define VAR_SCOPE_MODEL_HEADER
 
-#include <vector>
-#include <string>
-#include "VarPlot.h"
 #include "ALogDataBroker.h"
+#include "VarPlot.h"
 #include "VarPlotEntry.h"
+#include <string>
+#include <vector>
 
-class ModelVarScope
-{
- public:
+class ModelVarScope {
+public:
   ModelVarScope();
   virtual ~ModelVarScope() {}
 
   // Setters
-  void   setDataBroker(ALogDataBroker, unsigned int mix);
-  void   setTime(double tstamp);
-  void   setVarPlot(unsigned int mix);
-  void   addVarPlot(unsigned int mix);
-  void   delVarPlot(unsigned int mix);
+  void setDataBroker(ALogDataBroker, unsigned int mix);
+  void setTime(double tstamp);
+  void setVarPlot(unsigned int mix);
+  void addVarPlot(unsigned int mix);
+  void delVarPlot(unsigned int mix);
 
-  void   setShowVName(bool v)   {m_show_vname = v;}
-  void   setShowVarName(bool v) {m_show_varname = v;}
-  void   setShowSource(bool v)  {m_show_source = v;}
-  void   setShowSrcAux(bool v)  {m_show_srcaux = v;}
+  void setShowVName(bool v) { m_show_vname = v; }
+  void setShowVarName(bool v) { m_show_varname = v; }
+  void setShowSource(bool v) { m_show_source = v; }
+  void setShowSrcAux(bool v) { m_show_srcaux = v; }
 
-  void   reformat();
+  void reformat();
 
   // Getters
-  double        getCurrTime() const {return(m_curr_time);}
-  unsigned int  getVPlotSize(std::string) const;
-  
-  std::vector<std::string>  getPastEntries() const;
-  std::vector<std::string>  getSoonEntries() const;
- 
- protected:
-  std::vector<std::string>  getEntries(const std::list<VarPlotEntry>&) const;
-  std::list<VarPlotEntry>   mergePlots(std::list<VarPlotEntry>, 
-				       std::list<VarPlotEntry>) const;
+  double getCurrTime() const { return (m_curr_time); }
+  unsigned int getVPlotSize(std::string) const;
 
-  void   reformat(std::list<VarPlotEntry>&);
+  std::vector<std::string> getPastEntries() const;
+  std::vector<std::string> getSoonEntries() const;
+
+protected:
+  std::vector<std::string> getEntries(const std::list<VarPlotEntry> &) const;
+  std::list<VarPlotEntry> mergePlots(std::list<VarPlotEntry>,
+                                     std::list<VarPlotEntry>) const;
+
+  void reformat(std::list<VarPlotEntry> &);
 
 private:
-  double         m_curr_time;
+  double m_curr_time;
   ALogDataBroker m_dbroker;
 
   // Vehicle name stays constant once it is set initially
-  std::string m_vname; 
+  std::string m_vname;
 
   std::list<VarPlotEntry> m_prev_entries;
   std::list<VarPlotEntry> m_soon_entries;
@@ -83,12 +82,6 @@ private:
   unsigned int m_max_len_vname;
   unsigned int m_max_len_source;
   unsigned int m_max_len_srcaux;
-  
 };
 
 #endif
-
-
-
-
-

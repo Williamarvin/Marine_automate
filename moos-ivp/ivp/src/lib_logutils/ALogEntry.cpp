@@ -29,106 +29,92 @@ using namespace std;
 //--------------------------------------------------------
 // Procedure: set()
 
-void ALogEntry::set(double timestamp, const std::string& varname, 
-		    const std::string& source, 
-		    const std::string& srcaux,
-		    const std::string& sval)
-{
+void ALogEntry::set(double timestamp, const std::string &varname,
+                    const std::string &source, const std::string &srcaux,
+                    const std::string &sval) {
   m_timestamp = timestamp;
-  m_varname   = varname;
-  m_source    = source;
-  m_srcaux    = srcaux;
-  m_sval      = sval;
-  m_dval      = 0;
-  m_isnum     = false;
+  m_varname = varname;
+  m_source = source;
+  m_srcaux = srcaux;
+  m_sval = sval;
+  m_dval = 0;
+  m_isnum = false;
 }
-  
 
 //--------------------------------------------------------
 // Procedure: set()
 
-void ALogEntry::set(double timestamp, const std::string& varname, 
-		    const std::string& source, 
-		    const std::string& srcaux,
-		    double dval)
-{
+void ALogEntry::set(double timestamp, const std::string &varname,
+                    const std::string &source, const std::string &srcaux,
+                    double dval) {
   m_timestamp = timestamp;
-  m_varname   = varname;
-  m_source    = source;
-  m_srcaux    = srcaux;
-  m_sval      = "";
-  m_dval      = dval;
-  m_isnum     = true;
+  m_varname = varname;
+  m_source = source;
+  m_srcaux = srcaux;
+  m_sval = "";
+  m_dval = dval;
+  m_isnum = true;
 }
-
 
 //--------------------------------------------------------
 // Procedure: getSummary()
 
-string ALogEntry::getSummary() const
-{
+string ALogEntry::getSummary() const {
   string summary;
 
   summary += doubleToString(m_timestamp) + "  ";
   summary += padString(m_varname, 20, false) + "  ";
 
-  summary += "(" + m_node.substr(0,3) + ")";
+  summary += "(" + m_node.substr(0, 3) + ")";
   summary += padString(m_source, 25, false) + "  ";
-  if(m_isnum)
+  if (m_isnum)
     summary += doubleToStringX(m_dval);
   else
     summary += m_sval;
 
-  return(summary);
+  return (summary);
 }
-
 
 //--------------------------------------------------------
 // Procedure: tokenField
 
-bool ALogEntry::tokenField(const string& field, double& value) const
-{
-  return(tokParse(m_sval, field, ',', '=', value));
+bool ALogEntry::tokenField(const string &field, double &value) const {
+  return (tokParse(m_sval, field, ',', '=', value));
 }
 
 //--------------------------------------------------------
 // Procedure: overloaded less than operator
 
-bool operator< (const ALogEntry& one, const ALogEntry& two)
-{
-  if(one.time() < two.time())
-    return(true);
+bool operator<(const ALogEntry &one, const ALogEntry &two) {
+  if (one.time() < two.time())
+    return (true);
   else
-    return(false);
+    return (false);
 }
 
 //--------------------------------------------------------
 // Procedure: overload equals operator
 
-bool operator== (const ALogEntry& one, const ALogEntry& two)
-{
-  if((one.time() == two.time()) &&
-     (one.getVarName() == two.getVarName()) &&
-     (one.getSource() == two.getSource())   &&
-     (one.getSrcAux() == two.getSrcAux())   &&
-     (one.getStringVal() == two.getStringVal()) &&
-     (one.getNode() == two.getNode()) &&
-     (one.getDoubleVal() == two.getDoubleVal()) &&
-     (one.isNumerical() == two.isNumerical())   &&
-     (one.getRawLine() == two.getRawLine())   &&
-     (one.getStatus() == two.getStatus()))
-    return(true);
-  return(false);
+bool operator==(const ALogEntry &one, const ALogEntry &two) {
+  if ((one.time() == two.time()) && (one.getVarName() == two.getVarName()) &&
+      (one.getSource() == two.getSource()) &&
+      (one.getSrcAux() == two.getSrcAux()) &&
+      (one.getStringVal() == two.getStringVal()) &&
+      (one.getNode() == two.getNode()) &&
+      (one.getDoubleVal() == two.getDoubleVal()) &&
+      (one.isNumerical() == two.isNumerical()) &&
+      (one.getRawLine() == two.getRawLine()) &&
+      (one.getStatus() == two.getStatus()))
+    return (true);
+  return (false);
 }
 
 //--------------------------------------------------------
 // Procedure: overload not-equals operator
 
-bool operator!= (const ALogEntry& one, const ALogEntry& two)
-{
-  if(one == two)
-    return(false);
+bool operator!=(const ALogEntry &one, const ALogEntry &two) {
+  if (one == two)
+    return (false);
 
-  return(true);
+  return (true);
 }
-

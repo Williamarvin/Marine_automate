@@ -24,51 +24,38 @@
 #ifndef ALOG_LOAD_REPORTER_HEADER
 #define ALOG_LOAD_REPORTER_HEADER
 
-#include <vector>
-#include <string>
 #include <set>
+#include <string>
+#include <vector>
 
-class LoadReporter
-{
- public:
+class LoadReporter {
+public:
   LoadReporter();
   ~LoadReporter() {}
 
   void setVerbose();
-  void setTerse()      {m_terse=true; m_verbose=false;}
-  void setNearMode()   {m_near_mode = true;}
+  void setTerse() {
+    m_terse = true;
+    m_verbose = false;
+  }
+  void setNearMode() { m_near_mode = true; }
   bool addALogFile(std::string);
   void report();
 
-  
-  
- protected:
+protected:
   bool breachCount(std::string alogfile);
-  
- protected: // State Variables
 
+protected: // State Variables
   unsigned int m_breach_count;
   unsigned int m_near_breach_count;
-  
- protected: // Configuration Variables
 
+protected: // Configuration Variables
   bool m_verbose;
   bool m_terse;
 
   bool m_near_mode;
-  
-  std::vector<std::string> m_alog_files;
 
+  std::vector<std::string> m_alog_files;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

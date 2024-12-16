@@ -8,30 +8,25 @@
 #ifndef SIMPLEASTAR_HEADER
 #define SIMPLEASTAR_HEADER
 
-
-#include <vector>
-#include <map>
-#include <set>
-#include <math.h>
-#include <list>
-#include <iostream>
-#include <algorithm>    // std::reverse
-#include <limits>
 #include "GraphNode.h"
+#include <algorithm> // std::reverse
+#include <iostream>
+#include <limits>
+#include <list>
+#include <map>
+#include <math.h>
+#include <set>
+#include <vector>
 
-
-
-class SimpleAStar
-{
- public:
+class SimpleAStar {
+public:
   SimpleAStar();
   ~SimpleAStar();
 
   typedef std::vector<double> vertex;
   typedef std::size_t index;
-  typedef std::pair<index,index> edge;
+  typedef std::pair<index, index> edge;
   typedef std::vector<index> path;
-
 
   //----------------------------------
   // This is the main function that should be called
@@ -42,7 +37,7 @@ class SimpleAStar
   //                  x = 1, y = 2, z = 3;
   //              E = a vector of edges
   //                  Ex. E[1].first = 1, and E[1].second = 2
-  //                  would represent an edge exists from 
+  //                  would represent an edge exists from
   //                  vertex 1 to 2.
   //              Obs = a set of indices that are to be
   //                  considered obstacles.
@@ -53,17 +48,12 @@ class SimpleAStar
   //                  starting indices
   //              idx_final = a set of acceptable
   //                  final indices,
-  //       
+  //
   //      Output: path = sequence of indices from start
-  //                  to finish. 
-  path  searchPath( const std::map<index, vertex>& V,
-		     const std::vector<edge>& E,
-		     const std::set<index>& Obs,
-		     const std::set<index>& idx_start,
-		     const std::set<index>& idx_final );
-
-
-  
+  //                  to finish.
+  path searchPath(const std::map<index, vertex> &V, const std::vector<edge> &E,
+                  const std::set<index> &Obs, const std::set<index> &idx_start,
+                  const std::set<index> &idx_final);
 
   // For faster performance, you can preload the graph
   // using preload_graph(...) and then one can repeatedly
@@ -71,33 +61,26 @@ class SimpleAStar
   // The assumption is that the graph - all the inputs to
   // preload_graph - do not change over time.
   // The inputs are the same as described in search_path(...)
-  bool preloadGraph(const std::map<index, vertex>& V,
-		    const std::vector<edge>& E,
-		    const std::set<index>& idx_start,
-		    const std::set<index>& idx_final,
-		    bool asc_cell_id = true);
-  
-  path searchPathFast(const std::set<index>& Obs);
-  
+  bool preloadGraph(const std::map<index, vertex> &V,
+                    const std::vector<edge> &E,
+                    const std::set<index> &idx_start,
+                    const std::set<index> &idx_final, bool asc_cell_id = true);
 
-  double calcCost( const vertex& Vi, const vertex& q);
-  double calcHeuristic( const vertex& Vi, const vertex& q);
-  
+  path searchPathFast(const std::set<index> &Obs);
 
- protected:
+  double calcCost(const vertex &Vi, const vertex &q);
+  double calcHeuristic(const vertex &Vi, const vertex &q);
 
+protected:
+private:
+  double minHeuristicToGoal(const std::map<index, vertex> &V,
+                            const int node_number,
+                            const std::set<index> &idx_final);
 
- private:
+  path recoverPath(const std::list<Node> &closed_list,
+                   const std::set<index> &idx_start, index idx_final);
 
-  double minHeuristicToGoal(const std::map<index, vertex>& V,
-			    const int node_number,
-			    const std::set<index>& idx_final);
-  
-  path  recoverPath(const std::list<Node>& closed_list,
-		    const std::set<index>& idx_start,
-		    index idx_final);
-  
-  path  recoverPathFast(index idx_final);
+  path recoverPathFast(index idx_final);
 
   //  Member variable to hold the info about the graph
   //  A map should be fast enough per
@@ -106,13 +89,6 @@ class SimpleAStar
   std::list<index> m_open_list_seed;
 
   bool m_graph_preloaded;
-  
-
-    
 };
-  
 
-
-
-
-#endif 
+#endif

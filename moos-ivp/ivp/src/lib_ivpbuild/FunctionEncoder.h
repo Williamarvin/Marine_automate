@@ -26,29 +26,23 @@
 #ifndef FUNCTION_ENCODER_HEADER
 #define FUNCTION_ENCODER_HEADER
 
-#include <string>
 #include "IvPFunction.h"
+#include <string>
 
 // Convert an IvPFunction to string represntation
-std::string IvPFunctionToString(IvPFunction*);
+std::string IvPFunctionToString(IvPFunction *);
 
 // Convert an IvPFunction to a vector of strings
-std::vector<std::string> IvPFunctionToVector(const std::string&, 
-					     const std::string&, int);
+std::vector<std::string> IvPFunctionToVector(const std::string &,
+                                             const std::string &, int);
 
 // Create an IvPFunction based on a string representation
-IvPFunction *StringToIvPFunction(const std::string&);
+IvPFunction *StringToIvPFunction(const std::string &);
 
 // Create an IvPFunction Context String without building the function
-std::string StringToIvPContext(const std::string&);
+std::string StringToIvPContext(const std::string &);
 
 // Extract the IvPDomain without building the function
-IvPDomain IPFStringToIvPDomain(const std::string&);
+IvPDomain IPFStringToIvPDomain(const std::string &);
 
 #endif
-
-
-
-
-
-

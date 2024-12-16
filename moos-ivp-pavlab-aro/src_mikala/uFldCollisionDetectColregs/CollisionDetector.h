@@ -26,119 +26,112 @@
 
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-#include <string>
-#include <map>
-#include <vector>
-#include <iterator>
-#include <algorithm>  
-#include "CPAMonitor.h"
 #include "CPAEvent_mnm.h"
-#include "VarDataPair.h"
-#include "LogicCondition.h"
-#include "InfoBuffer.h"
+#include "CPAMonitor.h"
 #include "EncounterReport.h"
+#include "InfoBuffer.h"
+#include "LogicCondition.h"
+#include "VarDataPair.h"
+#include <algorithm>
+#include <iterator>
+#include <map>
+#include <string>
+#include <vector>
 
-class CollisionDetector : public AppCastingMOOSApp
-{
- public:
+class CollisionDetector : public AppCastingMOOSApp {
+public:
   CollisionDetector();
   ~CollisionDetector() {}
-  
- protected: // Standard MOOSApp functions to overload  
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
- protected: 
+
+protected:
   void handleMailNodeReport(std::string);
   bool buildReport();
   void registerVariables();
   void handleCPAEvent(CPAEvent);
   bool handleConfigFlag(std::string, std::string);
-  void postFlags(const std::vector<VarDataPair>&, const CPAEvent&);
+  void postFlags(const std::vector<VarDataPair> &, const CPAEvent &);
 
   std::string expandMacroCD(std::string, std::string v1, std::string v2);
 
   void postRings();
-  
- protected: // Functions in support of logic conditions
-  bool updateInfoBuffer(CMOOSMsg&);
+
+protected: // Functions in support of logic conditions
+  bool updateInfoBuffer(CMOOSMsg &);
   bool checkConditions();
-  
- private: // Configuration variables
+
+private: // Configuration variables
   double m_near_miss_dist;
   double m_collision_dist;
   double m_encounter_dist;
-  
-  bool   m_pulse_render;
+
+  bool m_pulse_render;
   double m_pulse_duration;
   double m_pulse_range;
 
-  bool   m_post_closest_range;
-  bool   m_post_closest_range_ever;
+  bool m_post_closest_range;
+  bool m_post_closest_range_ever;
 
-  bool   m_encounter_rings;
-  
+  bool m_encounter_rings;
+
   std::vector<VarDataPair> m_collision_flags;
   std::vector<VarDataPair> m_near_miss_flags;
   std::vector<VarDataPair> m_encounter_flags;
 
   // Set of logic conditions determining when detector is active
   std::vector<LogicCondition> m_logic_conditions;
-  
- private: // State variables
+
+private: // State variables
   CPAMonitor m_cpa_monitor;
-  
+
   bool m_conditions_ok;
 
   bool m_report_all_encounters;
 
   // Each map uses the vehicle name as the key
-  public:
+public:
   std::map<std::string, unsigned int> m_map_vname_collisions;
   std::map<std::string, unsigned int> m_map_vname_near_misses;
   std::map<std::string, unsigned int> m_map_vname_encounters;
-  std::map<std::string, unsigned int> m_map_vname_spawns; 
+  std::map<std::string, unsigned int> m_map_vname_spawns;
   std::map<std::string, unsigned int> m_map_vname_overtaking;
   std::map<std::string, unsigned int> m_map_vname_headon;
   std::map<std::string, unsigned int> m_map_vname_crossing;
-  std::map<std::string, unsigned int>  m_map_active_encounters;
+  std::map<std::string, unsigned int> m_map_active_encounters;
 
-  std::vector<EncounterReport> m_encounter_reports_all; 
+  std::vector<EncounterReport> m_encounter_reports_all;
 
   std::vector<EncounterReport> m_encounter_reports_headon;
   std::vector<EncounterReport> m_encounter_reports_overtaking;
   std::vector<EncounterReport> m_encounter_reports_crossing;
- 
-  
+
   unsigned int m_total_collisions;
   unsigned int m_total_near_misses;
   unsigned int m_total_encounters;
   unsigned int m_total_overtaking;
   unsigned int m_total_headon;
   unsigned int m_total_crossing;
-  
+
   bool m_new_encounter;
 
   std::string m_param_summary;
   std::vector<std::string> m_notified_vehicles;
 
   std::string classifyEncounter(EncounterReport);
-  std::string classifyEncounter(std::string, std::string, double, double, double, double);
+  std::string classifyEncounter(std::string, std::string, double, double,
+                                double, double);
   bool isUniqueEncounter(EncounterReport);
-  //void sortEncounters();
+  // void sortEncounters();
 
-  std::string debug1; 
+  std::string debug1;
   std::string debug2;
-
 
   InfoBuffer *m_info_buffer;
 };
 
 #endif
-
-
-
-
-

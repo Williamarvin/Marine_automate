@@ -24,43 +24,40 @@
 #ifndef POPULATOR_MISSION_TASK_DIARY_HEADER
 #define POPULATOR_MISSION_TASK_DIARY_HEADER
 
+#include "ALogEntry.h"
+#include "TaskDiary.h"
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include "TaskDiary.h"
-#include "ALogEntry.h"
 
-class Populator_TaskDiary
-{
+class Populator_TaskDiary {
 public:
-  Populator_TaskDiary() {m_verbose=false;}
+  Populator_TaskDiary() { m_verbose = false; }
   ~Populator_TaskDiary() {}
 
-  bool      addALogFile(std::string filename);
-  bool      addKLogFile(std::string filename,
-			std::string node,
-			double utc_start_time);
+  bool addALogFile(std::string filename);
+  bool addKLogFile(std::string filename, std::string node,
+                   double utc_start_time);
 
-  bool      populateFromALogs();
-  bool      populateFromKLogs();
-  
-  void      setVerbose()   {m_verbose = true;}
-  TaskDiary getTaskDiary() {return(m_task_diary);}
+  bool populateFromALogs();
+  bool populateFromKLogs();
+
+  void setVerbose() { m_verbose = true; }
+  TaskDiary getTaskDiary() { return (m_task_diary); }
 
 protected:
   double handleALogFile(std::string filename);
-  bool   handleKLogFile(unsigned int);
-  
+  bool handleKLogFile(unsigned int);
+
 protected:
   bool m_verbose;
-  
+
   TaskDiary m_task_diary;
 
   std::vector<std::string> m_alog_files;
 
   std::vector<std::string> m_klog_files;
-  std::vector<double>      m_klog_files_utc;
+  std::vector<double> m_klog_files_utc;
   std::vector<std::string> m_klog_files_node;
-  
 };
-#endif 
+#endif

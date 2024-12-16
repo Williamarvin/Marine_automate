@@ -27,32 +27,22 @@
 #ifndef RT_EVALUATOR_HEADER
 #define RT_EVALUATOR_HEADER
 
-#include <vector>
 #include "PDMap.h"
 #include "PQueue.h"
+#include <vector>
 
 class Regressor;
 
 class RT_Evaluator {
 public:
-  RT_Evaluator(Regressor*);
+  RT_Evaluator(Regressor *);
   virtual ~RT_Evaluator() {}
 
-public: 
-  void evaluate(PDMap*, PQueue&);
+public:
+  void evaluate(PDMap *, PQueue &);
 
 protected:
-  Regressor* m_regressor;
+  Regressor *m_regressor;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-

@@ -24,37 +24,40 @@
 #ifndef ULH_GUIX_HEADER
 #define ULH_GUIX_HEADER
 
-#include <string>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Output.H>
-#include "ModelHelmScope.h"
 #include "ALogDataBroker.h"
+#include "ModelHelmScope.h"
+#include <FL/Fl.H>
+#include <FL/Fl_Browser.H>
+#include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Menu_Bar.H>
+#include <FL/Fl_Output.H>
+#include <FL/Fl_Window.H>
+#include <string>
 
 class REPLAY_GUI;
 
 class GUI_HelmScope : public Fl_Window {
 public:
-  GUI_HelmScope(int w, int h, const char *l=0);
+  GUI_HelmScope(int w, int h, const char *l = 0);
   ~GUI_HelmScope();
-  
+
   static Fl_Menu_Item menu_[];
   Fl_Menu_Bar *mbar;
 
   void initWidgets();
 
-  void setParentGUI(REPLAY_GUI *gui) {m_parent_gui=gui;}
+  void setParentGUI(REPLAY_GUI *gui) { m_parent_gui = gui; }
   void setDataBroker(ALogDataBroker, std::string vname);
-  void setCurrTime(double=-1);
-  void setReplayWarpMsg(std::string s) {m_replay_warp_msg=s; updateXY();}
+  void setCurrTime(double = -1);
+  void setReplayWarpMsg(std::string s) {
+    m_replay_warp_msg = s;
+    updateXY();
+  }
 
   void resize(int, int, int, int);
-  int  handle(int);
+  int handle(int);
 
- protected:
+protected:
   void resizeWidgetsShape();
   void resizeWidgetsText();
   void updateTopBrowsers();
@@ -64,49 +67,49 @@ public:
 
 private:
   inline void cb_Browser_i();
-  static void cb_Browser(Fl_Widget*);
+  static void cb_Browser(Fl_Widget *);
 
   inline void cb_BrowserHeader_i();
-  static void cb_BrowserHeader(Fl_Widget*);
+  static void cb_BrowserHeader(Fl_Widget *);
 
   inline void cb_ButtonWarnings_i();
-  static void cb_ButtonWarnings(Fl_Widget*);
+  static void cb_ButtonWarnings(Fl_Widget *);
 
   inline void cb_ButtonErrors_i();
-  static void cb_ButtonErrors(Fl_Widget*);
+  static void cb_ButtonErrors(Fl_Widget *);
 
   inline void cb_ButtonModeTree_i();
-  static void cb_ButtonModeTree(Fl_Widget*);
+  static void cb_ButtonModeTree(Fl_Widget *);
 
   inline void cb_ButtonLifeEvents_i();
-  static void cb_ButtonLifeEvents(Fl_Widget*);
+  static void cb_ButtonLifeEvents(Fl_Widget *);
 
   inline void cb_Step_i(int);
-  static void cb_Step(Fl_Widget*, int);
+  static void cb_Step(Fl_Widget *, int);
 
- public:
-  ModelHelmScope  m_hsmodel;
-  REPLAY_GUI     *m_parent_gui;
-  ALogDataBroker  m_dbroker;
+public:
+  ModelHelmScope m_hsmodel;
+  REPLAY_GUI *m_parent_gui;
+  ALogDataBroker m_dbroker;
 
 protected:
   std::string m_vname;
 
-  Fl_Output   *m_fld_time;
-  Fl_Output   *m_fld_mode;
-  Fl_Output   *m_fld_iter;
-  Fl_Output   *m_fld_decision;
-  Fl_Output   *m_fld_state;
+  Fl_Output *m_fld_time;
+  Fl_Output *m_fld_mode;
+  Fl_Output *m_fld_iter;
+  Fl_Output *m_fld_decision;
+  Fl_Output *m_fld_state;
 
-  Fl_Check_Button  *m_but_gen_errors;
-  Fl_Check_Button  *m_but_gen_warnings;
-  Fl_Check_Button  *m_but_gen_modetree;
-  Fl_Check_Button  *m_but_gen_levents;
+  Fl_Check_Button *m_but_gen_errors;
+  Fl_Check_Button *m_but_gen_warnings;
+  Fl_Check_Button *m_but_gen_modetree;
+  Fl_Check_Button *m_but_gen_levents;
 
   Fl_Browser *m_brw_active;
   Fl_Browser *m_brw_running;
   Fl_Browser *m_brw_idle;
-  Fl_Browser *m_brw_completed;  
+  Fl_Browser *m_brw_completed;
   Fl_Browser *m_brw_general;
 
   unsigned int m_cnt_active;
@@ -122,13 +125,8 @@ protected:
 
   int m_mutable_text_size;
 
-  std::string  m_gen_browser_mode; // warnings, errors, life_events, mode_tree
-  std::string  m_replay_warp_msg;
+  std::string m_gen_browser_mode; // warnings, errors, life_events, mode_tree
+  std::string m_replay_warp_msg;
 };
 
 #endif
-
-
-
-
-

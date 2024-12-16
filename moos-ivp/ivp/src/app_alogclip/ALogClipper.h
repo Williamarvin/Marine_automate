@@ -27,21 +27,20 @@
 #include <string>
 #include <vector>
 
-class ALogClipper
-{
- public:
+class ALogClipper {
+public:
   ALogClipper();
   ~ALogClipper() {}
-  
-  bool         openALogFileRead(std::string filename);
-  bool         openALogFileWrite(std::string filename);
+
+  bool openALogFileRead(std::string filename);
+  bool openALogFileWrite(std::string filename);
   unsigned int clip(double mintime, double maxtime);
 
-  unsigned int getDetails(const std::string& statevar);
+  unsigned int getDetails(const std::string &statevar);
 
- protected:
+protected:
   std::string getNextLine();
-  bool        writeNextLine(const std::string& output);
+  bool writeNextLine(const std::string &output);
 
   unsigned int m_kept_chars;
   unsigned int m_clipped_chars_front;
@@ -50,16 +49,11 @@ class ALogClipper
   unsigned int m_clipped_lines_front;
   unsigned int m_clipped_lines_back;
 
- private:
+private:
   FILE *m_infile;
   FILE *m_outfile;
 
   std::vector<std::string> m_preserve_vars;
 };
 
-#endif 
-
-
-
-
-
+#endif

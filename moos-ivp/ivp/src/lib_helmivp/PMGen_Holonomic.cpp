@@ -9,19 +9,18 @@
 /* except by the author(s), or those designated by the author.   */
 /*****************************************************************/
 
-#include "MBUtils.h"
-#include "GeomUtils.h"
-#include "AngleUtils.h"
 #include "PMGen_Holonomic.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: generate()
 
-PlatModel PMGen_Holonomic::generate(double osx, double osy,
-				    double osh, double osv)
-{
+PlatModel PMGen_Holonomic::generate(double osx, double osy, double osh,
+                                    double osv) {
   PlatModel pmodel("holo");
-  return(pmodel);
+  return (pmodel);
 }

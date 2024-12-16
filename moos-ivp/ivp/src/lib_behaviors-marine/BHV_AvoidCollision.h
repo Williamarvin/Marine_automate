@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_AVOID_COLLISION_HEADER
 #define BHV_AVOID_COLLISION_HEADER
 
@@ -32,25 +32,24 @@ public:
   BHV_AvoidCollision(IvPDomain);
   ~BHV_AvoidCollision() {}
 
-  void         onHelmStart();
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onIdleState();
-  void         onInactiveState();
-  bool         isConstraint() {return(true);}
+  void onHelmStart();
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onIdleState();
+  void onInactiveState();
+  bool isConstraint() { return (true); }
 
-  std::string  getInfo(std::string);
-  
- protected:
+  std::string getInfo(std::string);
+
+protected:
   double getRelevance();
   double getPriority();
-  void   postRange();
+  void postRange();
 
-  IvPFunction* getAvoidIPF();
-  IvPFunction* getAvoidDepthIPF();
-  
- private: // Configuration Parameters
+  IvPFunction *getAvoidIPF();
+  IvPFunction *getAvoidDepthIPF();
 
+private: // Configuration Parameters
   std::string m_pwt_grade;
   std::string m_contact_type_required;
 
@@ -61,22 +60,21 @@ public:
   double m_max_util_cpa_dist;
   double m_roc_max_heighten; // Rate of Closure w/ max relevance heightening
   double m_roc_max_dampen;   // Rate of Closure w/ max relevance dampening
-  bool   m_no_alert_request;
+  bool m_no_alert_request;
 
   double m_collision_depth;
 
   // Release 19.8 additions
-  bool   m_use_refinery;
-  bool   m_check_plateaus;
-  bool   m_check_validity;
+  bool m_use_refinery;
+  bool m_check_plateaus;
+  bool m_check_validity;
   double m_pcheck_thresh;
-  bool   m_verbose;
-  
-private:  // State Variables
+  bool m_verbose;
+
+private: // State Variables
   double m_curr_closing_spd;
-  bool   m_avoiding;
+  bool m_avoiding;
 
   unsigned int m_total_evals;
 };
 #endif
-

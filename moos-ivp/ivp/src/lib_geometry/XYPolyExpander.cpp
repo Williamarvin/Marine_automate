@@ -23,19 +23,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath>
 #include "XYPolyExpander.h"
-#include "MBUtils.h"
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
+#include <cmath>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor()
 
-XYPolyExpander::XYPolyExpander()
-{
+XYPolyExpander::XYPolyExpander() {
   // Buffer dist between original and buff poly. By default same.
   m_buff = 0;
 
@@ -57,14 +56,13 @@ XYPolyExpander::XYPolyExpander()
 //      Note: This param sets the change in angle as new points are
 //            created around corners.
 
-void XYPolyExpander::setDegreeDelta(double delta)
-{
+void XYPolyExpander::setDegreeDelta(double delta) {
   // Apply some reasonable bounds. Delta too low results in poly with
   // excessive number of vertices. Delta too high results in poly with
   // crudely uneven buffer distances from the original poly.
-  if(delta < 0.2)
+  if (delta < 0.2)
     delta = 0.2;
-  if(delta > 45)
+  if (delta > 45)
     delta = 45;
 
   m_deg_delta = delta;
@@ -76,13 +74,12 @@ void XYPolyExpander::setDegreeDelta(double delta)
 //            added to the expander to reject points that are
 //            effectively identical. By default this is off.
 
-void XYPolyExpander::setVertexProximityThresh(double thresh)
-{
+void XYPolyExpander::setVertexProximityThresh(double thresh) {
   // Set reasonable bounds. Probably no right answer but a thresh
-  // of  more than 10 meters apart seems unreasonable. 
-  if(thresh > 10)
+  // of  more than 10 meters apart seems unreasonable.
+  if (thresh > 10)
     thresh = 10;
-  
+
   m_vertex_proximity_thresh = thresh;
 }
 
@@ -90,75 +87,70 @@ void XYPolyExpander::setVertexProximityThresh(double thresh)
 // Procedure: getBufferPoly()
 //      Note: The main function call for this class
 
-XYPolygon XYPolyExpander::getBufferPoly(double buff)
-{
+XYPolygon XYPolyExpander::getBufferPoly(double buff) {
   clear();
 
   XYPolygon null_poly;
-  if(!m_poly_orig.is_convex())
-    return(null_poly);
+  if (!m_poly_orig.is_convex())
+    return (null_poly);
 
   // By default the buffer poly is just the original
   m_poly_buff = m_poly_orig;
   m_buff = buff;
 
   bool ok = expandSegments();
-  if(ok)
+  if (ok)
     ok = buildCorners();
-  if(ok)
+  if (ok)
     ok = buildNewPoly();
-  
-  return(m_poly_buff);
+
+  return (m_poly_buff);
 }
 
 //---------------------------------------------------------------
 // Procedure: setPoly()
 
-bool XYPolyExpander::setPoly(XYPolygon poly)
-{
+bool XYPolyExpander::setPoly(XYPolygon poly) {
   // Sanity check
-  if(!poly.is_convex())
-    return(false);
-  
-  m_poly_orig = poly;
-  return(true);
-}
+  if (!poly.is_convex())
+    return (false);
 
+  m_poly_orig = poly;
+  return (true);
+}
 
 //---------------------------------------------------------------
 // Procedure: expandSegments()
 
-bool XYPolyExpander::expandSegments()
-{
+bool XYPolyExpander::expandSegments() {
   // Sanity check for convexity (also implies num vertices > 2)
-  if(!m_poly_orig.is_convex())
-    return(false);
+  if (!m_poly_orig.is_convex())
+    return (false);
 
   double cx = m_poly_orig.get_centroid_x();
   double cy = m_poly_orig.get_centroid_y();
-  
+
   vector<double> px;
   vector<double> py;
-  
-  for(unsigned int i=0; i<m_poly_orig.size(); i++) {
+
+  for (unsigned int i = 0; i < m_poly_orig.size(); i++) {
     // Part 1: Get next two vertices
     double vx1 = m_poly_orig.get_vx(i);
     double vy1 = m_poly_orig.get_vy(i);
     double vx2 = 0;
     double vy2 = 0;
-    if((i+1) < m_poly_orig.size()) {
-      vx2 = m_poly_orig.get_vx(i+1);
-      vy2 = m_poly_orig.get_vy(i+1);
-    }
-    else {
+    if ((i + 1) < m_poly_orig.size()) {
+      vx2 = m_poly_orig.get_vx(i + 1);
+      vy2 = m_poly_orig.get_vy(i + 1);
+    } else {
       vx2 = m_poly_orig.get_vx(0);
       vy2 = m_poly_orig.get_vy(0);
     }
 
-    // Part 2: Determine the expand angle. Perpendicular to 
+    // Part 2: Determine the expand angle. Perpendicular to
     // the edge, but must determine which angle is "out".
-    double bng_from_1to2 = relAng(vx1,vy1, vx2,vy2);
-    double bng_from_1toC = relAng(vx1,vy1, cx,cy);
+    double bng_from_1to2 = relAng(vx1, vy1, vx2, vy2);
+    double bng_from_1toC = relAng(vx1, vy1, cx, cy);
     // The two possible choices are bng1 and bng2
     double bng1 = angle360(bng_from_1to2 - 90);
     double bng2 = angle360(bng_from_1to2 + 90);
@@ -167,19 +159,18 @@ bool XYPolyExpander::expandSegments()
     double delta1 = angleDiff(bng1, bng_from_1toC);
     double delta2 = angleDiff(bng2, bng_from_1toC);
     double bng_exp = bng1;
-    if(delta1 < delta2)
+    if (delta1 < delta2)
       bng_exp = bng2;
 
-
     // Part 3: Expand the vertices
-    double nx1,ny1;
-    projectPoint(bng_exp, m_buff, vx1,vy1, nx1,ny1);
+    double nx1, ny1;
+    projectPoint(bng_exp, m_buff, vx1, vy1, nx1, ny1);
     px.push_back(nx1);
     py.push_back(ny1);
-    double nx2,ny2;
-    projectPoint(bng_exp, m_buff, vx2,vy2, nx2,ny2);
+    double nx2, ny2;
+    projectPoint(bng_exp, m_buff, vx2, vy2, nx2, ny2);
     px.push_back(nx2);
-    py.push_back(ny2);    
+    py.push_back(ny2);
   }
 
   // Part 4: Shift the px,py vectors one step, so each step of two
@@ -188,9 +179,9 @@ bool XYPolyExpander::expandSegments()
   unsigned int psize = px.size();
   vector<double> npx;
   vector<double> npy;
-  npx.push_back(px[psize-1]);
-  npy.push_back(py[psize-1]);
-  for(unsigned int k=0; k<psize-1; k++) {
+  npx.push_back(px[psize - 1]);
+  npy.push_back(py[psize - 1]);
+  for (unsigned int k = 0; k < psize - 1; k++) {
     npx.push_back(px[k]);
     npy.push_back(py[k]);
   }
@@ -198,39 +189,38 @@ bool XYPolyExpander::expandSegments()
   // Part 5: Create a x/y vector same size as number of vertices
   // where each index contains the two expanded vertex points in
   // the right order.
-  for(unsigned int k=0; k<psize; k=k+2) {
+  for (unsigned int k = 0; k < psize; k = k + 2) {
     m_px1.push_back(npx[k]);
     m_py1.push_back(npy[k]);
-    m_px2.push_back(npx[k+1]);
-    m_py2.push_back(npy[k+1]);
+    m_px2.push_back(npx[k + 1]);
+    m_py2.push_back(npy[k + 1]);
   }
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: buildCorners()
 
-bool XYPolyExpander::buildCorners()
-{
+bool XYPolyExpander::buildCorners() {
   // Sanity check
   unsigned int psize = m_px1.size();
-  if(psize == 0)
-    return(false);
+  if (psize == 0)
+    return (false);
 
   // Part 2: Build the corners
   bool clockwise = m_poly_orig.is_clockwise();
 
-  for(unsigned int i=0; i<m_px1.size(); i++) {
+  for (unsigned int i = 0; i < m_px1.size(); i++) {
     double vx = m_poly_orig.get_vx(i);
     double vy = m_poly_orig.get_vy(i);
-        
-    double ang1 = relAng(vx,vy, m_px1[i], m_py1[i]);
-    double ang2 = relAng(vx,vy, m_px2[i], m_py2[i]);
+
+    double ang1 = relAng(vx, vy, m_px1[i], m_py1[i]);
+    double ang2 = relAng(vx, vy, m_px2[i], m_py2[i]);
 
     double delta = angleDiff(ang1, ang2);
     double dsteps = (delta / m_deg_delta);
-    if(dsteps < 0)
+    if (dsteps < 0)
       dsteps = 0;
     unsigned int steps = (unsigned int)(dsteps);
 
@@ -238,42 +228,40 @@ bool XYPolyExpander::buildCorners()
     vector<double> corners_ny;
     m_ipx.push_back(corners_nx);
     m_ipy.push_back(corners_ny);
-    if(clockwise) {
-      for(unsigned int j=1; j<steps; j++) {
-	double angx = angle360(ang1 + ((double)(j))*(m_deg_delta));
-	double nx,ny;
-	projectPoint(angx, m_buff, vx,vy, nx,ny);
-	m_ipx[i].push_back(nx);
-	m_ipy[i].push_back(ny);
+    if (clockwise) {
+      for (unsigned int j = 1; j < steps; j++) {
+        double angx = angle360(ang1 + ((double)(j)) * (m_deg_delta));
+        double nx, ny;
+        projectPoint(angx, m_buff, vx, vy, nx, ny);
+        m_ipx[i].push_back(nx);
+        m_ipy[i].push_back(ny);
       }
-    }
-    else {
-      for(unsigned int j=1; j<steps; j++) {
-	double angx = angle360(ang1 - ((double)(j))*(m_deg_delta));
-	double nx,ny;
-	projectPoint(angx, m_buff, vx,vy, nx,ny);
-	m_ipx[i].push_back(nx);
-	m_ipy[i].push_back(ny);
+    } else {
+      for (unsigned int j = 1; j < steps; j++) {
+        double angx = angle360(ang1 - ((double)(j)) * (m_deg_delta));
+        double nx, ny;
+        projectPoint(angx, m_buff, vx, vy, nx, ny);
+        m_ipx[i].push_back(nx);
+        m_ipy[i].push_back(ny);
       }
     }
   }
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
-// Procedure: buildNewPoly() 
+// Procedure: buildNewPoly()
 //   Purpose: Given (a) expanded edges, and (b) points representing
 //            rounded corners, stitch them together for single poly
- 
-bool XYPolyExpander::buildNewPoly()
-{
+
+bool XYPolyExpander::buildNewPoly() {
   XYPolygon new_poly;
 
-  for(unsigned int i=0; i<m_px1.size(); i++) {
-    // Arg false means dont check for convexity on each addition.    
+  for (unsigned int i = 0; i < m_px1.size(); i++) {
+    // Arg false means dont check for convexity on each addition.
     new_poly.add_vertex(m_px1[i], m_py1[i], false);
-    for(unsigned int j=0; j<m_ipx[i].size(); j++) {
+    for (unsigned int j = 0; j < m_ipx[i].size(); j++) {
       new_poly.add_vertex(m_ipx[i][j], m_ipy[i][j]);
     }
     new_poly.add_vertex_delta(m_px2[i], m_py2[i], 1, false);
@@ -283,24 +271,22 @@ bool XYPolyExpander::buildNewPoly()
 
   // If non-convex, make an attempt to adjust theh poly by removing
   // the most colinear points until the poly is convex
-  if(!new_poly.is_convex() && m_settling_enabled)
+  if (!new_poly.is_convex() && m_settling_enabled)
     new_poly = new_poly.crossProductSettle();
 
   // If the poly is still convex, return while retaining the
   // original unexpanded poly as the expanded poly.
-  if(!new_poly.is_convex())
-    return(false);
+  if (!new_poly.is_convex())
+    return (false);
 
   m_poly_buff = new_poly;
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: clear()
 
-void XYPolyExpander::clear()
-{
+void XYPolyExpander::clear() {
   m_px1.clear();
   m_py1.clear();
   m_px2.clear();
@@ -309,6 +295,3 @@ void XYPolyExpander::clear()
   m_ipx.clear();
   m_ipy.clear();
 }
-
-
-

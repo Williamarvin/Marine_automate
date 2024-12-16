@@ -12,32 +12,27 @@
 #ifndef CONVOY_ORDER_HANDLER_HEADER
 #define CONVOY_ORDER_HANDLER_HEADER
 
-#include <string>
-#include <map>
 #include "ConvoyOrderDetector.h"
+#include <map>
+#include <string>
 
-class OrderHandler
-{
- public:
+class OrderHandler {
+public:
   OrderHandler();
   ~OrderHandler() {}
 
   bool handle();
-  
+
   bool setParam(std::string, std::string);
-  
+
 protected: // Config vars
-
   std::string m_file;
-  bool        m_verbose;
+  bool m_verbose;
 
- protected: // State vars
-
+protected: // State vars
   unsigned int m_unhandled_lines;
-  
+
   ConvoyOrderDetector m_odetector;
 };
 
 #endif
-
-

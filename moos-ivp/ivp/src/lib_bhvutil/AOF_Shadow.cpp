@@ -26,12 +26,12 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cassert>
 #include "AOF_Shadow.h"
 #include "AngleUtils.h"
 #include "IvPDomain.h"
+#include <cassert>
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -44,9 +44,7 @@ using namespace std;
 //      args: goslat  Given Ownship Latitude Position
 //      args: goslon  Given Ownship Latitude Position
 
-AOF_Shadow::AOF_Shadow(IvPDomain gdomain)
-  : AOF(gdomain)
-{
+AOF_Shadow::AOF_Shadow(IvPDomain gdomain) : AOF(gdomain) {
   crs_ix = gdomain.getIndex("course");
   spd_ix = gdomain.getIndex("speed");
 
@@ -57,100 +55,74 @@ AOF_Shadow::AOF_Shadow(IvPDomain gdomain)
 //----------------------------------------------------------------
 // Procedure: setParam
 
-bool AOF_Shadow::setParam(const string& param, double param_val)
-{
-  if(param == "cn_crs") {
+bool AOF_Shadow::setParam(const string &param, double param_val) {
+  if (param == "cn_crs") {
     cn_crs = param_val;
     cn_crs_set = true;
-    return(true);
-  }
-  else if(param == "cn_spd") {
+    return (true);
+  } else if (param == "cn_spd") {
     cn_spd = param_val;
     cn_spd_set = true;
-    return(true);
-  }
-  else
-    return(false);
+    return (true);
+  } else
+    return (false);
 }
 
 //----------------------------------------------------------------
 // Procedure: initialize
 
-bool AOF_Shadow::initialize()
-{
-  if((crs_ix==-1)||(spd_ix==-1))
-    return(false);
-  if(!cn_crs_set || !cn_spd_set)
-    return(false);
-  return(true);
+bool AOF_Shadow::initialize() {
+  if ((crs_ix == -1) || (spd_ix == -1))
+    return (false);
+  if (!cn_crs_set || !cn_spd_set)
+    return (false);
+  return (true);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: evalBox
-//   Purpose: Evaluates a given <Course, Speed, Time-on-leg> tuple 
+//   Purpose: Evaluates a given <Course, Speed, Time-on-leg> tuple
 //               given by a 3D ptBox (b).
 //            Determines naut mile Closest-Point-of-Approach (CPA)
-//               and returns a value after passing it thru the 
+//               and returns a value after passing it thru the
 //               metric() function.
 
-double AOF_Shadow::evalBox(const IvPBox *b) const
-{
+double AOF_Shadow::evalBox(const IvPBox *b) const {
   double eval_crs = 0;
   double eval_spd = 0;
 
-  m_domain.getVal(crs_ix, b->pt(crs_ix,0), eval_crs);
-  m_domain.getVal(spd_ix, b->pt(spd_ix,0), eval_spd);
+  m_domain.getVal(crs_ix, b->pt(crs_ix, 0), eval_crs);
+  m_domain.getVal(spd_ix, b->pt(spd_ix, 0), eval_spd);
 
   double course_diff = cn_crs - eval_crs;
-  if(course_diff > 180)
+  if (course_diff > 180)
     course_diff -= 360;
-  if(course_diff < -180)
+  if (course_diff < -180)
     course_diff += 360;
-  if(course_diff < 0)
+  if (course_diff < 0)
     course_diff *= -1;
 
   double speed_diff = cn_spd - eval_spd;
-  if(speed_diff < 0)
+  if (speed_diff < 0)
     speed_diff *= -1;
 
   double utility = metric(course_diff, speed_diff);
-  return(utility);
+  return (utility);
 }
 
 //----------------------------------------------------------------
 // Procedure: metric
 
-double AOF_Shadow::metric(double cval, double sval) const
-{
+double AOF_Shadow::metric(double cval, double sval) const {
   double cpct = cval / 180.0;
   cpct = cpct * cpct;
 
-  double spct = sval / 12;  // 20 is arbitrary, can we do better?
+  double spct = sval / 12; // 20 is arbitrary, can we do better?
   spct = spct * spct;
 
-  double cwt = 0.5;  // Should range between 0.0 and 1.0
-  double total_pct = (cwt * cpct) + ((1-cwt) * spct);
+  double cwt = 0.5; // Should range between 0.0 and 1.0
+  double total_pct = (cwt * cpct) + ((1 - cwt) * spct);
 
   double range = 100.0;
-  return((1.0 - total_pct) * range);
+  return ((1.0 - total_pct) * range);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

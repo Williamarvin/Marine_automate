@@ -24,26 +24,20 @@
 #ifndef POPULATOR_APP_LOG_PLOT_HEADER
 #define POPULATOR_APP_LOG_PLOT_HEADER
 
+#include "ALogEntry.h"
+#include "AppLogPlot.h"
 #include <string>
 #include <vector>
-#include "AppLogPlot.h"
-#include "ALogEntry.h"
 
-class Populator_AppLogPlot
-{
+class Populator_AppLogPlot {
 public:
   Populator_AppLogPlot() {}
   ~Populator_AppLogPlot() {}
 
-  bool       populateFromEntries(const std::vector<ALogEntry>&);
-  AppLogPlot getAppLogPlot() {return(m_alplot);}
+  bool populateFromEntries(const std::vector<ALogEntry> &);
+  AppLogPlot getAppLogPlot() { return (m_alplot); }
 
 protected:
   AppLogPlot m_alplot;
 };
-#endif 
-
-
-
-
-
+#endif

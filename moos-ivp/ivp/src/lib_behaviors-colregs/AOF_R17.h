@@ -20,53 +20,46 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_R17_HEADER
 #define AOF_R17_HEADER
 
-#include <string> 
 #include "AOF_Contact.h"
+#include <string>
 
-
-class AOF_R17: public AOF_Contact {
+class AOF_R17 : public AOF_Contact {
 public:
   AOF_R17(IvPDomain);
-  ~AOF_R17() {};
+  ~AOF_R17(){};
 
- public: // virtual functions   
-  double evalBox(const IvPBox*) const;
-  bool   setParam(const std::string&, double);
-  bool   setParam(const std::string&, const std::string&);
-  bool   initialize();
-  
- protected: // non-virtual functions
+public: // virtual functions
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &, double);
+  bool setParam(const std::string &, const std::string &);
+  bool initialize();
+
+protected: // non-virtual functions
   double utilityHold(double hdg, double spd) const;
   double utilityAvoid(double hdg, double spd) const;
   double metricCPA(double) const;
 
- private:
-  int    m_crs_ix;  // Index of "course" variable in IvPDomain
-  int    m_spd_ix;  // Index of "speed" variable in IvPDomain
+private:
+  int m_crs_ix; // Index of "course" variable in IvPDomain
+  int m_spd_ix; // Index of "speed" variable in IvPDomain
 
   double m_osh;
   double m_osv;
-  bool   m_osh_set;
-  bool   m_osv_set;
+  bool m_osh_set;
+  bool m_osv_set;
 
   // used to store original stand-on course/speed prior to 17.a.ii actions
-  double m_original_course; 
+  double m_original_course;
 
   double m_original_speed;
-  bool   m_original_course_set;
-  bool   m_original_speed_set;
-  
+  bool m_original_course_set;
+  bool m_original_speed_set;
+
   std::string m_pass_mode;
 };
 
-
 #endif
-
-
-
-
-

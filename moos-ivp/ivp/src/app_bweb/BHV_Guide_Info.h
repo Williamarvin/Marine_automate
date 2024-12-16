@@ -20,7 +20,7 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_GUIDE_INFO_HEADER
 #define BHV_GUIDE_INFO_HEADER
 
@@ -29,12 +29,3 @@ void showHelpAndExit();
 void showReleaseInfoAndExit();
 
 #endif
-
-
-
-
-
-
-
-
-

@@ -30,53 +30,56 @@
 #ifndef AOF_HEADER
 #define AOF_HEADER
 
-#include <vector>
-#include <list>
-#include <string>
 #include "IvPBox.h"
 #include "IvPDomain.h"
+#include <list>
+#include <string>
+#include <vector>
 
-class AOF{
+class AOF {
 public:
-  AOF(const IvPDomain& dom) {m_domain=dom;}
+  AOF(const IvPDomain &dom) { m_domain = dom; }
   virtual ~AOF() {}
 
   // Virtual functions
-  virtual double evalBox(const IvPBox*) const {return(0);}
-  virtual double evalBoxDebug(const IvPBox*, std::vector<std::string>&) const
-  {return(0);}
+  virtual double evalBox(const IvPBox *) const { return (0); }
+  virtual double evalBoxDebug(const IvPBox *,
+                              std::vector<std::string> &) const {
+    return (0);
+  }
 
-  virtual double evalPoint(const std::vector<double>&) const {return(0);}
-  virtual bool  initialize() {return(true);}
-  virtual bool  setParam(const std::string&, double) {return(false);}
-  virtual bool  setParam(const std::string&, const std::string&) 
-  {return(false);}
+  virtual double evalPoint(const std::vector<double> &) const { return (0); }
+  virtual bool initialize() { return (true); }
+  virtual bool setParam(const std::string &, double) { return (false); }
+  virtual bool setParam(const std::string &, const std::string &) {
+    return (false);
+  }
 
-  virtual double evalBox(const IvPBox*, 
-			 std::vector<std::string>&, 
-			 std::vector<std::string>&) {return(0);}
+  virtual double evalBox(const IvPBox *, std::vector<std::string> &,
+                         std::vector<std::string> &) {
+    return (0);
+  }
 
-  virtual bool   minMaxKnown() const {return(false);}
-  virtual double getKnownMin() const {return(0);}
-  virtual double getKnownMax() const {return(0);}
+  virtual bool minMaxKnown() const { return (false); }
+  virtual double getKnownMin() const { return (0); }
+  virtual double getKnownMax() const { return (0); }
 
-  
-  double extract(const std::string& var, const IvPBox* pbox) const;
-  double extract(const std::string& varname, 
-		 const std::vector<double>& point) const;
+  double extract(const std::string &var, const IvPBox *pbox) const;
+  double extract(const std::string &varname,
+                 const std::vector<double> &point) const;
 
-  IvPDomain getDomain() const {return(m_domain);}
+  IvPDomain getDomain() const { return (m_domain); }
 
-  unsigned int  getDim() const   {return(m_domain.size());}
+  unsigned int getDim() const { return (m_domain.size()); }
 
-  std::list<std::string> getMsgsAOF() {return(m_msgs);}
+  std::list<std::string> getMsgsAOF() { return (m_msgs); }
   std::string getCatMsgsAOF() const;
-  
-  void clearMsgsAOF()  {m_msgs.clear();}
-  bool hasMsgsAOF()    {return(m_msgs.size() != 0);}
 
- protected:
-  bool postMsgAOF(std::string msg, bool res=false);
+  void clearMsgsAOF() { m_msgs.clear(); }
+  bool hasMsgsAOF() { return (m_msgs.size() != 0); }
+
+protected:
+  bool postMsgAOF(std::string msg, bool res = false);
 
 protected:
   IvPDomain m_domain;
@@ -84,8 +87,3 @@ protected:
   std::list<std::string> m_msgs;
 };
 #endif
-
-
-
-
-

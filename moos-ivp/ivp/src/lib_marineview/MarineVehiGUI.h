@@ -24,58 +24,46 @@
 #ifndef MARINE_VEHI_GUI_HEADER
 #define MARINE_VEHI_GUI_HEADER
 
-#include <string>
 #include "MarineGUI.h"
+#include <string>
 
 class MarineVehiGUI : public MarineGUI {
 public:
-  MarineVehiGUI(int w, int h, const char *l=0);
+  MarineVehiGUI(int w, int h, const char *l = 0);
   virtual ~MarineVehiGUI() {}
 
-  bool   setRadioVehiAttrib(std::string attr, std::string val="");
-  void   updateRadios();
-  void   setMenuItemColors();
+  bool setRadioVehiAttrib(std::string attr, std::string val = "");
+  void updateRadios();
+  void setMenuItemColors();
 
- protected: // Protected member functions
-  void   augmentMenu();
+protected: // Protected member functions
+  void augmentMenu();
 
-  virtual bool syncNodesAtoB() {return(false);}
+  virtual bool syncNodesAtoB() { return (false); }
 
- protected: // Widget callback functions
+protected: // Widget callback functions
   inline void cb_SetRadioVehiAttrib_i(int);
-  static void cb_SetRadioVehiAttrib(Fl_Widget*, int);
+  static void cb_SetRadioVehiAttrib(Fl_Widget *, int);
 
   inline void cb_CycleFocus_i();
-  static void cb_CycleFocus(Fl_Widget*);
+  static void cb_CycleFocus(Fl_Widget *);
 
   inline void cb_ToggleTrailColor_i();
-  static void cb_ToggleTrailColor(Fl_Widget*);
+  static void cb_ToggleTrailColor(Fl_Widget *);
 
   inline void cb_AltTrailLength_i(int);
-  static void cb_AltTrailLength(Fl_Widget*, int);
+  static void cb_AltTrailLength(Fl_Widget *, int);
 
   inline void cb_AltTrailSize_i(int);
-  static void cb_AltTrailSize(Fl_Widget*, int);
+  static void cb_AltTrailSize(Fl_Widget *, int);
 
   inline void cb_AltShapeScale_i(int);
-  static void cb_AltShapeScale(Fl_Widget*, int);
+  static void cb_AltShapeScale(Fl_Widget *, int);
 
   inline void cb_DataView_i(int);
-  static void cb_DataView(Fl_Widget*, int);
+  static void cb_DataView(Fl_Widget *, int);
 
   inline void cb_CenterView_i(int);
-  static void cb_CenterView(Fl_Widget*, int);
+  static void cb_CenterView(Fl_Widget *, int);
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

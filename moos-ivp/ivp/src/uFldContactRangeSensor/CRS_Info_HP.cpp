@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
+#include "CRS_Info_HP.h"
+#include "ColorParse.h"
+#include "ReleaseInfo.h"
 #include <cstdlib>
 #include <iostream>
-#include "ColorParse.h"
-#include "CRS_Info_HP.h"
-#include "ReleaseInfo.h"
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  Typically run in a shoreside community. Takes reports from    ");
@@ -47,8 +46,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelp
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                          ");
   blu("==========================================================");
   blu("Usage: uFldContactRangeSensor file.moos [OPTIONS]         ");
@@ -57,7 +55,7 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                          ");
   blk("Options:                                                  ");
-  mag("  --alias","=<ProcessName>                                ");
+  mag("  --alias", "=<ProcessName>                                ");
   blk("      Launch uFldContactRangeSensor with the given        ");
   blk("      process name rather than uFldContactRangeSensor.    ");
   mag("  --example, -e                                           ");
@@ -68,10 +66,11 @@ void showHelpAndExit()
   blk("      Display MOOS publications and subscriptions.        ");
   mag("  --version,-v                                            ");
   blk("      Display release version of uFldContactRangeSensor.  ");
-  mag("  --verbose","=<setting>                                  ");
+  mag("  --verbose", "=<setting>                                  ");
   blk("      Set verbosity. true or false (default)              ");
   mag("  --web,-w                                                ");
-  blk("      Open browser to: https://oceanai.mit.edu/apps/uFldContactRangeSensor ");
+  blk("      Open browser to: "
+      "https://oceanai.mit.edu/apps/uFldContactRangeSensor ");
   blk("                                                          ");
   blk("Note: If argv[2] does not otherwise match a known option, ");
   blk("      then it will be interpreted as a run alias. This is ");
@@ -80,12 +79,10 @@ void showHelpAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldContactRangeSensor Example MOOS Configuration               ");
@@ -128,12 +125,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uFldContactRangeSensor INTERFACE                                ");
@@ -167,17 +162,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uFldContactRangeSensor", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-

@@ -37,16 +37,13 @@
 // DEALINGS IN THE SOFTWARE.
 //
 
-
 #ifndef MOOS_POCO_Foundation_Foundation_INCLUDED
 #define MOOS_POCO_Foundation_Foundation_INCLUDED
-
 
 //
 // Version Information
 //
 //#define MOOS_POCO_VERSION 0x010400D0
-
 
 //
 // Include library configuration
@@ -58,53 +55,51 @@
 // Ensure that MOOS_POCO_DLL is default unless MOOS_POCO_STATIC is defined
 //
 #if defined(_WIN32) && defined(_DLL)
-  #if !defined(MOOS_POCO_DLL) && !defined(MOOS_POCO_STATIC)
-    #define MOOS_POCO_DLL
-	#endif
+#if !defined(MOOS_POCO_DLL) && !defined(MOOS_POCO_STATIC)
+#define MOOS_POCO_DLL
+#endif
 #endif
 
-
 //
-// The following block is the standard way of creating macros which make exporting
-// from a DLL simpler. All files within this DLL are compiled with the Foundation_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see
-// MOOS_POCO_Foundation_API functions as being imported from a DLL, wheras this DLL sees symbols
-// defined with this macro as being exported.
+// The following block is the standard way of creating macros which make
+// exporting from a DLL simpler. All files within this DLL are compiled with the
+// Foundation_EXPORTS symbol defined on the command line. this symbol should not
+// be defined on any project that uses this DLL. This way any other project
+// whose source files include this file see MOOS_POCO_Foundation_API functions
+// as being imported from a DLL, wheras this DLL sees symbols defined with this
+// macro as being exported.
 //
 #if defined(_WIN32) && defined(MOOS_POCO_DLL)
-	#if defined(Foundation_EXPORTS)
-    #define MOOS_POCO_Foundation_API __declspec(dllexport)
-	#else
-    #define MOOS_POCO_Foundation_API __declspec(dllimport)
-	#endif
+#if defined(Foundation_EXPORTS)
+#define MOOS_POCO_Foundation_API __declspec(dllexport)
+#else
+#define MOOS_POCO_Foundation_API __declspec(dllimport)
 #endif
-
+#endif
 
 #if !defined(MOOS_POCO_Foundation_API)
-  #define MOOS_POCO_Foundation_API
+#define MOOS_POCO_Foundation_API
 #endif
-
 
 //
 // Automatically link Foundation library.
 //
 #if defined(_MSC_VER)
-  #if !defined(MOOS_POCO_NO_AUTOMATIC_LIBS) && !defined(Foundation_EXPORTS)
-    #if defined(MOOS_POCO_DLL)
-			#if defined(_DEBUG)
-				#pragma comment(lib, "PocoBitsd.lib")
-			#else
-				#pragma comment(lib, "PocoBits.lib")
-			#endif
-		#else
-			#if defined(_DEBUG)
-				#pragma comment(lib, "PocoBitsmtd.lib")
-			#else
-				#pragma comment(lib, "PocoBitsmt.lib")
-			#endif
-		#endif
-	#endif
+#if !defined(MOOS_POCO_NO_AUTOMATIC_LIBS) && !defined(Foundation_EXPORTS)
+#if defined(MOOS_POCO_DLL)
+#if defined(_DEBUG)
+#pragma comment(lib, "PocoBitsd.lib")
+#else
+#pragma comment(lib, "PocoBits.lib")
+#endif
+#else
+#if defined(_DEBUG)
+#pragma comment(lib, "PocoBitsmtd.lib")
+#else
+#pragma comment(lib, "PocoBitsmt.lib")
+#endif
+#endif
+#endif
 #endif
 
 //
@@ -112,13 +107,12 @@
 //
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Platform.h"
 #if defined(_WIN32)
-	#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_WIN32.h"
+#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_WIN32.h"
 #elif defined(__VMS)
-	#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_VMS.h"
+#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_VMS.h"
 #elif defined(MOOS_POCO_OS_FAMILY_UNIX)
-	#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_POSIX.h"
+#include "MOOS/libMOOS/Thirdparty/PocoBits/Platform_POSIX.h"
 #endif
-
 
 //
 // MOOS_POCO_JOIN
@@ -133,7 +127,6 @@
 #define MOOS_POCO_DO_JOIN(X, Y) MOOS_POCO_DO_JOIN2(X, Y)
 #define MOOS_POCO_DO_JOIN2(X, Y) X##Y
 
-
 //
 // Pull in basic definitions
 //
@@ -141,6 +134,5 @@
 #include "MOOS/libMOOS/Thirdparty/PocoBits/Types.h"
 
 #include <string>
-
 
 #endif // MOOS_POCO_Foundation_Foundation_INCLUDED

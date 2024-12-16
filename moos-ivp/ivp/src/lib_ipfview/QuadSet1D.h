@@ -24,64 +24,53 @@
 #ifndef QUAD_SET_1D_HEADER
 #define QUAD_SET_1D_HEADER
 
-#include <vector>
-#include <string>
-#include "Quad3D.h"
-#include "IvPFunction.h"
-#include "IvPDomain.h"
 #include "FColorMap.h"
+#include "IvPDomain.h"
+#include "IvPFunction.h"
+#include "Quad3D.h"
+#include <string>
+#include <vector>
 
-class QuadSet1D 
-{
+class QuadSet1D {
 public:
   QuadSet1D();
   ~QuadSet1D() {}
 
   // Set/Apply Information
-  bool   applyIPF(IvPFunction *ipf, std::string src="");
+  bool applyIPF(IvPFunction *ipf, std::string src = "");
 
-  void   addQuadSet1D(const QuadSet1D&);
-  void   setIvPDomain(IvPDomain);
-  
+  void addQuadSet1D(const QuadSet1D &);
+  void setIvPDomain(IvPDomain);
+
   // Get Information
-  bool         isEmpty1D() const             {return(size1D()==0);}
-  bool         isEmptyND() const;
-  double       getPriorityWt() const         {return(m_ipf_priority_wt);}
-  IvPDomain    getDomain() const             {return(m_ivp_domain);}
+  bool isEmpty1D() const { return (size1D() == 0); }
+  bool isEmptyND() const;
+  double getPriorityWt() const { return (m_ipf_priority_wt); }
+  IvPDomain getDomain() const { return (m_ivp_domain); }
   unsigned int size1D() const;
-  unsigned int size1DFs() const              {return(m_domain_pts.size());}
+  unsigned int size1DFs() const { return (m_domain_pts.size()); }
 
-  void         print() const;
+  void print() const;
 
-  std::vector<double>  getDomainPts(unsigned int=0)  const;
-  std::vector<double>  getRangeVals(unsigned int=0)  const;
-  std::vector<bool>    getDomainPtsX(unsigned int=0) const;
-  double               getRangeValMax(unsigned int=0) const;
-  unsigned int         getDomainIXMax(unsigned int=0) const;
-  std::string          getSource(unsigned int=0) const;
-  
+  std::vector<double> getDomainPts(unsigned int = 0) const;
+  std::vector<double> getRangeVals(unsigned int = 0) const;
+  std::vector<bool> getDomainPtsX(unsigned int = 0) const;
+  double getRangeValMax(unsigned int = 0) const;
+  unsigned int getDomainIXMax(unsigned int = 0) const;
+  std::string getSource(unsigned int = 0) const;
+
 protected:
-  IvPDomain    m_ivp_domain;
-  double       m_ipf_priority_wt;
+  IvPDomain m_ivp_domain;
+  double m_ipf_priority_wt;
 
   // Values for representing 1D IPFs
   // Each outer index below is for one source, typically:
   //   [0] Collective [1] Source#1 [2] Source#2 ...
-  std::vector<std::vector<double> >  m_domain_pts;
-  std::vector<std::vector<bool> >    m_domain_ptsx; // true if pt piece edge
-  std::vector<std::vector<double> >  m_range_vals;
-  std::vector<double>                m_range_val_max;
-  std::vector<unsigned int>          m_domain_ix_max;
-  std::vector<std::string>           m_sources;
-
+  std::vector<std::vector<double>> m_domain_pts;
+  std::vector<std::vector<bool>> m_domain_ptsx; // true if pt piece edge
+  std::vector<std::vector<double>> m_range_vals;
+  std::vector<double> m_range_val_max;
+  std::vector<unsigned int> m_domain_ix_max;
+  std::vector<std::string> m_sources;
 };
 #endif
-
-
-
-
-
-
-
-
-

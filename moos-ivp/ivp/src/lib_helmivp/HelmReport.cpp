@@ -21,37 +21,33 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "HelmReport.h"
 #include "BuildUtils.h"
 #include "MBUtils.h"
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor
 
-HelmReport::HelmReport() 
-{ 
-  initialize();
-}
+HelmReport::HelmReport() { initialize(); }
 
 //-----------------------------------------------------------
 // Procedure: initialize
 
-void HelmReport::initialize()
-{
+void HelmReport::initialize() {
   m_warning_count = 0;
-  m_time_utc      = 0;
-  m_iteration     = 0;
-  m_ofnum         = 0;
-  m_create_time   = 0;
-  m_solve_time    = 0;
-  m_halted        = false;
-  m_active_goal   = false;
+  m_time_utc = 0;
+  m_iteration = 0;
+  m_ofnum = 0;
+  m_create_time = 0;
+  m_solve_time = 0;
+  m_halted = false;
+  m_active_goal = false;
   m_max_create_time = 0;
-  m_max_solve_time  = 0;
-  m_max_loop_time   = 0;
+  m_max_solve_time = 0;
+  m_max_loop_time = 0;
 
   m_total_pcs_formed = 0;
   m_total_pcs_cached = 0;
@@ -60,19 +56,18 @@ void HelmReport::initialize()
 //-----------------------------------------------------------
 // Procedure: clear
 
-void HelmReport::clear(bool clear_completed)
-{
+void HelmReport::clear(bool clear_completed) {
   initialize();
 
   m_bhvs_running_desc.clear();
   m_bhvs_running_time.clear();
   m_bhvs_running_upds.clear();
-  
+
   m_bhvs_idle_desc.clear();
   m_bhvs_idle_time.clear();
   m_bhvs_idle_upds.clear();
-  
-  if(clear_completed) {
+
+  if (clear_completed) {
     m_bhvs_completed_desc.clear();
     m_bhvs_completed_time.clear();
     m_bhvs_completed_upds.clear();
@@ -97,112 +92,97 @@ void HelmReport::clear(bool clear_completed)
 //-----------------------------------------------------------
 // Procedure: addDecision()
 
-void HelmReport::addDecision(const string& var, double val) 
-{
+void HelmReport::addDecision(const string &var, double val) {
   m_decisions[var] = val;
 }
 
 //-----------------------------------------------------------
 // Procedure: setTemplatingSummary()
 
-void HelmReport::setTemplatingSummary(const vector<string>& summary)
-{
+void HelmReport::setTemplatingSummary(const vector<string> &summary) {
   m_templating_summary = summary;
 }
-
 
 //-----------------------------------------------------------
 // Procedure: clearDecisions()
 
-void HelmReport::clearDecisions()
-{
-  m_decisions.clear();
-}
-
+void HelmReport::clearDecisions() { m_decisions.clear(); }
 
 //-----------------------------------------------------------
 // Procedure: getTemplatingSummary()
 
-vector<string> HelmReport::getTemplatingSummary() const
-{
-  return(m_templating_summary);
+vector<string> HelmReport::getTemplatingSummary() const {
+  return (m_templating_summary);
 }
 
 //-----------------------------------------------------------
 // Procedure: getDecision()
 
-double HelmReport::getDecision(const string& var) const
-{
+double HelmReport::getDecision(const string &var) const {
   map<string, double>::const_iterator p = m_decisions.find(var);
-  if(p == m_decisions.end())
-    return(0);
+  if (p == m_decisions.end())
+    return (0);
   else
-    return(p->second);
+    return (p->second);
 }
 
 //-----------------------------------------------------------
 // Procedure: hasDecision()
 
-bool HelmReport::hasDecision(const string& var) const
-{
+bool HelmReport::hasDecision(const string &var) const {
   map<string, double>::const_iterator p = m_decisions.find(var);
-  if(p != m_decisions.end())
-    return(true);
+  if (p != m_decisions.end())
+    return (true);
   else
-    return(false);
+    return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: changedBehaviors
 
-bool HelmReport::changedBehaviors(const HelmReport& report) const
-{
+bool HelmReport::changedBehaviors(const HelmReport &report) const {
   // Want to base changes on simple list of behaviors, not full reports
   // of behaviors which includes timestamps etc.
-  bool full=false;  
-  
-  if(getActiveBehaviors(full)  != report.getActiveBehaviors(full))
-    return(true);
-  if(getRunningBehaviors(full) != report.getRunningBehaviors(full))
-    return(true);
-  if(getIdleBehaviors(full)    != report.getIdleBehaviors(full))
-    return(true);
-  if(getCompletedBehaviors(full) != report.getCompletedBehaviors(full))
-    return(true);
-  return(false);
+  bool full = false;
+
+  if (getActiveBehaviors(full) != report.getActiveBehaviors(full))
+    return (true);
+  if (getRunningBehaviors(full) != report.getRunningBehaviors(full))
+    return (true);
+  if (getIdleBehaviors(full) != report.getIdleBehaviors(full))
+    return (true);
+  if (getCompletedBehaviors(full) != report.getCompletedBehaviors(full))
+    return (true);
+  return (false);
 }
 
 //-----------------------------------------------------------
 // Procedure: getDecisionSummary()
 
-string HelmReport::getDecisionSummary() const
-{
+string HelmReport::getDecisionSummary() const {
   string summary;
 
   unsigned int i, domain_size = m_domain.size();
-  for(i=0; i<domain_size; i++) {
+  for (i = 0; i < domain_size; i++) {
     string varname = m_domain.getVarName(i);
-    if(i!=0)
+    if (i != 0)
       summary += ",";
     summary += "var=" + varname + ":";
-    map<string,double>::const_iterator p = m_decisions.find(varname);
-    if(p == m_decisions.end())
+    map<string, double>::const_iterator p = m_decisions.find(varname);
+    if (p == m_decisions.end())
       summary += "varbalk";
     else
       summary += doubleToStringX(p->second);
   }
-  return(summary);
+  return (summary);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: addActiveBHV
 
-void HelmReport::addActiveBHV(const string& descriptor, double time, 
-			      double pwt, int pcs, double cpu_time, 
-			      const string& update_summary, 
-			      unsigned int ipfs)
-{
+void HelmReport::addActiveBHV(const string &descriptor, double time, double pwt,
+                              int pcs, double cpu_time,
+                              const string &update_summary, unsigned int ipfs) {
   m_bhvs_active_desc.push_back(descriptor);
   m_bhvs_active_time.push_back(time);
   m_bhvs_active_upds.push_back(update_summary);
@@ -211,43 +191,40 @@ void HelmReport::addActiveBHV(const string& descriptor, double time,
   m_bhvs_active_cpu.push_back(cpu_time);
   m_bhvs_active_ipfs.push_back(ipfs);
 }
-  
+
 //-----------------------------------------------------------
 // Procedure: getActiveBehaviors
 
-string HelmReport::getActiveBehaviors(bool full_report) const
-{
+string HelmReport::getActiveBehaviors(bool full_report) const {
   string return_str;
   unsigned int i, vsize = m_bhvs_active_desc.size();
-  for(i=0; i<vsize; i++) {
-    if(full_report) {
-      if(i>0)
-	return_str += ":";
+  for (i = 0; i < vsize; i++) {
+    if (full_report) {
+      if (i > 0)
+        return_str += ":";
       return_str += m_bhvs_active_desc[i];
-      return_str += "$" + doubleToString(m_bhvs_active_time[i],2);
+      return_str += "$" + doubleToString(m_bhvs_active_time[i], 2);
       return_str += "$" + doubleToString(m_bhvs_active_pwt[i]);
       return_str += "$" + intToString(m_bhvs_active_pcs[i]);
       return_str += "$" + doubleToString(m_bhvs_active_cpu[i]);
       return_str += "$" + m_bhvs_active_upds[i];
       return_str += "$" + uintToString(m_bhvs_active_ipfs[i]);
-    }
-    else {
-      if(i>0)
-	return_str += ",";
+    } else {
+      if (i > 0)
+        return_str += ",";
       return_str += m_bhvs_active_desc[i];
     }
   }
 
-  if(return_str == "none")
+  if (return_str == "none")
     return_str = "";
-  return(return_str);
+  return (return_str);
 }
 
 //-----------------------------------------------------------
 // Procedure: clearActiveBHVs
 
-void HelmReport::clearActiveBHVs() 
-{
+void HelmReport::clearActiveBHVs() {
   m_bhvs_active_desc.clear();
   m_bhvs_active_time.clear();
   m_bhvs_active_upds.clear();
@@ -260,9 +237,8 @@ void HelmReport::clearActiveBHVs()
 //-----------------------------------------------------------
 // Procedure: addRunningBHV
 
-void HelmReport::addRunningBHV(const string& descriptor, double time, 
-			       const string& update_summary)
-{
+void HelmReport::addRunningBHV(const string &descriptor, double time,
+                               const string &update_summary) {
   m_bhvs_running_desc.push_back(descriptor);
   m_bhvs_running_time.push_back(time);
   m_bhvs_running_upds.push_back(update_summary);
@@ -272,47 +248,42 @@ void HelmReport::addRunningBHV(const string& descriptor, double time,
 // Procedure: getRunningBehaviors
 //   Example: "loiter$1252348077.59$4/4 : return$1252348047.12$0/0"
 
-string HelmReport::getRunningBehaviors(bool full_report) const
-{
+string HelmReport::getRunningBehaviors(bool full_report) const {
   string return_str;
   unsigned int i, vsize = m_bhvs_running_desc.size();
-  for(i=0; i<vsize; i++) {
-    if(full_report) {
-      if(i>0)
-	return_str += ":";
+  for (i = 0; i < vsize; i++) {
+    if (full_report) {
+      if (i > 0)
+        return_str += ":";
       return_str += m_bhvs_running_desc[i];
-      return_str += "$" + doubleToString(m_bhvs_running_time[i],2);
+      return_str += "$" + doubleToString(m_bhvs_running_time[i], 2);
       return_str += "$" + m_bhvs_running_upds[i];
-    }
-    else {
-      if(i>0)
-	return_str += ",";
+    } else {
+      if (i > 0)
+        return_str += ",";
       return_str += m_bhvs_running_desc[i];
     }
   }
-  if(return_str == "none")
+  if (return_str == "none")
     return_str = "";
-  return(return_str);
+  return (return_str);
 }
 
 //-----------------------------------------------------------
 // Procedure: clearRunningBHVs
 
-void HelmReport::clearRunningBHVs() 
-{
+void HelmReport::clearRunningBHVs() {
   m_bhvs_running_desc.clear();
   m_bhvs_running_time.clear();
   m_bhvs_running_upds.clear();
 }
 
-
 //-----------------------------------------------------------
 // Procedure: addIdleBHV
 //            getIdleBehaviors
 
-void HelmReport::addIdleBHV(const string& descriptor, double time,
-			    const string& update_summary)
-{
+void HelmReport::addIdleBHV(const string &descriptor, double time,
+                            const string &update_summary) {
   m_bhvs_idle_desc.push_back(descriptor);
   m_bhvs_idle_time.push_back(time);
   m_bhvs_idle_upds.push_back(update_summary);
@@ -322,34 +293,31 @@ void HelmReport::addIdleBHV(const string& descriptor, double time,
 // Procedure: getIdleBehaviors
 //   Example: "loiter$1252348077.59$4/4 : return$1252348047.12$0/0"
 
-string HelmReport::getIdleBehaviors(bool full_report) const
-{
+string HelmReport::getIdleBehaviors(bool full_report) const {
   string return_str;
   unsigned int i, vsize = m_bhvs_idle_desc.size();
-  for(i=0; i<vsize; i++) {
-    if(full_report) {
-      if(i>0)
-	return_str += ":";
+  for (i = 0; i < vsize; i++) {
+    if (full_report) {
+      if (i > 0)
+        return_str += ":";
       return_str += m_bhvs_idle_desc[i];
-      return_str += "$" + doubleToString(m_bhvs_idle_time[i],2);
+      return_str += "$" + doubleToString(m_bhvs_idle_time[i], 2);
       return_str += "$" + m_bhvs_idle_upds[i];
-    }
-    else {
-      if(i>0)
-	return_str += ",";
+    } else {
+      if (i > 0)
+        return_str += ",";
       return_str += m_bhvs_idle_desc[i];
     }
   }
-  if(return_str == "none")
+  if (return_str == "none")
     return_str = "";
-  return(return_str);
+  return (return_str);
 }
 
 //-----------------------------------------------------------
 // Procedure: clearIdleBHVs
 
-void HelmReport::clearIdleBHVs() 
-{
+void HelmReport::clearIdleBHVs() {
   m_bhvs_idle_desc.clear();
   m_bhvs_idle_time.clear();
   m_bhvs_idle_upds.clear();
@@ -358,18 +326,16 @@ void HelmReport::clearIdleBHVs()
 //-----------------------------------------------------------
 // Procedure: addCompletedBHV
 
-void HelmReport::addCompletedBHV(const string& descriptor, double time,
-				 const string& update_summary)
-{
-  if(descriptor == "")
+void HelmReport::addCompletedBHV(const string &descriptor, double time,
+                                 const string &update_summary) {
+  if (descriptor == "")
     return;
 
   m_bhvs_completed_desc.push_back(descriptor);
   m_bhvs_completed_time.push_back(time);
   m_bhvs_completed_upds.push_back(update_summary);
-  
 
-  if(m_bhvs_completed_desc.size() > 50) {
+  if (m_bhvs_completed_desc.size() > 50) {
     m_bhvs_completed_desc.pop_front();
     m_bhvs_completed_time.pop_front();
     m_bhvs_completed_upds.pop_front();
@@ -380,49 +346,43 @@ void HelmReport::addCompletedBHV(const string& descriptor, double time,
 // Procedure: getCompletedBehaviors
 //   Example: "loiter$1252348077.59$4/4 : return$1252348047.12$0/0"
 
-string HelmReport::getCompletedBehaviors(bool full_report) const
-{
+string HelmReport::getCompletedBehaviors(bool full_report) const {
   string return_str;
 
   unsigned int i, vsize = m_bhvs_completed_desc.size();
-  for(i=0; i<vsize; i++) {
-    if(full_report) {
-      if(i>0)
-	return_str += ":";
+  for (i = 0; i < vsize; i++) {
+    if (full_report) {
+      if (i > 0)
+        return_str += ":";
       return_str += m_bhvs_completed_desc[i];
-      return_str += "$" + doubleToString(m_bhvs_completed_time[i],2);
+      return_str += "$" + doubleToString(m_bhvs_completed_time[i], 2);
       return_str += "$" + m_bhvs_completed_upds[i];
-    }
-    else {
-      if(i>0)
-	return_str += ",";
+    } else {
+      if (i > 0)
+        return_str += ",";
       return_str += m_bhvs_completed_desc[i];
     }
   }
-  if(return_str == "none")
+  if (return_str == "none")
     return_str = "";
-  return(return_str);
+  return (return_str);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: clearCompletedBHVs
 
-void HelmReport::clearCompletedBHVs() 
-{
+void HelmReport::clearCompletedBHVs() {
   m_bhvs_completed_desc.clear();
   m_bhvs_completed_time.clear();
   m_bhvs_completed_upds.clear();
 }
 
-
 //-----------------------------------------------------------
 // Procedure: getDomainString()
-//   Example: [speed,0,5,26] [course,0,359,360] 
+//   Example: [speed,0,5,26] [course,0,359,360]
 
-string HelmReport::getDomainString() const
-{
-  return(domainToString(m_domain));
+string HelmReport::getDomainString() const {
+  return (domainToString(m_domain));
 
 #if 0
   string return_string;
@@ -444,121 +404,116 @@ string HelmReport::getDomainString() const
 //-----------------------------------------------------------
 // Procedure: getReportAsString()
 
-string HelmReport::getReportAsString() const
-{
+string HelmReport::getReportAsString() const {
   HelmReport empty_report;
-  return(getReportAsString(empty_report, true));
+  return (getReportAsString(empty_report, true));
 }
-
 
 //-----------------------------------------------------------
 // Procedure: getReportAsString(const HelmReport&)
 
-string HelmReport::getReportAsString(const HelmReport& prep, bool full) const
-{
+string HelmReport::getReportAsString(const HelmReport &prep, bool full) const {
   string report = "iter=" + uintToString(m_iteration);
   report += (",utc_time=" + doubleToString(m_time_utc, 2));
 
-  if(full || (m_ofnum != prep.getOFNUM()))
+  if (full || (m_ofnum != prep.getOFNUM()))
     report += (",ofnum=" + uintToString(m_ofnum));
-  if(full || (m_total_pcs_formed != prep.getTotalPcsFormed()))
+  if (full || (m_total_pcs_formed != prep.getTotalPcsFormed()))
     report += (",total_pcs_formed=" + uintToString(m_total_pcs_formed));
-  if(full || (m_total_pcs_cached != prep.getTotalPcsCached()))
+  if (full || (m_total_pcs_cached != prep.getTotalPcsCached()))
     report += (",total_pcs_cached=" + uintToString(m_total_pcs_cached));
-  if(full || (m_warning_count != prep.getWarnings()))
+  if (full || (m_warning_count != prep.getWarnings()))
     report += (",warnings=" + uintToString(m_warning_count));
-  if(full || (m_solve_time != prep.getSolveTime()))
+  if (full || (m_solve_time != prep.getSolveTime()))
     report += (",solve_time=" + doubleToString(m_solve_time, 2));
-  if(full || (m_create_time != prep.getCreateTime()))
+  if (full || (m_create_time != prep.getCreateTime()))
     report += (",create_time=" + doubleToString(m_create_time, 2));
 
-  if(full || (m_max_create_time != prep.getMaxCreateTime()))
+  if (full || (m_max_create_time != prep.getMaxCreateTime()))
     report += (",max_create_time=" + doubleToString(m_max_create_time, 2));
-  if(full || (m_max_solve_time != prep.getMaxSolveTime()))
+  if (full || (m_max_solve_time != prep.getMaxSolveTime()))
     report += (",max_solve_time=" + doubleToString(m_max_solve_time, 2));
-  if(full || (m_max_loop_time != prep.getMaxLoopTime()))
+  if (full || (m_max_loop_time != prep.getMaxLoopTime()))
     report += (",max_loop_time=" + doubleToString(m_max_loop_time, 2));
 
   double loop_time = m_create_time + m_solve_time;
-  if(full || (loop_time != prep.getLoopTime()))
+  if (full || (loop_time != prep.getLoopTime()))
     report += (",loop_time=" + doubleToString(loop_time, 2));
-  
+
   string decision_summary = getDecisionSummary();
-  if(full || (decision_summary != prep.getDecisionSummary()))
+  if (full || (decision_summary != prep.getDecisionSummary()))
     report += "," + decision_summary;
 
-  if(full || (m_halted != prep.getHalted()))
+  if (full || (m_halted != prep.getHalted()))
     report += (",halted=" + boolToString(m_halted));
 
-  if(full || (m_active_goal != prep.getActiveGoal()))
+  if (full || (m_active_goal != prep.getActiveGoal()))
     report += (",active_goal=" + boolToString(m_active_goal));
-  
-  if(full || (m_modes != prep.getModeSummary())) {
+
+  if (full || (m_modes != prep.getModeSummary())) {
     report += ",modes=";
-    if(m_modes == "")
+    if (m_modes == "")
       report += "none";
     else
       report += m_modes;
   }
 
   string running_bhvs = getRunningBehaviors();
-  if(full || (running_bhvs != prep.getRunningBehaviors())) {
+  if (full || (running_bhvs != prep.getRunningBehaviors())) {
     report += ",running_bhvs=";
-    if(running_bhvs == "")
+    if (running_bhvs == "")
       report += "none";
     else
       report += running_bhvs;
   }
 
   string active_bhvs = getActiveBehaviors();
-  if(full || (active_bhvs != prep.getActiveBehaviors())) {
+  if (full || (active_bhvs != prep.getActiveBehaviors())) {
     report += ",active_bhvs=";
-    if(active_bhvs == "")
+    if (active_bhvs == "")
       report += "none";
     else
       report += active_bhvs;
   }
 
   string idle_bhvs = getIdleBehaviors();
-  if(full || (idle_bhvs != prep.getIdleBehaviors())) {
+  if (full || (idle_bhvs != prep.getIdleBehaviors())) {
     report += ",idle_bhvs=";
-    if(idle_bhvs == "")
+    if (idle_bhvs == "")
       report += "none";
     else
       report += idle_bhvs;
   }
 
   string completed_bhvs = getCompletedBehaviors();
-  if(full || (completed_bhvs != prep.getCompletedBehaviors())) {
+  if (full || (completed_bhvs != prep.getCompletedBehaviors())) {
     report += ",completed_bhvs=";
-    if(completed_bhvs == "") {
-      if(prep.getCompletedBehaviors() == "")
-	report += "none";
-    }
-    else
+    if (completed_bhvs == "") {
+      if (prep.getCompletedBehaviors() == "")
+        report += "none";
+    } else
       report += completed_bhvs;
   }
 
   string domain_str = domainToString(m_domain);
-  if(full || (domain_str != prep.getDomainString()))
+  if (full || (domain_str != prep.getDomainString()))
     report += ",ivpdomain=\"" + domain_str + "\"";
 
-  if(full || (m_halt_message != prep.getHaltMsg())) {
+  if (full || (m_halt_message != prep.getHaltMsg())) {
     report += ",halt_msg=";
-    if(m_halt_message == "")
+    if (m_halt_message == "")
       report += "none";
     else
       report += m_halt_message;
   }
 
-  return(report);
+  return (report);
 }
 
 //---------------------------------------------------------
 // Procedure: print()
 
-void HelmReport::print() const
-{
+void HelmReport::print() const {
   cout << "HelmReport:-----------------------------------" << endl;
   cout << "halt_message:" << m_halt_message << endl;
   cout << "active_bhvs:" << getActiveBehaviors() << endl;
@@ -575,11 +530,10 @@ void HelmReport::print() const
   cout << "active_goal:" << boolToString(m_active_goal) << endl;
 }
 
-
 //---------------------------------------------------------
 // Procedure: formattedSummary()
-//   
-// 
+//
+//
 //  Helm Iteration: 2       (hz=0.25)(1)  (hz=0.25)(1)  (hz=0.25)(max)
 //    IvP functions:  0
 //    Mode(s):        ACTIVE:LOITERING
@@ -587,8 +541,8 @@ void HelmReport::print() const
 //    CreateTime:     0.00    (max=0.00)
 //    LoopTime:       0.00    (max=0.00)
 //    Halted:         false   (0 warnings: 0 total)
-//    Active Goal:    true    
-//  Helm Decision: [speed,0,5,26] [course,0,359,360] 
+//    Active Goal:    true
+//  Helm Decision: [speed,0,5,26] [course,0,359,360]
 //    course = 195
 //    speed  = 1.2
 //  Behaviors Active: ---------- (1)
@@ -598,8 +552,8 @@ void HelmReport::print() const
 //    waypt_return, station-keep
 //  Behaviors Completed: ------- (0)
 //
-list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
-{
+list<string> HelmReport::formattedSummary(double curr_time,
+                                          bool verbose) const {
   list<string> rlist;
 
   string str;
@@ -610,16 +564,16 @@ list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
   rlist.push_back("  Pieces (Cached): " + uintToString(m_total_pcs_cached));
   rlist.push_back("  Mode(s):         " + m_modes);
 
-  str =  "  SolveTime:   " + doubleToString(m_solve_time,2);
-  str += "   (max=" + doubleToString(m_max_solve_time,2) + ")";
+  str = "  SolveTime:   " + doubleToString(m_solve_time, 2);
+  str += "   (max=" + doubleToString(m_max_solve_time, 2) + ")";
   rlist.push_back(str);
 
-  str =  "  CreateTime:  " + doubleToString(m_create_time,2);
-  str += "   (max=" + doubleToString(m_max_create_time,2) + ")";
+  str = "  CreateTime:  " + doubleToString(m_create_time, 2);
+  str += "   (max=" + doubleToString(m_max_create_time, 2) + ")";
   rlist.push_back(str);
 
-  str =  "  LoopTime:    " + doubleToString(getLoopTime(),2);
-  str += "   (max=" + doubleToString(m_max_loop_time,2) + ")";
+  str = "  LoopTime:    " + doubleToString(getLoopTime(), 2);
+  str += "   (max=" + doubleToString(m_max_loop_time, 2) + ")";
   rlist.push_back(str);
 
   str = "  Halted:         " + boolToString(m_halted);
@@ -632,33 +586,33 @@ list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
   string domain_str = "[" + domainToString(m_domain) + "]";
   domain_str = findReplace(domain_str, ":", "] [");
   rlist.push_back("Helm Decision: " + domain_str);
-  
+
   map<string, double>::const_iterator p;
   unsigned int i, vsize = m_domain.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string varname = m_domain.getVarName(i);
     p = m_decisions.find(varname);
-    if(p == m_decisions.end())
+    if (p == m_decisions.end())
       rlist.push_back("  " + varname + " = no-decision");
     else
       rlist.push_back("  " + varname + " = " + doubleToStringX(p->second));
   }
-  
-  string active_bhvs    = uintToString(m_bhvs_active_desc.size());
-  string running_bhvs   = uintToString(m_bhvs_running_desc.size());
-  string idle_bhvs      = uintToString(m_bhvs_idle_desc.size());
+
+  string active_bhvs = uintToString(m_bhvs_active_desc.size());
+  string running_bhvs = uintToString(m_bhvs_running_desc.size());
+  string idle_bhvs = uintToString(m_bhvs_idle_desc.size());
   string completed_bhvs = uintToString(m_bhvs_completed_desc.size());
 
   string spawnable_bhvs = uintToString(m_templating_summary.size());
   rlist.push_back("Behaviors Spawnable: --------- (" + spawnable_bhvs + ")");
-  for(unsigned i=0; i<m_templating_summary.size(); i++) {
+  for (unsigned i = 0; i < m_templating_summary.size(); i++) {
     str = "  " + m_templating_summary[i];
     rlist.push_back(str);
   }
 
   rlist.push_back("Behaviors Active: ---------- (" + active_bhvs + ")");
   vsize = m_bhvs_active_desc.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     str = "  " + m_bhvs_active_desc[i];
     string time_in_state = timeInState(curr_time, m_bhvs_active_time[i]);
     str += " [" + time_in_state + "]";
@@ -669,10 +623,9 @@ list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
     rlist.push_back(str);
   }
 
-  
   rlist.push_back("Behaviors Running: --------- (" + running_bhvs + ")");
   vsize = m_bhvs_running_desc.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     str = "  " + m_bhvs_running_desc[i];
     string time_in_state = timeInState(curr_time, m_bhvs_running_time[i]);
     str += " [" + time_in_state + "]";
@@ -681,19 +634,18 @@ list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
 
   rlist.push_back("Behaviors Idle: ------------ (" + idle_bhvs + ")");
   vsize = m_bhvs_idle_desc.size();
-  if(verbose) {
-    for(i=0; i<vsize; i++) {
+  if (verbose) {
+    for (i = 0; i < vsize; i++) {
       str = "  " + m_bhvs_idle_desc[i];
       string time_in_state = timeInState(curr_time, m_bhvs_idle_time[i]);
       str += " [" + time_in_state + "]";
       rlist.push_back(str);
     }
-  }
-  else {
+  } else {
     str = "  ";
-    for(i=0; i<vsize; i++) {
-      if(i>0)
-	str += ", ";
+    for (i = 0; i < vsize; i++) {
+      if (i > 0)
+        str += ", ";
       str += m_bhvs_idle_desc[i];
       string time_in_state = timeInState(curr_time, m_bhvs_idle_time[i]);
       str += "[" + time_in_state + "]";
@@ -703,50 +655,38 @@ list<string> HelmReport::formattedSummary(double curr_time, bool verbose) const
 
   rlist.push_back("Behaviors Completed: ------- (" + completed_bhvs + ")");
   vsize = m_bhvs_completed_desc.size();
-  if(verbose) {
-    for(i=0; i<vsize; i++) {
+  if (verbose) {
+    for (i = 0; i < vsize; i++) {
       str = "  {" + m_bhvs_completed_desc[i] + "}";
       string time_in_state = timeInState(curr_time, m_bhvs_completed_time[i]);
       str += " [" + time_in_state + "]";
       rlist.push_back(str);
     }
-  }
-  else {
-    if(vsize > 0) {
+  } else {
+    if (vsize > 0) {
       str = "  ";
-      for(i=0; i<vsize; i++) {
-	if(i>0) 
-	  str += ", ";
-	str += m_bhvs_completed_desc[i];
-	string time_in_state = timeInState(curr_time, m_bhvs_completed_time[i]);
-	str += "[" + time_in_state + "]";
+      for (i = 0; i < vsize; i++) {
+        if (i > 0)
+          str += ", ";
+        str += m_bhvs_completed_desc[i];
+        string time_in_state = timeInState(curr_time, m_bhvs_completed_time[i]);
+        str += "[" + time_in_state + "]";
       }
       rlist.push_back(str);
     }
   }
-  
-  return(rlist);
+
+  return (rlist);
 }
 
 //---------------------------------------------------------
 // Procedure: timeInState()
 
-string HelmReport::timeInState(double curr_time, double mark_time) const
-{
+string HelmReport::timeInState(double curr_time, double mark_time) const {
   string s_time_in_state = "always";
-  if(mark_time > 0) {
+  if (mark_time > 0) {
     double d_time_in_state = curr_time - mark_time;
-    s_time_in_state = doubleToString(d_time_in_state,2);
+    s_time_in_state = doubleToString(d_time_in_state, 2);
   }
-  return(s_time_in_state);
+  return (s_time_in_state);
 }
-
-
-
-
-
-
-
-
-
-

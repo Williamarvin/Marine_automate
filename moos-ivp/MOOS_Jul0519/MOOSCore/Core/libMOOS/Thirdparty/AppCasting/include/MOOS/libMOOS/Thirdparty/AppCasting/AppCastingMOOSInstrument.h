@@ -29,63 +29,62 @@
 #ifndef APPCASTING_MOOS_INSTRUMENT_HEADER
 #define APPCASTING_MOOS_INSTRUMENT_HEADER
 
-#include <sstream>
-#include <iostream>
-#include <vector>
-#include <string>
-#include "MOOS/libMOOS/App/MOOSInstrument.h"
 #include "AppCast.h"
+#include "MOOS/libMOOS/App/MOOSInstrument.h"
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
-class AppCastingMOOSInstrument : public CMOOSInstrument
-{
+class AppCastingMOOSInstrument : public CMOOSInstrument {
 public:
   AppCastingMOOSInstrument();
-  virtual ~AppCastingMOOSInstrument() {};
+  virtual ~AppCastingMOOSInstrument(){};
 
   virtual bool Iterate();
-  virtual bool OnNewMail(MOOSMSG_LIST&);
+  virtual bool OnNewMail(MOOSMSG_LIST &);
   virtual bool OnStartUp();
-  virtual bool buildReport() {return(false);};
-  
- protected:
-  void         RegisterVariables();
-  void         PostReport(const std::string& directive="");
-  void         reportEvent(const std::string&);
-  void         reportConfigWarning(const std::string&);
-  void         reportUnhandledConfigWarning(const std::string&);
-  bool         reportRunWarning(const std::string&);
-  void         retractRunWarning(const std::string&);
-  unsigned int getWarningCount(const std::string&) const;
-  bool 			OnStartUpDirectives(std::string directives="");
+  virtual bool buildReport() { return (false); };
 
- private:
-  void         handleMailAppCastRequest(const std::string&);
-  bool         appcastRequested();
+protected:
+  void RegisterVariables();
+  void PostReport(const std::string &directive = "");
+  void reportEvent(const std::string &);
+  void reportConfigWarning(const std::string &);
+  void reportUnhandledConfigWarning(const std::string &);
+  bool reportRunWarning(const std::string &);
+  void retractRunWarning(const std::string &);
+  unsigned int getWarningCount(const std::string &) const;
+  bool OnStartUpDirectives(std::string directives = "");
+
+private:
+  void handleMailAppCastRequest(const std::string &);
+  bool appcastRequested();
 
 protected:
   unsigned int m_iteration;
-  double       m_curr_time;
-  double       m_start_time;
-  double       m_time_warp;
-  double       m_last_iterate_time;
-  double       m_iterate_start_time;
-  double       m_last_report_time;
-  double       m_term_report_interval;
-  bool         m_term_reporting;
+  double m_curr_time;
+  double m_start_time;
+  double m_time_warp;
+  double m_last_iterate_time;
+  double m_iterate_start_time;
+  double m_last_report_time;
+  double m_term_report_interval;
+  bool m_term_reporting;
 
   std::stringstream m_msgs;
 
-  AppCast      m_ac;
-  std::string  m_host_community;
+  AppCast m_ac;
+  std::string m_host_community;
 
- private:
-  double       m_last_report_time_appcast;
-  bool         m_new_run_warning;
-  bool         m_new_cfg_warning;
+private:
+  double m_last_report_time_appcast;
+  bool m_new_run_warning;
+  bool m_new_cfg_warning;
 
   // Map from KEY (AC requestor) to config param.
-  std::map<std::string, double>       m_map_bcast_duration;
-  std::map<std::string, double>       m_map_bcast_tstart;
-  std::map<std::string, std::string>  m_map_bcast_thresh;  
+  std::map<std::string, double> m_map_bcast_duration;
+  std::map<std::string, double> m_map_bcast_tstart;
+  std::map<std::string, std::string> m_map_bcast_thresh;
 };
 #endif

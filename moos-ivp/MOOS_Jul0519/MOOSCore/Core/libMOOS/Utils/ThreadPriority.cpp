@@ -24,103 +24,90 @@
 ////////////////////////////////////////////////////////////////////////////
 **/
 #ifndef WIN32
-	#include <pthread.h>
+#include <pthread.h>
 #endif
-#include <stdexcept>
+#include <cerrno>
 #include <cstring>
 #include <iostream>
-#include <cerrno>
+#include <stdexcept>
 
-namespace MOOS
-{
-bool BoostThisThread()
-{
+namespace MOOS {
+bool BoostThisThread() {
 #ifdef WIN32
-	std::cerr<<"MOOS::BoostThisThread is not supported in WIN32 (yet)\n";
-	return false;
+  std::cerr << "MOOS::BoostThisThread is not supported in WIN32 (yet)\n";
+  return false;
 #else
-	try
-	{
-		int policy = SCHED_OTHER;
-		struct sched_param param;
-		if(pthread_getschedparam(pthread_self(), &policy, &param)!=0)
-		{
-			throw std::runtime_error("MOOS::BoostThisThread() failed to get this thread's scheduling details");
-		}
-		//std::cout<<"default priority"<< param.sched_priority<<"\n";
+  try {
+    int policy = SCHED_OTHER;
+    struct sched_param param;
+    if (pthread_getschedparam(pthread_self(), &policy, &param) != 0) {
+      throw std::runtime_error("MOOS::BoostThisThread() failed to get this "
+                               "thread's scheduling details");
+    }
+    // std::cout<<"default priority"<< param.sched_priority<<"\n";
 
-		int max_priority;
-		if((max_priority = sched_get_priority_max(policy))==-1)
-		{
-			throw std::runtime_error("MOOS::BoostThisThread() failed to get this thread's max priority");
-		}
-		//std::cout<<"max priority"<< param.sched_priority<<"\n";
+    int max_priority;
+    if ((max_priority = sched_get_priority_max(policy)) == -1) {
+      throw std::runtime_error(
+          "MOOS::BoostThisThread() failed to get this thread's max priority");
+    }
+    // std::cout<<"max priority"<< param.sched_priority<<"\n";
 
-		//we might already be at max priority
-		if(param.sched_priority==max_priority)
-		{
-		    //nothing to be done...
-		    throw std::runtime_error("MOOS::BoostThisThread() max priority reached");
-		}
+    // we might already be at max priority
+    if (param.sched_priority == max_priority) {
+      // nothing to be done...
+      throw std::runtime_error("MOOS::BoostThisThread() max priority reached");
+    }
 
-		param.sched_priority+=1;
+    param.sched_priority += 1;
 
-		if(pthread_setschedparam(pthread_self(), policy, &param)!=0)
-		{
-			throw std::runtime_error("MOOS::BoostThisThread() failed to increase this thread's  priority");
-		}
+    if (pthread_setschedparam(pthread_self(), policy, &param) != 0) {
+      throw std::runtime_error(
+          "MOOS::BoostThisThread() failed to increase this thread's  priority");
+    }
 
-		//std::cerr<<"boosted IO of thread "<<pthread_self()<<"\n";
-	}
-	catch(const std::runtime_error & e)
-	{
-		std::cerr<<e.what()<<" "<<strerror(errno)<<"\n";
-		return false;
-	}
-	return true;
+    // std::cerr<<"boosted IO of thread "<<pthread_self()<<"\n";
+  } catch (const std::runtime_error &e) {
+    std::cerr << e.what() << " " << strerror(errno) << "\n";
+    return false;
+  }
+  return true;
 
 #endif
-
 }
 
-bool GetThisThreadsPriority(int & Priority, int & MaxAllowed)
-{
+bool GetThisThreadsPriority(int &Priority, int &MaxAllowed) {
 #ifdef WIN32
-	Priority;
-	MaxAllowed;
-	std::cerr<<"MOOS::GetThisThreadsPriority is not supported in WIN32 (yet)\n";
-	return false;
+  Priority;
+  MaxAllowed;
+  std::cerr << "MOOS::GetThisThreadsPriority is not supported in WIN32 (yet)\n";
+  return false;
 #else
-	int policy = SCHED_OTHER;
-	struct sched_param param;
-	int max_priority;
+  int policy = SCHED_OTHER;
+  struct sched_param param;
+  int max_priority;
 
-	try
-	{
-		if(pthread_getschedparam(pthread_self(), &policy, &param)!=0)
-		{
-			throw std::runtime_error("MOOS::BoostThisThread() failed to get this thread's scheduling details");
-		}
+  try {
+    if (pthread_getschedparam(pthread_self(), &policy, &param) != 0) {
+      throw std::runtime_error("MOOS::BoostThisThread() failed to get this "
+                               "thread's scheduling details");
+    }
 
-		if((max_priority = sched_get_priority_max(policy))==-1)
-		{
-			throw std::runtime_error("MOOS::BoostThisThread() failed to get this thread's max priority");
-		}
+    if ((max_priority = sched_get_priority_max(policy)) == -1) {
+      throw std::runtime_error(
+          "MOOS::BoostThisThread() failed to get this thread's max priority");
+    }
 
-	}
-	catch(const std::runtime_error & e)
-	{
-		std::cerr<<e.what()<<" "<<strerror(errno)<<"\n";
-		return false;
-	}
+  } catch (const std::runtime_error &e) {
+    std::cerr << e.what() << " " << strerror(errno) << "\n";
+    return false;
+  }
 
-	Priority = param.sched_priority;
-	MaxAllowed = max_priority ;
+  Priority = param.sched_priority;
+  MaxAllowed = max_priority;
 
-	return true;
+  return true;
 #endif
-
 }
 
-
-}
+} // namespace MOOS

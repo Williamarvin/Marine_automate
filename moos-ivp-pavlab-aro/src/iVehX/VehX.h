@@ -12,18 +12,16 @@
 #ifndef VehX_HEADER
 #define VehX_HEADER
 
-#include <string>
-#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "MOOS/libMOOSGeodesy/MOOSGeodesy.h"
+#include <string>
 
-#include "SockNinja.h"              // from lib_socket_utils
-#include "MBUtils.h"                // from lib_mbutil
-#include "LatLonFormatUtils.h"      // from lib_mbutil
-#include "Thruster.h"               
+#include "LatLonFormatUtils.h" // from lib_mbutil
+#include "MBUtils.h"           // from lib_mbutil
+#include "SockNinja.h"         // from lib_socket_utils
+#include "Thruster.h"
 
-
-class VehX : public AppCastingMOOSApp
-{
+class VehX : public AppCastingMOOSApp {
 public:
   VehX();
   ~VehX();
@@ -46,43 +44,39 @@ protected: // App Specific functions
   bool handleConfigIgnoreMsg(std::string);
   bool handleMsgGPRMC(std::string);
 
-  bool reportBadMessage(std::string msg, std::string reason="");
+  bool reportBadMessage(std::string msg, std::string reason = "");
   bool GeodesySetup();
   void checkForStalenessOrAllStop();
-  
 
-private: // Config variables
-  double       m_max_rudder;       // MAX_RUDDER
-  double       m_max_thrust;       // MAX_THRUST
-  std::string  m_drive_mode;       // DRIVE_MODE
-  std::string  m_vname;            // Vehicle name
+private:                    // Config variables
+  double m_max_rudder;      // MAX_RUDDER
+  double m_max_thrust;      // MAX_THRUST
+  std::string m_drive_mode; // DRIVE_MODE
+  std::string m_vname;      // Vehicle name
   std::set<std::string> m_ignore_msgs;
-  
+
 private: // State variables
   CMOOSGeodesy m_geodesy;
-  SockNinja    m_ninja;
-  Thruster     m_thrust;
+  SockNinja m_ninja;
+  Thruster m_thrust;
 
-  bool         m_ivp_allstop;
-  bool         m_moos_manual_override;
+  bool m_ivp_allstop;
+  bool m_moos_manual_override;
 
   // Stale Message Detection
-  bool         m_stale_check_enabled;
-  bool         m_stale_mode;
-  double       m_stale_threshold;
+  bool m_stale_check_enabled;
+  bool m_stale_mode;
+  double m_stale_threshold;
   unsigned int m_count_stale;
-  double       m_tstamp_des_rudder;
-  double       m_tstamp_des_thrust;
+  double m_tstamp_des_rudder;
+  double m_tstamp_des_thrust;
 
-  double       m_nav_x;
-  double       m_nav_y;
-  double       m_nav_hdg;
-  double       m_nav_spd;
+  double m_nav_x;
+  double m_nav_y;
+  double m_nav_hdg;
+  double m_nav_spd;
 
   unsigned int m_bad_nmea_semantic;
-
 };
 
-#endif 
-
-
+#endif

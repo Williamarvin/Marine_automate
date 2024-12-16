@@ -8,92 +8,89 @@
 #ifndef FldBloomStormSim_HEADER
 #define FldBloomStormSim_HEADER
 
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "XYFormatUtilsPoly.h"
-#include "XYPolygon.h"
-#include <cstdlib>    // rand
 #include "GeomUtils.h" // randPointInPoly
-#include <queue>       
-#include "XYRangePulse.h"
-#include <unistd.h>
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "NodeRecord.h"
 #include "NodeRecordUtils.h"
 #include "XYCircle.h"
+#include "XYFormatUtilsPoly.h"
+#include "XYPolygon.h"
+#include "XYRangePulse.h"
+#include <cstdlib> // rand
+#include <queue>
+#include <unistd.h>
 
-class FldBloomStormSim : public AppCastingMOOSApp
-{
- public:
-   FldBloomStormSim();
-   ~FldBloomStormSim();
+class FldBloomStormSim : public AppCastingMOOSApp {
+public:
+  FldBloomStormSim();
+  ~FldBloomStormSim();
 
- protected: // Standard MOOSApp functions to overload  
-   bool OnNewMail(MOOSMSG_LIST &NewMail);
-   bool Iterate();
-   bool OnConnectToServer();
-   bool OnStartUp();
+protected: // Standard MOOSApp functions to overload
+  bool OnNewMail(MOOSMSG_LIST &NewMail);
+  bool Iterate();
+  bool OnConnectToServer();
+  bool OnStartUp();
 
- protected: // Standard AppCastingMOOSApp function to overload 
-   bool buildReport();
-   bool handleMailNodeReport(const std::string& node_report_str);
-   bool handleSampleFinishedLog(const std::string vname); 
+protected: // Standard AppCastingMOOSApp function to overload
+  bool buildReport();
+  bool handleMailNodeReport(const std::string &node_report_str);
+  bool handleSampleFinishedLog(const std::string vname);
 
- protected:
-   void registerVariables();
-   bool handleConfigRegion(std::string opstr, unsigned int number);
-   
-   
-   bool manageBlooms();
-   bool checkActiveBlooms();
-   bool notifyVehiclesOfBloom();
-   
-   bool manageStorm();
-   bool checkActiveStorm(); 
-   bool notifyVehiclesOfStorm();
+protected:
+  void registerVariables();
+  bool handleConfigRegion(std::string opstr, unsigned int number);
 
-   double getRange(const XYRangePulse & Pulse, double time); 
+  bool manageBlooms();
+  bool checkActiveBlooms();
+  bool notifyVehiclesOfBloom();
 
- private: // Configuration variables
-   XYPolygon m_region_1;
-   XYPolygon m_region_2;
-   XYPolygon m_storm_region;
+  bool manageStorm();
+  bool checkActiveStorm();
+  bool notifyVehiclesOfStorm();
 
-   XYCircle m_storm_circle;
+  double getRange(const XYRangePulse &Pulse, double time);
 
-   double m_bloom_rad_max;
-   double m_bloom_rad_min;
-   double m_bloom_duration_max;
-   double m_bloom_duration_min;
-   double m_probability_of_new_bloom;
-   double m_time_between_bloom_attempts; 
+private: // Configuration variables
+  XYPolygon m_region_1;
+  XYPolygon m_region_2;
+  XYPolygon m_storm_region;
 
-   double m_storm_speed;
-   double m_storm_radius; 
-   double m_storm_max_angle;
-   double m_time_between_storms;
+  XYCircle m_storm_circle;
 
- private: // State variables
+  double m_bloom_rad_max;
+  double m_bloom_rad_min;
+  double m_bloom_duration_max;
+  double m_bloom_duration_min;
+  double m_probability_of_new_bloom;
+  double m_time_between_bloom_attempts;
 
-   double m_last_storm_time;
-   double m_last_bloom_start_time;
-   unsigned int m_bloom_count;
-   unsigned int m_storm_count;
-   unsigned int m_unsampled_blooms_completed;
-   unsigned int m_sampled_blooms_completed; 
+  double m_storm_speed;
+  double m_storm_radius;
+  double m_storm_max_angle;
+  double m_time_between_storms;
 
-   std::list<XYRangePulse> m_active_blooms;
-   double m_storm_heading;
-   double m_storm_x;
-   double m_storm_y;
-   double m_storm_last_update_time;
-   bool m_storm_active; 
+private: // State variables
+  double m_last_storm_time;
+  double m_last_bloom_start_time;
+  unsigned int m_bloom_count;
+  unsigned int m_storm_count;
+  unsigned int m_unsampled_blooms_completed;
+  unsigned int m_sampled_blooms_completed;
 
-  // Key for each map below is the vehicle name. 
-  std::map<std::string, NodeRecord>   m_map_node_records;
+  std::list<XYRangePulse> m_active_blooms;
+  double m_storm_heading;
+  double m_storm_x;
+  double m_storm_y;
+  double m_storm_last_update_time;
+  bool m_storm_active;
+
+  // Key for each map below is the vehicle name.
+  std::map<std::string, NodeRecord> m_map_node_records;
 
   std::set<std::string> m_vehicles_in_bloom;
   std::set<std::string> m_vehicles_in_storm;
 
-  std::set<std::string> m_blooms_sampled_labels; 
+  std::set<std::string> m_blooms_sampled_labels;
 };
 
-#endif 
+#endif

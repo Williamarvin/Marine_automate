@@ -20,20 +20,19 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cstdlib>
-#include <iostream>
+
+#include "QueryDB_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "QueryDB_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  uQueryDB is a command-line tool for querying a MOOSDB with a  ");
@@ -42,7 +41,7 @@ void showSynopsis()
   blk("  It finds the MOOSDB via mission file provided on the command  ");
   blk("  line, or the IP address and port number given on the command  ");
   blk("  line. It will connect to the DB, register for the variables   ");
-  blk("  involved in the logic condition(s) and determine if the       "); 
+  blk("  involved in the logic condition(s) and determine if the       ");
   blk("  condition holds. It will then exit with 0 if it holds or 1    ");
   blk("  otherwise.                                                    ");
   blk("                                                                ");
@@ -53,8 +52,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uQueryDB condition [file.moos] [OPTIONS]                 ");
@@ -113,16 +111,17 @@ void showHelpAndExit()
   blk("   $ uQueryDB alpha.moos                                        ");
   blk("   $ uQueryDB alpha.moos --condition=\"DB_UPTIME > 20\"         ");
   blk("   $ uQueryDB alpha.moos --condition=\"DEPLOY=true\" --wait=10  ");
-  blk("   $ uQueryDB --condition=\"DEPLOY=false\" --host=localhost --port=9000");
-  blk("   $ uQueryDB alpha.moos --condition=\"((MISSION=complete) or (MISSION=halt))\"");
+  blk("   $ uQueryDB --condition=\"DEPLOY=false\" --host=localhost "
+      "--port=9000");
+  blk("   $ uQueryDB alpha.moos --condition=\"((MISSION=complete) or "
+      "(MISSION=halt))\"");
   exit(0);
 }
 
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uQueryDB Example MOOS Configuration                             ");
   blu("=============================================================== ");
@@ -156,12 +155,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blu("=============================================================== ");
   blu("uQueryDB INTERFACE                                              ");
   blu("=============================================================== ");
@@ -184,18 +181,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uQueryDB", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

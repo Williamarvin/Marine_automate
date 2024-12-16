@@ -22,152 +22,133 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
-#include <cmath>
-#include "GeomUtils.h"
-#include "AngleUtils.h"
+
 #include "CircularUtils.h"
+#include "AngleUtils.h"
+#include "GeomUtils.h"
+#include <cmath>
 
 #ifndef M_PI
 #define M_PI 3.1415926
 #endif
 
-
 using namespace std;
 
 //---------------------------------------------------------------
 // Procedure: arcFlight
-//   Purpose: 
+//   Purpose:
 
-bool arcFlight(double x1, double y1, double heading, double radius,
-	       double dist, bool port, double& rx, double& ry, 
-	       double& rheading)
-{
-  if((dist < 0) || (radius < 0))
-    return(false);
+bool arcFlight(double x1, double y1, double heading, double radius, double dist,
+               bool port, double &rx, double &ry, double &rheading) {
+  if ((dist < 0) || (radius < 0))
+    return (false);
 
-  // Calculate the pivot point by calculating the angle from 
+  // Calculate the pivot point by calculating the angle from
   // the start point to the pivot point and then projecting.
   double ang_ctr_to_start;
   double ang_ctr_to_finish;
-  if(port) {
+  if (port) {
     ang_ctr_to_start = heading + 90;
-    if(ang_ctr_to_start >= 360)
+    if (ang_ctr_to_start >= 360)
       ang_ctr_to_start -= 360;
-  }
-  else {
+  } else {
     ang_ctr_to_start = heading - 90;
-    if(ang_ctr_to_start < 0)
+    if (ang_ctr_to_start < 0)
       ang_ctr_to_start += 360;
   }
 
-  double circumf   = M_PI * radius * 2;
-  double arc_pct   = dist / circumf;
+  double circumf = M_PI * radius * 2;
+  double arc_pct = dist / circumf;
   double delta_hdg = arc_pct * 360;
 
   // Calculate the new-heading for return and for calculating
   // the new or return x,y position.
-  if(delta_hdg >= 360)
+  if (delta_hdg >= 360)
     delta_hdg = angle360(delta_hdg);
 
-  if(port)
+  if (port)
     delta_hdg = -delta_hdg + 360;
 
-  rheading = heading + delta_hdg; 
+  rheading = heading + delta_hdg;
   ang_ctr_to_finish = ang_ctr_to_start + delta_hdg;
-  if(rheading >= 360)
+  if (rheading >= 360)
     rheading -= 360;
-  if(ang_ctr_to_finish >= 360)
+  if (ang_ctr_to_finish >= 360)
     ang_ctr_to_finish -= 360;
 
   // Now calculate the start x,y position
   double mod_ang_cts = -ang_ctr_to_start + 90;
-  double radians     = (mod_ang_cts/180.0) * M_PI;
-  double ctr_x       = x1 - (cos(radians) * radius);
-  double ctr_y       = y1 - (sin(radians) * radius);
+  double radians = (mod_ang_cts / 180.0) * M_PI;
+  double ctr_x = x1 - (cos(radians) * radius);
+  double ctr_y = y1 - (sin(radians) * radius);
 
   // Now calculate the new x,y position
   double mod_ang_ctf = -ang_ctr_to_finish + 90;
-  double new_radians = (mod_ang_ctf/180.0) * M_PI;
-  rx                 = ctr_x + (cos(new_radians) * radius);
-  ry                 = ctr_y + (sin(new_radians) * radius);
+  double new_radians = (mod_ang_ctf / 180.0) * M_PI;
+  rx = ctr_x + (cos(new_radians) * radius);
+  ry = ctr_y + (sin(new_radians) * radius);
 
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: arcFlight
-//   Purpose: 
+//   Purpose:
 
 XYArc arcFlight(double x1, double y1, double heading, double radius,
-		double dist, bool port)
-{
+                double dist, bool port) {
   XYArc arc;
-  if((dist < 0) || (radius < 0))
-    return(arc);
+  if ((dist < 0) || (radius < 0))
+    return (arc);
 
-  // Calculate the pivot point by calculating the angle from 
+  // Calculate the pivot point by calculating the angle from
   // the start point to the pivot point and then projecting.
   double ang_ctr_to_start;
   double ang_ctr_to_finish;
-  if(port) {
+  if (port) {
     ang_ctr_to_start = heading + 90;
-    if(ang_ctr_to_start >= 360)
+    if (ang_ctr_to_start >= 360)
       ang_ctr_to_start -= 360;
-  }
-  else {
+  } else {
     ang_ctr_to_start = heading - 90;
-    if(ang_ctr_to_start < 0)
+    if (ang_ctr_to_start < 0)
       ang_ctr_to_start += 360;
   }
 
-  double circumf   = M_PI * radius * 2;
-  double arc_pct   = dist / circumf;
+  double circumf = M_PI * radius * 2;
+  double arc_pct = dist / circumf;
   double delta_hdg = arc_pct * 360;
 
   // Calculate the new-heading for return and for calculating
   // the new or return x,y position.
-  if(delta_hdg >= 360)
+  if (delta_hdg >= 360)
     delta_hdg = angle360(delta_hdg);
 
-  if(port)
+  if (port)
     delta_hdg = -delta_hdg + 360;
 
   ang_ctr_to_finish = ang_ctr_to_start + delta_hdg;
-  if(ang_ctr_to_finish >= 360)
+  if (ang_ctr_to_finish >= 360)
     ang_ctr_to_finish -= 360;
 
   // Now calculate the start x,y position
   double mod_ang_cts = -ang_ctr_to_start + 90;
-  double radians     = (mod_ang_cts/180.0) * M_PI;
-  double ctr_x       = x1 - (cos(radians) * radius);
-  double ctr_y       = y1 - (sin(radians) * radius);
+  double radians = (mod_ang_cts / 180.0) * M_PI;
+  double ctr_x = x1 - (cos(radians) * radius);
+  double ctr_y = y1 - (sin(radians) * radius);
 
   // Now calculate the new x,y position
   double mod_ang_ctf = -ang_ctr_to_finish + 90;
-  double new_radians = (mod_ang_ctf/180.0) * M_PI;
-  double rx          = ctr_x + (cos(new_radians) * radius);
-  double ry          = ctr_y + (sin(new_radians) * radius);
+  double new_radians = (mod_ang_ctf / 180.0) * M_PI;
+  double rx = ctr_x + (cos(new_radians) * radius);
+  double ry = ctr_y + (sin(new_radians) * radius);
 
-  if(port)
-    arc.set(ctr_x,ctr_y,radius,ang_ctr_to_start,
-	    ang_ctr_to_finish,x1,y1,rx,ry);
+  if (port)
+    arc.set(ctr_x, ctr_y, radius, ang_ctr_to_start, ang_ctr_to_finish, x1, y1,
+            rx, ry);
   else
-    arc.set(ctr_x,ctr_y,radius,ang_ctr_to_finish,
-	    ang_ctr_to_start,rx,ry,x1,y1);
+    arc.set(ctr_x, ctr_y, radius, ang_ctr_to_finish, ang_ctr_to_start, rx, ry,
+            x1, y1);
 
-  return(arc);
+  return (arc);
 }
-
-
-
-
-
-
-
-
-
-
-
-

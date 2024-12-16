@@ -24,41 +24,33 @@
 #ifndef A_UNIT_TESTER_HEADER
 #define A_UNIT_TESTER_HEADER
 
-#include <vector>
-#include <string>
 #include <set>
+#include <string>
+#include <vector>
 
-class UnitTester
-{
- public:
+class UnitTester {
+public:
   UnitTester();
   ~UnitTester() {}
 
   bool addTestFile(std::string);
-  bool addVerbosity() {m_verbosity++; return(true);}
-  bool runUnitTests()
-    ;
+  bool addVerbosity() {
+    m_verbosity++;
+    return (true);
+  }
+  bool runUnitTests();
   void printReport();
 
 protected:
-  bool   handleUnitTestFile(std::string);
+  bool handleUnitTestFile(std::string);
   std::string executeOneTest(std::string);
-  
-  bool   actualSatExpected(std::string, std::string);
-  
+
+  bool actualSatExpected(std::string, std::string);
+
 protected:
   std::vector<std::string> m_test_files;
-  
+
   unsigned int m_verbosity;
 };
 
 #endif
-
-
-
-
-
-
-
-
-

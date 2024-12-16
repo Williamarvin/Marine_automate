@@ -15,15 +15,15 @@ namespace MOOS {
 
 class Share {
 public:
-	Share();
-	virtual ~Share();
-	int Run(int argc,char * argv[]);
+  Share();
+  virtual ~Share();
+  int Run(int argc, char *argv[]);
 
 private:
-	class Impl;
-	Impl* _Impl;
+  class Impl;
+  Impl *_Impl;
 };
 
-}
+} // namespace MOOS
 
 #endif /* MOOS_ESSENTIAL_SHARE_H_ */

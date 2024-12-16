@@ -24,37 +24,36 @@
 #ifndef ALOG_SPLIT_HANDLER_HEADER
 #define ALOG_SPLIT_HANDLER_HEADER
 
-#include <vector>
-#include <string>
 #include <map>
 #include <set>
+#include <string>
+#include <vector>
 
-class SplitHandler
-{
- public:
+class SplitHandler {
+public:
   SplitHandler(std::string);
   ~SplitHandler() {}
 
   bool handle();
   bool handlePreCheckALogFile();
-  void setVerbose(bool v)          {m_verbose=v;}
-  void setProgress(bool v)         {m_progress=v;}
-  void setDirectory(std::string s) {m_given_dir=s;}
+  void setVerbose(bool v) { m_verbose = v; }
+  void setProgress(bool v) { m_progress = v; }
+  void setDirectory(std::string s) { m_given_dir = s; }
   void setMaxFilePtrCache(unsigned int);
 
- protected:
+protected:
   bool handlePreCheckSplitDir();
   bool handleMakeSplitFiles();
   bool handleMakeSplitSummary();
-  
- protected: // Config variables
-  std::string  m_alog_file;
-  std::string  m_given_dir;
-  bool         m_verbose;
-  bool         m_progress;
+
+protected: // Config variables
+  std::string m_alog_file;
+  std::string m_given_dir;
+  bool m_verbose;
+  bool m_progress;
   unsigned int m_max_cache;
-  
- protected: // State variables
+
+protected: // State variables
   std::string m_basedir;
   std::string m_logstart;
   std::string m_time_min;
@@ -68,15 +67,15 @@ class SplitHandler
 
   bool m_split_dir_prior;
   bool m_max_cache_exceeded;
-  
+
   std::string m_curr_helm_iter;
 
   std::set<std::string> m_vip_cache;
-  
+
   // Each map key is a MOOS variable name
-  std::map<std::string, FILE*>       m_file_ptr;
+  std::map<std::string, FILE *> m_file_ptr;
   std::map<std::string, std::string> m_var_type;
-  std::map<std::string, std::set<std::string> > m_var_srcs;
+  std::map<std::string, std::set<std::string>> m_var_srcs;
 
   // Keep track of all unique bhv names for summary file
   std::set<std::string> m_bhv_names;
@@ -85,4 +84,3 @@ class SplitHandler
 };
 
 #endif
-

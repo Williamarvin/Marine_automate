@@ -19,20 +19,19 @@ namespace MOOS {
 
 class Route {
 public:
-	Route();
-	virtual ~Route();
+  Route();
+  virtual ~Route();
 
-	bool operator==(const Route & r) const;
-	MOOS::IPV4Address dest_address;
-	std::string dest_name;
-	std::string src_name;
-	bool multicast;
-	std::string to_string() const;
-	double frequency;
-	double last_time_sent;
-
+  bool operator==(const Route &r) const;
+  MOOS::IPV4Address dest_address;
+  std::string dest_name;
+  std::string src_name;
+  bool multicast;
+  std::string to_string() const;
+  double frequency;
+  double last_time_sent;
 };
 
-}
+} // namespace MOOS
 
 #endif /* ROUTE_H_ */

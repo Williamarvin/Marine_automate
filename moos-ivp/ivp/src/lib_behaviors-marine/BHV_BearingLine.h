@@ -21,44 +21,31 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_BNG_LINE_HEADER
 #define BHV_BNG_LINE_HEADER
 
+#include "IvPBehavior.h"
 #include "XYPoint.h"
 #include "XYSegList.h"
-#include "IvPBehavior.h"
 
 class BHV_BearingLine : public IvPBehavior {
 public:
   BHV_BearingLine(IvPDomain);
   ~BHV_BearingLine() {}
-  
-  void         onIdleState()      {postErasableObjects();}
-  void         onCompleteState()  {postErasableObjects();}
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
 
- protected:
-  void         postErasableObjects();
+  void onIdleState() { postErasableObjects(); }
+  void onCompleteState() { postErasableObjects(); }
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
 
-protected:  // configuration parameters
-  double    m_line_pct;
-  XYPoint   m_bearing_pt;
+protected:
+  void postErasableObjects();
+
+protected: // configuration parameters
+  double m_line_pct;
+  XYPoint m_bearing_pt;
   XYSegList m_seglist;
-  bool      m_show_pt;
+  bool m_show_pt;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-

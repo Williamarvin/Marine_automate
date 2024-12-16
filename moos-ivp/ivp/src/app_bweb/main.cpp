@@ -21,53 +21,41 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstring>
-#include <iostream>
-#include "MBUtils.h"
 #include "BHV_Guide.h"
 #include "BHV_Guide_Info.h"
+#include "MBUtils.h"
+#include <cstring>
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------
 // Procedure: main
 
-int main(int argc ,char * argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
-  string run_command  = argv[0];
+  string run_command = argv[0];
 
   BHV_Guide bhv_guide;
-  
-  for(int i=1; i<argc; i++) {
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
     bool handled = false;
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
 
-    else 
+    else
       handled = bhv_guide.setBehaviorName(argi);
 
-    if(!handled) {
+    if (!handled) {
       cout << "Bad arg:[" << argi << "]. Exit Code 1." << endl;
-      return(1);
+      return (1);
     }
   }
 
   bhv_guide.guide();
-  
-  return(0);
+
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-
-

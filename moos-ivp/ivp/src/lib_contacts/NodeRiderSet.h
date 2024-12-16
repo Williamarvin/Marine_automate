@@ -24,38 +24,35 @@
 #ifndef NODE_RIDER_SET_HEADER
 #define NODE_RIDER_SET_HEADER
 
+#include "NodeRider.h"
 #include <string>
 #include <vector>
-#include "NodeRider.h"
 
-class NodeRiderSet
-{
+class NodeRiderSet {
 public:
-  NodeRiderSet() {};
-  ~NodeRiderSet() {};
+  NodeRiderSet(){};
+  ~NodeRiderSet(){};
 
   bool addNodeRider(NodeRider);
   bool addNodeRider(std::string);
 
   bool updateRider(std::string var, std::string val, double utc);
-  
+
   std::vector<std::string> getVars() const;
   std::vector<std::string> getRiderSpecs() const;
 
   std::string getRiderReports(double uct);
-  
+
   NodeRider getNodeRider(unsigned int) const;
-  
-  unsigned int size() const {return(m_riders.size());}
-  
- protected:  
+
+  unsigned int size() const { return (m_riders.size()); }
+
+protected:
   bool setPolicy(std::string);
   bool setFrequency(double);
-    
- protected:
-  std::vector<NodeRider>  m_riders;
 
+protected:
+  std::vector<NodeRider> m_riders;
 };
 
-#endif 
-
+#endif

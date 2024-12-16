@@ -7,17 +7,15 @@
 #include "recordTypes.h"
 
 // This class uses index records to find lines in the alog
-class alogLineReader
-{
-    public:
-        alogLineReader();
-        ~alogLineReader();
+class alogLineReader {
+public:
+  alogLineReader();
+  ~alogLineReader();
 
-        std::ifstream  m_alogFileStream;
+  std::ifstream m_alogFileStream;
 
-        bool Open( std::string alogFilename );
-        void Read( aloglib::idxRec alogRec, std::string & line );
+  bool Open(std::string alogFilename);
+  void Read(aloglib::idxRec alogRec, std::string &line);
 };
 
 #endif // _alogLineReader_h_
-

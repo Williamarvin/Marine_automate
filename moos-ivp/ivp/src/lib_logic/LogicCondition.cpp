@@ -23,133 +23,107 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
 #include "LogicCondition.h"
+#include <iostream>
 
 using namespace std;
 
-
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: Constructor
 
-LogicCondition::LogicCondition()
-{
+LogicCondition::LogicCondition() {
   m_node = 0;
   m_allow_dblequals = true;
 }
 
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: Destructor
 
-LogicCondition::~LogicCondition()
-{
-  if(m_node) 
-    delete(m_node);
+LogicCondition::~LogicCondition() {
+  if (m_node)
+    delete (m_node);
   m_node = 0;
 }
 
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: Constructor
 
-LogicCondition::LogicCondition(const LogicCondition &b)
-{
-  if(b.m_node)
+LogicCondition::LogicCondition(const LogicCondition &b) {
+  if (b.m_node)
     m_node = b.m_node->copy();
   else
     m_node = 0;
   m_allow_dblequals = true;
 }
 
-//------------------------------------------------------ 
+//------------------------------------------------------
 // Procedure: expandMacro()
 
-void LogicCondition::expandMacro(string macro, string value)
-{
-  if(m_node)
+void LogicCondition::expandMacro(string macro, string value) {
+  if (m_node)
     m_node->recursiveExpandMacro(macro, value);
 }
 
 //----------------------------------------------------------------
 // Procedure: operator=
 
-const LogicCondition &LogicCondition::operator=(const LogicCondition &right)
-{
-  if(right.m_node)
+const LogicCondition &LogicCondition::operator=(const LogicCondition &right) {
+  if (right.m_node)
     m_node = right.m_node->copy();
-  else 
+  else
     m_node = 0;
 
-  return(*this);
+  return (*this);
 }
 
 //----------------------------------------------------------------
 // Procedure: getVarNames()
 
-vector<string> LogicCondition::getVarNames() const
-{
+vector<string> LogicCondition::getVarNames() const {
   vector<string> rvector;
-  
-  if(m_node)
-    rvector = m_node->recursiveGetVarNames();
-  
-  return(rvector);
-}
 
+  if (m_node)
+    rvector = m_node->recursiveGetVarNames();
+
+  return (rvector);
+}
 
 //----------------------------------------------------------------
 // Procedure: setCondition()
 
-bool LogicCondition::setCondition(const string& str)
-{
-  if(m_node) {
-    delete(m_node);
+bool LogicCondition::setCondition(const string &str) {
+  if (m_node) {
+    delete (m_node);
     m_node = 0;
   }
 
   m_node = new ParseNode(str);
 
   bool ok_parse = m_node->recursiveParse(m_allow_dblequals);
-  if(!ok_parse) {
-    delete(m_node);
+  if (!ok_parse) {
+    delete (m_node);
     m_node = 0;
     cout << "Bad Condition: " << str << endl;
-    return(false);
+    return (false);
   }
 
   bool ok_syntax = m_node->recursiveSyntaxCheck();
-  if(!ok_syntax) {
-    delete(m_node);
+  if (!ok_syntax) {
+    delete (m_node);
     m_node = 0;
     cout << "Bad Condition Syntax: " << str << endl;
-    return(false);
+    return (false);
   }
 
-  return(true);
+  return (true);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: eval
 
-bool LogicCondition::eval() const
-{
-  if(m_node)
-    return(m_node->recursiveEvaluate());
+bool LogicCondition::eval() const {
+  if (m_node)
+    return (m_node->recursiveEvaluate());
   else
-    return(false);
+    return (false);
 }
-	   
-
-	   
-
-
-
-
-
-
-
-
-
-
-
-

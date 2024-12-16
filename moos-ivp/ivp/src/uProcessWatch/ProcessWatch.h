@@ -24,13 +24,12 @@
 #ifndef PROCESS_WATCH_HEADER
 #define PROCESS_WATCH_HEADER
 
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
-class ProcessWatch : public AppCastingMOOSApp
-{
+class ProcessWatch : public AppCastingMOOSApp {
 public:
   ProcessWatch();
   virtual ~ProcessWatch() {}
@@ -53,7 +52,7 @@ protected:
   bool handleConfigExcludeList(std::string);
   bool handleConfigExcludeItem(std::string);
 
- protected:
+protected:
   bool addToWatchList(std::string);
 
   void checkForIndividualUpdates();
@@ -69,46 +68,46 @@ protected:
 
   void populateAntlerList();
 
-  bool processIncluded(const std::string& procname);
-  bool processExcluded(const std::string& procname);
+  bool processIncluded(const std::string &procname);
+  bool processExcluded(const std::string &procname);
 
- protected: // State Variables
-  bool         m_proc_watch_summary_changed;
-  double       m_last_posting_time;
+protected: // State Variables
+  bool m_proc_watch_summary_changed;
+  double m_last_posting_time;
 
   // Clients and Summary stored across iterations
-  std::string  m_db_clients;
-  std::string  m_proc_watch_summary;
+  std::string m_db_clients;
+  std::string m_proc_watch_summary;
 
-  std::vector<std::string>  m_watch_list;
-  std::vector<std::string>  m_excused_list;
+  std::vector<std::string> m_watch_list;
+  std::vector<std::string> m_excused_list;
 
   // Mapping from proc name to data
   std::map<std::string, bool> m_map_alive;
   std::map<std::string, bool> m_map_alive_prev;
   std::map<std::string, unsigned int> m_map_noted_gone;
   std::map<std::string, unsigned int> m_map_noted_here;
-  std::map<std::string, double>       m_map_now_cpuload;
-  std::map<std::string, double>       m_map_max_cpuload;
+  std::map<std::string, double> m_map_now_cpuload;
+  std::map<std::string, double> m_map_max_cpuload;
 
   std::set<std::string> m_set_db_clients;
   std::set<std::string> m_set_watch_clients;
   std::set<std::string> m_set_antler_clients;
 
- protected: // Configurations Variables
-  bool         m_watch_all_db;
-  bool         m_watch_all_antler;
-  double       m_allow_retractions;
-  double       m_min_wait;             
-  double       m_noted_gone_wait;
+protected: // Configurations Variables
+  bool m_watch_all_db;
+  bool m_watch_all_antler;
+  double m_allow_retractions;
+  double m_min_wait;
+  double m_noted_gone_wait;
 
   // Include List
-  std::vector<std::string>  m_include_list;
-  std::vector<bool>         m_include_list_prefix;
+  std::vector<std::string> m_include_list;
+  std::vector<bool> m_include_list_prefix;
 
   // Exclude List
-  std::vector<std::string>  m_exclude_list;
-  std::vector<bool>         m_exclude_list_prefix;
+  std::vector<std::string> m_exclude_list;
+  std::vector<bool> m_exclude_list_prefix;
 
   // A dedicated MOOS var for posting when a proc chgs status
   std::map<std::string, std::string> m_map_proc_post;
@@ -117,13 +116,4 @@ protected:
   std::map<std::string, std::string> m_map_chgpost;
 };
 
-#endif 
-
-
-
-
-
-
-
-
-
+#endif

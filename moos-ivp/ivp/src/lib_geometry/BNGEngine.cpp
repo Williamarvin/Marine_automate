@@ -23,18 +23,17 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath> 
 #include "BNGEngine.h"
-#include "GeomUtils.h"
 #include "AngleUtils.h"
+#include "GeomUtils.h"
+#include <cmath>
 
 using namespace std;
 
 //----------------------------------------------------------
 // Procedure: Constructor
 
-BNGEngine::BNGEngine()
-{
+BNGEngine::BNGEngine() {
   m_cnx = 0;
   m_cny = 0;
   m_cnv = 0;
@@ -46,9 +45,8 @@ BNGEngine::BNGEngine()
 //----------------------------------------------------------
 // Procedure: Constructor
 
-BNGEngine::BNGEngine(double cnx, double cny, double cnh, double cnv,
-		     double osx, double osy)
-{
+BNGEngine::BNGEngine(double cnx, double cny, double cnh, double cnv, double osx,
+                     double osy) {
   m_cnx = cnx;
   m_cny = cny;
   m_cnh = cnh;
@@ -57,32 +55,17 @@ BNGEngine::BNGEngine(double cnx, double cny, double cnh, double cnv,
   m_osy = osy;
 }
 
-
 //----------------------------------------------------------
 // Procedure: setStatic
 
-void BNGEngine::setStatic()
-{
-}
+void BNGEngine::setStatic() {}
 
 //----------------------------------------------------------------
 // Procedure: evalBNG()
 
-double BNGEngine::evalBNG(double osh, double osv) const
-{
-  return(0);
-}
-
+double BNGEngine::evalBNG(double osh, double osv) const { return (0); }
 
 //----------------------------------------------------------------
 // Procedure: evalBNGRate()
 
-double BNGEngine::evalBNGRate(double osh, double osv) const
-{
-  return(0);
-}
-
-
-
-
-
+double BNGEngine::evalBNGRate(double osh, double osv) const { return (0); }

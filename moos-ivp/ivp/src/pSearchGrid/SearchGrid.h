@@ -24,13 +24,12 @@
 #ifndef SEARCH_GRID_MOOS_APP_HEADER
 #define SEARCH_GRID_MOOS_APP_HEADER
 
+#include "ExFilterSet.h"
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 #include "XYConvexGrid.h"
-#include "ExFilterSet.h"
 
-class SearchGrid : public AppCastingMOOSApp
-{
- public:
+class SearchGrid : public AppCastingMOOSApp {
+public:
   SearchGrid();
   virtual ~SearchGrid() {}
 
@@ -39,28 +38,25 @@ class SearchGrid : public AppCastingMOOSApp
   bool OnConnectToServer();
   bool OnStartUp();
 
- protected:
+protected:
   bool buildReport();
   void registerVariables();
   void handleMailNodeReport(std::string);
 
   void postGrid();
   void postGridUpdates();
-  
+
 protected: // Config vars
-  bool        m_report_deltas;
+  bool m_report_deltas;
   std::string m_grid_label;
   std::string m_grid_var_name;
 
   ExFilterSet m_filter_set;
 
 protected: // State vars
-  
   XYConvexGrid m_grid;
 
   std::map<unsigned int, double> m_map_deltas;
-
 };
 
-#endif 
-
+#endif

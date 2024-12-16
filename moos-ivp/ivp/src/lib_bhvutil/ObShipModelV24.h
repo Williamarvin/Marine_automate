@@ -27,133 +27,132 @@
 #ifndef OB_SHIP_MODELV24_HEADER
 #define OB_SHIP_MODELV24_HEADER
 
-#include <vector>
+#include "PlatModel.h"
 #include "XYPolygon.h"
 #include "XYSeglr.h"
-#include "PlatModel.h"
+#include <vector>
 
-class ObShipModelV24
-{
- public:
-  ObShipModelV24(double osx=0, double osy=0, double osh=0, double osv=0);
-  ~ObShipModelV24() {};
+class ObShipModelV24 {
+public:
+  ObShipModelV24(double osx = 0, double osy = 0, double osh = 0,
+                 double osv = 0);
+  ~ObShipModelV24(){};
 
- public: // setters
-  bool   setPose(double osx, double osy, double osh, double osv=0);
-  bool   setPoseOSX(double osx);
-  bool   setPoseOSY(double osy);
-  bool   setPoseOSH(double osh);
-  bool   setPoseOSV(double osv);
+public: // setters
+  bool setPose(double osx, double osy, double osh, double osv = 0);
+  bool setPoseOSX(double osx);
+  bool setPoseOSY(double osy);
+  bool setPoseOSH(double osh);
+  bool setPoseOSV(double osv);
 
-  void   setMinUtil(double);
-  void   setMaxUtil(double);
-  void   setMinMaxUtil(double, double);
-  void   setOBuffRDegs(double);
+  void setMinUtil(double);
+  void setMaxUtil(double);
+  void setMinMaxUtil(double, double);
+  void setOBuffRDegs(double);
 
-  void   setPlatModel(PlatModel tm);
+  void setPlatModel(PlatModel tm);
 
- public: // Setters that may generate health warnings
-  std::string  setGutPoly(XYPolygon);
-  std::string  setGutPoly(std::string);
-  std::string  setPwtInnerDist(double);
-  std::string  setPwtOuterDist(double);
-  std::string  setCompletedDist(double);
-  std::string  setMinUtilCPA(double);
-  std::string  setMaxUtilCPA(double);
-  std::string  setAllowableTTC(double);
+public: // Setters that may generate health warnings
+  std::string setGutPoly(XYPolygon);
+  std::string setGutPoly(std::string);
+  std::string setPwtInnerDist(double);
+  std::string setPwtOuterDist(double);
+  std::string setCompletedDist(double);
+  std::string setMinUtilCPA(double);
+  std::string setMaxUtilCPA(double);
+  std::string setAllowableTTC(double);
 
-  void   print(std::string key="") const;
-  void   printBnds() const;
+  void print(std::string key = "") const;
+  void printBnds() const;
 
- public: // Setters for benchmark config
-  void   useTurnCache(bool v=true) {m_turn_cache_enabled=v;}
-  
- public: // getters (of things that can be set)
-  double getOSX() const  {return(m_plat_model.getOSX());}
-  double getOSY() const  {return(m_plat_model.getOSY());}
-  double getOSH() const  {return(m_plat_model.getOSH());}
-  double getOSV() const  {return(m_plat_model.getOSV());}
+public: // Setters for benchmark config
+  void useTurnCache(bool v = true) { m_turn_cache_enabled = v; }
 
-  double getPwtInnerDist() const    {return(m_pwt_inner_dist);}
-  double getPwtOuterDist() const    {return(m_pwt_outer_dist);}
-  double getMinUtilCPA() const      {return(m_min_util_cpa);}
-  double getMaxUtilCPA() const      {return(m_max_util_cpa);}
-  double getMinUtilCPAFlex() const  {return(m_min_util_cpa_flex);}
-  double getMaxUtilCPAFlex() const  {return(m_max_util_cpa_flex);}
+public: // getters (of things that can be set)
+  double getOSX() const { return (m_plat_model.getOSX()); }
+  double getOSY() const { return (m_plat_model.getOSY()); }
+  double getOSH() const { return (m_plat_model.getOSH()); }
+  double getOSV() const { return (m_plat_model.getOSV()); }
 
-  double getAllowableTTC() const    {return(m_allowable_ttc);}
-  double getCompletedDist() const   {return(m_completed_dist);}
-  double getOBuffRDegs() const      {return(m_obuff_rdegs);}
-  XYPolygon getGutPoly() const     {return(m_gut_poly);}
-  PlatModel getPlatModel() const    {return(m_plat_model);}
-  bool   isTurnCacheEnabled() const {return(m_turn_cache_enabled);}
-  
- public: // analyzers (getters of things calculated)
-  double getObcentX() const        {return(m_cx);}
-  double getObcentY() const        {return(m_cy);}
-  double getObcentBng() const      {return(m_obcent_bng);};
-  double getObcentRelBng() const   {return(m_obcent_relbng);}
+  double getPwtInnerDist() const { return (m_pwt_inner_dist); }
+  double getPwtOuterDist() const { return (m_pwt_outer_dist); }
+  double getMinUtilCPA() const { return (m_min_util_cpa); }
+  double getMaxUtilCPA() const { return (m_max_util_cpa); }
+  double getMinUtilCPAFlex() const { return (m_min_util_cpa_flex); }
+  double getMaxUtilCPAFlex() const { return (m_max_util_cpa_flex); }
 
-  XYPolygon getMidPoly() const {return(m_mid_poly);}
-  XYPolygon getRimPoly() const {return(m_rim_poly);}
-  std::string getPassingSide() const   {return(m_passing_side);}
+  double getAllowableTTC() const { return (m_allowable_ttc); }
+  double getCompletedDist() const { return (m_completed_dist); }
+  double getOBuffRDegs() const { return (m_obuff_rdegs); }
+  XYPolygon getGutPoly() const { return (m_gut_poly); }
+  PlatModel getPlatModel() const { return (m_plat_model); }
+  bool isTurnCacheEnabled() const { return (m_turn_cache_enabled); }
 
-  double getRange() const           {return(m_range);}
-  double getRangeInOSH() const      {return(m_range_in_osh);}
+public: // analyzers (getters of things calculated)
+  double getObcentX() const { return (m_cx); }
+  double getObcentY() const { return (m_cy); }
+  double getObcentBng() const { return (m_obcent_bng); };
+  double getObcentRelBng() const { return (m_obcent_relbng); }
 
-  double getGutBngMinToPoly() const {return(m_gut_bng_min_to_poly);}
-  double getGutBngMaxToPoly() const {return(m_gut_bng_max_to_poly);}
-  double getRimBngMinToPoly() const {return(m_rim_bng_min_to_poly);}
-  double getRimBngMaxToPoly() const {return(m_rim_bng_max_to_poly);}
+  XYPolygon getMidPoly() const { return (m_mid_poly); }
+  XYPolygon getRimPoly() const { return (m_rim_poly); }
+  std::string getPassingSide() const { return (m_passing_side); }
 
-  unsigned int getGutBngHitCount() const   {return(m_gut_bng_hit_count);}
-  unsigned int getGutBngUnhitCount() const {return(m_gut_bng_unhit_count);}
-  unsigned int getRimBngHitCount() const   {return(m_rim_bng_hit_count);}
-  unsigned int getRimBngUnhitCount() const {return(m_rim_bng_unhit_count);}
+  double getRange() const { return (m_range); }
+  double getRangeInOSH() const { return (m_range_in_osh); }
 
-  
-  double getGutBngMinDistToPoly() const {return(m_gut_bng_min_dist_to_poly);}
-  double getGutBngMaxDistToPoly() const {return(m_gut_bng_max_dist_to_poly);}
-  double getRimBngMinDistToPoly() const {return(m_rim_bng_min_dist_to_poly);}
-  double getRimBngMaxDistToPoly() const {return(m_rim_bng_max_dist_to_poly);}
+  double getGutBngMinToPoly() const { return (m_gut_bng_min_to_poly); }
+  double getGutBngMaxToPoly() const { return (m_gut_bng_max_to_poly); }
+  double getRimBngMinToPoly() const { return (m_rim_bng_min_to_poly); }
+  double getRimBngMaxToPoly() const { return (m_rim_bng_max_to_poly); }
 
-  double getCPAInOSH() const {return(m_cpa_in_osh);}
+  unsigned int getGutBngHitCount() const { return (m_gut_bng_hit_count); }
+  unsigned int getGutBngUnhitCount() const { return (m_gut_bng_unhit_count); }
+  unsigned int getRimBngHitCount() const { return (m_rim_bng_hit_count); }
+  unsigned int getRimBngUnhitCount() const { return (m_rim_bng_unhit_count); }
 
-  bool   paramIsSet(std::string) const;
-  bool   ownshipInGutPoly() const;
-  bool   ownshipInMidPoly() const;
-  bool   ownshipInRimPoly() const;
+  double getGutBngMinDistToPoly() const { return (m_gut_bng_min_dist_to_poly); }
+  double getGutBngMaxDistToPoly() const { return (m_gut_bng_max_dist_to_poly); }
+  double getRimBngMinDistToPoly() const { return (m_rim_bng_min_dist_to_poly); }
+  double getRimBngMaxDistToPoly() const { return (m_rim_bng_max_dist_to_poly); }
 
-  std::string getFailedExpandPolyStr(bool clear=true);
+  double getCPAInOSH() const { return (m_cpa_in_osh); }
 
-  std::string getObstacleLabel() const {return(m_gut_poly.get_label());}
-  
+  bool paramIsSet(std::string) const;
+  bool ownshipInGutPoly() const;
+  bool ownshipInMidPoly() const;
+  bool ownshipInRimPoly() const;
+
+  std::string getFailedExpandPolyStr(bool clear = true);
+
+  std::string getObstacleLabel() const { return (m_gut_poly.get_label()); }
+
   double getRangeRelevance();
-  bool   isObstacleAft(double xbng=0) const;
+  bool isObstacleAft(double xbng = 0) const;
 
-  bool   isValid() const;
+  bool isValid() const;
 
-  double rayCPA(double hdg, double& ix, double& iy) const;
-  double seglrCPA(double hdg, double& ix, double& iy,
-		  double& stemdist, bool verbose=false) const;
+  double rayCPA(double hdg, double &ix, double &iy) const;
+  double seglrCPA(double hdg, double &ix, double &iy, double &stemdist,
+                  bool verbose = false) const;
 
-  double evalHdgSpd(double hdg, double spd, bool verbose=false) const;
+  double evalHdgSpd(double hdg, double spd, bool verbose = false) const;
 
-  void   setCachedVals(bool force=false);
+  void setCachedVals(bool force = false);
 
-  void   updateBngExtremes();
-  
+  void updateBngExtremes();
+
 protected:
   bool updateDynamic();
-  void fillTurnCache(const XYPolygon&);
+  void fillTurnCache(const XYPolygon &);
 
   bool setBngMinMaxToGutPoly();
   bool setBngMinMaxToRimPoly();
-  
- private: // Config (set) variables
+
+private: // Config (set) variables
   XYPolygon m_gut_poly;
   PlatModel m_plat_model;
-  
+
   double m_min_util;
   double m_max_util;
   double m_min_util_cpa;
@@ -164,23 +163,23 @@ protected:
   double m_pwt_outer_dist;
   double m_allowable_ttc;
   double m_completed_dist;
-  
+
   double m_obuff_rdegs;
 
-  bool   m_turn_cache_enabled;
-  bool   m_pause_update_dynamic;
+  bool m_turn_cache_enabled;
+  bool m_pause_update_dynamic;
 
-  bool   m_stale_cache;
-  
+  bool m_stale_cache;
+
   std::set<std::string> m_set_params;
-  
- private: // State (derived) variables
+
+private: // State (derived) variables
   XYPolygon m_mid_poly;
   XYPolygon m_rim_poly;
 
   unsigned int m_dynamic_updates;
-  
-  double m_cx;  // Obstacle center x,y
+
+  double m_cx; // Obstacle center x,y
   double m_cy;
 
   double m_obcent_bng;
@@ -195,9 +194,8 @@ protected:
 
   // boundaries and distance caches. Used mainly if there
   // is a Refinery using the ObShipModel
-  
-private:
 
+private:
   double m_gut_bng_min_to_poly;
   double m_gut_bng_max_to_poly;
   double m_rim_bng_min_to_poly;
@@ -207,7 +205,7 @@ private:
   unsigned int m_gut_bng_unhit_count; // If 0, bad in all dirs
   unsigned int m_rim_bng_hit_count;
   unsigned int m_rim_bng_unhit_count;
-  
+
   double m_gut_bng_min_dist_to_poly;
   double m_gut_bng_max_dist_to_poly;
 
@@ -215,7 +213,7 @@ private:
   double m_rim_bng_max_dist_to_poly;
 
   // ToDo improvements:
-  
+
   // 1) calc and cache the seglr for each hdg angle. Use in
   // both the bngMinMaxToRimPoly and bngMinMaxToGutPoly. If
 
@@ -240,8 +238,6 @@ private:
   // NOTE on outward cache sweep: If the center of the gut poly
   // is closer than the Dubins turn radius, that the refinery
   // can resort to just one plateau on the otherside of ownship.
-  
-  
 };
 
-#endif 
+#endif

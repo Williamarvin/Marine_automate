@@ -21,124 +21,111 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstring>
-#include <vector>
 #include "MBUtils.h"
 #include "OpenURL.h"
 #include "PokeDB.h"
 #include "PokeDB_Info.h"
+#include <cstring>
+#include <iostream>
+#include <vector>
 
 using namespace std;
 
-int main(int argc ,char * argv[])
-{
+int main(int argc, char *argv[]) {
   string mission_file;
 
   vector<string> pokes;
 
-  string server_host = "";  // localhost
-  int    server_port = 0;   // 9000
-  bool   use_cache = false;
-  
-  for(int i=1; i<argc; i++) {
+  string server_host = ""; // localhost
+  int server_port = 0;     // 9000
+  bool use_cache = false;
+
+  for (int i = 1; i < argc; i++) {
     string argi = argv[i];
-    if((argi=="-v") || (argi=="--version") || (argi=="-version"))
+    if ((argi == "-v") || (argi == "--version") || (argi == "-version"))
       showReleaseInfoAndExit();
-    else if((argi=="-e") || (argi=="--example") || (argi=="-example"))
+    else if ((argi == "-e") || (argi == "--example") || (argi == "-example"))
       showExampleConfigAndExit();
-    else if((argi == "-h") || (argi == "--help") || (argi=="-help"))
+    else if ((argi == "-h") || (argi == "--help") || (argi == "-help"))
       showHelpAndExit();
-    else if((argi == "-i") || (argi == "--interface"))
+    else if ((argi == "-i") || (argi == "--interface"))
       showInterfaceAndExit();
 
-    else if((argi == "-q") || (argi == "--quiet")) {
+    else if ((argi == "-q") || (argi == "--quiet")) {
       std::ofstream file("/dev/null");
       std::streambuf *strm_buffer = std::cout.rdbuf();
       cout.rdbuf(file.rdbuf());
       cout.rdbuf(strm_buffer);
-    }
-    else if(strBegins(argi, "--host="))       // recommended to user
+    } else if (strBegins(argi, "--host=")) // recommended to user
       server_host = argi.substr(7);
-    else if(strBegins(argi, "host="))
+    else if (strBegins(argi, "host="))
       server_host = argi.substr(5);
-    else if(strBegins(argi, "serverhost="))
+    else if (strBegins(argi, "serverhost="))
       server_host = argi.substr(11);
-    else if(strBegins(argi, "server_host="))
+    else if (strBegins(argi, "server_host="))
       server_host = argi.substr(12);
 
-    else if((argi == "--cache") || (argi == "-c"))
+    else if ((argi == "--cache") || (argi == "-c"))
       use_cache = true;
 
-    else if(strBegins(argi, "--port="))      // recommended to user
+    else if (strBegins(argi, "--port=")) // recommended to user
       server_port = atoi(argi.substr(7).c_str());
-    else if(strBegins(argi, "port="))
+    else if (strBegins(argi, "port="))
       server_port = atoi(argi.substr(5).c_str());
-    else if(strBegins(argi, "serverport="))
+    else if (strBegins(argi, "serverport="))
       server_port = atoi(argi.substr(11).c_str());
-    else if(strBegins(argi, "server_port="))
+    else if (strBegins(argi, "server_port="))
       server_port = atoi(argi.substr(12).c_str());
-    else if((argi == "-w") || (argi == "--web") || (argi == "-web"))
+    else if ((argi == "-w") || (argi == "--web") || (argi == "-web"))
       openURLX("https://oceanai.mit.edu/ivpman/apps/uPokeDB");
 
-    else if(strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
+    else if (strEnds(argi, ".moos") || strEnds(argi, ".moos++"))
       mission_file = argv[i];
-    else if(strContains(argi, "="))
+    else if (strContains(argi, "="))
       pokes.push_back(argi);
   }
 
-  // If the mission file is not provided, we prompt the user if the 
+  // If the mission file is not provided, we prompt the user if the
   // server_host or server_port information is not on command line.
-  if(mission_file == "") {
+  if (mission_file == "") {
     char buff[1000];
     // If server_host info was not on the command line, prompt here.
-    if(server_host == "") {
+    if (server_host == "") {
       server_host = "localhost";
       cout << "Enter IP address:  [localhost] ";
-      if(fgets(buff, 999, stdin) != NULL) {
-	if(buff[0] != '\n') {
-	  server_host     = buff;    
-	}
+      if (fgets(buff, 999, stdin) != NULL) {
+        if (buff[0] != '\n') {
+          server_host = buff;
+        }
       }
     }
     // If server_port info was not on the command line, prompt here.
-    if(server_port == 0) {
+    if (server_port == 0) {
       cout << "Enter Port number: [9000] ";
       server_port = 9000;
-      if(fgets(buff, 999, stdin) != NULL) {
-	if(buff[0] != '\n') {
-	  server_port     = atoi(buff); 
-	}
+      if (fgets(buff, 999, stdin) != NULL) {
+        if (buff[0] != '\n') {
+          server_port = atoi(buff);
+        }
       }
     }
   }
 
   PokeDB Poker(server_host, server_port);
   Poker.setUseCache(use_cache);
-  
-  if(mission_file == "") {
+
+  if (mission_file == "") {
     cout << "Mission File not provided. " << endl;
     cout << "  server_host  = " << server_host << endl;
     cout << "  server_port  = " << server_port << endl;
     Poker.setConfigureCommsLocally(true);
-  }
-  else
+  } else
     cout << "Mission File was provided: " << mission_file << endl;
-  
-  for(unsigned int j=0; j<pokes.size(); j++)
+
+  for (unsigned int j = 0; j < pokes.size(); j++)
     Poker.setPoke(pokes[j]);
-  
+
   Poker.Run("uPokeDB", mission_file.c_str(), argc, argv);
 
-  return(0);
+  return (0);
 }
-
-
-
-
-
-
-
-
-
-

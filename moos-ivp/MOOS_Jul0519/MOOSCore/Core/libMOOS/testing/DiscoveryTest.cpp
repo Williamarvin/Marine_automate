@@ -7,26 +7,19 @@
 
 #include "MOOS/libMOOS/Comms/XPCUdpSocket.h"
 #include "MOOS/libMOOS/Utils/MOOSUtilityFunctions.h"
-#include <iostream>
-#include <iomanip>
 #include <cmath>
+#include <iomanip>
+#include <iostream>
 
+int main(int argc, char *argv[]) {
+  XPCUdpSocket discovery(9002);
+  discovery.vSetBroadcast(true);
+  discovery.vBindSocket();
 
-
-int main(int argc, char * argv[])
-{
-    XPCUdpSocket discovery(9002);
-    discovery.vSetBroadcast(true);
-    discovery.vBindSocket();
-
-    char  msg[1024];
-    while(1)
-    {
-        int iRx =discovery.iRecieveMessage(msg,1024);
-        if(iRx)
-            std::cerr<<std::string(msg)<<std::endl;
-    }
-
-
-
+  char msg[1024];
+  while (1) {
+    int iRx = discovery.iRecieveMessage(msg, 1024);
+    if (iRx)
+      std::cerr << std::string(msg) << std::endl;
+  }
 }

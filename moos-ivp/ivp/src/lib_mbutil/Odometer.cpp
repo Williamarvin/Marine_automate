@@ -23,60 +23,55 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cmath>
 #include "Odometer.h"
+#include <cmath>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Constructor:
 
-Odometer::Odometer()
-{
+Odometer::Odometer() {
   // Init state variables
   reset();
-  
+
   m_paused = false;
 }
 
 //-----------------------------------------------------------
 // Procedure: reset()
 
-void Odometer::reset(double utc)
-{
+void Odometer::reset(double utc) {
   m_curr_x = 0;
   m_curr_y = 0;
   m_prev_x = 0;
   m_prev_y = 0;
   m_orig_x = 0;
   m_orig_y = 0;
-  
-  m_curr_utc  = utc;
+
+  m_curr_utc = utc;
   m_start_utc = utc;
 
   m_nav_x_received = false;
-  m_nav_y_received = false;  
+  m_nav_y_received = false;
 
   m_total_distance = 0;
-  m_max_extent     = 0;
+  m_max_extent = 0;
 }
 
 //-----------------------------------------------------------
 // Procedure: resetExtent()
 
-void Odometer::resetExtent()
-{
+void Odometer::resetExtent() {
   m_max_extent = 0;
-  m_orig_x     = m_curr_x;
-  m_orig_y     = m_curr_y;
+  m_orig_x = m_curr_x;
+  m_orig_y = m_curr_y;
 }
-
 
 //-----------------------------------------------------------
 // Procedure: setXY()
 
-void Odometer::setXY(double xval, double yval)
-{
+void Odometer::setXY(double xval, double yval) {
   setX(xval);
   setY(yval);
 }
@@ -84,12 +79,11 @@ void Odometer::setXY(double xval, double yval)
 //-----------------------------------------------------------
 // Procedure: setX()
 
-void Odometer::setX(double dval)
-{
+void Odometer::setX(double dval) {
   m_curr_x = dval;
 
   // For the first reading, we also set the prev_x to this val
-  if(!m_nav_x_received) {
+  if (!m_nav_x_received) {
     m_prev_x = m_curr_x;
     m_orig_x = m_curr_x;
   }
@@ -100,16 +94,15 @@ void Odometer::setX(double dval)
 //-----------------------------------------------------------
 // Procedure: setY()
 
-void Odometer::setY(double dval)
-{
+void Odometer::setY(double dval) {
   m_curr_y = dval;
 
   // For the first reading, we also set the prev_y to this val
-  if(!m_nav_y_received) {
+  if (!m_nav_y_received) {
     m_prev_y = m_curr_y;
     m_orig_y = m_curr_y;
   }
-    
+
   m_nav_y_received = true;
 }
 
@@ -117,9 +110,8 @@ void Odometer::setY(double dval)
 // Procedure: updateTime()
 //      Note: Universal Time Coordinated (UTC)
 
-void Odometer::updateTime(double utc)
-{
-  if(m_start_utc == 0)
+void Odometer::updateTime(double utc) {
+  if (m_start_utc == 0)
     m_start_utc = utc;
   m_curr_utc = utc;
 }
@@ -128,29 +120,26 @@ void Odometer::updateTime(double utc)
 // Procedure: getTotalElapsed()
 //      Note: If given a valid utc (>0) then update time first
 
-double Odometer::getTotalElapsed(double dval)
-{
-  if(dval > 0)
+double Odometer::getTotalElapsed(double dval) {
+  if (dval > 0)
     updateTime(dval);
-  
-  return(m_curr_utc - m_start_utc);
+
+  return (m_curr_utc - m_start_utc);
 }
 
 //-----------------------------------------------------------
 // Procedure: updateDistance()
 
-void Odometer::updateDistance(double x, double y)
-{
-  setXY(x,y);
+void Odometer::updateDistance(double x, double y) {
+  setXY(x, y);
   updateDistance();
 }
 
 //-----------------------------------------------------------
 // Procedure: updateDistance()
 
-void Odometer::updateDistance()
-{
-  if(!m_paused) {
+void Odometer::updateDistance() {
+  if (!m_paused) {
     double xdelta = m_curr_x - m_prev_x;
     double ydelta = m_curr_y - m_prev_y;
     m_total_distance += hypot(xdelta, ydelta);
@@ -158,11 +147,10 @@ void Odometer::updateDistance()
     double x_ext = m_curr_x - m_orig_x;
     double y_ext = m_curr_y - m_orig_y;
     double extent = hypot(x_ext, y_ext);
-    if(extent > m_max_extent)
+    if (extent > m_max_extent)
       m_max_extent = extent;
   }
-  
+
   m_prev_x = m_curr_x;
   m_prev_y = m_curr_y;
 }
-

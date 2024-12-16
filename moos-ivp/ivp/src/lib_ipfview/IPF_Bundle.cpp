@@ -21,20 +21,19 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include <cstdlib>
 #include "IPF_Bundle.h"
+#include "BuildUtils.h"
 #include "FunctionEncoder.h"
 #include "MBUtils.h"
-#include "BuildUtils.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //--------------------------------------------------------------
 // Procedure: addIPF
 
-void IPF_Bundle::addIPF(const std::string& str)
-{
+void IPF_Bundle::addIPF(const std::string &str) {
   string context_string = StringToIvPContext(str);
 
   IvPDomain domain = IPFStringToIvPDomain(str);
@@ -44,7 +43,7 @@ void IPF_Bundle::addIPF(const std::string& str)
 
   unsigned int iteration = atoi(iter_str.c_str());
 
-  if(m_entries.size() == 0) {
+  if (m_entries.size() == 0) {
     m_entries.push_back(str);
     m_sources.push_back(behavior);
     m_iteration = iteration;
@@ -52,9 +51,9 @@ void IPF_Bundle::addIPF(const std::string& str)
     return;
   }
 
-  if(m_iteration != iteration)
+  if (m_iteration != iteration)
     return;
-  if(vectorContains(m_sources, behavior))
+  if (vectorContains(m_sources, behavior))
     return;
 
   m_entries.push_back(str);
@@ -65,149 +64,128 @@ void IPF_Bundle::addIPF(const std::string& str)
 //--------------------------------------------------------------
 // Procedure: getCollectiveQuadSet()
 
-QuadSet IPF_Bundle::getCollectiveQuadSet(string ctype)
-{
+QuadSet IPF_Bundle::getCollectiveQuadSet(string ctype) {
   QuadSet empty_qset;
 
   unsigned int k, ksize = m_entries.size();
-  if(ksize == 0)
-    return(empty_qset);
-  
+  if (ksize == 0)
+    return (empty_qset);
+
   QuadSet return_qset;
-  if(ctype == "collective-depth") {
-    for(k=0; k<ksize; k++) {
+  if (ctype == "collective-depth") {
+    for (k = 0; k < ksize; k++) {
       QuadSet quad_set_k = m_entries[k].getQuadSet(m_ivp_domain);
       IvPDomain domain = quad_set_k.getDomain();
-      if(domain.hasOnlyDomain("depth"))
-	return_qset.addQuadSet(quad_set_k);
+      if (domain.hasOnlyDomain("depth"))
+        return_qset.addQuadSet(quad_set_k);
     }
   }
-  if(ctype == "collective-hdgspd") {
-    for(k=0; k<ksize; k++) {
+  if (ctype == "collective-hdgspd") {
+    for (k = 0; k < ksize; k++) {
       QuadSet quad_set_k = m_entries[k].getQuadSet(m_ivp_domain);
       IvPDomain domain = quad_set_k.getDomain();
-      if(!domain.hasOnlyDomain("depth"))
-	return_qset.addQuadSet(quad_set_k);
+      if (!domain.hasOnlyDomain("depth"))
+        return_qset.addQuadSet(quad_set_k);
     }
   }
 
-  return(return_qset);
+  return (return_qset);
 }
 
 //--------------------------------------------------------------
 // Procedure: getQuadSet(index)
 
-QuadSet IPF_Bundle::getQuadSet(unsigned int index, bool dense)
-{
-  if(index < m_entries.size())
-    return(m_entries[index].getQuadSet(m_ivp_domain, dense));
+QuadSet IPF_Bundle::getQuadSet(unsigned int index, bool dense) {
+  if (index < m_entries.size())
+    return (m_entries[index].getQuadSet(m_ivp_domain, dense));
 
   QuadSet empty_qset;
-  return(empty_qset);
+  return (empty_qset);
 }
 
 //--------------------------------------------------------------
 // Procedure: getQuadSet(source)
 
-QuadSet IPF_Bundle::getQuadSet(string source, bool dense)
-{
+QuadSet IPF_Bundle::getQuadSet(string source, bool dense) {
   unsigned int i, vsize = m_sources.size();
-  for(i=0; i<vsize; i++) 
-    if(m_sources[i] == source)
-      return(m_entries[i].getQuadSet(m_ivp_domain, dense));
-  
+  for (i = 0; i < vsize; i++)
+    if (m_sources[i] == source)
+      return (m_entries[i].getQuadSet(m_ivp_domain, dense));
+
   QuadSet empty_qset;
-  return(empty_qset);
+  return (empty_qset);
 }
 
 //--------------------------------------------------------------
 // Procedure: getPieces(source)
 
-unsigned int IPF_Bundle::getPieces(string source) const
-{
+unsigned int IPF_Bundle::getPieces(string source) const {
   unsigned int i, vsize = m_sources.size();
-  for(i=0; i<vsize; i++) {
-    if(m_sources[i] == source)
-      return(m_entries[i].getPieces());
+  for (i = 0; i < vsize; i++) {
+    if (m_sources[i] == source)
+      return (m_entries[i].getPieces());
   }
 
-  return(0);
+  return (0);
 }
 
 //--------------------------------------------------------------
 // Procedure: getPriority(source)
 
-double IPF_Bundle::getPriority(string source) const
-{
+double IPF_Bundle::getPriority(string source) const {
   unsigned int i, vsize = m_sources.size();
-  for(i=0; i<vsize; i++) 
-    if(m_sources[i] == source)
-      return(m_entries[i].getPriority());
+  for (i = 0; i < vsize; i++)
+    if (m_sources[i] == source)
+      return (m_entries[i].getPriority());
 
-  return(0);
+  return (0);
 }
 
 //--------------------------------------------------------------
 // Procedure: getDomain(source)
 
-IvPDomain IPF_Bundle::getDomain(string source) const
-{
+IvPDomain IPF_Bundle::getDomain(string source) const {
   unsigned int i, vsize = m_sources.size();
-  for(i=0; i<vsize; i++) 
-    if(m_sources[i] == source)
-      return(m_entries[i].getDomain());
+  for (i = 0; i < vsize; i++)
+    if (m_sources[i] == source)
+      return (m_entries[i].getDomain());
 
   IvPDomain empty_domain;
-  return(empty_domain);
+  return (empty_domain);
 }
 
 //--------------------------------------------------------------
 // Procedure: getSource()
 
-string IPF_Bundle::getSource(unsigned int index)
-{
-  if(index >= m_entries.size())
-    return("");
+string IPF_Bundle::getSource(unsigned int index) {
+  if (index >= m_entries.size())
+    return ("");
   else
-    return(m_sources[index]);
-      
+    return (m_sources[index]);
 }
 
 //--------------------------------------------------------------
 // Procedure: getIPFString()
 
-string IPF_Bundle::getIPFString(unsigned int index)
-{
-  if(index >= m_entries.size())
-    return("");
+string IPF_Bundle::getIPFString(unsigned int index) {
+  if (index >= m_entries.size())
+    return ("");
   else
-    return(m_entries[index].getIPFString());
+    return (m_entries[index].getIPFString());
 }
-
 
 //--------------------------------------------------------------
 // Procedure: getIPFStrings()
 
-vector<string> IPF_Bundle::getIPFStrings()
-{
+vector<string> IPF_Bundle::getIPFStrings() {
   vector<string> ipf_strings;
-  
+
   unsigned int i, vsize = m_entries.size();
-  for(i=0; i<vsize; i++) {
+  for (i = 0; i < vsize; i++) {
     string ipf_string = m_entries[i].getIPFString();
-    if(ipf_string != "")
+    if (ipf_string != "")
       ipf_strings.push_back(ipf_string);
   }
 
-  return(ipf_strings);
+  return (ipf_strings);
 }
-
-
-
-
-
-
-
-
-
-

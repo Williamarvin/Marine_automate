@@ -26,47 +26,47 @@
 #ifndef VPLUG_GEO_SETTINGS_HEADER
 #define VPLUG_GEO_SETTINGS_HEADER
 
-#include <vector>
+#include "ColorPack.h"
 #include <map>
 #include <string>
-#include "ColorPack.h"
+#include <vector>
 
 class VPlug_GeoSettings {
 public:
   VPlug_GeoSettings();
   virtual ~VPlug_GeoSettings() {}
 
- public:   // A Catch-All Setter
-  bool   setParam(std::string param, std::string value);
+public: // A Catch-All Setter
+  bool setParam(std::string param, std::string value);
 
- protected: // Specfic Setters
-  bool   setViewMapping(std::string, std::string);
-  bool   setSizeMapping(std::string, std::string);
-  bool   setSizeMapping(std::string, std::string, double min, double max);
-  bool   setOpaqMapping(std::string, std::string);
-  bool   setAttrMapping(std::string, std::string);
-  bool   setColorMapping(std::string, std::string);
+protected: // Specfic Setters
+  bool setViewMapping(std::string, std::string);
+  bool setSizeMapping(std::string, std::string);
+  bool setSizeMapping(std::string, std::string, double min, double max);
+  bool setOpaqMapping(std::string, std::string);
+  bool setAttrMapping(std::string, std::string);
+  bool setColorMapping(std::string, std::string);
 
- public:  // Specific Gettters (Custom return format)
-  bool         viewable(const std::string&, bool view_default=true) const;
-  double       geosize(const std::string&, double size_default=0) const;
-  double       opaqueness(const std::string&, double size_default=0.5) const;
-  std::string  attribute(const std::string&, std::string str_default="") const;
-  std::string  colorname(const std::string&, std::string color_default="") const;
-  ColorPack    geocolor(const std::string&, std::string color_default="") const;
+public: // Specific Gettters (Custom return format)
+  bool viewable(const std::string &, bool view_default = true) const;
+  double geosize(const std::string &, double size_default = 0) const;
+  double opaqueness(const std::string &, double size_default = 0.5) const;
+  std::string attribute(const std::string &,
+                        std::string str_default = "") const;
+  std::string colorname(const std::string &,
+                        std::string color_default = "") const;
+  ColorPack geocolor(const std::string &, std::string color_default = "") const;
 
- public:  // A Catch-All Getter (String return format)
-  std::string  strvalue(std::string);  
+public: // A Catch-All Getter (String return format)
+  std::string strvalue(std::string);
 
 protected:
-  std::map<std::string, bool>        m_viewable_map;
-  std::map<std::string, double>      m_gsize_map;
-  std::map<std::string, double>      m_opaque_map; 
+  std::map<std::string, bool> m_viewable_map;
+  std::map<std::string, double> m_gsize_map;
+  std::map<std::string, double> m_opaque_map;
   std::map<std::string, std::string> m_attribute_map;
   std::map<std::string, std::string> m_color_str_map;
-  std::map<std::string, ColorPack>   m_color_pck_map;
+  std::map<std::string, ColorPack> m_color_pck_map;
 };
 
 #endif
-
-

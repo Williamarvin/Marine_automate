@@ -21,19 +21,18 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <cstdlib> 
-#include <iostream>
+#include "XMS_Info.h"
 #include "ColorParse.h"
 #include "ReleaseInfo.h"
-#include "XMS_Info.h"
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //----------------------------------------------------------------
 // Procedure: showSynopsis
 
-void showSynopsis()
-{
+void showSynopsis() {
   blk("SYNOPSIS:                                                       ");
   blk("------------------------------------                            ");
   blk("  uXMS is a terminal-based (non GUI) tool for scoping a MOOSDB. ");
@@ -48,8 +47,7 @@ void showSynopsis()
 //----------------------------------------------------------------
 // Procedure: showHelpAndExit
 
-void showHelpAndExit()
-{
+void showHelpAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("Usage: uXMS [file.moos] [OPTIONS]                               ");
@@ -58,17 +56,17 @@ void showHelpAndExit()
   showSynopsis();
   blk("                                                                ");
   blk("Options:                                                        ");
-  mag("  --alias","=<ProcessName>                                      ");
+  mag("  --alias", "=<ProcessName>                                      ");
   blk("      Launch uXMS with the given process name rather than uXMS. ");
   mag("  --all,-a                                                      ");
   blk("    Show ALL MOOS variables in the MOOSDB                       ");
   mag("  --clean,-c                                                    ");
   blk("    Ignore scope variables in file.moos                         ");
-  mag("  --colormap","=<MOOSVar>,<color>                               ");
+  mag("  --colormap", "=<MOOSVar>,<color>                               ");
   blk("    Display all entries where the variable, source, or community");
   blk("    has VAR as substring. Allowable olors: blue, red, magenta,  ");
   blk("    cyan, or green.                                             ");
-  mag("  --colorany","=<MOOSVar>,<MOOSVar>,...                         ");
+  mag("  --colorany", "=<MOOSVar>,<MOOSVar>,...                         ");
   blk("    Display all entries where the variable, community, or source");
   blk("    has VAR as substring. Color auto-chosen from unused colors. ");
   mag("  --example, -e                                                 ");
@@ -81,23 +79,23 @@ void showHelpAndExit()
   blk("      Display MOOS publications and subscriptions.              ");
   mag("  --novirgins,-g                                                ");
   blk("    Don't display virgin variables                              ");
-  mag("  --mode","=[paused,EVENTS,streaming]                           ");
+  mag("  --mode", "=[paused,EVENTS,streaming]                           ");
   blk("    Determine display mode. Paused: scope updated only on user  ");
-  blk("    request. Events: data updated only on change to a scoped    "); 
+  blk("    request. Events: data updated only on change to a scoped    ");
   blk("    variable. Streaming: updates continuously on each app-tick. ");
-  mag("  --serverhost","=<IPAddress>                                   ");
+  mag("  --serverhost", "=<IPAddress>                                   ");
   blk("    Connect to MOOSDB at IP=value, not from the .moos file.     ");
-  mag("  --serverport","=<PortNumber>                                  "); 
+  mag("  --serverport", "=<PortNumber>                                  ");
   blk("    Connect to MOOSDB at port=value, not from the .moos file.   ");
-  mag("  --show","=[source,time,community,aux]                         ");
+  mag("  --show", "=[source,time,community,aux]                         ");
   blk("    Turn on data display in the named column, source, time, or  ");
   blk("    community. All off by default enabling aux shows the        ");
   blk("    auxilliary source in the souce column.                      ");
-  mag("  --src","=<MOOSApp>,<MOOSApp>, ...                             ");
+  mag("  --src", "=<MOOSApp>,<MOOSApp>, ...                             ");
   blk("    Scope only on vars posted by the given MOOS processes       ");
-  mag("  --trunc","=value [10,1000]                                    ");
+  mag("  --trunc", "=value [10,1000]                                    ");
   blk("    Truncate the output in the data column.                     ");
-  mag("  --termint","=value [0,10]  (default is 0.6)                   ");
+  mag("  --termint", "=value [0,10]  (default is 0.6)                   ");
   blk("    Minimum real-time seconds between terminal reports.         ");
   mag("  --version,-v                                                  ");
   blk("    Display the release version of uXMS.                        ");
@@ -117,8 +115,7 @@ void showHelpAndExit()
 //----------------------------------------------------------------
 // Procedure: showExampleConfigAndExit
 
-void showExampleConfigAndExit()
-{
+void showExampleConfigAndExit() {
   blu("=============================================================== ");
   blu("uXMS Example MOOS Configuration                                 ");
   blu("=============================================================== ");
@@ -160,12 +157,10 @@ void showExampleConfigAndExit()
   exit(0);
 }
 
-
 //----------------------------------------------------------------
 // Procedure: showInterfaceAndExit
 
-void showInterfaceAndExit()
-{
+void showInterfaceAndExit() {
   blk("                                                                ");
   blu("=============================================================== ");
   blu("uXMS INTERFACE                                                  ");
@@ -191,18 +186,7 @@ void showInterfaceAndExit()
 //----------------------------------------------------------------
 // Procedure: showReleaseInfoAndExit
 
-void showReleaseInfoAndExit()
-{
+void showReleaseInfoAndExit() {
   showReleaseInfo("uXMS", "gpl");
   exit(0);
 }
-
-
-
-
-
-
-
-
-
-

@@ -34,29 +34,27 @@ using namespace std;
 //            that many line numbers will be read and returned into
 //            the vector.
 
-
-vector<string> fileBuffer(const string& filename, unsigned int amt)
-{
+vector<string> fileBuffer(const string &filename, unsigned int amt) {
   vector<string> fvector;
 
   FILE *f = fopen(filename.c_str(), "r");
-  if(f==NULL)
-    return(fvector);
+  if (f == NULL)
+    return (fvector);
 
-  vector<char>  buff;
+  vector<char> buff;
   buff.reserve(500000);
 
-  int  myint = '\0';
-  bool EOL    = false;
+  int myint = '\0';
+  bool EOL = false;
   unsigned int lines = 0;
   bool reached_line_limit = false;
 
-  while((myint!=EOF) && !reached_line_limit) {
+  while ((myint != EOF) && !reached_line_limit) {
     EOL = false;
-    while(!EOL) {
+    while (!EOL) {
       myint = fgetc(f);
-      unsigned char   mychar = myint;
-      switch(myint) {
+      unsigned char mychar = myint;
+      switch (myint) {
       case '\n':
       case EOF:
         EOL = true;
@@ -67,118 +65,107 @@ vector<string> fileBuffer(const string& filename, unsigned int amt)
     }
 
     string str(buff.size(), ' ');
-    for(unsigned int i=0; i<buff.size(); i++)
+    for (unsigned int i = 0; i < buff.size(); i++)
       str[i] = buff[i];
     buff.clear();
     lines++;
 
     fvector.push_back(str);
-    if(amt != 0) {
+    if (amt != 0) {
       lines++;
-      if(lines >= amt)
+      if (lines >= amt)
         reached_line_limit = true;
     }
-
   }
   fclose(f);
 
-  return(fvector);
+  return (fvector);
 }
 
 //----------------------------------------------------------------
 // Procedure: fileBufferList()
 //      Note: Same as fileBuffer, but a STL list is returned instead
 
-list<string> fileBufferList(const string& filename, unsigned int amt)
-{
+list<string> fileBufferList(const string &filename, unsigned int amt) {
   list<string> flist;
   vector<string> svector = fileBuffer(filename, amt);
-  for(unsigned int i=0; i<svector.size(); i++)
+  for (unsigned int i = 0; i < svector.size(); i++)
     flist.push_back(svector[i]);
 
-  return(flist);
+  return (flist);
 }
-
 
 //----------------------------------------------------------------
 // Procedure: fileBufferSlash()
-//      Note: Same as fileBuffer function, but slash-terminated 
-//            strings (having a '\' character as their last non 
+//      Note: Same as fileBuffer function, but slash-terminated
+//            strings (having a '\' character as their last non
 //            white space character) are merged with the subsequent
 //            line.
 
-
-vector<string> fileBufferSlash(const string& filename, unsigned int amt)
-{
+vector<string> fileBufferSlash(const string &filename, unsigned int amt) {
   vector<string> fvector;
 
   FILE *f = fopen(filename.c_str(), "r");
-  if(f==NULL)
-    return(fvector);
+  if (f == NULL)
+    return (fvector);
 
   const int MAX_LINE_LENGTH = 5000;
 
-  int    myint = '\0';
-  int    buffix = 0;
-  bool   EOL    = false;
-  char   buff[MAX_LINE_LENGTH];
-  bool   reached_line_limit = false;
+  int myint = '\0';
+  int buffix = 0;
+  bool EOL = false;
+  char buff[MAX_LINE_LENGTH];
+  bool reached_line_limit = false;
   string line_so_far = "";
 
   unsigned int lines = 0;
 
-
-  while((myint!=EOF) && (!reached_line_limit)) {
+  while ((myint != EOF) && (!reached_line_limit)) {
     EOL = false;
     buffix = 0;
 
-    int  slash_index      = 0;
+    int slash_index = 0;
     bool slash_terminated = false;
-    while((!EOL) && (buffix < MAX_LINE_LENGTH)) {
+    while ((!EOL) && (buffix < MAX_LINE_LENGTH)) {
       myint = fgetc(f);
-      unsigned char  mychar = myint;
-      switch(myint) {
+      unsigned char mychar = myint;
+      switch (myint) {
       case '\\':
-	slash_terminated = true;
-	slash_index = buffix;
+        slash_terminated = true;
+        slash_index = buffix;
         buff[buffix] = mychar;
         buffix++;
-	break;
+        break;
       case '\n':
       case EOF:
-        buff[buffix] = '\0';  // attach terminating NULL
+        buff[buffix] = '\0'; // attach terminating NULL
         EOL = true;
         break;
       default:
-	if((mychar!=' ') && (mychar!='\t')) {
-	  slash_terminated = false;
-	  slash_index      = 0;
-	}
+        if ((mychar != ' ') && (mychar != '\t')) {
+          slash_terminated = false;
+          slash_index = 0;
+        }
         buff[buffix] = mychar;
         buffix++;
       }
     }
 
-    if(slash_terminated)
+    if (slash_terminated)
       buff[slash_index] = '\0';
 
     line_so_far += buff;
-    if(!slash_terminated) {
+    if (!slash_terminated) {
       fvector.push_back(line_so_far);
       line_so_far = "";
-      if(amt != 0) {
-	lines++;
-	if(lines >= amt)
-	  reached_line_limit = true;
+      if (amt != 0) {
+        lines++;
+        if (lines >= amt)
+          reached_line_limit = true;
       }
     }
   }
   fclose(f);
- 
-  return(fvector);
+
+  return (fvector);
 }
-
-
-
-
-

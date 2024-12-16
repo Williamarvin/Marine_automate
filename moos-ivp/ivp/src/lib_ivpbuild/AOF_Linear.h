@@ -22,22 +22,25 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef AOF_LINEAR_HEADER
 #define AOF_LINEAR_HEADER
 
 #include "AOF.h"
 
-class AOF_Linear: public AOF {
- public:
-  AOF_Linear(IvPDomain domain) : AOF(domain)
-  {m_coeff=0; n_coeff=0; b_scalar=0;}
+class AOF_Linear : public AOF {
+public:
+  AOF_Linear(IvPDomain domain) : AOF(domain) {
+    m_coeff = 0;
+    n_coeff = 0;
+    b_scalar = 0;
+  }
   ~AOF_Linear() {}
 
-public:    
-  double evalBox(const IvPBox*) const;
-  bool   setParam(const std::string& param, double val); 
-  
+public:
+  double evalBox(const IvPBox *) const;
+  bool setParam(const std::string &param, double val);
+
 private:
   double m_coeff;
   double n_coeff;
@@ -45,12 +48,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-

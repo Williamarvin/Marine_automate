@@ -20,49 +20,48 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_TRAIL_HEADER
 #define BHV_TRAIL_HEADER
 
-#include <string>
 #include "IvPContactBehavior.h"
+#include <string>
 
 class IvPDomain;
 class BHV_Trail : public IvPContactBehavior {
 public:
   BHV_Trail(IvPDomain);
   ~BHV_Trail() {}
-  
-  IvPFunction* onRunState();
-  bool         setParam(std::string, std::string);
-  void         onRunToIdleState();
-  void         onIdleState();
-  void         onHelmStart();
+
+  IvPFunction *onRunState();
+  bool setParam(std::string, std::string);
+  void onRunToIdleState();
+  void onIdleState();
+  void onHelmStart();
 
 protected:
-  double  getRelevance();
-  double  getPriority();
+  double getRelevance();
+  double getPriority();
 
-  bool    handleConfigModTrailRange(double);
-  bool    handleConfigModTrailRangePct(double);
-  void    postViewableTrailPoint();
-  double  updateTrailDistance();  
-  void    calculateTrailPoint();
+  bool handleConfigModTrailRange(double);
+  bool handleConfigModTrailRangePct(double);
+  void postViewableTrailPoint();
+  double updateTrailDistance();
+  void calculateTrailPoint();
 
 private: // Configuration parameters
-  double  m_min_trail_range;
-  double  m_trail_range;
-  double  m_trail_angle;
-  double  m_radius;
-  double  m_nm_radius;
-  double  m_pwt_outer_dist;
-  double  m_max_util_cpa_dist;
-  double  m_trail_pt_x;
-  double  m_trail_pt_y;
-  bool    m_angle_relative;
-  bool    m_post_trail_dist_on_idle;
+  double m_min_trail_range;
+  double m_trail_range;
+  double m_trail_angle;
+  double m_radius;
+  double m_nm_radius;
+  double m_pwt_outer_dist;
+  double m_max_util_cpa_dist;
+  double m_trail_pt_x;
+  double m_trail_pt_y;
+  bool m_angle_relative;
+  bool m_post_trail_dist_on_idle;
 
-  bool    m_no_alert_request;
+  bool m_no_alert_request;
 };
 #endif
-

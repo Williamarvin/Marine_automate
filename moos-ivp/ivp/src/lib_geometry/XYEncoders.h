@@ -26,37 +26,17 @@
 #ifndef XY_ENCODERS_HEADER
 #define XY_ENCODERS_HEADER
 
-#include <string>
 #include "XYGrid.h"
 #include "XYSquare.h"
+#include <string>
 
 // Convert an XYSquare to string represntation
-std::string XYSquareToString(const XYSquare&);
+std::string XYSquareToString(const XYSquare &);
 
 // Convert an XYGrid to string represntation
-std::string XYGridToString(const XYGrid&);
+std::string XYGridToString(const XYGrid &);
 
 // Create an XYGrid based on a string representation
-XYGrid StringToXYGrid(const std::string&);
+XYGrid StringToXYGrid(const std::string &);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

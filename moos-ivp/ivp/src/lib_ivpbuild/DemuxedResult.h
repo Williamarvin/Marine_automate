@@ -30,54 +30,35 @@
 
 class DemuxedResult {
 public:
-  DemuxedResult(const std::string& demux_string,
-		const std::string& demux_source, 
-		double demux_tstamp) {
+  DemuxedResult(const std::string &demux_string,
+                const std::string &demux_source, double demux_tstamp) {
     m_demux_string = demux_string;
     m_demux_source = demux_source;
     m_demux_tstamp = demux_tstamp;
     m_empty = false;
   }
 
-  DemuxedResult()  {m_demux_tstamp=0; m_empty=true;}
+  DemuxedResult() {
+    m_demux_tstamp = 0;
+    m_empty = true;
+  }
   ~DemuxedResult() {}
 
 public:
-  void  setString(const std::string& s) {m_demux_string = s;}
-  void  setSource(const std::string& s) {m_demux_source = s;}
-  void  setTStamp(double v)             {m_demux_tstamp = v;}
+  void setString(const std::string &s) { m_demux_string = s; }
+  void setSource(const std::string &s) { m_demux_source = s; }
+  void setTStamp(double v) { m_demux_tstamp = v; }
 
-  std::string getString() {return(m_demux_string);}
-  std::string getSource() {return(m_demux_source);}
-  double      getTStamp() {return(m_demux_tstamp);}
-  bool        isEmpty()   {return(m_empty);}
+  std::string getString() { return (m_demux_string); }
+  std::string getSource() { return (m_demux_source); }
+  double getTStamp() { return (m_demux_tstamp); }
+  bool isEmpty() { return (m_empty); }
 
 protected:
-  std::string  m_demux_string;
-  std::string  m_demux_source;
-  double       m_demux_tstamp;
-  bool         m_empty;
+  std::string m_demux_string;
+  std::string m_demux_source;
+  double m_demux_tstamp;
+  bool m_empty;
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

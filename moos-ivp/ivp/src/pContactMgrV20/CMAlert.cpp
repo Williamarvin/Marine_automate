@@ -21,176 +21,164 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
-#include <iostream>
-#include "XYFormatUtilsPoly.h"
 #include "CMAlert.h"
+#include "XYFormatUtilsPoly.h"
+#include <iostream>
 
 using namespace std;
 
 //---------------------------------------------------------------
 // Constructor
 
-CMAlert::CMAlert()
-{
-  m_range     = -1;
+CMAlert::CMAlert() {
+  m_range = -1;
   m_range_far = -1;
 }
 
 //---------------------------------------------------------------
 // Procedure: configFilter()
 
-bool CMAlert::configFilter(string param, string value)
-{
-  if(param == "match_name")
-    return(m_filter_set.addMatchName(value));
-  else if(param == "ignore_name")
-    return(m_filter_set.addIgnoreName(value));
+bool CMAlert::configFilter(string param, string value) {
+  if (param == "match_name")
+    return (m_filter_set.addMatchName(value));
+  else if (param == "ignore_name")
+    return (m_filter_set.addIgnoreName(value));
 
-  else if(param == "match_group")
-    return(m_filter_set.addMatchGroup(value));
-  else if(param == "ignore_group")
-    return(m_filter_set.addIgnoreGroup(value));
+  else if (param == "match_group")
+    return (m_filter_set.addMatchGroup(value));
+  else if (param == "ignore_group")
+    return (m_filter_set.addIgnoreGroup(value));
 
-  else if(param == "match_type")
-    return(m_filter_set.addMatchType(value));
-  else if(param == "ignore_type")
-    return(m_filter_set.addIgnoreType(value));
+  else if (param == "match_type")
+    return (m_filter_set.addMatchType(value));
+  else if (param == "ignore_type")
+    return (m_filter_set.addIgnoreType(value));
 
-  else if(param == "match_region")
-    return(m_filter_set.addMatchRegion(value));
-  else if(param == "ignore_region")
-    return(m_filter_set.addIgnoreRegion(value));
+  else if (param == "match_region")
+    return (m_filter_set.addMatchRegion(value));
+  else if (param == "ignore_region")
+    return (m_filter_set.addIgnoreRegion(value));
 
-  else if(param == "strict_ignore")
-    return(m_filter_set.setStrictIgnore(value));
-  
-  return(false);
+  else if (param == "strict_ignore")
+    return (m_filter_set.setStrictIgnore(value));
+
+  return (false);
 }
 
 //---------------------------------------------------------------
 // Procedure: filterCheck()
 
-bool CMAlert::filterCheck(NodeRecord record) const
-{
-  return(m_filter_set.filterCheck(record));
+bool CMAlert::filterCheck(NodeRecord record) const {
+  return (m_filter_set.filterCheck(record));
 }
 
 //---------------------------------------------------------------
 // Procedure: filterCheck()
 
-bool CMAlert::filterCheck(NodeRecord record, double osx, double osy) const
-{
-  return(m_filter_set.filterCheck(record, osx, osy));
+bool CMAlert::filterCheck(NodeRecord record, double osx, double osy) const {
+  return (m_filter_set.filterCheck(record, osx, osy));
 }
-
 
 //---------------------------------------------------------------
 // Procedure: setAlertSource()
 
-bool CMAlert::setAlertSource(string str)
-{
-  if(str == "")
-    return(false);
+bool CMAlert::setAlertSource(string str) {
+  if (str == "")
+    return (false);
 
   m_alert_source = str;
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: setAlertRange()
 //      Note: We ensure that m_range_far is always greater than or
-//            equal to m_range. 
+//            equal to m_range.
 
-bool CMAlert::setAlertRange(string str)
-{
-  if(tolower(str) == "off") {
+bool CMAlert::setAlertRange(string str) {
+  if (tolower(str) == "off") {
     // The -2 value indicates it has been purposely set to off
-    m_range     = -2;
+    m_range = -2;
     m_range_far = -2;
-    return(true);
+    return (true);
   }
 
-  if(!isNumber(str))
-    return(false);
+  if (!isNumber(str))
+    return (false);
 
   double dval = atof(str.c_str());
-  return(setAlertRange(dval));
+  return (setAlertRange(dval));
 }
 
 //---------------------------------------------------------------
 // Procedure: setAlertRangeFar()
 //      Note: We ensure that m_range_far is always greater than or
-//            equal to m_range. 
+//            equal to m_range.
 
-bool CMAlert::setAlertRangeFar(string str)
-{
-  if(tolower(str) == "off") {
+bool CMAlert::setAlertRangeFar(string str) {
+  if (tolower(str) == "off") {
     // The -2 value indicates it has been purposely set to off
     m_range_far = -2;
-    return(true);
+    return (true);
   }
-  if(!isNumber(str))
-    return(false);
+  if (!isNumber(str))
+    return (false);
 
   double dval = atof(str.c_str());
 
-  return(setAlertRangeFar(dval));
+  return (setAlertRangeFar(dval));
 }
 
 //---------------------------------------------------------------
 // Procedure: setAlertRange
 //      Note: We ensure that m_range_far is always greater than or
-//            equal to m_range. 
+//            equal to m_range.
 
-bool CMAlert::setAlertRange(double dval)
-{
-  if(dval < 0)
-    return(false);
+bool CMAlert::setAlertRange(double dval) {
+  if (dval < 0)
+    return (false);
   m_range = dval;
-  if(m_range_far < m_range)
+  if (m_range_far < m_range)
     m_range_far = m_range;
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: setAlertRangeFar
 //      Note: We ensure that m_range_far is always greater than or
-//            equal to m_range. 
+//            equal to m_range.
 
-bool CMAlert::setAlertRangeFar(double dval)
-{
-  if(dval < 0)
-    return(false);
+bool CMAlert::setAlertRangeFar(double dval) {
+  if (dval < 0)
+    return (false);
   m_range_far = dval;
-  if(m_range > m_range_far)
+  if (m_range > m_range_far)
     m_range = m_range_far;
 
-  return(true);
+  return (true);
 }
-
 
 //---------------------------------------------------------------
 // Procedure: addAlertOnFlag
 
-bool CMAlert::addAlertOnFlag(string str)
-{
+bool CMAlert::addAlertOnFlag(string str) {
   // Sanity check: Make sure this isn't a duplicate
   str = stripBlankEnds(str);
-  if(m_on_flags_raw.count(str))
-    return(true);
+  if (m_on_flags_raw.count(str))
+    return (true);
   m_on_flags_raw.insert(str);
-  
+
   // Ok, create and add the VarDataPair
   string lft = biteStringX(str, '=');
   string rgt = str;
 
-  if((lft == "") || (rgt == ""))
-    return(false);
+  if ((lft == "") || (rgt == ""))
+    return (false);
 
   VarDataPair pair(lft, rgt, "auto");
   m_on_flags.push_back(pair);
-  return(true);    
+  return (true);
 }
 
 #if 0
@@ -223,29 +211,28 @@ bool CMAlert::addAlertOnFlag(string str)
 //---------------------------------------------------------------
 // Procedure: addAlertOffFlag
 
-bool CMAlert::addAlertOffFlag(string str)
-{
+bool CMAlert::addAlertOffFlag(string str) {
   vector<string> svector = parseString(str, '#');
-  for(unsigned int i=0; i<svector.size(); i++) {
+  for (unsigned int i = 0; i < svector.size(); i++) {
     // Sanity check: Make sure this isn't a duplicate
     string str = stripBlankEnds(svector[i]);
 
-    if(m_off_flags_raw.count(str))
+    if (m_off_flags_raw.count(str))
       continue;
     m_off_flags_raw.insert(str);
-    
+
     // Ok, create and add the VarDataPair
     string lft = biteStringX(str, '=');
     string rgt = str;
-    
-    if((lft == "") || (rgt == ""))
-      return(false);
-  
+
+    if ((lft == "") || (rgt == ""))
+      return (false);
+
     VarDataPair pair(lft, rgt, "auto");
     m_off_flags.push_back(pair);
   }
-  
-  return(true);    
+
+  return (true);
 }
 
 //---------------------------------------------------------------
@@ -253,35 +240,27 @@ bool CMAlert::addAlertOffFlag(string str)
 //      Note: For ranges, must have a non-zero range or have been
 //            explicitly turned off (indicated by val of -2)
 //            OK fo cpa_range to be same as range
-//            Must have at least one flag. 
+//            Must have at least one flag.
 
-bool CMAlert::valid() const
-{
-  if(m_range == -1)
-    return(false);
+bool CMAlert::valid() const {
+  if (m_range == -1)
+    return (false);
 
-  if(!hasAlertOnFlag() && !hasAlertOffFlag())
-    return(false);
+  if (!hasAlertOnFlag() && !hasAlertOffFlag())
+    return (false);
 
-  return(true);
+  return (true);
 }
 
 //---------------------------------------------------------------
 // Procedure: getAlertOnFlags()
 
-vector<VarDataPair> CMAlert::getAlertOnFlags() const
-{
-  return(m_on_flags);
-}
+vector<VarDataPair> CMAlert::getAlertOnFlags() const { return (m_on_flags); }
 
 //---------------------------------------------------------------
 // Procedure: getAlertOffFlags()
 
-vector<VarDataPair> CMAlert::getAlertOffFlags() const
-{
-  return(m_off_flags);
-}
-
+vector<VarDataPair> CMAlert::getAlertOffFlags() const { return (m_off_flags); }
 
 //---------------------------------------------------------------
 // Procedure: getSummary()
@@ -289,23 +268,20 @@ vector<VarDataPair> CMAlert::getAlertOffFlags() const
 //            match_type = usv
 //            ignore_region = pts={}
 
-
-vector<string> CMAlert::getSummary() const
-{
+vector<string> CMAlert::getSummary() const {
   vector<string> rvector;
 
   // Part 1: Get the Alert Ranges
   string alert_range_str = "off";
-  if(m_range == -1)
+  if (m_range == -1)
     alert_range_str = "unspecified";
-  if(m_range >=0)
-    alert_range_str = doubleToStringX(m_range,2);
+  if (m_range >= 0)
+    alert_range_str = doubleToStringX(m_range, 2);
 
-  
   string alert_range_far_str = "off";
-  if(m_range_far == -1)
+  if (m_range_far == -1)
     alert_range_far_str = "unspecified";
-  if(m_range_far >=0)
+  if (m_range_far >= 0)
     alert_range_far_str = doubleToStringX(m_range_far, 2);
 
   string alert_str = "Alert Ranges: " + alert_range_str;
@@ -313,24 +289,23 @@ vector<string> CMAlert::getSummary() const
   rvector.push_back(alert_str);
 
   string source = "--";
-  if(m_alert_source != "")
+  if (m_alert_source != "")
     source = m_alert_source;
-  rvector.push_back("Source: " + source); 
-  
-   // Part 2: Get the On/Off Flags
-  for(unsigned int i=0; i<m_on_flags.size(); i++) {
+  rvector.push_back("Source: " + source);
+
+  // Part 2: Get the On/Off Flags
+  for (unsigned int i = 0; i < m_on_flags.size(); i++) {
     string msg = "OnFlag: " + m_on_flags[i].getPrintable();
     rvector.push_back(msg);
   }
-  for(unsigned int i=0; i<m_off_flags.size(); i++) {
+  for (unsigned int i = 0; i < m_off_flags.size(); i++) {
     string msg = "OnFlag: " + m_off_flags[i].getPrintable();
     rvector.push_back(msg);
   }
 
-   // Part 3: Get the Filter Summary
+  // Part 3: Get the Filter Summary
   vector<string> filter_summary = m_filter_set.getSummaryX();
   rvector = mergeVectors(rvector, filter_summary);
-  
-  return(rvector);
-}
 
+  return (rvector);
+}

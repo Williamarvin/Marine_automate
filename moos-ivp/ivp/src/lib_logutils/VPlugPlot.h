@@ -24,43 +24,40 @@
 #ifndef GEO_PLOT_HEADER
 #define GEO_PLOT_HEADER
 
+#include "VPlug_GeoShapes.h"
+#include <list>
 #include <string>
 #include <vector>
-#include <list>
-#include "VPlug_GeoShapes.h"
 
-class VPlugPlot
-{
+class VPlugPlot {
 public:
   VPlugPlot();
   ~VPlugPlot() {}
 
-  bool    addEvent(const std::string& var, 
-		   const std::string& val, double time);
-  void    setVehiName(std::string s) {m_vehi_name = s;}
-  void    setBinVal(double);
-  
-  double  getMinTime() const;
-  double  getMaxTime() const;
+  bool addEvent(const std::string &var, const std::string &val, double time);
+  void setVehiName(std::string s) { m_vehi_name = s; }
+  void setBinVal(double);
 
-  void    applySkew(double skew);
+  double getMinTime() const;
+  double getMaxTime() const;
 
-  void    print() const;
-  void    summary(std::string indent="") const;
+  void applySkew(double skew);
 
-  std::string  getVehiName() const   {return(m_vehi_name);}
-  unsigned int size() const          {return(m_time.size());}
+  void print() const;
+  void summary(std::string indent = "") const;
+
+  std::string getVehiName() const { return (m_vehi_name); }
+  unsigned int size() const { return (m_time.size()); }
 
   VPlug_GeoShapes getVPlugByIndex(unsigned int index) const;
   VPlug_GeoShapes getVPlugByTime(double gtime) const;
 
-  
 protected: // config vars
   double m_binval;
-  
-protected: // state vars
-  std::string                  m_vehi_name;  // Name of the platform
-  std::vector<double>          m_time;
+
+protected:                 // state vars
+  std::string m_vehi_name; // Name of the platform
+  std::vector<double> m_time;
   std::vector<VPlug_GeoShapes> m_vplugs;
 
   unsigned int m_view_point_cnt;
@@ -76,14 +73,4 @@ protected: // state vars
   unsigned int m_view_marker_cnt;
   unsigned int m_view_textbox_cnt;
 };
-#endif 
-
-
-
-
-
-
-
-
-
-
+#endif

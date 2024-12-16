@@ -22,35 +22,34 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef HASH_UTILS_HEADER
 #define HASH_UTILS_HEADER
 
-#include <vector>
 #include <string>
+#include <vector>
 
 std::string missionHash();
 std::string missionHashShort(std::string);
 
-std::string hashAlphaNum(unsigned int len=6);
-std::string hashAlphaUpper(unsigned int len=6);
+std::string hashAlphaNum(unsigned int len = 6);
+std::string hashAlphaUpper(unsigned int len = 6);
 
 std::string hashRandAdj();
 
-std::string getCurrYear(bool full=false);
+std::string getCurrYear(bool full = false);
 std::string getCurrMonth();
 std::string getCurrDay();
 std::string getCurrHour();
 std::string getCurrMinute();
 std::string getCurrSeconds();
 std::string getCurrSecsUTC();
-double      getCurrTimeUTC();
+double getCurrTimeUTC();
 
-std::string randomWord(const std::vector<std::string>& );
+std::string randomWord(const std::vector<std::string> &);
 
 std::vector<std::string> adjectives4();
 std::vector<std::string> nouns4();
 std::vector<std::string> names4();
 
 #endif
-

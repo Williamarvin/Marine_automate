@@ -22,75 +22,72 @@
 /* Public License along with MOOS-IvP.  If not, see              */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef ANGLEUTILS_HEADER
 #define ANGLEUTILS_HEADER
 
-#include <list>
 #include "XYPoint.h"
 #include "XYPolygon.h"
+#include <list>
 
-double  angleFromThreePoints(double x1, double y1, double x2, double y2,
-			     double x3, double y3);
-bool    threePointTurnLeft(double x0, double y0, double x1, double y1,
-			   double x2, double y2);
-double  threePointXProduct(double x0, double y0, double x1, double y1,
-			   double x2, double y2);
+double angleFromThreePoints(double x1, double y1, double x2, double y2,
+                            double x3, double y3);
+bool threePointTurnLeft(double x0, double y0, double x1, double y1, double x2,
+                        double y2);
+double threePointXProduct(double x0, double y0, double x1, double y1, double x2,
+                          double y2);
 
-double  relAng(double xa, double ya, double xb, double yb);
-double  relAng(const XYPoint& a, const XYPoint& b);
-double  radAngleWrap(double radians);
-double  degToRadians(double degrees);
-double  radToDegrees(double radians);
-double  angle180(double degrees);
-double  angle360(double degrees);
-double  angleDiff(double, double);
-double  aspectDiff(double, double);
+double relAng(double xa, double ya, double xb, double yb);
+double relAng(const XYPoint &a, const XYPoint &b);
+double radAngleWrap(double radians);
+double degToRadians(double degrees);
+double radToDegrees(double radians);
+double angle180(double degrees);
+double angle360(double degrees);
+double angleDiff(double, double);
+double aspectDiff(double, double);
 
-double  angleMinAcute(double, double);
-double  angleMaxAcute(double, double);
-double  angleMinReflex(double, double);
-double  angleMaxReflex(double, double);
+double angleMinAcute(double, double);
+double angleMaxAcute(double, double);
+double angleMinReflex(double, double);
+double angleMaxReflex(double, double);
 
-double  angleMinContains(double, double, double);
-double  angleMaxContains(double, double, double);
-double  angleMinExcludes(double, double, double);
-double  angleMaxExcludes(double, double, double);
+double angleMinContains(double, double, double);
+double angleMaxContains(double, double, double);
+double angleMinExcludes(double, double, double);
+double angleMaxExcludes(double, double, double);
 
 // true heading/E-N conversion added by henrik
-double  radToHeading(double radians);
-double  headingToRadians(double degrees);
+double radToHeading(double radians);
+double headingToRadians(double degrees);
 
-double  speedInHeading(double osh, double osv, double heading);
+double speedInHeading(double osh, double osv, double heading);
 
-double  relBearing(double osx, double osy, double osh, double cnx, double cny);
-double  absRelBearing(double osx, double osy, double osh, double cnx, double cny);
-double  totAbsRelBearing(double osx, double osy, double osh, 
-			 double cnx, double cny, double cnh);
+double relBearing(double osx, double osy, double osh, double cnx, double cny);
+double absRelBearing(double osx, double osy, double osh, double cnx,
+                     double cny);
+double totAbsRelBearing(double osx, double osy, double osh, double cnx,
+                        double cny, double cnh);
 
-bool    containsAngle(double deg1, double deg2, double deg3);
+bool containsAngle(double deg1, double deg2, double deg3);
 
-bool    polyAft(double osx, double osy, double osh,
-		XYPolygon poly, double xbng=0);
+bool polyAft(double osx, double osy, double osh, XYPolygon poly,
+             double xbng = 0);
 
-double  turnGap(double osx, double osy, double osh, double tradius,
-		double px1, double py1, double px2, double py2, bool tright);
+double turnGap(double osx, double osy, double osh, double tradius, double px1,
+               double py1, double px2, double py2, bool tright);
 
-double  headingAvg(std::list<double>);
-double  headingAvg(double, double);
+double headingAvg(std::list<double>);
+double headingAvg(double, double);
 
-bool    portTurn(double osh, double new_hdg);
+bool portTurn(double osh, double new_hdg);
 
 // After 22.8
-bool    ptPortOfOwnship(double osx, double osy, double osh,
-			double ptx, double pty);
-bool    ptStarOfOwnship(double osx, double osy, double osh,
-			double ptx, double pty);
-bool    polyPortOfOwnship(double osx, double osy, double osh,
-			  XYPolygon poly);
-bool    polyStarOfOwnship(double osx, double osy, double osh,
-			  XYPolygon poly);
-			
+bool ptPortOfOwnship(double osx, double osy, double osh, double ptx,
+                     double pty);
+bool ptStarOfOwnship(double osx, double osy, double osh, double ptx,
+                     double pty);
+bool polyPortOfOwnship(double osx, double osy, double osh, XYPolygon poly);
+bool polyStarOfOwnship(double osx, double osy, double osh, XYPolygon poly);
+
 #endif
-
-

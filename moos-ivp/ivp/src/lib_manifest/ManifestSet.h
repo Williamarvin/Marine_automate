@@ -24,26 +24,25 @@
 #ifndef MANIFEST_SET_HEADER
 #define MANIFEST_SET_HEADER
 
+#include "Manifest.h"
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-#include "Manifest.h"
 
-class ManifestSet
-{
- public:
+class ManifestSet {
+public:
   ManifestSet();
   virtual ~ManifestSet() {}
 
   // Setters
-  bool      addManifest(Manifest manifest);
-  void      setLinesOfCode(std::string, unsigned int);
-  void      setFilesOfCode(std::string, unsigned int);
-  void      setWorkYears(std::string, double);
-  
+  bool addManifest(Manifest manifest);
+  void setLinesOfCode(std::string, unsigned int);
+  void setFilesOfCode(std::string, unsigned int);
+  void setWorkYears(std::string, double);
+
   // Getters
-  Manifest  getManifestByModule(std::string mod_name) const;
-  Manifest  getManifestByIndex(unsigned int index) const;
+  Manifest getManifestByModule(std::string mod_name) const;
+  Manifest getManifestByIndex(unsigned int index) const;
 
   ManifestSet getManifestSetByKey(std::string key) const;
   ManifestSet getManifestSetByAuthor(std::string key) const;
@@ -73,25 +72,24 @@ class ManifestSet
   void orderOldToNew();
   void associateDependers();
   void associateLinesOfCode();
-  
+
   // Analysis/Utilities
   unsigned int size() const;
 
   unsigned int getAllLinesOfCode() const;
   unsigned int getAllFilesOfCode() const;
-  double       getAllWorkYears() const;
-  bool         containsLibrary(std::string) const;
-  
+  double getAllWorkYears() const;
+  bool containsLibrary(std::string) const;
+
   void print() const;
   void printTerse() const;
-  
- protected: // Key properties
-  std::vector<Manifest>  m_manifests;
+
+protected: // Key properties
+  std::vector<Manifest> m_manifests;
 
   std::map<std::string, unsigned int> m_map_loc;
-  std::map<std::string, unsigned int> m_map_foc;  
-  std::map<std::string, double>       m_map_wyr;  
+  std::map<std::string, unsigned int> m_map_foc;
+  std::map<std::string, double> m_map_wyr;
 };
 
-#endif 
-
+#endif

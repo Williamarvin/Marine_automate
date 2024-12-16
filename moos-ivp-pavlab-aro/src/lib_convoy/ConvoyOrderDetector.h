@@ -12,22 +12,21 @@
 #ifndef CONVOY_ORDER_DETECTOR_HEADER
 #define CONVOY_ORDER_DETECTOR_HEADER
 
-#include <string>
-#include <list>
-#include <vector>
 #include "MBUtils.h"
+#include <list>
+#include <string>
+#include <vector>
 
-class ConvoyOrderDetector
-{
+class ConvoyOrderDetector {
 public:
-  ConvoyOrderDetector() {m_removals=0;}
+  ConvoyOrderDetector() { m_removals = 0; }
   ~ConvoyOrderDetector() {}
 
   bool addPairing(std::string pairing);
   bool removeVehicle(std::string vname);
-  
+
   bool findConvoy();
-  
+
   std::string getLeader() const;
   std::string getCaboose() const;
 
@@ -35,11 +34,11 @@ public:
 
   std::string getConvoySummary() const;
 
-  std::string getPairsStr() {return(stringListToString(m_pairs, ':'));}
-  
+  std::string getPairsStr() { return (stringListToString(m_pairs, ':')); }
+
   bool isValid() const;
 
-  unsigned int getRemovalCnt() const {return(m_removals);}
+  unsigned int getRemovalCnt() const { return (m_removals); }
 
 protected:
   bool addPairingAux(std::string pairing);
@@ -52,9 +51,6 @@ protected:
   std::list<std::string> m_pairs_pending;
 
   unsigned int m_removals;
-  
 };
 
-#endif 
-
-
+#endif

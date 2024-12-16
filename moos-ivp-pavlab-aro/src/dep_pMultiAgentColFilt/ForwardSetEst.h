@@ -14,14 +14,13 @@
 
 #include "MBUtils.h"
 
-#include <string>
-#include <list>
-#include <math.h>   // for fabs
-#include "XYPolygon.h"         // for forward poly
 #include "XYFormatUtilsPoly.h" // for string2poly
+#include "XYPolygon.h"         // for forward poly
+#include <list>
+#include <math.h> // for fabs
+#include <string>
 
-class ForwardSetEst
-{
+class ForwardSetEst {
 public:
   ForwardSetEst();
   ~ForwardSetEst();
@@ -30,39 +29,36 @@ public:
 
   bool setNominalFwdSetPoly(std::string spec);
   bool setNominalFwdSetSpeed(double val);
-  void setName(std::string name) {m_vname = name; }
+  void setName(std::string name) { m_vname = name; }
 
   // GET functions
-  bool updateSet(double curr_x, double curr_y, double curr_hdg,
-		 double curr_spd, double time);
-  bool willCollide(XYPolygon & other_agent_set) const;
-  
-  XYPolygon getCurrFwdReachSet() {return(m_curr_fwd_poly);} 
+  bool updateSet(double curr_x, double curr_y, double curr_hdg, double curr_spd,
+                 double time);
+  bool willCollide(XYPolygon &other_agent_set) const;
 
-  std::string getSpec(std::string color="white"); 
-  std::string getSpecInactive()  {return(m_curr_fwd_poly.get_spec_inactive());}
+  XYPolygon getCurrFwdReachSet() { return (m_curr_fwd_poly); }
 
-  
-  bool   isSpecValid();
-  double area() {return(m_curr_fwd_poly.area());}
-  
+  std::string getSpec(std::string color = "white");
+  std::string getSpecInactive() {
+    return (m_curr_fwd_poly.get_spec_inactive());
+  }
+
+  bool isSpecValid();
+  double area() { return (m_curr_fwd_poly.area()); }
+
 protected:
-
 private:
   std::string m_vname;
-  
-  XYPolygon  m_nominal_fwd_poly;
-  double     m_nominal_fwd_speed;
 
-  double  m_yaw_rate_filt_time_const;
-  double  m_yaw_rate_last;
-  double  m_heading_last;
-  double  m_last_time;
+  XYPolygon m_nominal_fwd_poly;
+  double m_nominal_fwd_speed;
 
-  XYPolygon  m_curr_fwd_poly; 
-  
+  double m_yaw_rate_filt_time_const;
+  double m_yaw_rate_last;
+  double m_heading_last;
+  double m_last_time;
+
+  XYPolygon m_curr_fwd_poly;
 };
 
 #endif
-
-

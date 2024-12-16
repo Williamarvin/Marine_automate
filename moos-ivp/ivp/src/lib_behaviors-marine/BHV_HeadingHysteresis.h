@@ -20,35 +20,34 @@
 /* License along with MOOS-IvP.  If not, see                     */
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
- 
+
 #ifndef BHV_HEADING_HYSTERESIS_HEADER
 #define BHV_HEADING_HYSTERESIS_HEADER
 
-#include <list>
 #include "IvPBehavior.h"
+#include <list>
 
 class BHV_HeadingHysteresis : public IvPBehavior {
- public:
+public:
   BHV_HeadingHysteresis(IvPDomain);
   ~BHV_HeadingHysteresis() {}
-  
-  IvPFunction* onRunState();
-  void         onIdleState();
-  bool         setParam(std::string, std::string);
-  
+
+  IvPFunction *onRunState();
+  void onIdleState();
+  bool setParam(std::string, std::string);
+
 protected:
   std::string updateHeadingHistory();
-  void        addHeadingEntry(double value, double time);
-  double      getHeadingAverage();
-  double      getHeadingVariance(double);
+  void addHeadingEntry(double value, double time);
+  double getHeadingAverage();
+  double getHeadingVariance(double);
 
 private: // Configuration Parameters
-  double       m_memory_time;
-  std::string  m_variable_name;
+  double m_memory_time;
+  std::string m_variable_name;
 
-  //double       m_peakwidth;
-  //double       m_basewidth;
-
+  // double       m_peakwidth;
+  // double       m_basewidth;
 
 private: // State Variables
   std::list<double> m_heading_val;
@@ -57,23 +56,3 @@ private: // State Variables
   double m_current_heading;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

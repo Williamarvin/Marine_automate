@@ -21,110 +21,101 @@
 /* <http://www.gnu.org/licenses/>.                               */
 /*****************************************************************/
 
+#include "LogTester.h"
+#include "FileBuffer.h"
+#include "MBUtils.h"
+#include <cstdio>
 #include <iostream>
 #include <sstream>
-#include <cstdio>
-#include "LogTester.h"
-#include "MBUtils.h"
-#include "FileBuffer.h"
 
 using namespace std;
 
 // --------------------------------------------------------
-// Constructor 
+// Constructor
 
-LogTester::LogTester() 
-{
+LogTester::LogTester() {
   m_verbose = false;
   m_overwrite = false;
-} 
+}
 
 // --------------------------------------------------------
-// Destructor 
+// Destructor
 
-LogTester::~LogTester() 
-{
-  if(m_fptr)
+LogTester::~LogTester() {
+  if (m_fptr)
     fclose(m_fptr);
-} 
+}
 
 // --------------------------------------------------------
 // Procedure: addTestFile()
 
-bool LogTester::addTestFile(string filename)
-{
-  if(!okFileToRead(filename))
-    return(false);
+bool LogTester::addTestFile(string filename) {
+  if (!okFileToRead(filename))
+    return (false);
 
-  if(vectorContains(m_test_files, filename))
-    return(false);
+  if (vectorContains(m_test_files, filename))
+    return (false);
 
   m_test_files.push_back(filename);
-  return(true);
+  return (true);
 }
-      
+
 // --------------------------------------------------------
 // Procedure: setALogFile()
 
-bool LogTester::setALogFile(string filename)
-{
+bool LogTester::setALogFile(string filename) {
   // If it cant be read, return false
-  if(!okFileToRead(filename))
-    return(false);
+  if (!okFileToRead(filename))
+    return (false);
 
   // If alog file is already set, return false.
-  if(m_alog_file != "")
-    return(false);
+  if (m_alog_file != "")
+    return (false);
 
   m_alog_file = filename;
-  return(true);
+  return (true);
 }
-      
+
 // --------------------------------------------------------
 // Procedure: setMarkFile()
 
-bool LogTester::setMarkFile(string filename)
-{
+bool LogTester::setMarkFile(string filename) {
   // Check if it already exists
-  if(okFileToRead(filename)) {
-    if(!m_overwrite)
-      return(false);
+  if (okFileToRead(filename)) {
+    if (!m_overwrite)
+      return (false);
   }
 
   // Check if it can be written to
-  if(!okFileToWrite(filename))
-    return(false);
+  if (!okFileToWrite(filename))
+    return (false);
 
   // If mark file is already set, return false.
-  if(m_mark_file != "")
-    return(false);
+  if (m_mark_file != "")
+    return (false);
 
   m_mark_file = filename;
-  return(true);
+  return (true);
 }
-      
 
 // --------------------------------------------------------
 // Procedure: parseTestFiles()
 
-bool LogTester::parseTestFiles()
-{
+bool LogTester::parseTestFiles() {
   bool ok = true;
-  for(unsigned int i=0; i<m_test_files.size(); i++) {
+  for (unsigned int i = 0; i < m_test_files.size(); i++) {
     ok = ok && parseTestFile(m_test_files[i]);
   }
 
-  return(ok);
+  return (ok);
 }
-  
 
 // --------------------------------------------------------
 // Procedure: print()
 
-void LogTester::print() const
-{
+void LogTester::print() const {
   cout << "Number of LogTests: " << m_tests.size() << endl;
-  for(unsigned int i=0; i<m_tests.size(); i++) {
+  for (unsigned int i = 0; i < m_tests.size(); i++) {
     m_tests[i].print();
   }
 }
@@ -135,150 +126,140 @@ void LogTester::print() const
 //   Returns: true if at least one flag has been read from specified file
 //            false otherwise.
 
-bool LogTester::parseTestFile(string test_file)
-{
+bool LogTester::parseTestFile(string test_file) {
   cout << "Beginning to parse test file: " << test_file << endl;
 
   vector<string> lines = fileBuffer(test_file);
-  if(lines.size() == 0) {
+  if (lines.size() == 0) {
     cout << "Invalid or empty file: " << test_file << ". Exiting" << endl;
-    return(false);
+    return (false);
   }
 
   LogTest ctest; // current test
   ctest.setTestName("test");
-  
+
   bool all_lines_ok = true;
   string prev_line_part;
-  for(unsigned int i=0; i<lines.size(); i++) {
+  for (unsigned int i = 0; i < lines.size(); i++) {
     string orig = stripBlankEnds(lines[i]);
     string line = stripBlankEnds(orig);
-    if(strBegins(line, "//"))
+    if (strBegins(line, "//"))
       continue;
-    if(line.size() == 0)
+    if (line.size() == 0)
       continue;
 
-    if(strEnds(line, "\\")) {
+    if (strEnds(line, "\\")) {
       rbiteString(line, '\\');
       prev_line_part = line;
       continue;
-    }
-    else {
+    } else {
       line = prev_line_part + line;
       prev_line_part = "";
     }
 
     string param = biteStringX(line, '=');
     string value = line;
-    
+
     bool ok_line = false;
-    if(param == "test_name") {
-      if(ctest.isEmpty())
-	ctest.setTestName(value);
+    if (param == "test_name") {
+      if (ctest.isEmpty())
+        ctest.setTestName(value);
       else {
-	m_tests.push_back(ctest);
-	ctest = LogTest();
-	ctest.setTestName(value);
+        m_tests.push_back(ctest);
+        ctest = LogTest();
+        ctest.setTestName(value);
       }
       ok_line = true;
-    }
-    else if((param == "start_condition") || (param == "sc"))
+    } else if ((param == "start_condition") || (param == "sc"))
       ok_line = ctest.addStartCondition(value);
-    else if((param == "end_condition") || (param == "ec"))
+    else if ((param == "end_condition") || (param == "ec"))
       ok_line = ctest.addEndCondition(value);
-    else if((param == "pass_condition") || (param == "pc"))
+    else if ((param == "pass_condition") || (param == "pc"))
       ok_line = ctest.addPassCondition(value);
-    else if((param == "fail_condition") || (param == "fc"))
+    else if ((param == "fail_condition") || (param == "fc"))
       ok_line = ctest.addFailCondition(value);
-    else if(param == "start_time")
+    else if (param == "start_time")
       ok_line = ctest.setStartTime(value);
-    else if(param == "end_time")
+    else if (param == "end_time")
       ok_line = ctest.setEndTime(value);
 
-    if(!ok_line) {
+    if (!ok_line) {
       cout << "Problem with line " << i << ": " << orig << endl;
       all_lines_ok = false;
     }
   }
 
-  if(!ctest.isEmpty())
+  if (!ctest.isEmpty())
     m_tests.push_back(ctest);
-  
-  return(all_lines_ok);
+
+  return (all_lines_ok);
 }
-  
 
 // --------------------------------------------------------
 // Procedure: test()
-//   Purpose: Checks the specified alogfile for the various conditions. 
-//   Returns: true if the specified condition was able to be added to 
-//               the specified vector of flags 
+//   Purpose: Checks the specified alogfile for the various conditions.
+//   Returns: true if the specified condition was able to be added to
+//               the specified vector of flags
 //            false otherwise.
 
-bool LogTester::test()
-{
+bool LogTester::test() {
   bool ok = parseTestFiles();
-  if(!ok)
-    return(false);
-  if(m_verbose) {
+  if (!ok)
+    return (false);
+  if (m_verbose) {
     cout << "All Test files properly parsed" << endl;
     print();
   }
-    
+
   m_fptr = fopen(m_alog_file.c_str(), "r");
-  if(!m_fptr )
-    return(false);
+  if (!m_fptr)
+    return (false);
 
   bool done = false;
-  while(!done) {
+  while (!done) {
     ALogEntry curr_entry = getNextRawALogEntry(m_fptr);
-    if(curr_entry.getStatus() == "eof" )
+    if (curr_entry.getStatus() == "eof")
       done = true;
-    for(unsigned int i=0; i<m_tests.size(); i++) {
+    for (unsigned int i = 0; i < m_tests.size(); i++) {
       m_tests[i].updateState(curr_entry);
     }
   }
 
   bool all_passed = finish();
-  return(all_passed);
+  return (all_passed);
 }
-
 
 // --------------------------------------------------------
 // Procedure: finish()
 //   Purpose: Close the input file pointer if needed, and
 //            determine if all the tests have passed.
 
-bool LogTester::finish()
-{
+bool LogTester::finish() {
   // Part 1: Summarize all states
   bool all_passed = true;
-  for(unsigned int i=0; i<m_tests.size(); i++) 
+  for (unsigned int i = 0; i < m_tests.size(); i++)
     all_passed = all_passed && (m_tests[i].getState() == "passed");
 
   // Part 2: Build results file
   stringstream ss;
   ss << "final_result = " << boolToString(all_passed) << endl;
-  
-  for(unsigned int i=0; i<m_tests.size(); i++) {
+
+  for (unsigned int i = 0; i < m_tests.size(); i++) {
     bool test_passed = (m_tests[i].getState() == "passed");
     string reason;
-    if(!test_passed) 
+    if (!test_passed)
       reason = "(" + m_tests[i].getFailReason() + ")";
 
     string foo = "=" + m_tests[i].getState() + "=";
     ss << "result for test " << m_tests[i].getName();
     ss << ":" << boolToString(test_passed) << foo << reason << endl;
     vector<string> events = m_tests[i].getEvents();
-    for(unsigned int j=0; j<events.size(); j++)
+    for (unsigned int j = 0; j < events.size(); j++)
       ss << events[j] << endl;
     ss << endl;
   }
-  
+
   cout << ss.str() << endl;
-  
-  return(all_passed);
+
+  return (all_passed);
 }
-
-
-

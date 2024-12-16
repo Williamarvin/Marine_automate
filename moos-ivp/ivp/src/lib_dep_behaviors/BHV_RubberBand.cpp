@@ -25,44 +25,41 @@
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4503)
 #endif
-#include <iostream>
-#include <cmath> 
-#include <cstdlib>
 #include "BHV_RubberBand.h"
-#include "MBUtils.h"
 #include "AngleUtils.h"
-#include "GeomUtils.h"
 #include "BuildUtils.h"
-#include "ZAIC_PEAK.h"
+#include "GeomUtils.h"
+#include "MBUtils.h"
 #include "OF_Coupler.h"
-
+#include "ZAIC_PEAK.h"
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
 //-----------------------------------------------------------
 // Procedure: Constructor
 
-BHV_RubberBand::BHV_RubberBand(IvPDomain gdomain) : 
-  IvPBehavior(gdomain)
-{
+BHV_RubberBand::BHV_RubberBand(IvPDomain gdomain) : IvPBehavior(gdomain) {
   this->setParam("descriptor", "(d)bhv_waypoint");
 
   m_domain = subDomain(m_domain, "course,speed");
 
   // Default values for Configuration Parameters
-  m_station_x    = 0;
-  m_station_y    = 0;
+  m_station_x = 0;
+  m_station_y = 0;
   m_outer_radius = 15;
   m_inner_radius = 4;
-  m_outer_speed  = 1.2;
-  m_extra_speed  = 0;
+  m_outer_speed = 1.2;
+  m_extra_speed = 0;
   m_center_activate = false;
   width = 90;
 
   // Default values for State  Variables
-  m_center_pending  = false;
-  m_center_assign   = "";
-  m_station_set     = false;
+  m_center_pending = false;
+  m_center_assign = "";
+  m_station_set = false;
 
   stiffness = 0.1;
   relevance = 1.0;
@@ -78,84 +75,79 @@ BHV_RubberBand::BHV_RubberBand(IvPDomain gdomain) :
 //            The "radius" parameter indicates what it means to have
 //            arrived at the waypoint.
 
-bool BHV_RubberBand::setParam(string param, string val) 
-{
-  if(IvPBehavior::setParam(param, val))
-    return(true);
+bool BHV_RubberBand::setParam(string param, string val) {
+  if (IvPBehavior::setParam(param, val))
+    return (true);
 
   val = stripBlankEnds(val);
 
   //  if(param == "station_pt") {
-  if(param == "points" || param == "point") {
-    m_center_assign  = val;
+  if (param == "points" || param == "point") {
+    m_center_assign = val;
     m_center_pending = true;
-    return(updateCenter());
-    return(true);
+    return (updateCenter());
+    return (true);
   }
 
-  else if(param == "center_activate") {
+  else if (param == "center_activate") {
     val = tolower(val);
-    if((val!="true")&&(val!="false"))
-      return(false);
+    if ((val != "true") && (val != "false"))
+      return (false);
     m_center_activate = (val == "true");
-    return(true);
-  }  
+    return (true);
+  }
 
-  else if(param == "outer_radius") {
+  else if (param == "outer_radius") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     m_outer_radius = dval;
-    return(true);
+    return (true);
   }
 
-  else if(param == "inner_radius") {
+  else if (param == "inner_radius") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     m_inner_radius = dval;
-    return(true);
+    return (true);
   }
 
-  else if(param == "outer_speed") {
+  else if (param == "outer_speed") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     m_outer_speed = dval;
     //    if(m_extra_speed < m_outer_speed)
     //  m_extra_speed = m_outer_speed;
-    return(true);
+    return (true);
   }
 
-  else if(param == "extra_speed") {
+  else if (param == "extra_speed") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     m_extra_speed = dval;
-    return(true);
+    return (true);
   }
 
-  else if(param == "stiffness") {
+  else if (param == "stiffness") {
     double dval = atof(val.c_str());
-    if((dval <= 0) || (!isNumber(val)))
-      return(false);
+    if ((dval <= 0) || (!isNumber(val)))
+      return (false);
     stiffness = dval;
-    return(true);
+    return (true);
+  } else if (param == "width") {
+    width = (int)atof(val.c_str());
   }
-  else if(param == "width") 
-   {
-     width = (int) atof(val.c_str());
-   }
 
-  return(false);
+  return (false);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: onSetParamComplete
 
-void BHV_RubberBand::onSetParamComplete() 
-{
+void BHV_RubberBand::onSetParamComplete() {
   m_trail_point.set_label(m_us_name + "_station");
   m_trail_point.set_type("station");
   m_trail_point.set_active("false");
@@ -166,44 +158,38 @@ void BHV_RubberBand::onSetParamComplete()
 //-----------------------------------------------------------
 // Procedure: onRunToIdleState
 
-void BHV_RubberBand::onRunToIdleState()
-{
-  postErasableTrailPoint();
-}
+void BHV_RubberBand::onRunToIdleState() { postErasableTrailPoint(); }
 
 //-----------------------------------------------------------
 // Procedure: onIdleState
 //      Note: If m_center_pending is true, each time the behavior
-//            goes inactive (and thus this function is called), 
-//            a pending new center is declared, and set to the 
-//            special value of present_position, which will be 
+//            goes inactive (and thus this function is called),
+//            a pending new center is declared, and set to the
+//            special value of present_position, which will be
 //            determined when the activation occurs.
 
-void BHV_RubberBand::onIdleState()
-{
+void BHV_RubberBand::onIdleState() {
   postStationMessage(false);
-  if(!m_center_activate)
+  if (!m_center_activate)
     return;
   m_center_pending = true;
-  m_center_assign  = "present_position";
+  m_center_assign = "present_position";
 }
-
 
 //-----------------------------------------------------------
 // Procedure: onRunState
 
-IvPFunction *BHV_RubberBand::onRunState() 
-{
+IvPFunction *BHV_RubberBand::onRunState() {
   // Set m_osx, m_osy
-  if(!updateInfoIn())
-    return(0);
+  if (!updateInfoIn())
+    return (0);
 
   updateCenter();
 
-  if(!m_station_set) {
+  if (!m_station_set) {
     postWMessage("STATION_NOT_SET");
     postStationMessage(false);
-    return(0);
+    return (0);
   }
 
   IvPFunction *ipf = 0;
@@ -213,51 +199,50 @@ IvPFunction *BHV_RubberBand::onRunState()
   double nav_y = getBufferDoubleVal("NAV_Y", ok2);
 
   // If no ownship position from info_buffer, return null
-  if(!ok1 || !ok2) {
+  if (!ok1 || !ok2) {
     postWMessage("No ownship X/Y info in info_buffer.");
     postStationMessage(false);
-    return(0);
+    return (0);
   }
 
   m_trail_point.set_vertex(m_station_x, m_station_y);
   postViewableTrailPoint();
 
-  double dist_to_station  = distPointToPoint(nav_x, nav_y, 
-					     m_station_x, m_station_y);
+  double dist_to_station =
+      distPointToPoint(nav_x, nav_y, m_station_x, m_station_y);
 
   // Post distance at integer precision unless close to zero
-  if(dist_to_station <= 1)
+  if (dist_to_station <= 1)
     postMessage("DIST_TO_STATION", dist_to_station);
   else
     postIntMessage("DIST_TO_STATION", dist_to_station);
 
   postStationMessage(true);
-  if(dist_to_station <= m_inner_radius)
-    return(0);
+  if (dist_to_station <= m_inner_radius)
+    return (0);
 
-  double angle_to_station = relAng(nav_x, nav_y, 
-				   m_station_x, m_station_y);
+  double angle_to_station = relAng(nav_x, nav_y, m_station_x, m_station_y);
 
   relevance = 0;
 
   double desired_speed = 0;
-  if((dist_to_station > m_inner_radius) && (dist_to_station < m_outer_radius)) 
-    {
-      double range  = m_outer_radius - m_inner_radius;
-      double pct    = (dist_to_station - m_inner_radius) / range;
-      desired_speed = pct * m_outer_speed;
-      relevance = 1.0;
-    }
+  if ((dist_to_station > m_inner_radius) &&
+      (dist_to_station < m_outer_radius)) {
+    double range = m_outer_radius - m_inner_radius;
+    double pct = (dist_to_station - m_inner_radius) / range;
+    desired_speed = pct * m_outer_speed;
+    relevance = 1.0;
+  }
 
-  if(dist_to_station >= m_outer_radius)
-    {
-      if (m_extra_speed > 0)
-	desired_speed = m_extra_speed;
-      else
-	desired_speed = m_outer_speed;
+  if (dist_to_station >= m_outer_radius) {
+    if (m_extra_speed > 0)
+      desired_speed = m_extra_speed;
+    else
+      desired_speed = m_outer_speed;
 
-      relevance = 1.0+stiffness*(dist_to_station - m_outer_radius)/m_outer_radius;
-    }
+    relevance =
+        1.0 + stiffness * (dist_to_station - m_outer_radius) / m_outer_radius;
+  }
 
   ZAIC_PEAK spd_zaic(m_domain, "speed");
   spd_zaic.setSummit(desired_speed);
@@ -266,25 +251,24 @@ IvPFunction *BHV_RubberBand::onRunState()
   spd_zaic.setSummitDelta(50.0);
   spd_zaic.setMinMaxUtil(0, 25);
   IvPFunction *spd_ipf = spd_zaic.extractIvPFunction();
-  
+
   ZAIC_PEAK crs_zaic(m_domain, "course");
   crs_zaic.setSummit(angle_to_station);
   crs_zaic.setPeakWidth(width);
-  crs_zaic.setBaseWidth(180-width);
+  crs_zaic.setBaseWidth(180 - width);
   crs_zaic.setSummitDelta(10.0);
   crs_zaic.setMinMaxUtil(0, 100);
   crs_zaic.setValueWrap(true);
   IvPFunction *crs_ipf = crs_zaic.extractIvPFunction();
-  
+
   OF_Coupler coupler;
   ipf = coupler.couple(crs_ipf, spd_ipf);
 
-  if(ipf)
+  if (ipf)
     ipf->setPWT(relevance * m_priority_wt);
 
-  return(ipf);
+  return (ipf);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: updateInfoIn()
@@ -296,110 +280,89 @@ IvPFunction *BHV_RubberBand::onRunState()
 //            variable to false which will communicate the gravity
 //            of the situation to the helm.
 
-bool BHV_RubberBand::updateInfoIn()
-{
+bool BHV_RubberBand::updateInfoIn() {
   bool ok1, ok2;
   // ownship position in meters from some 0,0 reference point.
   m_osx = getBufferDoubleVal("NAV_X", ok1);
   m_osy = getBufferDoubleVal("NAV_Y", ok2);
 
   // Must get ownship position from InfoBuffer
-  if(!ok1 || !ok2) {
+  if (!ok1 || !ok2) {
     postEMessage("No ownship X/Y info in info_buffer.");
-    return(false);
+    return (false);
   }
-  
-  return(true);
+
+  return (true);
 }
-
-
 
 //-----------------------------------------------------------
 // Procedure: updateCenter()
 
-bool BHV_RubberBand::updateCenter()
-{
-  if(!m_center_pending)
-    return(true);
-  
+bool BHV_RubberBand::updateCenter() {
+  if (!m_center_pending)
+    return (true);
+
   bool ok_update = false;
 
   m_center_assign = tolower(m_center_assign);
 
-  if(m_center_assign == "present_position") {
-    m_station_x   = m_osx;
-    m_station_y   = m_osy;
+  if (m_center_assign == "present_position") {
+    m_station_x = m_osx;
+    m_station_y = m_osy;
     m_station_set = true;
     ok_update = true;
-  }
-  else {
+  } else {
     vector<string> svector = parseString(m_center_assign, ',');
-    if(svector.size() == 2) {
+    if (svector.size() == 2) {
       svector[0] = stripBlankEnds(svector[0]);
       svector[1] = stripBlankEnds(svector[1]);
-      if(isNumber(svector[0]) && isNumber(svector[1])) {
-	double xval = atof(svector[0].c_str());
-	double yval = atof(svector[1].c_str());
-	m_station_x   = xval;
-	m_station_y   = yval;
-	m_station_set = true;
-	ok_update     = true;
+      if (isNumber(svector[0]) && isNumber(svector[1])) {
+        double xval = atof(svector[0].c_str());
+        double yval = atof(svector[1].c_str());
+        m_station_x = xval;
+        m_station_y = yval;
+        m_station_set = true;
+        ok_update = true;
       }
     }
   }
-  
+
   m_center_assign = "";
   m_center_pending = false;
-  return(ok_update);
+  return (ok_update);
 }
-
 
 //-----------------------------------------------------------
 // Procedure: postStationMessage()
 
-void BHV_RubberBand::postStationMessage(bool post)
-{
-  string str_x = doubleToString(m_station_x,0);
-  string str_y = doubleToString(m_station_y,0);
+void BHV_RubberBand::postStationMessage(bool post) {
+  string str_x = doubleToString(m_station_x, 0);
+  string str_y = doubleToString(m_station_y, 0);
   string station = str_x + "," + str_y + ",";
-  
-  if(post)
-    station += doubleToString(m_outer_radius,0) + ",";
+
+  if (post)
+    station += doubleToString(m_outer_radius, 0) + ",";
   else
     station += "0,";
 
   station += m_us_name;
   postMessage("STATION_CIRCLE", station);
-
 }
 
 //-----------------------------------------------------------
 // Procedure: postViewableTrailPoint
 
-void BHV_RubberBand::postViewableTrailPoint()
-{
+void BHV_RubberBand::postViewableTrailPoint() {
   m_trail_point.set_active(true);
   string spec = m_trail_point.get_spec();
   postMessage("VIEW_POINT", spec);
 }
 
-
 //-----------------------------------------------------------
 // Procedure: postErasableTrailPoint
 
-void BHV_RubberBand::postErasableTrailPoint()
-{
+void BHV_RubberBand::postErasableTrailPoint() {
   m_trail_point.set_active(false);
   string spec = m_trail_point.get_spec();
   postMessage("VIEW_POINT", spec);
 }
-
-
-
-
-
-
-
-
-
-

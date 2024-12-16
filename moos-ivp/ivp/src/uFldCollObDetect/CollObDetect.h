@@ -24,31 +24,29 @@
 #ifndef COLL_OB_DETECT_HEADER
 #define COLL_OB_DETECT_HEADER
 
-#include <string>
-#include <vector>
-#include <map>
 #include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
-#include "XYPolygon.h"
 #include "NodeRecord.h"
 #include "VarDataPair.h"
+#include "XYPolygon.h"
+#include <map>
+#include <string>
+#include <vector>
 
-
-class CollObDetect : public AppCastingMOOSApp
-{
- public:
+class CollObDetect : public AppCastingMOOSApp {
+public:
   CollObDetect();
-  virtual ~CollObDetect() {};
-  
- protected: // Standard MOOSApp functions to overload  
+  virtual ~CollObDetect(){};
+
+protected: // Standard MOOSApp functions to overload
   bool OnNewMail(MOOSMSG_LIST &NewMail);
   bool Iterate();
   bool OnConnectToServer();
   bool OnStartUp();
-  
- protected: // Standard AppCastingMOOSApp function to overload 
+
+protected: // Standard AppCastingMOOSApp function to overload
   bool buildReport();
-  
- protected:
+
+protected:
   void registerVariables();
 
   bool handleMailKnownObstacle(std::string);
@@ -58,11 +56,9 @@ class CollObDetect : public AppCastingMOOSApp
   void updateVehiDists();
   void updateVehiMinDists();
   void updateVehiEncounters();
-  
-  void postFlags(const std::vector<VarDataPair>&,
-		 double min_dist,
-		 std::string vname,
-		 std::string label);
+
+  void postFlags(const std::vector<VarDataPair> &, double min_dist,
+                 std::string vname, std::string label);
 
   void setCurrDist(std::string vname, std::string lab, double dist);
   void setPrevDist(std::string vname, std::string lab, double dist);
@@ -74,13 +70,11 @@ class CollObDetect : public AppCastingMOOSApp
 
   void postEncounterBin(double dist);
   void binEncounter(double dist);
-  
-  
- private: // Configuration variables
 
+private: // Configuration variables
   // Core map of obtacles and time received
   std::map<std::string, XYPolygon> m_map_obstacles;
-  std::map<std::string, double>    m_map_ob_tstamp;
+  std::map<std::string, double> m_map_ob_tstamp;
 
   // Params defining test/success
   double m_near_miss_dist;
@@ -90,15 +84,14 @@ class CollObDetect : public AppCastingMOOSApp
   std::vector<VarDataPair> m_collision_flags;
   std::vector<VarDataPair> m_near_miss_flags;
   std::vector<VarDataPair> m_encounter_flags;
-  
- private: // State variables
 
+private: // State variables
   std::map<std::string, NodeRecord> m_map_vrecords;
 
   // For each vehicle and each obstacle
-  std::map<std::string, std::map<std::string, double> > m_map_vdist;
-  std::map<std::string, std::map<std::string, double> > m_map_vdist_prev;
-  std::map<std::string, std::map<std::string, double> > m_map_vdist_min;
+  std::map<std::string, std::map<std::string, double>> m_map_vdist;
+  std::map<std::string, std::map<std::string, double>> m_map_vdist_prev;
+  std::map<std::string, std::map<std::string, double>> m_map_vdist_min;
 
   unsigned int m_total_encounters;
   unsigned int m_total_near_misses;
@@ -109,9 +102,8 @@ class CollObDetect : public AppCastingMOOSApp
   std::map<double, unsigned int> m_map_bins;  // totals in bin
   std::map<double, unsigned int> m_map_tbins; // totals in bin and below
   bool m_bins_created;
-  
+
   double m_global_min_dist;
 };
 
-#endif 
-
+#endif

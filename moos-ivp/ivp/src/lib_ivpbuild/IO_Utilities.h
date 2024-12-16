@@ -26,40 +26,22 @@
 #ifndef IO_UTILITIES_HEADER
 #define IO_UTILITIES_HEADER
 
-#include <vector>
-#include <string>
-#include <cstdio>
-#include "IvPProblem.h"
 #include "IvPFunction.h"
+#include "IvPProblem.h"
 #include "ZAIC_PEAK.h"
+#include <cstdio>
+#include <string>
+#include <vector>
 
-bool   saveProblem(IvPProblem*, const std::string&);
-bool   saveFunction(IvPFunction *ipf, const std::string&, bool append);
-bool   savePDMap(PDMap*, FILE*);
+bool saveProblem(IvPProblem *, const std::string &);
+bool saveFunction(IvPFunction *ipf, const std::string &, bool append);
+bool savePDMap(PDMap *, FILE *);
 
-IvPFunction* readFunction(const std::string&);
+IvPFunction *readFunction(const std::string &);
 
-std::vector<IvPFunction*> readFunctions(const std::string&);
-PDMap*       readPDMap(FILE *f, int dim, int cnt, IvPDomain dom, int deg);
+std::vector<IvPFunction *> readFunctions(const std::string &);
+PDMap *readPDMap(FILE *f, int dim, int cnt, IvPDomain dom, int deg);
 
-void   printZAIC_PEAK(ZAIC_PEAK);
+void printZAIC_PEAK(ZAIC_PEAK);
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
