@@ -1,28 +1,23 @@
-#--------------------------------------------------------
-# The CMakeLists.txt for:                   pMarineViewer
-# Author(s):                                Mike Benjamin
-#--------------------------------------------------------
+cmake_minimum_required(VERSION 3.10)
+project(pMarineViewer)
 
-# Set System Specific Libraries
-if (${WIN32})
-  SET(SYSTEM_LIBS wsock32)
-else (${WIN32})
-  SET(SYSTEM_LIBS m)
-endif (${WIN32})
+# Set C++ standard to C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_SYSTEM_NAME STREQUAL Linux)
-  SET(SYSTEM_LIBS ${SYSTEM_LIBS} GL)
-endif(CMAKE_SYSTEM_NAME STREQUAL Linux)
+# Find CURL
+find_package(CURL REQUIRED)
+
+# Find OpenCV
+find_package(OpenCV REQUIRED)  # Ensure OpenCV is found
+
+# Find OpenGL
+find_package(OpenGL REQUIRED)  # Add this line to find OpenGL
 
 FILE(GLOB SRC *.cpp)
 
-If (${APPLE})
-      # If you want to create an Apple BUNDLE, do it here
-      ADD_EXECUTABLE(pMarineViewer ${SRC})
-ELSE (${APPLE})
-      ADD_EXECUTABLE(pMarineViewer ${SRC})
-ENDIF (${APPLE})
-      
+ADD_EXECUTABLE(pMarineViewer ${SRC})
+
 TARGET_LINK_LIBRARIES(pMarineViewer         
   ${MOOS_LIBRARIES}
   ${MOOSGeodesy_LIBRARIES}
@@ -36,18 +31,15 @@ TARGET_LINK_LIBRARIES(pMarineViewer
   apputil
   mbutil
   bhvutil
-  # Standard libraries used by this project's FLTK apps...
   fltk 
   fltk_gl 
   dl
-  tiff)
+  tiff 
+  ${CURL_LIBRARIES} 
+  ${OpenCV_LIBS}  # Link against OpenCV libraries
+  ${OPENGL_LIBRARIES}  # Link against OpenGL libraries
+)
 
-# http://developer.apple.com/qa/qa2007/qa1567.html
-IF (${APPLE})
-  SET_TARGET_PROPERTIES(pMarineViewer PROPERTIES	  
-    LINK_FLAGS "-framework OpenGL -framework AGL -framework Cocoa"
-    )
-ENDIF (${APPLE})
+include_directories(${CURL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})  # Include directories for CURL and OpenCV
 
 ADD_TEST(MyTest1 ${EXECUTABLE_OUTPUT_PATH}/pMarineViewer --version)
-
