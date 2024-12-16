@@ -1,0 +1,25 @@
+# Ignore all bin
+# moos-ivp
+/moos-ivp/bin/
+/moos-ivp/build/
+/moos-ivp/lib/
+/moos-ivp/include/
+/moos-ivp/ivp/bin/
+/moos-ivp/ivp/src/bin
+/moos-ivp/MOOS_Jul0519/
+
+# moos-ivp-pavlab
+/moos-ivp-pavlab-aro/bin/
+/moos-ivp-pavlab-aro/build/
+/moos-ivp-pavlab-aro/lib
+
+# Ignore all logs
+*._moos
+*.moos
+*alog
+*blog
+*slog
+*ylog
+
+# Ignore others
+*svn
