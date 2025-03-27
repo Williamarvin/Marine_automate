@@ -15,3 +15,7 @@ StandardError=append:/home/orangepi/launch_now_error.log
 [Install]
 WantedBy=default.target
 
+
+# sudo systemctl daemon-reload
+# sudo systemctl enable service 
+# sudo systemctl start service 
